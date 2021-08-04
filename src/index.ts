@@ -175,9 +175,13 @@ client.on('ready', async () => {
         const guild = client.guilds.cache.get(<string>client.restartData.get('serverId'));
         const channel = <discord.TextChannel>await guild?.channels.cache.get(<string>client.restartData.get('channelId'));
         const message = await channel?.messages.fetch(<string>client.restartData.get('messageId'));
-        await message.reply(`Done! Restart complete in ${Date.now() - <number>client.restartData.get('time')}ms (${(Date.now() - <number>client.restartData.get('time')) / 1000} seconds).`);
+        await message.reply(
+            `Done! Restart complete in ${Date.now() - <number>client.restartData.get('time')}ms (${
+                (Date.now() - <number>client.restartData.get('time')) / 1000
+            } seconds).`
+        );
         client.restartData.set('wasRestarted', false);
-    } else log('i', 'Not restarted.');
+    } else {log('i', 'Not restarted.');}
 });
 
 // Message handler

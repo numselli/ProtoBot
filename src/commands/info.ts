@@ -17,17 +17,19 @@
  */
 
 // Modules
-import type { Client, Message } from 'discord.js';
+import type { Client, Message, MessageEmbed } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
 
 // Main
 function fireStats(userID: string, message: Message, client: Client): void {
     const uData: any = client.ustats.get(userID);
-    message.reply(`**User info for \`${userID}\`:**
-Hugs: ${uData.hugs}
-uwus: ${client.uwus.get(userID) ?? 0}
-owos: ${client.owos.get(userID) ?? 0}
-Tildes: ${client.tildes.get(userID) ?? 0}`);
+    const embed = new MessageEmbed()
+        .setTitle(`User info for ${userID}`)
+        .addField('Hugs', uData.hugs)
+        .addField('uwus', client.uwus.get(userID) ?? 0)
+        .addField('owos', client.owos.get(userID) ?? 0)
+        .addField('Tildes', client.tildes.get(userID) ?? 0)
+    message.reply(embed);
 }
 
 export function run(client: Client, message: Message, args: string[], log: Logger): void {

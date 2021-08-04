@@ -167,6 +167,15 @@ client.on('ready', async () => {
 
     // Status
     client.user?.setActivity(`${client.config.prefixes[0]}about | Written for furries, by furries!`, { type: 'PLAYING' });
+    
+    // Restart message finished
+    if (client.restartData.get('wasRestarted')) {
+        let guild = client.guilds.cache.get(client.restartData.get('serverId'))
+        let channel = await guild.channels.cache.fetch(client.restartData.get('channelId'));
+        let message = await channel.messages.cache.fetch(client.restartData.get('messageId'));
+        await message.reply(`Done! Restart complete in ${Date.now() - client.restartData.get('time')}ms.`);
+        client.restartData.set('wasRestarted', false)
+    }
 });
 
 // Message handler

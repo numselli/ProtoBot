@@ -59,5 +59,6 @@ export default class Client extends BaseClient {
         await this.uconfs.close();
         await this.markovMessages.close();
         await this.fursonas.close();
+        await this.restartData.close();
     }
 }

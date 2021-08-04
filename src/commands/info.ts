@@ -17,7 +17,8 @@
  */
 
 // Modules
-import type { Client, Message, MessageEmbed } from 'discord.js';
+import type { Client, Message } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
 
 // Main

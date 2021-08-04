@@ -7,7 +7,7 @@ while true; do
     tsc;
     cd dist;
     node .;
-    if [[ "$?" -eq 9 ]]; then
+    if [ "$?" -eq 9 ]; then
         echo 'Restarting instantly: exit code was 9 (RESTART)'
     else
         echo 'Restarting in 3 seconds. Press Ctrl+C to cancel.';

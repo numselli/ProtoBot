@@ -45,7 +45,7 @@ declare module 'discord.js' {
         uconfs: Enmap<string, UserConfig>;
         markovMessages: Enmap<string, MarkovData>; // NOTE: remove markovs in the future perhaps?
         fursonas: Enmap<string, Fursona>;
-        restartData: Enmap<string, unknown>
+        restartData: Enmap<string, unknown>;
 
         // In memory
         commands: Enmap<string, Command>;

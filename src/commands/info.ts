@@ -29,7 +29,7 @@ function fireStats(userID: string, message: Message, client: Client): void {
         .addField('Hugs', uData.hugs)
         .addField('uwus', client.uwus.get(userID) ?? 0)
         .addField('owos', client.owos.get(userID) ?? 0)
-        .addField('Tildes', client.tildes.get(userID) ?? 0)
+        .addField('Tildes', client.tildes.get(userID) ?? 0);
     message.reply(embed);
 }
 

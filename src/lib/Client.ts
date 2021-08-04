@@ -41,6 +41,7 @@ export default class Client extends BaseClient {
         this.ustats = new Enmap({ name: 'ustats', verbose: makeVerboseFunction('ustats') });
         this.uconfs = new Enmap({ name: 'uconfs', verbose: makeVerboseFunction('uconfs') });
         this.fursonas = new Enmap({ name: 'fursonas', verbose: makeVerboseFunction('fursonas') });
+        this.restartData = new Enmap({ name: 'restartData', verbose: makeVerboseFunction('restartData') });
 
         // In memory items
         this.commands = new Enmap();

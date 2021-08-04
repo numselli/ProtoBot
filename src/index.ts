@@ -181,7 +181,9 @@ client.on('ready', async () => {
             } seconds).`
         );
         client.restartData.set('wasRestarted', false);
-    } else {log('i', 'Not restarted.');}
+    } else {
+        log('i', 'Not restarted.');
+    }
 });
 
 // Message handler

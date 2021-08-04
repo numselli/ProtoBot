@@ -32,7 +32,7 @@ export async function run(client: Client, message: Message, args: string[], log:
     log('w', `${message.author.tag} has triggered a restart!`);
     // restart bot
     message.reply('Alright, restarting...').then(() => {
-        client.restartData.set('serverId', message.guild.id);
+        client.restartData.set('serverId', message.guild?.id);
         client.restartData.set('channelId', message.channel.id);
         client.restartData.set('messageId', message.id);
         client.restartData.set('time', Date.now());

@@ -170,10 +170,10 @@ client.on('ready', async () => {
     
     // Restart message finished
     if (client.restartData.get('wasRestarted')) {
-        let guild = client.guilds.cache.get(client.restartData.get('serverId'))
-        let channel = await guild.channels.cache.fetch(client.restartData.get('channelId'));
-        let message = await channel.messages.cache.fetch(client.restartData.get('messageId'));
-        await message.reply(`Done! Restart complete in ${Date.now() - client.restartData.get('time')}ms.`);
+        let guild = client.guilds.cache.get(<string>client.restartData.get('serverId'))
+        let channel = <discord.TextChannel>(await guild?.channels.cache.get(<string>client.restartData.get('channelId')));
+        let message = await channel?.messages.fetch(<string>client.restartData.get('messageId'));
+        await message.reply(`Done! Restart complete in ${Date.now() - <number>client.restartData.get('time')}ms.`);
         client.restartData.set('wasRestarted', false)
     }
 });

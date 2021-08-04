@@ -20,6 +20,7 @@
 import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
 import sleep from '@lib/sleep';
+import { MessageEmbed } from 'discord.js';
 
 interface CutieData {
     username: string;
@@ -42,18 +43,13 @@ This may take a while.`);
 
     await sleep(3000);
 
-    let str = `**Cutie detection results for <@${message.author.id}>**
-
-I have found **${cuties.length}** cuties!
-
-Cuties found:`;
+    const embed = new MessageEmbed().setTitle('Cuties list').setDescription(`I have found **${cuties.length}** cuties!`);
 
     for (const cutie of cuties) {
-        str += `
-- ${cutie.username}#${cutie.tag} (\`${cutie.id}\`)`;
+        embed.addField(`${cutie.username}#${cutie.tag}`, `User ID: \`${cutie.id}\``);
     }
 
-    m.edit(str);
+    m.edit(embed);
 }
 
 // Config

@@ -31,7 +31,12 @@ export async function run(client: Client, message: Message, args: string[], log:
 
     log('w', `${message.author.tag} has triggered a restart!`);
     // restart bot
-    message.reply('Goodbye!').then(() => {
+    message.reply('Alright, restarting...').then(() => {
+        client.restartData.set('serverId', message.guild.id);
+        client.restartData.set('channelId', message.channel.id);
+        client.restartData.set('messageId', message.id);
+        client.restartData.set('time', Date.now());
+        client.restartData.set('wasRestarted', true);
         log('w', 'Goodbye!');
         log('w', 'Killing client...');
         client.destroy();
@@ -39,7 +44,8 @@ export async function run(client: Client, message: Message, args: string[], log:
         log('w', 'Closing databases...');
         client.closeDatabases();
         log('w', 'Closed databases.');
-        process.exit();
+        log('w', 'Exiting with code 9 (RESTART)');
+        process.exit(9);
     });
 }
 

@@ -16,8 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+function escapeMarkdown(text: string) {
+    const unescaped = text.replace(/\\(\*|_|`|~|\\)/g, '$1'); // unescape any "backslashed" character
+    const escaped = unescaped.replace(/(\*|_|`|~|\\)/g, '\\$1'); // escape *, _, `, ~, \
+    return escaped;
+}
+
 // Modules
-import * as discord from 'discord.js';
 import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
 
@@ -28,10 +33,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
         const m: Message = messages.last();
         message.reply(`Content of message ID \`${m.id}\` in channel <#${m.channel.id}>:
 
-${
-    // @ts-ignore
-    discord.escapeMarkdown(m.content)
-}`);
+${escapeMarkdown(m.content)}`);
     });
 }
 

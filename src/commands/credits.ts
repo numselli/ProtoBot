@@ -81,7 +81,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
         embed.addField(item.item, str);
     });
 
-    message.channel.send(embed);
+    message.reply({ embeds: [embed] });
 }
 
 // Config

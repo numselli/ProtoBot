@@ -42,7 +42,20 @@ import '@lib/memstatAuto';
 import log from './log';
 
 // Initialize client
-const client = new Client();
+const client = new Client({
+    intents: [
+        discord.Intents.FLAGS.GUILDS,
+        discord.Intents.FLAGS.GUILD_MEMBERS,
+        discord.Intents.FLAGS.GUILD_BANS,
+        discord.Intents.FLAGS.GUILD_INVITES,
+        discord.Intents.FLAGS.GUILD_MESSAGES,
+        discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        discord.Intents.FLAGS.GUILD_MESSAGE_TYPING,
+        discord.Intents.FLAGS.DIRECT_MESSAGES,
+        discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
+        discord.Intents.FLAGS.DIRECT_MESSAGE_TYPING
+    ]
+});
 
 // Ready event
 client.on('ready', async () => {
@@ -187,11 +200,11 @@ client.on('ready', async () => {
 });
 
 // Message handler
-client.on('message', (message: discord.Message) => {
+client.on('messageCreate', (message: discord.Message) => {
     client.ustats.ensure(message.author.id, client.defaults.USER_STATS);
     client.uconfs.ensure(message.author.id, client.defaults.USER_CONFS);
     client.cooldowns.ensure(message.author.id, client.defaults.COOLDOWNS);
-    if (message.author.bot || message.channel.type === 'dm') {
+    if (message.author.bot || message.channel.type === 'DM') {
         // exit
         return;
     }
@@ -226,9 +239,9 @@ client.on('message', (message: discord.Message) => {
         log('v', `Running command "${command}" for "${message.author.tag}" with args "${args.join(' ')}"!`);
         log(
             'v',
-            `Command found at: ${message.guild?.name ?? 'unknown'} (${message.guild?.id ?? 'unknown'}) => #${message.channel?.name ?? '#unknown'} (${
-                message.channel?.id ?? 'unknown'
-            }) => ${message.id}`
+            `Command found at: ${message.guild?.name ?? 'unknown'} (${message.guild?.id ?? 'unknown'}) => #${
+                <string>message.channel?.name ?? '#unknown'
+            } (${message.channel?.id ?? 'unknown'}) => ${message.id}`
         );
 
         log('v', 'Resolving alias...');

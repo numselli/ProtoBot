@@ -27,7 +27,7 @@ interface FoxData {
 }
 
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
-    const msg = await message.channel.send('Fetching a fox picture...');
+    const msg = await message.reply('Fetching a fox picture...');
     const body = <FoxData>await fetch('https://randomfox.ca/floof/').then((res) => res.json());
     const embed = new MessageEmbed()
         .setTitle(`Fox for ${message.author.username}`)
@@ -35,7 +35,7 @@ export async function run(client: Client, message: Message, args: string[], log:
         .setTimestamp(Date.now())
         .setDescription(`[Link](${body.link})`)
         .setColor('RANDOM');
-    msg.edit(embed);
+    msg.edit({ embeds: [embed] });
 }
 
 // Config

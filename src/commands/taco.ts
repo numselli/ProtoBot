@@ -33,7 +33,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
             .setFooter('Command made by Mr. El and BadBoyHaloCat.')
             .setTimestamp();
 
-        message.channel.send(embed);
+        message.reply({ embeds: [embed] });
     } else {
         message.reply('This command is only available in a special server! ;)');
     }

@@ -104,7 +104,7 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
 
     if (!silent) {
         try {
-            message.channel.send(embed);
+            message.reply({ embeds: [embed] });
         } catch (e) {
             log('e', e);
         }

@@ -42,12 +42,11 @@ export function run(client: Client, message: Message, args: string[], log: Logge
     client.ustats.ensure(userID, client.defaults.USER_STATS);
     client.ustats.inc(userID, 'boops');
 
-    message.channel.send(
+    message.reply(
         `**Boop!**
 <@${message.author.id}> boops <@${userID}>~!
 
-https://cdn.discordapp.com/emojis/777752005820416000.gif`,
-        { disableMentions: 'everyone' }
+https://cdn.discordapp.com/emojis/777752005820416000.gif`
     );
     message.delete().catch((err) => {
         log('w', `Failed to delete command message for "boop"!: ${err}`);

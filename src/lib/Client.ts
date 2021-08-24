@@ -26,7 +26,7 @@ function makeVerboseFunction(name: string): (q: string) => void {
 }
 
 export default class Client extends BaseClient {
-    public constructor(options?: ClientOptions) {
+    public constructor(options: ClientOptions) {
         super(options);
         this.config = config;
         this.defaults = {

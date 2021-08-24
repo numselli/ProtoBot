@@ -125,7 +125,7 @@ ${code}`
 
         if (!silent) {
             try {
-                message.channel.send(embed);
+                message.reply({ embeds: [embed] });
             } catch (e) {
                 log('e', e);
             }

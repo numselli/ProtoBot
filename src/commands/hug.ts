@@ -42,10 +42,9 @@ export function run(client: Client, message: Message, args: string[], log: Logge
     client.ustats.ensure(userID, client.defaults.USER_STATS);
     client.ustats.inc(userID, 'hugs');
 
-    message.channel.send(
+    message.reply(
         `**HUG!**
-<@${message.author.id}> huggles <@${userID}> tightly.`,
-        { disableMentions: 'everyone' }
+<@${message.author.id}> huggles <@${userID}> tightly.`
     );
     message.delete().catch((err) => {
         log('w', `Failed to delete command message for "hug"!: ${err}`);

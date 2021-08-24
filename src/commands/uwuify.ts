@@ -50,7 +50,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
     ];
     const msg: string = uwuify.uwuifySentence(args.join(' '));
     // @ts-ignore
-    message.channel.send(`${intense ? msg.replace(/u/gi, 'UwU').replace(/o/gi, 'OwO') : msg}`, { split: { prepend: '...', append: '...' } });
+    message.reply(`${intense ? msg.replace(/u/gi, 'UwU').replace(/o/gi, 'OwO') : msg}`, { split: { prepend: '...', append: '...' } });
 }
 
 // Config

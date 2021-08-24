@@ -40,7 +40,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
         .setDescription(`Please wait.. Switching to \`${args[0]}\`...`)
         .addField('Status', `\`$ git branch ${args[0]}\``);
 
-    message.channel.send(embed).then((m: discord.Message) => {
+    message.reply({ embeds: [embed] }).then((m: discord.Message) => {
         exec(`git checkout ${args[0]}`, (error: ExecException | null, stdout: string, stderr: string) => {
             embed = new discord.MessageEmbed()
                 .setTitle(`Branch Switch [${stderr.startsWith('Switched') ? 'Complete' : 'Failed'}]`)
@@ -55,7 +55,7 @@ ${stderr ?? '<none>'}${stdout !== '' ? `\n${stdout}` : ''}
                 );
             }
 
-            m.edit(embed);
+            m.edit({ embeds: [embed] });
         });
     });
 }

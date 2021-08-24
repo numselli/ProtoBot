@@ -26,11 +26,11 @@ interface KoalaData {
 }
 
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
-    const msg = await message.channel.send('Fetching a koala picture...');
+    const msg = await message.reply('Fetching a koala picture...');
     const body = <KoalaData>await fetch('https://some-random-api.ml/img/koala').then((res) => res.json());
     const embed = new MessageEmbed().setTitle(`Koala for ${message.author.username}`).setImage(body.link).setTimestamp(Date.now()).setColor('RANDOM');
     msg.delete();
-    message.channel.send(embed);
+    message.reply({ embeds: [embed] });
 }
 
 // Config

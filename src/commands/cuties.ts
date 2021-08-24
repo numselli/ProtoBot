@@ -38,7 +38,7 @@ export async function run(client: Client, message: Message, args: string[], log:
         { username: 'Ayanari', tag: '4420', id: '814303392020692994' }
     ];
 
-    const m = await message.channel.send(`**Detecting cuties for <@${message.author.id}>...**
+    const m = await message.reply(`**Detecting cuties for <@${message.author.id}>...**
 This may take a while.`);
 
     await sleep(3000);
@@ -49,7 +49,7 @@ This may take a while.`);
         embed.addField(`${cutie.username}#${cutie.tag}`, `User ID: \`${cutie.id}\``);
     }
 
-    m.edit(embed);
+    m.edit({ embeds: [embed] });
 }
 
 // Config

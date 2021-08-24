@@ -42,10 +42,9 @@ export function run(client: Client, message: Message, args: string[], log: Logge
     client.ustats.ensure(userID, client.defaults.USER_STATS);
     client.ustats.inc(userID, 'pats');
 
-    message.channel.send(
+    message.reply(
         `**Pat!**
-<@${message.author.id}> pats <@${userID}> on the head~!`,
-        { disableMentions: 'everyone' }
+<@${message.author.id}> pats <@${userID}> on the head~!`
     );
     message.delete().catch((err) => {
         log('w', `Failed to delete command message for "pat"!: ${err}`);

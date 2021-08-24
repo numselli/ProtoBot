@@ -40,7 +40,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
     });
 
     message.author
-        .send(embed)
+        .send({ embeds: [embed] })
         .then(() => {
             message.reply('Sent the help menu to your DM!');
         })
@@ -49,7 +49,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
 
 The error was: \`${e}\``);
             log('w', `Failed to send embed to user DMs for help: ${e}`);
-            message.channel.send(embed);
+            message.reply({ embeds: [embed] });
         });
 }
 

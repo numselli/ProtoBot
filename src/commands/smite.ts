@@ -45,7 +45,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
         };
         // Move to local scope
         const { cloud, bolt, cloud_bolt } = emotes;
-        message.channel.send(`Hehe, <@${userID}> **SMITTEN** by <@${message.author.id}>!
+        message.reply(`Hehe, <@${userID}> **SMITTEN** by <@${message.author.id}>!
 \`\`\`
 ${cloud}${cloud}${cloud}${cloud_bolt}${cloud}
       ${bolt}

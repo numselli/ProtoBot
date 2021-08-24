@@ -22,7 +22,7 @@ import type Logger from '@lib/interfaces/Logger';
 
 // Main
 export function run(client: Client, message: Message, args: string[], log: Logger): void {
-    message.channel.send(`**Oh hewwo there <@${message.author.id}>!**
+    message.reply(`**Oh hewwo there <@${message.author.id}>!**
 
 **I'm ProtoBot.**
 

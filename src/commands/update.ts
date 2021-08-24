@@ -42,7 +42,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
 
     l('i', 'Getting git status...');
 
-    message.channel.send(embed).then((m: discord.Message) => {
+    message.reply({ embeds: [embed] }).then((m: discord.Message) => {
         exec('git status', (error: ExecException | null, stdout: string, stderr: string) => {
             if (error) {
                 l('e', `Failed to update: ${error}`);
@@ -114,7 +114,7 @@ ${stdout4 === '' ? stderr4 : stdout4}
                                                     `To apply the update, run ${client.config.prefixes[0]}restart.`
                                                 );
 
-                                            m.edit(embed);
+                                            m.edit({ embeds: [embed] });
 
                                             l('i', 'Update completed!');
                                         }

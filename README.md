@@ -12,6 +12,88 @@ A Discord furry bot
 
 ProtoBot is a Discord bot made by furries, for furries.
 
+## Installing & Setup
+
+The following steps will help you to get ProtoBot running on your computer.
+
+We support **Linux** and **macOS 11 or above**. Any Windows/OSX bugs will be treated with LOW PRIORITY.
+
+### 1. Node.js
+
+Follow the installation steps for [Node.js v16](https://nodejs.org/en/)
+
+Then install TypeScript: `npm install -g typescript`
+
+### 2. Enmap
+
+Install the [Enmap pre-requisites](https://enmap.evie.dev/install#pre-requisites). **DO NOT** run the `npm i enmap` command!
+
+### 3. Git
+
+Ensure [Git](https://git-scm.com/) is installed. On Linux, install it with your package manager, the package is probably named `git`.
+
+### 4. Cloning
+
+In a destination folder, run this command:
+
+```bash
+git clone https://github.com/thetayloredman/ProtoBot.git
+```
+
+### 5. Installing NPM Dependencies
+
+> **WARNING:** _This process may take a while._
+
+Run the following command:
+
+```bash
+npm i
+```
+
+### 6. Configuring the Bot
+
+Copy the file `src/config.rename-me.ts` to `src/config.ts`. Edit the new file.
+
+> **NOTE:** _Only change values inside of the config export. Any other changes are unsupported._
+
+#### `token`
+
+Create a bot account (if you don't have one already) from [the Discord developer panel](discord.com/developers/applications)
+
+Create an application and add a bot. Copy the token. Paste it here.
+
+#### `dirs`
+
+> **WARNING:** _Changing these may break the command and hook handling modules._
+
+The directories used for commands and hooks. I wouldn't change these unless needed due to a directory rename.
+
+#### `prefixes`
+
+The bot's prefixes.
+
+#### `cooldowns`
+
+The cooldowns for commands and hooks.
+
+#### `ownerID`
+
+> ***WARNING: DO NOT GIVE ANYBODY YOU DO NOT KNOW VERY WELL OWNER ACCESS!***  
+> **ANYONE WITH OWNER ACCESS CAN GET DIRECT ACCESS TO A SHELL ON YOUR SYSTEM.**  
+> **I REPEAT, *NOBODY* GETS OWNER ACCESS. I AM NOT RESPONSIBLE FOR ANY DAMAGE CAUSED IF YOU DO NOT OBEY THIS.**
+
+**Hey, did you read that thing above me? If not, read it. Did you read it? Read it again. This is serious.**
+
+Your user ID.
+
+### 7. First Startup
+
+Run `./start.sh`.
+
+### 8. Logging
+
+Logs will automatically be created and manual maintanence is needed for cleaning these up.
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):

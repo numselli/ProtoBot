@@ -21,7 +21,7 @@
         "enmap": "^5.8.7",
         "markov-strings": "^3.0.1",
         "module-alias": "^2.2.2",
-        "node-fetch": "^2.6.1",
+        "node-fetch": "^2.6.5",
         "prettier": "^2.3.2",
         "source-map-support": "^0.5.19",
         "strip-ansi": "^6.0.0",

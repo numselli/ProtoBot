@@ -53,9 +53,6 @@ ${cloud}${cloud}${cloud}${cloud_bolt}${cloud}
     ${bolt}
    ${bolt}
 \`\`\``);
-        message.delete().catch(() => {
-            log('w', 'Failed to delete smite cmd message!');
-        });
     }
 }
 

@@ -46,9 +46,6 @@ export function run(client: Client, message: Message, args: string[], log: Logge
         `**Pat!**
 <@${message.author.id}> pats <@${userID}> on the head~!`
     );
-    message.delete().catch((err) => {
-        log('w', `Failed to delete command message for "pat"!: ${err}`);
-    });
 }
 
 // Config

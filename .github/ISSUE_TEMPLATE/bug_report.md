@@ -4,7 +4,6 @@ about: Found a bug? Report it here!
 title: 'bug: Describe the bug...'
 labels: 'bug, Triage: Untriaged'
 assignees: ''
-
 ---
 
 <!--

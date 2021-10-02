@@ -48,9 +48,6 @@ export function run(client: Client, message: Message, args: string[], log: Logge
 
 https://cdn.discordapp.com/emojis/777752005820416000.gif`
     );
-    message.delete().catch((err) => {
-        log('w', `Failed to delete command message for "boop"!: ${err}`);
-    });
 }
 
 // Config

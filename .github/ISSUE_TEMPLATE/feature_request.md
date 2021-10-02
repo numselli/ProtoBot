@@ -4,7 +4,6 @@ about: Suggest an idea to be added to ProtoBot
 title: 'feat: Describe the feature request...'
 labels: 'enhancement, Triage: Untriaged'
 assignees: ''
-
 ---
 
 <!--

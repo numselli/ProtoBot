@@ -62,6 +62,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "808-Dev",
+      "name": "0v0Bot Admin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/63218975?v=4",
+      "profile": "https://github.com/808-Dev",
+      "contributions": [
+        "infra"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -41,6 +41,10 @@ export function run(client: Client, message: Message, args: string[], log: Logge
             users: [{ tag: 'BadBoyHaloCat#1826' }]
         },
         {
+            item: 'Infra: Hosting ProtoBot Gen2+',
+            users: [{ tag: 'UF17#2822' }]
+        },
+        {
             item: 'Offering to rewrite all of ProtoBot',
             users: [{ tag: 'antemortem#0110' }]
         },
@@ -51,10 +55,6 @@ export function run(client: Client, message: Message, args: string[], log: Logge
         {
             item: 'Just existing idk',
             users: [{ tag: 'boa#1665' }, { tag: 'ElectricLeAluki#9621' }, { tag: 'charmines#1522' }]
-        },
-        {
-            item: 'Adding taco command o3o',
-            users: [{ tag: 'Mr. El#2628' }]
         }
     ];
 

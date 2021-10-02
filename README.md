@@ -8,6 +8,8 @@
 
 A Discord furry bot
 
+[Add to your server today!](https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=518151064640&scope=bot)
+
 ## What is ProtoBot?
 
 ProtoBot is a Discord bot made by furries, for furries.

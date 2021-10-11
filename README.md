@@ -8,7 +8,7 @@
 
 A Discord furry bot
 
-[Add to your server today!](https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=518151064640&scope=bot)
+[Add to your server!](https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=518151064640&scope=bot)
 
 ## What is ProtoBot?
 
@@ -18,7 +18,7 @@ ProtoBot is a Discord bot made by furries, for furries.
 
 The following steps will help you to get ProtoBot running on your computer.
 
-We support **Linux** and **macOS 11 or above**. Any Windows/OSX bugs will be treated with LOW PRIORITY.
+We support **Linux** and **macOS 11 or greater**. Any Windows/OSX bugs will be treated with LOW PRIORITY.
 
 ### 1. Node.js
 

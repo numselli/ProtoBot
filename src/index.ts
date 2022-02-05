@@ -23,7 +23,7 @@ import moduleAlias from 'module-alias';
 
 moduleAlias.addAliases({
     '@lib': __dirname + '/lib', // Library files, such as core modules and clients.
-    '@root': __dirname + '/'    // For direct access to uncompiled source.
+    '@root': __dirname + '/' // For direct access to uncompiled source.
 });
 
 // Import source-map-support and register it to allow better visibility of
@@ -31,10 +31,10 @@ moduleAlias.addAliases({
 import 'source-map-support/register';
 
 // Modules
-import * as fs from 'fs';                           // Filesystem access
-import chalk from 'chalk';                          // Coloring for CLI - FIXME: update to v5 when TS is updated
-import Client from '@lib/Client';                   // The custom client files
-import discord from 'discord.js';                   // <<< Discord!
+import * as fs from 'fs'; // Filesystem access
+import chalk from 'chalk'; // Coloring for CLI - FIXME: update to v5 when TS is updated
+import Client from '@lib/Client'; // The custom client files
+import discord from 'discord.js'; // <<< Discord!
 import type Command from '@lib/interfaces/Command'; // For command typing
 
 // Import the primary log function from the CWD.
@@ -113,7 +113,7 @@ client.on('ready', async () => {
             log(type, `${chalk.yellow('[')}${chalk.yellow.bold('CMDLOAD')}${chalk.yellow(']')} ${message}`);
         }
         l('i', 'Beginning initial command load...');
-        
+
         // Read the root directory of the commands.
         fs.readdir(client.config.dirs.commands, (err, files) => {
             if (err) {
@@ -139,15 +139,15 @@ client.on('ready', async () => {
                                 ? client.config.dirs.commands + path
                                 : `${client.config.dirs.commands}/${path}`)
                         );
-                        const cmdName = path.replace('.js', '');                // Set the command's name to the path without the extension.
-                        l('v', `Loading command "${cmdName}"...`);              //
+                        const cmdName = path.replace('.js', ''); // Set the command's name to the path without the extension.
+                        l('v', `Loading command "${cmdName}"...`); //
                         client.commandsConfig.set(cmdName, commandData.config); // Set the command configuration into the command map.
-                        client.commands.set(cmdName, commandData);              // Import the command into the main commands object.
+                        client.commands.set(cmdName, commandData); // Import the command into the main commands object.
                         // Load aliases into the refs along with the base command
                         l('v', `Loading command aliases for ${cmdName}...`);
                         l('v', 'Loaded base alias!');
-                        client.commandsRefs.set(cmdName, cmdName);              // The command's name itself will always be an alias, as
-                                                                                // the code that handles aliases is not very well written.
+                        client.commandsRefs.set(cmdName, cmdName); // The command's name itself will always be an alias, as
+                        // the code that handles aliases is not very well written.
                         (commandData.config.aliases ?? []).forEach((alias) => {
                             l('v', `Loaded alias ${alias}!`);
                             client.commandsRefs.set(alias, cmdName); // Set the alias into the command referencing Map.
@@ -208,18 +208,19 @@ client.on('ready', async () => {
     log('i', 'Checking if we were restarted...');
     if (client.restartData.get('wasRestarted')) {
         log('i', 'We have restarted. Sending message...');
-        const guild = client.guilds.cache.get(<string>client.restartData.get('serverId'));                                 // Fetch the server we restarted in...
+        const guild = client.guilds.cache.get(<string>client.restartData.get('serverId')); // Fetch the server we restarted in...
         const channel = <discord.TextChannel>await guild?.channels.cache.get(<string>client.restartData.get('channelId')); // ...and get the channel...
-        const message = await channel?.messages.fetch(<string>client.restartData.get('messageId'));                        // ...and finally the message.
+        const message = await channel?.messages.fetch(<string>client.restartData.get('messageId')); // ...and finally the message.
         await message.reply(
             `Done! Restart complete in ${Date.now() - <number>client.restartData.get('time')}ms (${
                 (Date.now() - <number>client.restartData.get('time')) / 1000
             } seconds).`
         );
         client.restartData.set('wasRestarted', false); // TODO: Maybe check that there is no way for this to
-                                                       //       not be set, as if it is set true at start we
-                                                       //       always will nag the dev.
-    } else { // A clean start
+        //       not be set, as if it is set true at start we
+        //       always will nag the dev.
+    } else {
+        // A clean start
         log('i', 'Not restarted.');
     }
 });
@@ -240,7 +241,10 @@ client.on('messageCreate', (message: discord.Message) => {
     // If this is a bot, return to prevent looping.
     if (message.author.bot) return;
     // ...but if it's a DM, clarify it to the user.
-    if (message.channel.type === 'DM') { message.reply('Hey there! I do not accept DMs. Use me in a server.'); return; }
+    if (message.channel.type === 'DM') {
+        message.reply('Hey there! I do not accept DMs. Use me in a server.');
+        return;
+    }
     // Execute each hook from the database.
     client.hooks.forEach((hookData) => {
         log('i', `${chalk.green('[')}${chalk.green.bold('HookRunner')}${chalk.green(']')} Running hook ${hookData.config.name}!`);

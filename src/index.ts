@@ -16,36 +16,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Aliases (aka @lib/ @root/ etc)
+// Import the moduleAlias module. This is used to allow importing of module
+// aliases, such as @lib (to the lib folder) and @root (to the root of the
+// source)
 import moduleAlias from 'module-alias';
 
 moduleAlias.addAliases({
-    '@lib': __dirname + '/lib',
-    '@root': __dirname + '/'
+    '@lib': __dirname + '/lib', // Library files, such as core modules and clients.
+    '@root': __dirname + '/' // For direct access to uncompiled source.
 });
 
-// Support source maps
-// source map much uwu
+// Import source-map-support and register it to allow better visibility of
+// error locations as shown in the TS default source maps.
 import 'source-map-support/register';
 
 // Modules
-import * as fs from 'fs';
-import chalk from 'chalk';
-import Client from '@lib/Client';
-import discord from 'discord.js';
-import type Command from '@lib/interfaces/Command';
+import * as fs from 'fs'; // Filesystem access
+import chalk from 'chalk'; // Coloring for CLI - FIXME: update to v5 when TS is updated
+import Client from '@lib/Client'; // The custom client files
+import discord from 'discord.js'; // <<< Discord!
+import type Command from '@lib/interfaces/Command'; // For command typing
 
-// Log import
+// Import the primary log function from the CWD.
 import log from './log';
 
-// Initialize client
+// Initialize a Client instance, and provide the Discord intent flags.
 const client = new Client({
     intents: [
         discord.Intents.FLAGS.GUILDS,
         discord.Intents.FLAGS.GUILD_MEMBERS,
         discord.Intents.FLAGS.GUILD_BANS,
         discord.Intents.FLAGS.GUILD_INVITES,
-        discord.Intents.FLAGS.GUILD_MESSAGES,
+        discord.Intents.FLAGS.GUILD_MESSAGES, // We may need to apply for this intent at verification
         discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
         discord.Intents.FLAGS.GUILD_MESSAGE_TYPING,
         discord.Intents.FLAGS.DIRECT_MESSAGES,
@@ -54,11 +56,15 @@ const client = new Client({
     ]
 });
 
-// Ready event
+// When the client is ready...
 client.on('ready', async () => {
+    // Count the total user counts up. We do this by getting the total user count
+    // for each server and remove ourselves from it...
     const userCountsPerGuild = client.guilds.cache.map((g) => g.memberCount - 1);
     let userTotal = 0;
+    // ...and iterate through them to increment our user total...
     userCountsPerGuild.forEach((item) => (userTotal += item));
+    // ...and get the average guild-user ratio.
     const userAvg = userTotal / userCountsPerGuild.length;
     // prettier-ignore
     (() => {
@@ -80,6 +86,8 @@ client.on('ready', async () => {
         log('i', 'PPPPPPPPPP           rrrrrrr               ooooooooooo             ttttttttttt     ooooooooooo   BBBBBBBBBBBBBBBBB      ooooooooooo             ttttttttttt');
     })()
     log('i', 'Ready!');
+    // A lot of chalk prefixes to show the counts. A better way to handle this?
+    // Whoever wrote this (myself) needs some mental help.
     log(
         'i',
         `${chalk.green('[')}${chalk.green.bold('BOT')}${chalk.green(']')} Username: ${
@@ -96,54 +104,70 @@ client.on('ready', async () => {
     );
     log('i', `${chalk.green('[')}${chalk.green.bold('USERAVG')}${chalk.green(']')} Average user count per guilds: ${chalk.red(Math.round(userAvg))}`);
     log('i', `${chalk.green('[')}${chalk.green.bold('PREFIXES')}${chalk.green(']')} Loaded ${chalk.red(client.config.prefixes.length)} prefixes!`);
+
+    // The root function used to load all of the command files.
     function loadCmds(): void {
+        // Define our own local version of the log() function to be used within this function, to show it is
+        // the command loading handler.
         function l(type: 'v' | 'i' | 'w' | 'e', message: any) {
             log(type, `${chalk.yellow('[')}${chalk.yellow.bold('CMDLOAD')}${chalk.yellow(']')} ${message}`);
         }
         l('i', 'Beginning initial command load...');
+
+        // Read the root directory of the commands.
         fs.readdir(client.config.dirs.commands, (err, files) => {
             if (err) {
+                // Something went wrong. err = an Error object
                 l('e', `Failed to read directory ${client.config.dirs.commands}:`);
                 l('e', err);
             } else {
                 files.forEach((path) => {
+                    // Ensure that what we are reading is a core JavaScript compiled file.
                     if (path.endsWith('.js')) {
+                        // Check that this file does not contain capitalized letters in it's names.
+                        // This is a violation. Logged as: 'CommandCasedWarning'
                         if (path.replace('.js', '').toLowerCase() !== path.replace('.js', '')) {
                             l('w', `CommandCasedWarning: Command at ${path} has a name with a capital letter!`);
                             l('w', `Will be loaded as "${path.replace('.js', '').toLowerCase()}"!`);
+                            // Normalize the path. This should never be needed.
                             path = path.toLowerCase();
                         }
-                        // normal load
+
+                        // The command data is loaded from the path.
                         const commandData = <Command>(
                             require(client.config.dirs.commands.endsWith('/')
                                 ? client.config.dirs.commands + path
                                 : `${client.config.dirs.commands}/${path}`)
                         );
-                        const cmdName = path.replace('.js', '');
-                        l('v', `Loading command "${cmdName}"...`);
-                        client.commandsConfig.set(cmdName, commandData.config);
-                        client.commands.set(cmdName, commandData);
+                        const cmdName = path.replace('.js', ''); // Set the command's name to the path without the extension.
+                        l('v', `Loading command "${cmdName}"...`); //
+                        client.commandsConfig.set(cmdName, commandData.config); // Set the command configuration into the command map.
+                        client.commands.set(cmdName, commandData); // Import the command into the main commands object.
                         // Load aliases into the refs along with the base command
                         l('v', `Loading command aliases for ${cmdName}...`);
                         l('v', 'Loaded base alias!');
-                        client.commandsRefs.set(cmdName, cmdName); // base
+                        client.commandsRefs.set(cmdName, cmdName); // The command's name itself will always be an alias, as
+                        // the code that handles aliases is not very well written.
                         (commandData.config.aliases ?? []).forEach((alias) => {
                             l('v', `Loaded alias ${alias}!`);
-                            client.commandsRefs.set(alias, cmdName);
+                            client.commandsRefs.set(alias, cmdName); // Set the alias into the command referencing Map.
                         });
                         l('v', `Finished loading command "${cmdName}"!`);
                     } else if (path.endsWith('.map')) {
-                        return;
+                        return; // Ignore source maps
                     } else {
-                        // unknown ext
+                        // THIS IS A VIOLATION AND SHOULD NEVER THROW; We will not kill the process however.
                         l('w', `File in commands dir with unknown extension: ${path}`);
                     }
                 });
             }
         });
     }
-    loadCmds();
+    loadCmds(); // Execute the massive function block above.
+
+    // Same thing, load the hook files.
     function loadHooks(): void {
+        // Consult loadCmds for most of this.
         function l(type: 'v' | 'i' | 'w' | 'e', message: any) {
             log(type, `${chalk.yellow('[')}${chalk.yellow.bold('HOOKLOAD')}${chalk.yellow(']')} ${message}`);
         }
@@ -155,7 +179,7 @@ client.on('ready', async () => {
             } else {
                 files.forEach((path: string) => {
                     if (path.endsWith('.js')) {
-                        // normal load
+                        // normal load, but in this case we import into the hook Map.
                         const hookData = require(client.config.dirs.hooks.endsWith('/')
                             ? client.config.dirs.hooks + path
                             : `${client.config.dirs.hooks}/${path}`);
@@ -173,39 +197,55 @@ client.on('ready', async () => {
             }
         });
     }
-    loadHooks();
+    loadHooks(); // Execute that massive thing again.
 
     // Status
+    // We assume the main prefix is always the first in the array.
     client.user?.setActivity(`${client.config.prefixes[0]}about | Written for furries, by furries!`, { type: 'PLAYING' });
 
-    // Restart message finished
+    // If we were restarted, based on the restartData Map, send the RestartTimer message to
+    // the channel we were restarted in.
     log('i', 'Checking if we were restarted...');
     if (client.restartData.get('wasRestarted')) {
         log('i', 'We have restarted. Sending message...');
-        const guild = client.guilds.cache.get(<string>client.restartData.get('serverId'));
-        const channel = <discord.TextChannel>await guild?.channels.cache.get(<string>client.restartData.get('channelId'));
-        const message = await channel?.messages.fetch(<string>client.restartData.get('messageId'));
+        const guild = client.guilds.cache.get(<string>client.restartData.get('serverId')); // Fetch the server we restarted in...
+        const channel = <discord.TextChannel>await guild?.channels.cache.get(<string>client.restartData.get('channelId')); // ...and get the channel...
+        const message = await channel?.messages.fetch(<string>client.restartData.get('messageId')); // ...and finally the message.
         await message.reply(
             `Done! Restart complete in ${Date.now() - <number>client.restartData.get('time')}ms (${
                 (Date.now() - <number>client.restartData.get('time')) / 1000
             } seconds).`
         );
-        client.restartData.set('wasRestarted', false);
+        client.restartData.set('wasRestarted', false); // TODO: Maybe check that there is no way for this to
+        //       not be set, as if it is set true at start we
+        //       always will nag the dev.
     } else {
+        // A clean start
         log('i', 'Not restarted.');
     }
 });
 
-// Message handler
+// The most important part.
+// *** HANDLING MESSAGES ***
+// message will be a discord.Message object with the standard properties.
+// -- THIS REQUIRES THE GUILDMESSAGES PRIVILEDGED INTENT
 client.on('messageCreate', (message: discord.Message) => {
+    // Let's (theoretically) say this person is brand new to us. We need
+    // to use .ensure() to make sure they exist in the databases. This
+    // does nothing if they are already in the DBs. If they aren't, we
+    // will add them with the default values as defined in
+    // client.defaults.
     client.ustats.ensure(message.author.id, client.defaults.USER_STATS);
     client.uconfs.ensure(message.author.id, client.defaults.USER_CONFS);
     client.cooldowns.ensure(message.author.id, client.defaults.COOLDOWNS);
-    if (message.author.bot || message.channel.type === 'DM') {
-        // exit
+    // If this is a bot, return to prevent looping.
+    if (message.author.bot) return;
+    // ...but if it's a DM, clarify it to the user.
+    if (message.channel.type === 'DM') {
+        message.reply('Hey there! I do not accept DMs. Use me in a server.');
         return;
     }
-    // @ts-ignore
+    // Execute each hook from the database.
     client.hooks.forEach((hookData) => {
         log('i', `${chalk.green('[')}${chalk.green.bold('HookRunner')}${chalk.green(']')} Running hook ${hookData.config.name}!`);
         hookData.run(client, message, log);

@@ -240,7 +240,7 @@ client.on('messageCreate', (message: discord.Message) => {
     // If this is a bot, return to prevent looping.
     if (message.author.bot) return;
     // ...but if it's a DM, clarify it to the user.
-    if (message.channel.type === 'DM') message.reply('Hey there! I do not accept DMs. Use me in a server.');
+    if (message.channel.type === 'DM') { message.reply('Hey there! I do not accept DMs. Use me in a server.'); return; }
     // Execute each hook from the database.
     client.hooks.forEach((hookData) => {
         log('i', `${chalk.green('[')}${chalk.green.bold('HookRunner')}${chalk.green(']')} Running hook ${hookData.config.name}!`);

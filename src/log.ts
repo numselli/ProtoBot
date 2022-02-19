@@ -16,6 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/************************************READ ME BEFORE EDITING THIS FILE*******
+ * Hey there, fellow explorer! This file is core to the functioning of     *
+ * ProtoBot. It handles logging and file writes for the log archives.      *
+ * This code was written a long time ago, back when persistent logging     *
+ * was implemented, so it may not make much sense. If someone is willing   *
+ * to take a look and potentially refactor it, that would be nice, but     *
+ * please ensure the API stays the same, as it is used HUNDREDS OF TIMES   *
+ * around the source code. Things we need to change are listed just        *
+ * under this comment in TODO tags. Thank you for (hopefully) contributing *
+ * to the continued development of ProtoBot!                               *
+ *                                      - ProtoBot Core Developer   0xLogN *
+ ***************************************************************************
+// TODO: Archive older log files with gzip or similar
+// TODO: Delete very old log files automatically
+// TODO: Flag to disable debug on production
+// TODO: Refactor API
+
 // Modules
 import chalk from 'chalk';
 import * as fs from 'fs';

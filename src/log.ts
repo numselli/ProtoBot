@@ -16,6 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+const runningInProd = process.env.PRODUCTION;
+
 // Import the necessary modules for the logger
 import chalk from 'chalk'; // Chalk handles fancy coloring.
 import * as fs from 'fs'; // To create the write streams.
@@ -51,7 +53,13 @@ try {
 function spawnLogStream(logLevel: 'verbose' | 'all' | 'warn' | 'err'): fs.WriteStream {
     try {
         const logStream: fs.WriteStream = fs.createWriteStream(`../logs/${logInitTime}/${logLevel}.log`);
-        logStream.write(`### ProtoBot - Log File @ ${logLevel}/${logInitTime} ###\n`);
+        logStream.write(`### ProtoBot - Log File @ ${logLevel}/${logInitTime}\n`);
+        if (runningInProd) {
+            logStream.write('### This is a production mode log file.\n');
+        }
+        if (logLevel === 'verbose' && runningInProd) {
+            logStream.write('### Logging at loglevel VERBOSE is disabled in production.\n### Check ENV.PRODUCTION.\n');
+        }
         return logStream;
     } catch (e) {
         console.error(e);
@@ -94,7 +102,7 @@ function writeItem(mode: 'v' | 'i' | 'w' | 'e', message: string): void {
             stream.write(`${strip(message)}\n`);
         }
     } else if (mode === 'v') {
-        logArray[3][0].write(`${strip(message)}\n`);
+        if (!runningInProd) {logArray[3][0].write(`${strip(message)}\n`);}
     }
 }
 
@@ -115,6 +123,7 @@ export default function log(mode: 'v' | 'i' | 'w' | 'e' | 'CLOSE_STREAMS', messa
             });
         });
     } else {
+        if (mode === 'v' && runningInProd) {return undefined;}
         if (typeof message !== 'string') {
             // Use util.inspect to color the message
             message = util.inspect(message, { colors: true });

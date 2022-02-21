@@ -75,6 +75,11 @@ client.on('ready', async () => {
         log('i', '|/       |/ \\___/ (_______)   )_(  '); 
     })();
     log('i', 'Ready!');
+    if (process.env.PRODUCTION) {
+        log('i', 'Running in production mode. Verbose logging is disabled.');
+    } else {
+        log('i', 'Running in development mode. Verbose logging is enabled.');
+    }
     // A lot of chalk prefixes to show the counts. A better way to handle this?
     // Whoever wrote this (myself) needs some mental help.
     log(

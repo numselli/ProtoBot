@@ -239,7 +239,7 @@ client.on('messageCreate', (message: discord.Message) => {
     client.uconfs.ensure(message.author.id, client.defaults.USER_CONFS);
     client.cooldowns.ensure(message.author.id, client.defaults.COOLDOWNS);
     // If this is a bot, return to prevent looping.
-    if (message.author.bot) return;
+    if (message.author.bot) {return;}
     // ...but if it's a DM, clarify it to the user.
     if (message.channel.type === 'DM') {
         message.reply('Hey there! I do not accept DMs. Use me in a server.');

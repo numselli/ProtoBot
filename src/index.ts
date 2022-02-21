@@ -45,14 +45,11 @@ const client = new Client({
     intents: [
         discord.Intents.FLAGS.GUILDS,
         discord.Intents.FLAGS.GUILD_MEMBERS,
-        discord.Intents.FLAGS.GUILD_BANS,
         discord.Intents.FLAGS.GUILD_INVITES,
         discord.Intents.FLAGS.GUILD_MESSAGES, // We may need to apply for this intent at verification
         discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        discord.Intents.FLAGS.GUILD_MESSAGE_TYPING,
         discord.Intents.FLAGS.DIRECT_MESSAGES,
-        discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
-        discord.Intents.FLAGS.DIRECT_MESSAGE_TYPING
+        discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
     ]
 });
 

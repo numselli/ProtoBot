@@ -65,42 +65,30 @@ client.on('ready', async () => {
     const userAvg = userTotal / userCountsPerGuild.length;
     // prettier-ignore
     (() => {
-        log('i', 'PPPPPPPPPPPPPPPPP                                                 tttt                           BBBBBBBBBBBBBBBBB                             tttt');
-        log('i', 'P::::::::::::::::P                                             ttt:::t                           B::::::::::::::::B                         ttt:::t');
-        log('i', 'P::::::PPPPPP:::::P                                            t:::::t                           B::::::BBBBBB:::::B                        t:::::t');
-        log('i', 'PP:::::P     P:::::P                                           t:::::t                           BB:::::B     B:::::B                       t:::::t');
-        log('i', '  P::::P     P:::::Prrrrr   rrrrrrrrr      ooooooooooo   ttttttt:::::ttttttt       ooooooooooo     B::::B     B:::::B   ooooooooooo   ttttttt:::::ttttttt');
-        log('i', '  P::::P     P:::::Pr::::rrr:::::::::r   oo:::::::::::oo t:::::::::::::::::t     oo:::::::::::oo   B::::B     B:::::B oo:::::::::::oo t:::::::::::::::::t');
-        log('i', '  P::::PPPPPP:::::P r:::::::::::::::::r o:::::::::::::::ot:::::::::::::::::t    o:::::::::::::::o  B::::BBBBBB:::::B o:::::::::::::::ot:::::::::::::::::t');
-        log('i', '  P:::::::::::::PP  rr::::::rrrrr::::::ro:::::ooooo:::::otttttt:::::::tttttt    o:::::ooooo:::::o  B:::::::::::::BB  o:::::ooooo:::::otttttt:::::::tttttt');
-        log('i', '  P::::PPPPPPPPP     r:::::r     r:::::ro::::o     o::::o      t:::::t          o::::o     o::::o  B::::BBBBBB:::::B o::::o     o::::o      t:::::t');
-        log('i', '  P::::P             r:::::r     rrrrrrro::::o     o::::o      t:::::t          o::::o     o::::o  B::::B     B:::::Bo::::o     o::::o      t:::::t');
-        log('i', '  P::::P             r:::::r            o::::o     o::::o      t:::::t          o::::o     o::::o  B::::B     B:::::Bo::::o     o::::o      t:::::t');
-        log('i', '  P::::P             r:::::r            o::::o     o::::o      t:::::t    tttttto::::o     o::::o  B::::B     B:::::Bo::::o     o::::o      t:::::t    tttttt');
-        log('i', 'PP::::::PP           r:::::r            o:::::ooooo:::::o      t::::::tttt:::::to:::::ooooo:::::oBB:::::BBBBBB::::::Bo:::::ooooo:::::o      t::::::tttt:::::t');
-        log('i', 'P::::::::P           r:::::r            o:::::::::::::::o      tt::::::::::::::to:::::::::::::::oB:::::::::::::::::B o:::::::::::::::o      tt::::::::::::::t');
-        log('i', 'P::::::::P           r:::::r             oo:::::::::::oo         tt:::::::::::tt oo:::::::::::oo B::::::::::::::::B   oo:::::::::::oo         tt:::::::::::tt');
-        log('i', 'PPPPPPPPPP           rrrrrrr               ooooooooooo             ttttttttttt     ooooooooooo   BBBBBBBBBBBBBBBBB      ooooooooooo             ttttttttttt');
-    })()
+        log('i', ' _______  ______   _______ _________');
+        log('i', '(  ____ )(  ___ \\ (  ___  )\\__   __/');
+        log('i', '| (    )|| (   ) )| (   ) |   ) (  '); 
+        log('i', '| (____)|| (__/ / | |   | |   | |  '); 
+        log('i', '|  _____)|  __ (  | |   | |   | |  '); 
+        log('i', '| (      | (  \\ \\ | |   | |   | |  '); 
+        log('i', '| )      | )___) )| (___) |   | |  '); 
+        log('i', '|/       |/ \\___/ (_______)   )_(  '); 
+    })();
     log('i', 'Ready!');
     // A lot of chalk prefixes to show the counts. A better way to handle this?
     // Whoever wrote this (myself) needs some mental help.
     log(
         'i',
-        `${chalk.green('[')}${chalk.green.bold('BOT')}${chalk.green(']')} Username: ${
-            chalk.red(client.user?.tag) ?? '(error: client.user is undefined)'
-        }`
+        `Username: ${chalk.red(client.user?.tag) ?? '(error: client.user is undefined)'}`
     );
-    log('i', `${chalk.green('[')}${chalk.green.bold('GUILDS')}${chalk.green(']')} In ${chalk.red(client.guilds.cache.size)} guilds!`);
-    log('i', `${chalk.green('[')}${chalk.green.bold('CHANNELS')}${chalk.green(']')} With ${chalk.red(client.channels.cache.size)} channels!`);
+    log('i', `In ${chalk.red(client.guilds.cache.size)} guilds!`);
+    log('i', `With ${chalk.red(client.channels.cache.size)} channels!`);
     log(
         'i',
-        `${chalk.green('[')}${chalk.green.bold('USERS')}${chalk.green(']')} Total ${chalk.red(userTotal)} users! (${chalk.red(
-            'excluding'
-        )} ${chalk.red.bold('self')})`
+        `Total ${chalk.red(userTotal)} members, excluding myself!`
     );
-    log('i', `${chalk.green('[')}${chalk.green.bold('USERAVG')}${chalk.green(']')} Average user count per guilds: ${chalk.red(Math.round(userAvg))}`);
-    log('i', `${chalk.green('[')}${chalk.green.bold('PREFIXES')}${chalk.green(']')} Loaded ${chalk.red(client.config.prefixes.length)} prefixes!`);
+    log('i', `Average user count over all guilds: ${chalk.red(Math.round(userAvg))}`);
+    log('i', `Loaded ${chalk.red(client.config.prefixes.length)} prefixes!`);
 
     // The root function used to load all of the command files.
     function loadCmds(): void {
@@ -149,7 +137,7 @@ client.on('ready', async () => {
                             l('v', `Loaded alias ${alias}!`);
                             client.commandsRefs.set(alias, cmdName); // Set the alias into the command referencing Map.
                         });
-                        l('v', `Finished loading command "${cmdName}"!`);
+                        l('i', `Finished loading command "${cmdName}"!`);
                     } else if (path.endsWith('.map')) {
                         return; // Ignore source maps
                     } else {
@@ -183,7 +171,7 @@ client.on('ready', async () => {
                         const hookName = path.replace('.js', '');
                         l('v', `Loading hook "${hookName}"...`);
                         client.hooks.set(hookName, hookData);
-                        l('v', `Finished loading hook "${hookName}"!`);
+                        l('i', `Finished loading hook "${hookName}"!`);
                     } else if (path.endsWith('.map')) {
                         return;
                     } else {

@@ -27,7 +27,7 @@
  * under this comment in TODO tags. Thank you for (hopefully) contributing *
  * to the continued development of ProtoBot!                               *
  *                                      - ProtoBot Core Developer   0xLogN *
- ***************************************************************************
+ ***************************************************************************/
 // TODO: Archive older log files with gzip or similar
 // TODO: Delete very old log files automatically
 // TODO: Flag to disable debug on production

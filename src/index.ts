@@ -317,29 +317,29 @@ process.on('exit', (code) => {
 
 // If we get an uncaught exception, close ASAP.
 process.on('uncaughtException', async (error) => {
-    log('e', 'Killing client...');
+    log('e', 'Killing client...', true);
     client.destroy();
-    log('e', 'Client killed.');
-    log('e', 'Closing databases...');
+    log('e', 'Client killed.', true);
+    log('e', 'Closing databases...', true);
     client.closeDatabases();
-    log('e', 'Closed databases.');
-    log('e', 'An uncaught exception occured!');
-    log('e', `Error thrown was:`);
+    log('e', 'Closed databases.', true);
+    log('e', 'An uncaught exception occured!', true);
+    log('e', `Error thrown was:`, true);
     error.stack?.split('\n').forEach((item) => {
-        log('e', `${item}`);
+        log('e', `${item}`, true);
     });
-    log('e', 'Stack trace dump:');
+    log('e', 'Stack trace dump:', true);
     let stack = new Error().stack?.split('\n');
     stack?.shift();
     if (!stack) {
         stack = [];
     }
     stack.forEach((item) => {
-        log('e', `${item}`);
+        log('e', `${item}`, true);
     });
-    log('e', 'Process exiting.');
-    log('e', 'Exit code 5.');
-    log('e', 'Goodbye!');
+    log('e', 'Process exiting.', true);
+    log('e', 'Exit code 5.', true);
+    log('e', 'Goodbye!', true);
     await log('CLOSE_STREAMS');
     process.exit(5);
 });

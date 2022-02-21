@@ -35,12 +35,6 @@
 
 const runningInProd = process.env.PRODUCTION;
 
-// Modules
-import chalk from 'chalk';
-import * as fs from 'fs';
-import strip from 'strip-ansi';
-import * as util from 'util';
-
 // Import the necessary modules for the logger
 import chalk from 'chalk'; // Chalk handles fancy coloring.
 import * as fs from 'fs'; // To create the write streams.

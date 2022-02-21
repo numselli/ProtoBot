@@ -16,18 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Modules
-import chalk from 'chalk';
-import * as fs from 'fs';
-import strip from 'strip-ansi';
-import * as util from 'util';
+// Import the necessary modules for the logger
+import chalk from 'chalk'; // Chalk handles fancy coloring.
+import * as fs from 'fs'; // To create the write streams.
+import strip from 'strip-ansi'; // To clean off the ANSI escape codes for the log files.
+import * as util from 'util'; // Utilities.
 
-// Create logging streams
+// Create the logging streams for all of the log levels.
+// A certain log level is always logged to all below it, so for example, if you were
+// to log an error, it would be logged to all levels.
+
+// The timestamp when the logfile was created (now).
 const logInitTime: number = Date.now();
 try {
     fs.readdirSync('../logs/');
 } catch (e) {
-    if (e.code === 'ENOENT') {
+    if ((<{ code: string }>e).code === 'ENOENT') {
         try {
             fs.mkdirSync('../logs/');
         } catch (e2) {
@@ -39,57 +43,58 @@ try {
         process.exit(1);
     }
 }
+
+// Spawn a logfile and it's respective streams.
+// Disable consistent-return. This is a bug in eslint, where a process.exit() does not count
+// as a return.
+// eslint-disable-next-line consistent-return
+function spawnLogStream(logLevel: 'verbose' | 'all' | 'warn' | 'err'): fs.WriteStream {
+    try {
+        const logStream: fs.WriteStream = fs.createWriteStream(`../logs/${logInitTime}/${logLevel}.log`);
+        logStream.write(`### ProtoBot - Log File @ ${logLevel}/${logInitTime} ###\n`);
+        return logStream;
+    } catch (e) {
+        console.error(e);
+        process.exit(1);
+    }
+}
+
+// Create the log directory.
 try {
     fs.mkdirSync(`../logs/${logInitTime}/`);
 } catch (e) {
     console.error(e);
     process.exit(1);
 }
-let verboseStr: fs.WriteStream;
-try {
-    verboseStr = fs.createWriteStream(`../logs/${logInitTime}/verbose.log`);
-} catch (e) {
-    console.error(e);
-    process.exit(1);
-}
-let allStr: fs.WriteStream;
-try {
-    allStr = fs.createWriteStream(`../logs/${logInitTime}/all.log`);
-} catch (e) {
-    console.error(e);
-    process.exit(1);
-}
-let warnStr: fs.WriteStream;
-try {
-    warnStr = fs.createWriteStream(`../logs/${logInitTime}/warn.log`);
-} catch (e) {
-    console.error(e);
-    process.exit(1);
-}
-let errStr: fs.WriteStream;
-try {
-    errStr = fs.createWriteStream(`../logs/${logInitTime}/err.log`);
-} catch (e) {
-    console.error(e);
-    process.exit(1);
-}
 
-// Log to file func
+const verboseStr = spawnLogStream('verbose');
+const allStr     = spawnLogStream('all');
+const warnStr    = spawnLogStream('warn');
+const errStr     = spawnLogStream('err');
+
+// Function to log to the appropriate stream(s).
 function writeItem(mode: 'v' | 'i' | 'w' | 'e', message: string): void {
+    const logArray: [fs.WriteStream, string][] = [
+        [errStr, 'e'],
+        [warnStr, 'w'],
+        [allStr, 'a'],
+        [verboseStr, 'v']
+    ];
+
     if (mode === 'e') {
-        errStr.write(`${strip(message)}\n`);
-        warnStr.write(`${strip(message)}\n`);
-        allStr.write(`${strip(message)}\n`);
-        verboseStr.write(`${strip(message)}\n`);
+        for (const [stream, _] of logArray) {
+            stream.write(`${strip(message)}\n`);
+        }
     } else if (mode === 'w') {
-        warnStr.write(`${strip(message)}\n`);
-        allStr.write(`${strip(message)}\n`);
-        verboseStr.write(`${strip(message)}\n`);
+        for (const [stream, _] of logArray.slice(1)) {
+            stream.write(`${strip(message)}\n`);
+        }
     } else if (mode === 'i') {
-        allStr.write(`${strip(message)}\n`);
-        verboseStr.write(`${strip(message)}\n`);
+        for (const [stream, _] of logArray.slice(2)) {
+            stream.write(`${strip(message)}\n`);
+        }
     } else if (mode === 'v') {
-        verboseStr.write(`${strip(message)}\n`);
+        logArray[3][0].write(`${strip(message)}\n`);
     }
 }
 

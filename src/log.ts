@@ -46,13 +46,15 @@ try {
     }
 }
 
+const logFldrSuffix = runningInProd ? '.prod' : '.dev';
+
 // Spawn a logfile and it's respective streams.
 // Disable consistent-return. This is a bug in eslint, where a process.exit() does not count
 // as a return.
 // eslint-disable-next-line consistent-return
 function spawnLogStream(logLevel: 'verbose' | 'all' | 'warn' | 'err'): fs.WriteStream {
     try {
-        const logStream: fs.WriteStream = fs.createWriteStream(`../logs/${logInitTime}/${logLevel}.log`);
+        const logStream: fs.WriteStream = fs.createWriteStream(`../logs/${logInitTime}${logFldrSuffix}/${logLevel}.log`);
         logStream.write(`### ProtoBot - Log File @ ${logLevel}/${logInitTime}\n`);
         if (runningInProd) {
             logStream.write('### This is a production mode log file.\n');
@@ -69,7 +71,7 @@ function spawnLogStream(logLevel: 'verbose' | 'all' | 'warn' | 'err'): fs.WriteS
 
 // Create the log directory.
 try {
-    fs.mkdirSync(`../logs/${logInitTime}/`);
+    fs.mkdirSync(`../logs/${logInitTime}${logFldrSuffix}/`);
 } catch (e) {
     console.error(e);
     process.exit(1);
@@ -88,6 +90,9 @@ function writeItem(mode: 'v' | 'i' | 'w' | 'e', message: string): void {
         [allStr, 'a'],
         [verboseStr, 'v']
     ];
+    if (runningInProd) {
+        logArray.pop();
+    }
 
     if (mode === 'e') {
         for (const [stream, _] of logArray) {

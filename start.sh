@@ -6,7 +6,7 @@ echo 'Starting!';
 while true; do
     tsc;
     cd dist;
-    node .;
+    PRODUCTION=$PRODUCTION node .;
     if [ "$?" -eq 9 ]; then
         echo 'Restarting instantly: exit code was 9 (RESTART)'
     else

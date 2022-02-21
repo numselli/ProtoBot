@@ -82,16 +82,10 @@ client.on('ready', async () => {
     }
     // A lot of chalk prefixes to show the counts. A better way to handle this?
     // Whoever wrote this (myself) needs some mental help.
-    log(
-        'i',
-        `Username: ${chalk.red(client.user?.tag) ?? '(error: client.user is undefined)'}`
-    );
+    log('i', `Username: ${chalk.red(client.user?.tag) ?? '(error: client.user is undefined)'}`);
     log('i', `In ${chalk.red(client.guilds.cache.size)} guilds!`);
     log('i', `With ${chalk.red(client.channels.cache.size)} channels!`);
-    log(
-        'i',
-        `Total ${chalk.red(userTotal)} members, excluding myself!`
-    );
+    log('i', `Total ${chalk.red(userTotal)} members, excluding myself!`);
     log('i', `Average user count over all guilds: ${chalk.red(Math.round(userAvg))}`);
     log('i', `Loaded ${chalk.red(client.config.prefixes.length)} prefixes!`);
 

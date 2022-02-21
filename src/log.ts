@@ -95,9 +95,9 @@ try {
 }
 
 const verboseStr = spawnLogStream('verbose');
-const allStr     = spawnLogStream('all');
-const warnStr    = spawnLogStream('warn');
-const errStr     = spawnLogStream('err');
+const allStr = spawnLogStream('all');
+const warnStr = spawnLogStream('warn');
+const errStr = spawnLogStream('err');
 
 // Function to log to the appropriate stream(s).
 function writeItem(mode: 'v' | 'i' | 'w' | 'e', message: string): void {
@@ -124,7 +124,9 @@ function writeItem(mode: 'v' | 'i' | 'w' | 'e', message: string): void {
             stream.write(`${strip(message)}\n`);
         }
     } else if (mode === 'v') {
-        if (!runningInProd) {logArray[3][0].write(`${strip(message)}\n`);}
+        if (!runningInProd) {
+            logArray[3][0].write(`${strip(message)}\n`);
+        }
     }
 }
 
@@ -145,7 +147,9 @@ export default function log(mode: 'v' | 'i' | 'w' | 'e' | 'CLOSE_STREAMS', messa
             });
         });
     } else {
-        if (mode === 'v' && runningInProd) {return undefined;}
+        if (mode === 'v' && runningInProd) {
+            return undefined;
+        }
         if (typeof message !== 'string') {
             // Use util.inspect to color the message
             message = util.inspect(message, { colors: true });

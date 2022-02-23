@@ -48,7 +48,7 @@ export async function run(client: Client, message: Message, args: string[], log:
             .setTitle(`Branch Switch [${stderr.startsWith('Switched') ? 'Complete' : 'Failed'}]`)
             .setDescription(stderr.startsWith('Switched') ? `Switched to branch ${args[0]}` : 'Failed to switch to branch. (Does it exist?)');
 
-        if (stderr) embed.addField('Log', `\`\`\`\n${stderr ?? '<none>'}${stdout !== '' ? `\n${stdout}` : ''}\n\`\`\``);
+        if (stderr) { embed.addField('Log', `\`\`\`\n${stderr ?? '<none>'}${stdout !== '' ? `\n${stdout}` : ''}\n\`\`\``); }
 
         m.edit({ embeds: [embed] });
     });

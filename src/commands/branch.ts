@@ -23,7 +23,7 @@ import { exec, ExecException } from 'child_process';
 import type Logger from '@lib/interfaces/Logger';
 
 // Main
-export function run(client: Client, message: Message, args: string[], log: Logger): void {
+export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
     // Safety check
     if (message.author.id !== client.config.ownerID) {
         log('w', `User ${message.author.tag} tried to use branch! Destination: ${args[0]}`);
@@ -33,6 +33,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
 
     if (!args[0]) {
         message.reply('What branch did you want to switch to, tho?');
+        return;
     }
 
     let embed: discord.MessageEmbed = new discord.MessageEmbed()
@@ -40,23 +41,16 @@ export function run(client: Client, message: Message, args: string[], log: Logge
         .setDescription(`Please wait.. Switching to \`${args[0]}\`...`)
         .addField('Status', `\`$ git branch ${args[0]}\``);
 
-    message.reply({ embeds: [embed] }).then((m: discord.Message) => {
-        exec(`git checkout ${args[0]}`, (error: ExecException | null, stdout: string, stderr: string) => {
-            embed = new discord.MessageEmbed()
-                .setTitle(`Branch Switch [${stderr.startsWith('Switched') ? 'Complete' : 'Failed'}]`)
-                .setDescription(stderr.startsWith('Switched') ? `Switched to branch ${args[0]}` : 'Failed to switch to branch. (Does it exist?)');
+   const m =  await message.reply({ embeds: [embed] })
+    
+    exec(`git checkout ${args[0]}`, (error: ExecException | null, stdout: string, stderr: string) => {
+        embed = new discord.MessageEmbed()
+            .setTitle(`Branch Switch [${stderr.startsWith('Switched') ? 'Complete' : 'Failed'}]`)
+            .setDescription(stderr.startsWith('Switched') ? `Switched to branch ${args[0]}` : 'Failed to switch to branch. (Does it exist?)');
 
-            if (stderr) {
-                embed.addField(
-                    'Log',
-                    `\`\`\`
-${stderr ?? '<none>'}${stdout !== '' ? `\n${stdout}` : ''}
-\`\`\``
-                );
-            }
+        if (stderr) embed.addField('Log', `\`\`\`\n${stderr ?? '<none>'}${stdout !== '' ? `\n${stdout}` : ''}\n\`\`\``);
 
-            m.edit({ embeds: [embed] });
-        });
+        m.edit({ embeds: [embed] });
     });
 }
 

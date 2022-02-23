@@ -25,13 +25,83 @@ import type Logger from '@lib/interfaces/Logger';
 export function run(client: Client, message: Message, args: string[], log: Logger): void {
     log('i', 'Fursona command fired!');
     // Get their fursona, PLS GIB I WANT AAAA >w<
-    if (!args[0]) {
-        // If they haven't set one...
-        const fursona = client.fursonas.get(message.author.id);
-        if (!fursona) {
-            log('i', 'No fursona for user!');
-            message.reply("You haven't set a fursona yet! To do this, run the command `fursona set`.");
-        } else {
+
+    switch (args[0]){
+        case "set":
+            log('i', 'Setting fursona!');
+            if (!args[1]) {
+                log('i', 'Showing set help!');
+                message.reply(`\`\`\`adoc\n===== FURSONA HELP =====\n${client.config.prefixes[0]}fursona set name <name> :: Set your fursona's name\n${client.config.prefixes[0]}fursona set bio <bio>   :: Set your fursona's bio\n${client.config.prefixes[0]}fursona set type <type> :: Set your fursona's breed/type\n\`\`\``);
+                return;
+            }
+
+            switch (args[1].toLowerCase()){
+                case "name":
+                    if (!args[2]) {
+                        const temp = client.fursonas.ensure(message.author.id, {});
+                        if ('name' in temp) {
+                            delete temp.name;
+                            message.reply('Deleted value.');
+                            client.fursonas.set(message.author.id, temp);
+                            return;
+                        }
+                        client.fursonas.set(message.author.id, temp);
+                        message.reply('You need to provide a value!');
+                        return;
+                    }
+                    client.fursonas.ensure(message.author.id, {});
+                    client.fursonas.set(message.author.id, args.slice(2).join(' '), 'name');
+                    message.reply('Set!');
+                break;
+                case "bio":
+                    if (!args[2]) {
+                        const temp = client.fursonas.ensure(message.author.id, {});
+                        if ('bio' in temp) {
+                            delete temp.bio;
+                            message.reply('Deleted value.');
+                            client.fursonas.set(message.author.id, temp);
+                            return;
+                        }
+                        client.fursonas.set(message.author.id, temp);
+                        message.reply('You need to provide a value!');
+                        return;
+                    }
+                    client.fursonas.ensure(message.author.id, {});
+                    client.fursonas.set(message.author.id, args.slice(2).join(' '), 'bio');
+                    message.reply('Set!');
+                break;
+                case "type":
+                    if (!args[2]) {
+                        const temp = client.fursonas.ensure(message.author.id, {});
+                        if ('type' in temp) {
+                            delete temp.type;
+                            message.reply('Deleted value.');
+                            client.fursonas.set(message.author.id, temp);
+                            return;
+                        }
+                        client.fursonas.set(message.author.id, temp);
+                        message.reply('You need to provide a value!');
+                        return;
+                    }
+                    client.fursonas.ensure(message.author.id, {});
+                    client.fursonas.set(message.author.id, args.slice(2).join(' '), 'type');
+                    message.reply('Set!');
+                break; 
+                default:
+                    message.reply('Unknown option! Try `fursona set`.');
+                break;
+            }
+        break;
+        default:
+            // If they haven't set one...
+            const fursona = client.fursonas.get(message.author.id);
+            if (!fursona) {
+                log('i', 'No fursona for user!');
+                message.reply("You haven't set a fursona yet! To do this, run the command `fursona set`.");
+                return;
+
+            }
+
             // They have one!
             log('i', 'Displaying fursona!');
             const embed = new discord.MessageEmbed().setTitle('Fursona').setDescription('Here is your current fursona information.');
@@ -41,68 +111,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
             embed.addField('Type', fursona.type || '<unset>');
 
             message.reply({ embeds: [embed] });
-        }
-    } else if (args[0].toLowerCase() === 'set') {
-        log('i', 'Setting fursona!');
-        if (!args[1]) {
-            log('i', 'Showing set help!');
-            message.reply(`\`\`\`adoc
-===== FURSONA HELP =====
-${client.config.prefixes[0]}fursona set name <name> :: Set your fursona's name
-${client.config.prefixes[0]}fursona set bio <bio>   :: Set your fursona's bio
-${client.config.prefixes[0]}fursona set type <type> :: Set your fursona's breed/type
-\`\`\``);
-        } else if (args[1].toLowerCase() === 'name') {
-            if (!args[2]) {
-                const temp = client.fursonas.ensure(message.author.id, {});
-                if ('name' in temp) {
-                    delete temp.name;
-                    message.reply('Deleted value.');
-                    client.fursonas.set(message.author.id, temp);
-                    return;
-                }
-                client.fursonas.set(message.author.id, temp);
-                message.reply('You need to provide a value!');
-                return;
-            }
-            client.fursonas.ensure(message.author.id, {});
-            client.fursonas.set(message.author.id, args.slice(2).join(' '), 'name');
-            message.reply('Set!');
-        } else if (args[1].toLowerCase() === 'bio') {
-            if (!args[2]) {
-                const temp = client.fursonas.ensure(message.author.id, {});
-                if ('bio' in temp) {
-                    delete temp.bio;
-                    message.reply('Deleted value.');
-                    client.fursonas.set(message.author.id, temp);
-                    return;
-                }
-                client.fursonas.set(message.author.id, temp);
-                message.reply('You need to provide a value!');
-                return;
-            }
-            client.fursonas.ensure(message.author.id, {});
-            client.fursonas.set(message.author.id, args.slice(2).join(' '), 'bio');
-            message.reply('Set!');
-        } else if (args[1].toLowerCase() === 'type') {
-            if (!args[2]) {
-                const temp = client.fursonas.ensure(message.author.id, {});
-                if ('type' in temp) {
-                    delete temp.type;
-                    message.reply('Deleted value.');
-                    client.fursonas.set(message.author.id, temp);
-                    return;
-                }
-                client.fursonas.set(message.author.id, temp);
-                message.reply('You need to provide a value!');
-                return;
-            }
-            client.fursonas.ensure(message.author.id, {});
-            client.fursonas.set(message.author.id, args.slice(2).join(' '), 'type');
-            message.reply('Set!');
-        } else {
-            message.reply('Unknown option! Try `fursona set`.');
-        }
+        break;
     }
 }
 

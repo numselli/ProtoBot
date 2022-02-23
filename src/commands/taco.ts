@@ -25,18 +25,19 @@ import type Logger from '@lib/interfaces/Logger';
 // ===== COMMAND MADE BY Mr. EL =====
 export function run(client: Client, message: Message, args: string[], log: Logger): void {
     // If it's FurDevs, we can ping mr. el:
-    if (message.guild?.id === '731520035717251142') {
-        const embed = new discord.MessageEmbed()
-            .setTitle('🌮 El is taco')
-            .setDescription('Indeed, <@326394970002948096> is a taco. o3o')
-            .setColor('RANDOM')
-            .setFooter('Command made by Mr. El and BadBoyHaloCat.')
-            .setTimestamp();
-
-        message.reply({ embeds: [embed] });
-    } else {
+    if (message.guild?.id !== '731520035717251142') {
         message.reply('This command is only available in a special server! ;)');
+        return;
     }
+    
+    const embed = new discord.MessageEmbed()
+        .setTitle('🌮 El is taco')
+        .setDescription('Indeed, <@326394970002948096> is a taco. o3o')
+        .setColor('RANDOM')
+        .setFooter('Command made by Mr. El and BadBoyHaloCat.')
+        .setTimestamp();
+
+    message.reply({ embeds: [embed] });
 }
 
 // Config

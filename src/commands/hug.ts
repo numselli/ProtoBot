@@ -22,15 +22,11 @@ import type Logger from '@lib/interfaces/Logger';
 
 // Main
 export function run(client: Client, message: Message, args: string[], log: Logger): void {
-    let userID: string | undefined;
+    let userID = args[0]?.replace(/[<@!>]/g, '');
     if (!args[0]) {
         log('i', 'No hug arg provided!');
         message.reply('Who did you want to hug?');
         return;
-    } else if (/<@!?.+>/.test(args[0])) {
-        userID = args[0].replace(/[<@!>]/g, '');
-    } else {
-        userID = args[0];
     }
 
     if (userID === message.author.id) {
@@ -42,10 +38,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
     client.ustats.ensure(userID, client.defaults.USER_STATS);
     client.ustats.inc(userID, 'hugs');
 
-    message.reply(
-        `**HUG!**
-<@${message.author.id}> huggles <@${userID}> tightly.`
-    );
+    message.reply(`**HUG!**\n<@${message.author.id}> huggles <@${userID}> tightly.`);
 }
 
 // Config

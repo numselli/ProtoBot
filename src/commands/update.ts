@@ -24,7 +24,7 @@ import { exec, ExecException } from 'child_process';
 import type Logger from '@lib/interfaces/Logger';
 
 // Main
-export function run(client: Client, message: Message, args: string[], log: Logger): void {
+export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
     // Safety check
     if (message.author.id !== client.config.ownerID) {
         log('w', `User ${message.author.tag} tried to use "update"!`);
@@ -42,90 +42,53 @@ export function run(client: Client, message: Message, args: string[], log: Logge
 
     l('i', 'Getting git status...');
 
-    message.reply({ embeds: [embed] }).then((m: discord.Message) => {
-        exec('git status', (error: ExecException | null, stdout: string, stderr: string) => {
-            if (error) {
-                l('e', `Failed to update: ${error}`);
-                m.edit(`Failed to update: ${error}`);
-            } else {
-                l('i', 'Got git status!');
-                embed.addField(
-                    'Git Status',
-                    `\`\`\`
-$ git status
+    const m = await message.reply({ embeds: [embed] })
 
-${stdout === '' ? stderr : stdout}
-\`\`\``
-                );
+    exec('git status', (error: ExecException | null, stdout: string, stderr: string) => {
+        if (error) {
+            l('e', `Failed to update: ${error}`);
+            m.edit(`Failed to update: ${error}`);
+        } else {
+            l('i', 'Got git status!');
+            embed.addField('Git Status', `\`\`\`\n$ git status\n\n${stdout === '' ? stderr : stdout}\n\`\`\``);
 
-                l('i', 'Adding files...');
-                exec('git add ..', (error2: ExecException | null, stdout2: string, stderr2: string) => {
-                    if (error2) {
-                        l('e', `Failed to update: ${error2}`);
-                        m.edit(`Failed to update: ${error2}`);
-                    } else {
-                        l('i', 'Added files!');
-                        embed.addField(
-                            'Git Add Result',
-                            `\`\`\`
-$ git add ..
+            l('i', 'Adding files...');
+            exec('git add ..', (error2: ExecException | null, stdout2: string, stderr2: string) => {
+                if (error2) {
+                    l('e', `Failed to update: ${error2}`);
+                    m.edit(`Failed to update: ${error2}`);
+                } else {
+                    l('i', 'Added files!');
+                    embed.addField('Git Add Result',`\`\`\`\n$ git add ..\n\n${stdout2 === '' ? stderr2 : stdout2}\n\`\`\``);
 
-${stdout2 === '' ? stderr2 : stdout2}
-\`\`\``
-                        );
+                    l('i', 'Committing...');
 
-                        l('i', 'Committing...');
+                    exec('git commit -m "ProtoBot -- Update (Found uncommitted changes)"', (error3: ExecException | null, stderr3: string, stdout3: string) => {
+                        l('i', 'Committed!');
+                        embed.addField('Git Commit Result', `\`\`\`\n$ git commit -m "ProtoBot -- Update (Found uncommitted changes)"\n\n${stdout3 === '' ? stderr3 : stdout3}\n\`\`\``);
 
-                        exec(
-                            'git commit -m "ProtoBot -- Update (Found uncommitted changes)"',
-                            (error3: ExecException | null, stderr3: string, stdout3: string) => {
-                                l('i', 'Committed!');
-                                embed.addField(
-                                    'Git Commit Result',
-                                    `\`\`\`
-$ git commit -m "ProtoBot -- Update (Found uncommitted changes)"
+                        l('i', 'Syncing...');
 
-${stdout3 === '' ? stderr3 : stdout3}
-\`\`\``
-                                );
+                        exec('git fetch && git pull --no-rebase && git push', (error4: ExecException | null, stderr4: string, stdout4: string) => {
+                            if (error4) {
+                                l('e', `Failed to update: ${error4}`);
+                                m.edit(`Failed to update: ${error4}`);
+                            } else {
+                                l('i', 'Synced!');
+                                embed
+                                    .addField('Git Sync (fetch -> pull -> push) Result', `\`\`\`\n$ git fetch && git pull --no-rebase && git push\n\n${stdout4 === '' ? stderr4 : stdout4}\n\`\`\``)
+                                    .addField('Status', '**Complete.**')
+                                    .addField('Restart to apply changes', `To apply the update, run ${client.config.prefixes[0]}restart.`);
 
-                                l('i', 'Syncing...');
+                                    m.edit({ embeds: [embed] });
 
-                                exec(
-                                    'git fetch && git pull --no-rebase && git push',
-                                    (error4: ExecException | null, stderr4: string, stdout4: string) => {
-                                        if (error4) {
-                                            l('e', `Failed to update: ${error4}`);
-                                            m.edit(`Failed to update: ${error4}`);
-                                        } else {
-                                            l('i', 'Synced!');
-                                            embed
-                                                .addField(
-                                                    'Git Sync (fetch -> pull -> push) Result',
-                                                    `\`\`\`
-$ git fetch && git pull --no-rebase && git push
-
-${stdout4 === '' ? stderr4 : stdout4}
-\`\`\``
-                                                )
-                                                .addField('Status', '**Complete.**')
-                                                .addField(
-                                                    'Restart to apply changes',
-                                                    `To apply the update, run ${client.config.prefixes[0]}restart.`
-                                                );
-
-                                            m.edit({ embeds: [embed] });
-
-                                            l('i', 'Update completed!');
-                                        }
-                                    }
-                                );
+                                    l('i', 'Update completed!');
                             }
-                        );
-                    }
-                });
-            }
-        });
+                        });
+                    });
+                }
+            });
+        }
     });
 }
 

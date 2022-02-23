@@ -22,20 +22,15 @@ import type Logger from '@lib/interfaces/Logger';
 
 // Main
 export function run(client: Client, message: Message, args: string[], log: Logger): void {
-    let userID: string | undefined;
+    let userID = args[0]?.replace(/[<@!>]/g, '');
     if (!args[0]) {
         log('i', 'No boop arg provided!');
         message.reply('Who did you want to pat?');
         return;
-    } else if (/<@!?.+>/.test(args[0])) {
-        userID = args[0].replace(/[<@!>]/g, '');
-    } else {
-        userID = args[0];
     }
 
     if (userID === message.author.id) {
-        message.reply(`**Self pat?**
-<@${message.author.id}> pats themselves on the head..?`);
+        message.reply(`**Self pat?**\n<@${message.author.id}> pats themselves on the head..?`);
         return;
     }
 
@@ -43,8 +38,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
     client.ustats.inc(userID, 'pats');
 
     message.reply(
-        `**Pat!**
-<@${message.author.id}> pats <@${userID}> on the head~!`
+        `**Pat!**\n<@${message.author.id}> pats <@${userID}> on the head~!`
     );
 }
 

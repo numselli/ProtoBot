@@ -27,14 +27,12 @@ import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
 
 // Main
-export function run(client: Client, message: Message, args: string[], log: Logger): void {
-    message.channel.messages.fetch({ limit: 2 }).then((messages) => {
-        // @ts-ignore *temporary
-        const m: Message = messages.last();
-        message.reply(`Content of message ID \`${m.id}\` in channel <#${m.channel.id}>:
+export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
+    const messages = await message.channel.messages.fetch({ limit: 2 })
 
-${escapeMarkdown(m.content)}`);
-    });
+    // @ts-ignore *temporary
+    const m: Message = messages.last();
+    message.reply(`Content of message ID \`${m.id}\` in channel <#${m.channel.id}>:\n\n${escapeMarkdown(m.content)}`);
 }
 
 // Config

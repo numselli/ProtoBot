@@ -71,6 +71,16 @@
       "contributions": [
         "infra"
       ]
+    },
+    {
+      "login": "numselli",
+      "name": "numselli",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58607232?v=4",
+      "profile": "http://numselli.xyz",
+      "contributions": [
+        "infra",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,

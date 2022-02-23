@@ -27,12 +27,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
         log('i', 'No boop arg provided!');
         message.reply('Who did you want to pat?');
         return;
-<<<<<<< HEAD
     }
-=======
-    } else if (/<@!?.+>/.test(args[0])) userID = args[0].replace(/[<@!>]/g, '');
-    else userID = args[0];
->>>>>>> main
 
     if (userID === message.author.id) {
         message.reply(`**Self pat?**\n<@${message.author.id}> pats themselves on the head..?`);

@@ -33,81 +33,85 @@
 // TODO: Flag to disable debug on production
 // TODO: Refactor API
 
-// Modules
-import chalk from 'chalk';
-import * as fs from 'fs';
-import strip from 'strip-ansi';
-import * as util from 'util';
+const runningInProd = process.env.PRODUCTION;
 
-// Create logging streams
+// Import the necessary modules for the logger
+import chalk from 'chalk'; // Chalk handles fancy coloring.
+import * as fs from 'fs'; // To create the write streams.
+import strip from 'strip-ansi'; // To clean off the ANSI escape codes for the log files.
+import * as util from 'util'; // Utilities.
+
+// Create the logging streams for all of the log levels.
+// A certain log level is always logged to all below it, so for example, if you were
+// to log an error, it would be logged to all levels.
+
+// The timestamp when the logfile was created (now).
 const logInitTime: number = Date.now();
 try {
     fs.readdirSync('../logs/');
 } catch (e) {
-    if (e.code === 'ENOENT') {
+    if ((<{ code: string }>e).code === 'ENOENT')
         try {
             fs.mkdirSync('../logs/');
         } catch (e2) {
             console.error(e2);
             process.exit(1);
         }
-    } else {
+    else {
         console.error(e);
         process.exit(1);
     }
 }
-try {
-    fs.mkdirSync(`../logs/${logInitTime}/`);
-} catch (e) {
-    console.error(e);
-    process.exit(1);
+
+const logFldrSuffix = runningInProd ? '.prod' : '.dev';
+
+// Spawn a logfile and it's respective streams.
+// Disable consistent-return. This is a bug in eslint, where a process.exit() does not count
+// as a return.
+// eslint-disable-next-line consistent-return
+function spawnLogStream(logLevel: 'verbose' | 'all' | 'warn' | 'err'): fs.WriteStream {
+    try {
+        const logStream: fs.WriteStream = fs.createWriteStream(`../logs/${logInitTime}${logFldrSuffix}/${logLevel}.log`);
+        logStream.write(`### ProtoBot - Log File @ ${logLevel}/${logInitTime}\n`);
+        if (runningInProd) logStream.write('### This is a production mode log file.\n');
+
+        if (logLevel === 'verbose' && runningInProd)
+            logStream.write('### Logging at loglevel VERBOSE is disabled in production.\n### Check ENV.PRODUCTION.\n');
+
+        return logStream;
+    } catch (e) {
+        console.error(e);
+        process.exit(1);
+    }
 }
-let verboseStr: fs.WriteStream;
+
+// Create the log directory.
 try {
-    verboseStr = fs.createWriteStream(`../logs/${logInitTime}/verbose.log`);
-} catch (e) {
-    console.error(e);
-    process.exit(1);
-}
-let allStr: fs.WriteStream;
-try {
-    allStr = fs.createWriteStream(`../logs/${logInitTime}/all.log`);
-} catch (e) {
-    console.error(e);
-    process.exit(1);
-}
-let warnStr: fs.WriteStream;
-try {
-    warnStr = fs.createWriteStream(`../logs/${logInitTime}/warn.log`);
-} catch (e) {
-    console.error(e);
-    process.exit(1);
-}
-let errStr: fs.WriteStream;
-try {
-    errStr = fs.createWriteStream(`../logs/${logInitTime}/err.log`);
+    fs.mkdirSync(`../logs/${logInitTime}${logFldrSuffix}/`);
 } catch (e) {
     console.error(e);
     process.exit(1);
 }
 
-// Log to file func
+const verboseStr = spawnLogStream('verbose');
+const allStr = spawnLogStream('all');
+const warnStr = spawnLogStream('warn');
+const errStr = spawnLogStream('err');
+
+// Function to log to the appropriate stream(s).
 function writeItem(mode: 'v' | 'i' | 'w' | 'e', message: string): void {
-    if (mode === 'e') {
-        errStr.write(`${strip(message)}\n`);
-        warnStr.write(`${strip(message)}\n`);
-        allStr.write(`${strip(message)}\n`);
-        verboseStr.write(`${strip(message)}\n`);
-    } else if (mode === 'w') {
-        warnStr.write(`${strip(message)}\n`);
-        allStr.write(`${strip(message)}\n`);
-        verboseStr.write(`${strip(message)}\n`);
-    } else if (mode === 'i') {
-        allStr.write(`${strip(message)}\n`);
-        verboseStr.write(`${strip(message)}\n`);
-    } else if (mode === 'v') {
-        verboseStr.write(`${strip(message)}\n`);
-    }
+    const logArray: [fs.WriteStream, string][] = [
+        [errStr, 'e'],
+        [warnStr, 'w'],
+        [allStr, 'a'],
+        [verboseStr, 'v']
+    ];
+    if (runningInProd) logArray.pop();
+
+    if (mode === 'e') for (const [stream, _] of logArray) stream.write(`${strip(message)}\n`);
+    else if (mode === 'w') for (const [stream, _] of logArray.slice(1)) stream.write(`${strip(message)}\n`);
+    else if (mode === 'i') for (const [stream, _] of logArray.slice(2)) stream.write(`${strip(message)}\n`);
+    else if (mode === 'v') if (!runningInProd) logArray[3][0].write(`${strip(message)}\n`);
 }
 
 // Main
@@ -115,7 +119,7 @@ export default function log(mode: 'CLOSE_STREAMS'): Promise<void>;
 export default function log(mode: 'v' | 'i' | 'w' | 'e', message: any, _bypassStackPrint?: boolean): void;
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function log(mode: 'v' | 'i' | 'w' | 'e' | 'CLOSE_STREAMS', message?: any, _bypassStackPrint = false): void | Promise<void> {
-    if (mode === 'CLOSE_STREAMS') {
+    if (mode === 'CLOSE_STREAMS')
         // Close all of the file streams
         return new Promise((resolve) => {
             errStr.end(() => {
@@ -126,11 +130,13 @@ export default function log(mode: 'v' | 'i' | 'w' | 'e' | 'CLOSE_STREAMS', messa
                 });
             });
         });
-    } else {
-        if (typeof message !== 'string') {
+    else {
+        if (mode === 'v' && runningInProd) return undefined;
+
+        if (typeof message !== 'string')
             // Use util.inspect to color the message
             message = util.inspect(message, { colors: true });
-        }
+
         let msg = '';
         let preparsedDate: any = new Date(Date.now()).toLocaleDateString('en-US', {
             weekday: 'short',
@@ -193,9 +199,7 @@ export default function log(mode: 'v' | 'i' | 'w' | 'e' | 'CLOSE_STREAMS', messa
             const a = s.split('\n');
             a.shift();
 
-            for (const entry of a) {
-                log('e', 'STACK: ' + entry, true);
-            }
+            for (const entry of a) log('e', 'STACK: ' + entry, true);
         }
 
         return undefined;

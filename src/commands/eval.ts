@@ -48,19 +48,15 @@ ${code}`
     let response;
     let e = false;
     try {
-        if (code.includes('await') && !message.content.includes('\n')) {
-            code = `( async () => {return ${code}})()`;
-        } else if (code.includes('await') && message.content.includes('\n')) {
-            code = `( async () => {${code}})()`;
-        }
+        if (code.includes('await') && !message.content.includes('\n')) code = `( async () => {return ${code}})()`;
+        else if (code.includes('await') && message.content.includes('\n')) code = `( async () => {${code}})()`;
+
         // eslint-disable-next-line no-eval
         response = await eval(code);
-        if (typeof response !== 'string') {
-            response = require('util').inspect(response, { depth: 3 });
-        }
+        if (typeof response !== 'string') response = require('util').inspect(response, { depth: 3 });
     } catch (err) {
         e = true;
-        response = err.toString();
+        response = (<Error>err).toString();
         const Linter = require('eslint').Linter;
         const linter = new Linter();
         const lint = linter.verify(code, {
@@ -102,13 +98,13 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
         });
     }
 
-    if (!silent) {
+    if (!silent)
         try {
             message.reply({ embeds: [embed] });
         } catch (e) {
-            log('e', e);
+            log('e', e as string);
         }
-    } else {
+    else {
         message.delete().catch(() => {
             // delete silent msg
             log('e', 'Failed to delete command message with silent eval!');

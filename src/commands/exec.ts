@@ -45,21 +45,13 @@ ${code}`
     let e = false;
 
     exec(code, (error: ExecException | null, stdout: string, stderr: string) => {
-        if (error || stderr) {
-            e = true;
-        }
+        if (error || stderr) e = true;
 
-        if (stderr) {
-            embed.addField('STDERR', `\`\`\`${stderr.substr(0, 2042)}\`\`\``);
-        }
+        if (stderr) embed.addField('STDERR', `\`\`\`${stderr.substr(0, 2042)}\`\`\``);
 
-        if (stdout) {
-            embed.addField('STDOUT', `\`\`\`${stdout.substr(0, 2042)}\`\`\``);
-        }
+        if (stdout) embed.addField('STDOUT', `\`\`\`${stdout.substr(0, 2042)}\`\`\``);
 
-        if (error) {
-            embed.addField('ExecError', `\`\`\`${error.toString().substr(0, 2042)}\`\`\``);
-        }
+        if (error) embed.addField('ExecError', `\`\`\`${error.toString().substr(0, 2042)}\`\`\``);
 
         const parsed = [(error ?? { toString: () => '' }).toString(), stderr, stdout].reduce((a, b) => (a.length > b.length ? a : b));
 
@@ -123,13 +115,13 @@ ${code}`
             }
         }
 
-        if (!silent) {
+        if (!silent)
             try {
                 message.reply({ embeds: [embed] });
             } catch (e) {
-                log('e', e);
+                log('e', e as string);
             }
-        } else {
+        else {
             message.delete().catch(() => {
                 // delete silent msg
                 log('e', 'Failed to delete command message with silent exec!');

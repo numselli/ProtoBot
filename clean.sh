@@ -8,7 +8,7 @@ echo "Running this script will delete files from"
 echo "the ProtoBot workspace."
 echo ""
 echo "Examples of files deleted are compilation items"
-echo "such as ./commands/*.js, but NOT DATABASES!"
+echo "such as ./dist/commands/*.js, but NOT DATABASES!"
 echo ""
 read -p "Are you 100% SURE you want to continue? [y/N] " isSure
 case "$isSure" in

@@ -50,9 +50,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
                 return;
             });
         return;
-    } else {
-        fireStats(userID, message, client);
-    }
+    } else fireStats(userID, message, client);
 }
 
 // Config

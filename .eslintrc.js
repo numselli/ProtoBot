@@ -70,7 +70,7 @@ module.exports = {
         'array-callback-return': ['error'],
         'block-scoped-var': ['error'],
         'consistent-return': ['error'],
-        'curly': ['error', 'all'],
+        'curly': ['error', 'multi'],
         'default-case': ['error'],
         'default-case-last': ['error'],
         'default-param-last': ['error'],

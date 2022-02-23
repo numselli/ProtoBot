@@ -45,14 +45,11 @@ const client = new Client({
     intents: [
         discord.Intents.FLAGS.GUILDS,
         discord.Intents.FLAGS.GUILD_MEMBERS,
-        discord.Intents.FLAGS.GUILD_BANS,
         discord.Intents.FLAGS.GUILD_INVITES,
         discord.Intents.FLAGS.GUILD_MESSAGES, // We may need to apply for this intent at verification
         discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        discord.Intents.FLAGS.GUILD_MESSAGE_TYPING,
         discord.Intents.FLAGS.DIRECT_MESSAGES,
-        discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
-        discord.Intents.FLAGS.DIRECT_MESSAGE_TYPING
+        discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
     ]
 });
 
@@ -68,42 +65,27 @@ client.on('ready', async () => {
     const userAvg = userTotal / userCountsPerGuild.length;
     // prettier-ignore
     (() => {
-        log('i', 'PPPPPPPPPPPPPPPPP                                                 tttt                           BBBBBBBBBBBBBBBBB                             tttt');
-        log('i', 'P::::::::::::::::P                                             ttt:::t                           B::::::::::::::::B                         ttt:::t');
-        log('i', 'P::::::PPPPPP:::::P                                            t:::::t                           B::::::BBBBBB:::::B                        t:::::t');
-        log('i', 'PP:::::P     P:::::P                                           t:::::t                           BB:::::B     B:::::B                       t:::::t');
-        log('i', '  P::::P     P:::::Prrrrr   rrrrrrrrr      ooooooooooo   ttttttt:::::ttttttt       ooooooooooo     B::::B     B:::::B   ooooooooooo   ttttttt:::::ttttttt');
-        log('i', '  P::::P     P:::::Pr::::rrr:::::::::r   oo:::::::::::oo t:::::::::::::::::t     oo:::::::::::oo   B::::B     B:::::B oo:::::::::::oo t:::::::::::::::::t');
-        log('i', '  P::::PPPPPP:::::P r:::::::::::::::::r o:::::::::::::::ot:::::::::::::::::t    o:::::::::::::::o  B::::BBBBBB:::::B o:::::::::::::::ot:::::::::::::::::t');
-        log('i', '  P:::::::::::::PP  rr::::::rrrrr::::::ro:::::ooooo:::::otttttt:::::::tttttt    o:::::ooooo:::::o  B:::::::::::::BB  o:::::ooooo:::::otttttt:::::::tttttt');
-        log('i', '  P::::PPPPPPPPP     r:::::r     r:::::ro::::o     o::::o      t:::::t          o::::o     o::::o  B::::BBBBBB:::::B o::::o     o::::o      t:::::t');
-        log('i', '  P::::P             r:::::r     rrrrrrro::::o     o::::o      t:::::t          o::::o     o::::o  B::::B     B:::::Bo::::o     o::::o      t:::::t');
-        log('i', '  P::::P             r:::::r            o::::o     o::::o      t:::::t          o::::o     o::::o  B::::B     B:::::Bo::::o     o::::o      t:::::t');
-        log('i', '  P::::P             r:::::r            o::::o     o::::o      t:::::t    tttttto::::o     o::::o  B::::B     B:::::Bo::::o     o::::o      t:::::t    tttttt');
-        log('i', 'PP::::::PP           r:::::r            o:::::ooooo:::::o      t::::::tttt:::::to:::::ooooo:::::oBB:::::BBBBBB::::::Bo:::::ooooo:::::o      t::::::tttt:::::t');
-        log('i', 'P::::::::P           r:::::r            o:::::::::::::::o      tt::::::::::::::to:::::::::::::::oB:::::::::::::::::B o:::::::::::::::o      tt::::::::::::::t');
-        log('i', 'P::::::::P           r:::::r             oo:::::::::::oo         tt:::::::::::tt oo:::::::::::oo B::::::::::::::::B   oo:::::::::::oo         tt:::::::::::tt');
-        log('i', 'PPPPPPPPPP           rrrrrrr               ooooooooooo             ttttttttttt     ooooooooooo   BBBBBBBBBBBBBBBBB      ooooooooooo             ttttttttttt');
-    })()
+        log('i', ' _______  ______   _______ _________');
+        log('i', '(  ____ )(  ___ \\ (  ___  )\\__   __/');
+        log('i', '| (    )|| (   ) )| (   ) |   ) (  '); 
+        log('i', '| (____)|| (__/ / | |   | |   | |  '); 
+        log('i', '|  _____)|  __ (  | |   | |   | |  '); 
+        log('i', '| (      | (  \\ \\ | |   | |   | |  '); 
+        log('i', '| )      | )___) )| (___) |   | |  '); 
+        log('i', '|/       |/ \\___/ (_______)   )_(  '); 
+    })();
     log('i', 'Ready!');
+    if (process.env.PRODUCTION) log('i', 'Running in production mode. Verbose logging is disabled.');
+    else log('i', 'Running in development mode. Verbose logging is enabled.');
+
     // A lot of chalk prefixes to show the counts. A better way to handle this?
     // Whoever wrote this (myself) needs some mental help.
-    log(
-        'i',
-        `${chalk.green('[')}${chalk.green.bold('BOT')}${chalk.green(']')} Username: ${
-            chalk.red(client.user?.tag) ?? '(error: client.user is undefined)'
-        }`
-    );
-    log('i', `${chalk.green('[')}${chalk.green.bold('GUILDS')}${chalk.green(']')} In ${chalk.red(client.guilds.cache.size)} guilds!`);
-    log('i', `${chalk.green('[')}${chalk.green.bold('CHANNELS')}${chalk.green(']')} With ${chalk.red(client.channels.cache.size)} channels!`);
-    log(
-        'i',
-        `${chalk.green('[')}${chalk.green.bold('USERS')}${chalk.green(']')} Total ${chalk.red(userTotal)} users! (${chalk.red(
-            'excluding'
-        )} ${chalk.red.bold('self')})`
-    );
-    log('i', `${chalk.green('[')}${chalk.green.bold('USERAVG')}${chalk.green(']')} Average user count per guilds: ${chalk.red(Math.round(userAvg))}`);
-    log('i', `${chalk.green('[')}${chalk.green.bold('PREFIXES')}${chalk.green(']')} Loaded ${chalk.red(client.config.prefixes.length)} prefixes!`);
+    log('i', `Username: ${chalk.red(client.user?.tag) ?? '(error: client.user is undefined)'}`);
+    log('i', `In ${chalk.red(client.guilds.cache.size)} guilds!`);
+    log('i', `With ${chalk.red(client.channels.cache.size)} channels!`);
+    log('i', `Total ${chalk.red(userTotal)} members, excluding myself!`);
+    log('i', `Average user count over all guilds: ${chalk.red(Math.round(userAvg))}`);
+    log('i', `Loaded ${chalk.red(client.config.prefixes.length)} prefixes!`);
 
     // The root function used to load all of the command files.
     function loadCmds(): void {
@@ -120,7 +102,7 @@ client.on('ready', async () => {
                 // Something went wrong. err = an Error object
                 l('e', `Failed to read directory ${client.config.dirs.commands}:`);
                 l('e', err);
-            } else {
+            } else
                 files.forEach((path) => {
                     // Ensure that what we are reading is a core JavaScript compiled file.
                     if (path.endsWith('.js')) {
@@ -152,15 +134,12 @@ client.on('ready', async () => {
                             l('v', `Loaded alias ${alias}!`);
                             client.commandsRefs.set(alias, cmdName); // Set the alias into the command referencing Map.
                         });
-                        l('v', `Finished loading command "${cmdName}"!`);
-                    } else if (path.endsWith('.map')) {
-                        return; // Ignore source maps
-                    } else {
-                        // THIS IS A VIOLATION AND SHOULD NEVER THROW; We will not kill the process however.
-                        l('w', `File in commands dir with unknown extension: ${path}`);
-                    }
+                        l('i', `Finished loading command "${cmdName}"!`);
+                    } else if (path.endsWith('.map')) return;
+                    // Ignore source maps
+                    // THIS IS A VIOLATION AND SHOULD NEVER THROW; We will not kill the process however.
+                    else l('w', `File in commands dir with unknown extension: ${path}`);
                 });
-            }
         });
     }
     loadCmds(); // Execute the massive function block above.
@@ -176,7 +155,7 @@ client.on('ready', async () => {
             if (err) {
                 l('e', `Failed to read directory ${client.config.dirs.hooks}:`);
                 l('e', err);
-            } else {
+            } else
                 files.forEach((path: string) => {
                     if (path.endsWith('.js')) {
                         // normal load, but in this case we import into the hook Map.
@@ -186,15 +165,11 @@ client.on('ready', async () => {
                         const hookName = path.replace('.js', '');
                         l('v', `Loading hook "${hookName}"...`);
                         client.hooks.set(hookName, hookData);
-                        l('v', `Finished loading hook "${hookName}"!`);
-                    } else if (path.endsWith('.map')) {
-                        return;
-                    } else {
-                        // unknown ext
-                        l('w', `File in hooks dir with unknown extension: ${path}`);
-                    }
+                        l('i', `Finished loading hook "${hookName}"!`);
+                    } else if (path.endsWith('.map')) return;
+                    // unknown ext
+                    else l('w', `File in hooks dir with unknown extension: ${path}`);
                 });
-            }
         });
     }
     loadHooks(); // Execute that massive thing again.
@@ -219,10 +194,9 @@ client.on('ready', async () => {
         client.restartData.set('wasRestarted', false); // TODO: Maybe check that there is no way for this to
         //       not be set, as if it is set true at start we
         //       always will nag the dev.
-    } else {
-        // A clean start
-        log('i', 'Not restarted.');
     }
+    // A clean start
+    else log('i', 'Not restarted.');
 });
 
 // The most important part.
@@ -239,9 +213,8 @@ client.on('messageCreate', (message: discord.Message) => {
     client.uconfs.ensure(message.author.id, client.defaults.USER_CONFS);
     client.cooldowns.ensure(message.author.id, client.defaults.COOLDOWNS);
     // If this is a bot, return to prevent looping.
-    if (message.author.bot) {
-        return;
-    }
+    if (message.author.bot) return;
+
     // ...but if it's a DM, clarify it to the user.
     if (message.channel.type === 'DM') {
         message.reply('Hey there! I do not accept DMs. Use me in a server.');
@@ -255,14 +228,13 @@ client.on('messageCreate', (message: discord.Message) => {
     let msgIsCommand = false;
     let prefixLen = 0;
     let prefixUsed;
-    for (const prefix of client.config.prefixes) {
+    for (const prefix of client.config.prefixes)
         if (message.content.toLowerCase().startsWith(prefix)) {
             msgIsCommand = true;
             prefixLen = prefix.length;
             prefixUsed = prefix;
             break;
         }
-    }
 
     // if it's a command, we handle it.
     if (msgIsCommand) {
@@ -270,9 +242,7 @@ client.on('messageCreate', (message: discord.Message) => {
         let command = args.shift()?.toLowerCase() ?? '';
 
         // quit if the command couldn't be fetched
-        if (!command) {
-            return;
-        }
+        if (!command) return;
 
         // verbose info
         log('v', `Running command "${command}" for "${message.author.tag}" with args "${args.join(' ')}"!`);
@@ -333,29 +303,28 @@ process.on('exit', (code) => {
 
 // If we get an uncaught exception, close ASAP.
 process.on('uncaughtException', async (error) => {
-    log('e', 'Killing client...');
+    log('e', 'Killing client...', true);
     client.destroy();
-    log('e', 'Client killed.');
-    log('e', 'Closing databases...');
+    log('e', 'Client killed.', true);
+    log('e', 'Closing databases...', true);
     client.closeDatabases();
-    log('e', 'Closed databases.');
-    log('e', 'An uncaught exception occured!');
-    log('e', `Error thrown was:`);
+    log('e', 'Closed databases.', true);
+    log('e', 'An uncaught exception occured!', true);
+    log('e', `Error thrown was:`, true);
     error.stack?.split('\n').forEach((item) => {
-        log('e', `${item}`);
+        log('e', `${item}`, true);
     });
-    log('e', 'Stack trace dump:');
+    log('e', 'Stack trace dump:', true);
     let stack = new Error().stack?.split('\n');
     stack?.shift();
-    if (!stack) {
-        stack = [];
-    }
+    if (!stack) stack = [];
+
     stack.forEach((item) => {
-        log('e', `${item}`);
+        log('e', `${item}`, true);
     });
-    log('e', 'Process exiting.');
-    log('e', 'Exit code 5.');
-    log('e', 'Goodbye!');
+    log('e', 'Process exiting.', true);
+    log('e', 'Exit code 5.', true);
+    log('e', 'Goodbye!', true);
     await log('CLOSE_STREAMS');
     process.exit(5);
 });

@@ -16,6 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/******************************************************************************
+ * Hello kind stranger!                                                       *
+ * This code was written as a key part of the TypeScript rewrite of ProtoBot. *
+ * This makes barely any sense to me, but seems to be the best way to do it.  *
+ * This file is critical. DO NOT DELETE IT!     - ProtoBot Maintainer, 0xLogN *
+ ******************************************************************************/
+
 // Imports
 import Command from '@lib/interfaces/Command';
 import CommandConfig from '@lib/interfaces/CommandConfig';

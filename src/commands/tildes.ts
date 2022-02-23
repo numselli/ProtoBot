@@ -39,9 +39,8 @@ export async function run(client: Client, message: Message): Promise<void> {
 
     for (let i = 0; i < sorted.length && i < CUTOFF; i++) {
         const [id, count] = sorted[i];
-        if (id === message.author.id) {
-            placed = true;
-        }
+        if (id === message.author.id) placed = true;
+
         // eslint-disable-next-line no-await-in-loop
         const user = await client.users.fetch(id).catch(() => null);
         buf.push(formatRow(i, user, client));
@@ -49,9 +48,7 @@ export async function run(client: Client, message: Message): Promise<void> {
 
     if (!placed) {
         const index = sorted.findIndex(([id]) => id === message.author.id);
-        if (index !== -1) {
-            buf.push('...', formatRow(index, message.author, client));
-        }
+        if (index !== -1) buf.push('...', formatRow(index, message.author, client));
     }
 
     buf.push('```');

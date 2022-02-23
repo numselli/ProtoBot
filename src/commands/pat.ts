@@ -22,7 +22,7 @@ import type Logger from '@lib/interfaces/Logger';
 
 // Main
 export function run(client: Client, message: Message, args: string[], log: Logger): void {
-    let userID = args[0]?.replace(/[<@!>]/g, '');
+    const userID = args[0]?.replace(/[<@!>]/g, '');
     if (!args[0]) {
         log('i', 'No boop arg provided!');
         message.reply('Who did you want to pat?');

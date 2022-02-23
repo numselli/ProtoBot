@@ -44,7 +44,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
             message.reply('Sent the help menu to your DM!');
         })
         .catch((e) => {
-            message.reply(`**ERROR**: I failed to send the help menu to your DMs.\n\nhe error was: \`${e}\``);
+            message.reply(`**ERROR**: I failed to send the help menu to your DMs.\n\nThe error was: \`${e}\``);
             log('w', `Failed to send embed to user DMs for help: ${e}`);
             message.reply({ embeds: [embed] });
         });

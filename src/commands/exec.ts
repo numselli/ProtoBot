@@ -127,7 +127,7 @@ ${code}`
             try {
                 message.reply({ embeds: [embed] });
             } catch (e) {
-                log('e', e);
+                log('e', e as string);
             }
         } else {
             message.delete().catch(() => {

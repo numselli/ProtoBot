@@ -60,7 +60,7 @@ ${code}`
         }
     } catch (err) {
         e = true;
-        response = err.toString();
+        response = (<Error>err).toString();
         const Linter = require('eslint').Linter;
         const linter = new Linter();
         const lint = linter.verify(code, {
@@ -106,7 +106,7 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
         try {
             message.reply({ embeds: [embed] });
         } catch (e) {
-            log('e', e);
+            log('e', e as string);
         }
     } else {
         message.delete().catch(() => {

@@ -35,13 +35,9 @@ function fireStats(userID: string, message: Message, client: Client): void {
 
 export function run(client: Client, message: Message, args: string[], log: Logger): void {
     let userID: string | undefined;
-    if (!args[0]) {
-        userID = message.author.id;
-    } else if (/<@!?.+>/.test(args[0])) {
-        userID = args[0].replace(/[<@!>]/g, '');
-    } else {
-        userID = args[0];
-    }
+    if (!args[0]) userID = message.author.id;
+    else if (/<@!?.+>/.test(args[0])) userID = args[0].replace(/[<@!>]/g, '');
+    else userID = args[0];
 
     if (!client.ustats.get(userID)) {
         client.users
@@ -57,9 +53,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
                 return;
             });
         return;
-    } else {
-        fireStats(userID, message, client);
-    }
+    } else fireStats(userID, message, client);
 }
 
 // Config

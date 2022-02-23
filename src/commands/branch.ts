@@ -31,9 +31,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
         return;
     }
 
-    if (!args[0]) {
-        message.reply('What branch did you want to switch to, tho?');
-    }
+    if (!args[0]) message.reply('What branch did you want to switch to, tho?');
 
     let embed: discord.MessageEmbed = new discord.MessageEmbed()
         .setTitle('Branch Switch')
@@ -46,14 +44,13 @@ export function run(client: Client, message: Message, args: string[], log: Logge
                 .setTitle(`Branch Switch [${stderr.startsWith('Switched') ? 'Complete' : 'Failed'}]`)
                 .setDescription(stderr.startsWith('Switched') ? `Switched to branch ${args[0]}` : 'Failed to switch to branch. (Does it exist?)');
 
-            if (stderr) {
+            if (stderr)
                 embed.addField(
                     'Log',
                     `\`\`\`
 ${stderr ?? '<none>'}${stdout !== '' ? `\n${stdout}` : ''}
 \`\`\``
                 );
-            }
 
             m.edit({ embeds: [embed] });
         });

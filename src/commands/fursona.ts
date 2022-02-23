@@ -100,9 +100,7 @@ ${client.config.prefixes[0]}fursona set type <type> :: Set your fursona's breed/
             client.fursonas.ensure(message.author.id, {});
             client.fursonas.set(message.author.id, args.slice(2).join(' '), 'type');
             message.reply('Set!');
-        } else {
-            message.reply('Unknown option! Try `fursona set`.');
-        }
+        } else message.reply('Unknown option! Try `fursona set`.');
     }
 }
 

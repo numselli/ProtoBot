@@ -31,9 +31,7 @@ export function run(client: Client, message: Message, log: Logger): void {
     if (!cooldowns || cooldowns + client.config.cooldowns.owos - Date.now() < 1) {
         let hasPrefix = false;
         client.config.prefixes.forEach((prefix: string) => {
-            if (!hasPrefix && message.content.startsWith(prefix)) {
-                hasPrefix = true;
-            }
+            if (!hasPrefix && message.content.startsWith(prefix)) hasPrefix = true;
         });
         if (message.content.toLowerCase().includes('owo') && !hasPrefix) {
             client.owos.ensure(message.author.id, 0);
@@ -47,14 +45,13 @@ export function run(client: Client, message: Message, log: Logger): void {
                 )} Added owo!`
             );
         }
-    } else {
+    } else
         log(
             'i',
             `${chalk.green('[')}${chalk.green.bold('OwOHandler')}${chalk.green(']')} User still on cooldown! ${chalk.red(
                 cooldowns + client.config.cooldowns.owos - Date.now()
             )} ms remaining!`
         );
-    }
 }
 
 // Config

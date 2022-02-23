@@ -27,11 +27,8 @@ export function run(client: Client, message: Message, args: string[], log: Logge
         log('i', 'No hug arg provided!');
         message.reply('Who did you want to hug?');
         return;
-    } else if (/<@!?.+>/.test(args[0])) {
-        userID = args[0].replace(/[<@!>]/g, '');
-    } else {
-        userID = args[0];
-    }
+    } else if (/<@!?.+>/.test(args[0])) userID = args[0].replace(/[<@!>]/g, '');
+    else userID = args[0];
 
     if (userID === message.author.id) {
         log('i', 'Cannot hug self!');

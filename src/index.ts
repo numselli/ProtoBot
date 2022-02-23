@@ -75,11 +75,9 @@ client.on('ready', async () => {
         log('i', '|/       |/ \\___/ (_______)   )_(  '); 
     })();
     log('i', 'Ready!');
-    if (process.env.PRODUCTION) {
-        log('i', 'Running in production mode. Verbose logging is disabled.');
-    } else {
-        log('i', 'Running in development mode. Verbose logging is enabled.');
-    }
+    if (process.env.PRODUCTION) log('i', 'Running in production mode. Verbose logging is disabled.');
+    else log('i', 'Running in development mode. Verbose logging is enabled.');
+
     // A lot of chalk prefixes to show the counts. A better way to handle this?
     // Whoever wrote this (myself) needs some mental help.
     log('i', `Username: ${chalk.red(client.user?.tag) ?? '(error: client.user is undefined)'}`);
@@ -104,7 +102,7 @@ client.on('ready', async () => {
                 // Something went wrong. err = an Error object
                 l('e', `Failed to read directory ${client.config.dirs.commands}:`);
                 l('e', err);
-            } else {
+            } else
                 files.forEach((path) => {
                     // Ensure that what we are reading is a core JavaScript compiled file.
                     if (path.endsWith('.js')) {
@@ -137,14 +135,11 @@ client.on('ready', async () => {
                             client.commandsRefs.set(alias, cmdName); // Set the alias into the command referencing Map.
                         });
                         l('i', `Finished loading command "${cmdName}"!`);
-                    } else if (path.endsWith('.map')) {
-                        return; // Ignore source maps
-                    } else {
-                        // THIS IS A VIOLATION AND SHOULD NEVER THROW; We will not kill the process however.
-                        l('w', `File in commands dir with unknown extension: ${path}`);
-                    }
+                    } else if (path.endsWith('.map')) return;
+                    // Ignore source maps
+                    // THIS IS A VIOLATION AND SHOULD NEVER THROW; We will not kill the process however.
+                    else l('w', `File in commands dir with unknown extension: ${path}`);
                 });
-            }
         });
     }
     loadCmds(); // Execute the massive function block above.
@@ -160,7 +155,7 @@ client.on('ready', async () => {
             if (err) {
                 l('e', `Failed to read directory ${client.config.dirs.hooks}:`);
                 l('e', err);
-            } else {
+            } else
                 files.forEach((path: string) => {
                     if (path.endsWith('.js')) {
                         // normal load, but in this case we import into the hook Map.
@@ -171,14 +166,10 @@ client.on('ready', async () => {
                         l('v', `Loading hook "${hookName}"...`);
                         client.hooks.set(hookName, hookData);
                         l('i', `Finished loading hook "${hookName}"!`);
-                    } else if (path.endsWith('.map')) {
-                        return;
-                    } else {
-                        // unknown ext
-                        l('w', `File in hooks dir with unknown extension: ${path}`);
-                    }
+                    } else if (path.endsWith('.map')) return;
+                    // unknown ext
+                    else l('w', `File in hooks dir with unknown extension: ${path}`);
                 });
-            }
         });
     }
     loadHooks(); // Execute that massive thing again.
@@ -203,10 +194,9 @@ client.on('ready', async () => {
         client.restartData.set('wasRestarted', false); // TODO: Maybe check that there is no way for this to
         //       not be set, as if it is set true at start we
         //       always will nag the dev.
-    } else {
-        // A clean start
-        log('i', 'Not restarted.');
     }
+    // A clean start
+    else log('i', 'Not restarted.');
 });
 
 // The most important part.
@@ -223,9 +213,8 @@ client.on('messageCreate', (message: discord.Message) => {
     client.uconfs.ensure(message.author.id, client.defaults.USER_CONFS);
     client.cooldowns.ensure(message.author.id, client.defaults.COOLDOWNS);
     // If this is a bot, return to prevent looping.
-    if (message.author.bot) {
-        return;
-    }
+    if (message.author.bot) return;
+
     // ...but if it's a DM, clarify it to the user.
     if (message.channel.type === 'DM') {
         message.reply('Hey there! I do not accept DMs. Use me in a server.');
@@ -239,14 +228,13 @@ client.on('messageCreate', (message: discord.Message) => {
     let msgIsCommand = false;
     let prefixLen = 0;
     let prefixUsed;
-    for (const prefix of client.config.prefixes) {
+    for (const prefix of client.config.prefixes)
         if (message.content.toLowerCase().startsWith(prefix)) {
             msgIsCommand = true;
             prefixLen = prefix.length;
             prefixUsed = prefix;
             break;
         }
-    }
 
     // if it's a command, we handle it.
     if (msgIsCommand) {
@@ -254,9 +242,7 @@ client.on('messageCreate', (message: discord.Message) => {
         let command = args.shift()?.toLowerCase() ?? '';
 
         // quit if the command couldn't be fetched
-        if (!command) {
-            return;
-        }
+        if (!command) return;
 
         // verbose info
         log('v', `Running command "${command}" for "${message.author.tag}" with args "${args.join(' ')}"!`);
@@ -331,9 +317,8 @@ process.on('uncaughtException', async (error) => {
     log('e', 'Stack trace dump:', true);
     let stack = new Error().stack?.split('\n');
     stack?.shift();
-    if (!stack) {
-        stack = [];
-    }
+    if (!stack) stack = [];
+
     stack.forEach((item) => {
         log('e', `${item}`, true);
     });

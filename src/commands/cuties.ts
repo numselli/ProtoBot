@@ -45,9 +45,7 @@ This may take a while.`);
 
     const embed = new MessageEmbed().setTitle('Cuties list').setDescription(`I have found **${cuties.length}** cuties!`);
 
-    for (const cutie of cuties) {
-        embed.addField(`${cutie.username}#${cutie.tag}`, `User ID: \`${cutie.id}\``);
-    }
+    for (const cutie of cuties) embed.addField(`${cutie.username}#${cutie.tag}`, `User ID: \`${cutie.id}\``);
 
     m.edit({ embeds: [embed] });
 }

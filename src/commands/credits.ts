@@ -67,15 +67,9 @@ export function run(client: Client, message: Message, args: string[], log: Logge
     credits.forEach((item: CreditItem) => {
         let str = '';
         item.users.forEach((user: CreditedUser, index: number) => {
-            if (str.length === 0) {
-                str += `Thank you, ${user.tag}`;
-            } else {
-                if (index !== item.users.length - 1) {
-                    str += `, ${user.tag}`;
-                } else {
-                    str += `, and ${user.tag}`;
-                }
-            }
+            if (str.length === 0) str += `Thank you, ${user.tag}`;
+            else if (index !== item.users.length - 1) str += `, ${user.tag}`;
+            else str += `, and ${user.tag}`;
         });
 
         embed.addField(item.item, str);

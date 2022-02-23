@@ -27,7 +27,7 @@ interface IEmoteData {
     cloud_bolt: string;
 }
 export function run(client: Client, message: Message, args: string[], log: Logger): void {
-    if (!args[0]) {
+    if (!args[0])
         message.reply('Who..?').then((m) => {
             setTimeout(async () => {
                 await m.delete();
@@ -36,7 +36,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
                 });
             });
         });
-    } else {
+    else {
         const userID: string = args[0].replace(/[<@!>]/g, '');
         const emotes: IEmoteData = {
             cloud: '☁️',

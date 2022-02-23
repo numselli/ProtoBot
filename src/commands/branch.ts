@@ -41,14 +41,16 @@ export async function run(client: Client, message: Message, args: string[], log:
         .setDescription(`Please wait.. Switching to \`${args[0]}\`...`)
         .addField('Status', `\`$ git branch ${args[0]}\``);
 
-   const m =  await message.reply({ embeds: [embed] })
-    
+    const m = await message.reply({ embeds: [embed] });
+
     exec(`git checkout ${args[0]}`, (error: ExecException | null, stdout: string, stderr: string) => {
         embed = new discord.MessageEmbed()
             .setTitle(`Branch Switch [${stderr.startsWith('Switched') ? 'Complete' : 'Failed'}]`)
             .setDescription(stderr.startsWith('Switched') ? `Switched to branch ${args[0]}` : 'Failed to switch to branch. (Does it exist?)');
 
-        if (stderr) { embed.addField('Log', `\`\`\`\n${stderr ?? '<none>'}${stdout !== '' ? `\n${stdout}` : ''}\n\`\`\``); }
+        if (stderr) {
+            embed.addField('Log', `\`\`\`\n${stderr ?? '<none>'}${stdout !== '' ? `\n${stdout}` : ''}\n\`\`\``);
+        }
 
         m.edit({ embeds: [embed] });
     });

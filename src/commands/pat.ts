@@ -37,9 +37,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
     client.ustats.ensure(userID, client.defaults.USER_STATS);
     client.ustats.inc(userID, 'pats');
 
-    message.reply(
-        `**Pat!**\n<@${message.author.id}> pats <@${userID}> on the head~!`
-    );
+    message.reply(`**Pat!**\n<@${message.author.id}> pats <@${userID}> on the head~!`);
 }
 
 // Config

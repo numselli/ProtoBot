@@ -29,7 +29,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
         message.reply('This command is only available in a special server! ;)');
         return;
     }
-    
+
     const embed = new discord.MessageEmbed()
         .setTitle('🌮 El is taco')
         .setDescription('Indeed, <@326394970002948096> is a taco. o3o')

@@ -26,17 +26,19 @@ export function run(client: Client, message: Message, args: string[], log: Logge
     log('i', 'Fursona command fired!');
     // Get their fursona, PLS GIB I WANT AAAA >w<
 
-    switch (args[0]){
-        case "set":
+    switch (args[0]) {
+        case 'set':
             log('i', 'Setting fursona!');
             if (!args[1]) {
                 log('i', 'Showing set help!');
-                message.reply(`\`\`\`adoc\n===== FURSONA HELP =====\n${client.config.prefixes[0]}fursona set name <name> :: Set your fursona's name\n${client.config.prefixes[0]}fursona set bio <bio>   :: Set your fursona's bio\n${client.config.prefixes[0]}fursona set type <type> :: Set your fursona's breed/type\n\`\`\``);
+                message.reply(
+                    `\`\`\`adoc\n===== FURSONA HELP =====\n${client.config.prefixes[0]}fursona set name <name> :: Set your fursona's name\n${client.config.prefixes[0]}fursona set bio <bio>   :: Set your fursona's bio\n${client.config.prefixes[0]}fursona set type <type> :: Set your fursona's breed/type\n\`\`\``
+                );
                 return;
             }
 
-            switch (args[1].toLowerCase()){
-                case "name":
+            switch (args[1].toLowerCase()) {
+                case 'name':
                     if (!args[2]) {
                         const temp = client.fursonas.ensure(message.author.id, {});
                         if ('name' in temp) {
@@ -52,8 +54,8 @@ export function run(client: Client, message: Message, args: string[], log: Logge
                     client.fursonas.ensure(message.author.id, {});
                     client.fursonas.set(message.author.id, args.slice(2).join(' '), 'name');
                     message.reply('Set!');
-                break;
-                case "bio":
+                    break;
+                case 'bio':
                     if (!args[2]) {
                         const temp = client.fursonas.ensure(message.author.id, {});
                         if ('bio' in temp) {
@@ -69,8 +71,8 @@ export function run(client: Client, message: Message, args: string[], log: Logge
                     client.fursonas.ensure(message.author.id, {});
                     client.fursonas.set(message.author.id, args.slice(2).join(' '), 'bio');
                     message.reply('Set!');
-                break;
-                case "type":
+                    break;
+                case 'type':
                     if (!args[2]) {
                         const temp = client.fursonas.ensure(message.author.id, {});
                         if ('type' in temp) {
@@ -86,12 +88,12 @@ export function run(client: Client, message: Message, args: string[], log: Logge
                     client.fursonas.ensure(message.author.id, {});
                     client.fursonas.set(message.author.id, args.slice(2).join(' '), 'type');
                     message.reply('Set!');
-                break; 
+                    break;
                 default:
                     message.reply('Unknown option! Try `fursona set`.');
-                break;
+                    break;
             }
-        break;
+            break;
         default:
             // If they haven't set one...
             const fursona = client.fursonas.get(message.author.id);
@@ -99,7 +101,6 @@ export function run(client: Client, message: Message, args: string[], log: Logge
                 log('i', 'No fursona for user!');
                 message.reply("You haven't set a fursona yet! To do this, run the command `fursona set`.");
                 return;
-
             }
 
             // They have one!
@@ -111,7 +112,7 @@ export function run(client: Client, message: Message, args: string[], log: Logge
             embed.addField('Type', fursona.type || '<unset>');
 
             message.reply({ embeds: [embed] });
-        break;
+            break;
     }
 }
 

@@ -39,7 +39,8 @@ export function run(client: Client, message: Message, args: string[], log: Logge
         );
     });
 
-    message.author.send({ embeds: [embed] })
+    message.author
+        .send({ embeds: [embed] })
         .then(() => {
             message.reply('Sent the help menu to your DM!');
         })

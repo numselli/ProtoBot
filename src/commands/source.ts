@@ -28,7 +28,7 @@ import type Logger from '@lib/interfaces/Logger';
 
 // Main
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
-    const messages = await message.channel.messages.fetch({ limit: 2 })
+    const messages = await message.channel.messages.fetch({ limit: 2 });
 
     // @ts-ignore *temporary
     const m: Message = messages.last();

@@ -28,12 +28,12 @@ export function run(client: Client, message: Message, args: string[], log: Logge
         message.reply('**Error:** No text provided!');
         return;
     }
-    
+
     if (args[0] === '-i') {
         intense = true;
         args.shift();
     }
-   
+
     const uwuify: Uwuifier = new Uwuifier();
     uwuify.actions = [
         '*blushes*',

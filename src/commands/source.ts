@@ -30,7 +30,6 @@ import type Logger from '@lib/interfaces/Logger';
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
     const messages = await message.channel.messages.fetch({ limit: 2 });
 
-    // @ts-ignore *temporary
     const m: Message = messages.last();
     message.reply(`Content of message ID \`${m.id}\` in channel <#${m.channel.id}>:\n\n${escapeMarkdown(m.content)}`);
 }

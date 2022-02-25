@@ -79,7 +79,8 @@
       "profile": "http://numselli.xyz",
       "contributions": [
         "infra",
-        "bug"
+        "bug",
+        "code"
       ]
     }
   ],

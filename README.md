@@ -92,6 +92,8 @@ Your user ID.
 
 Run `./start.sh`.
 
+FOR PRODUCTION ENVIRONMENTS: Run `PRODUCTION=1 ./start.sh`
+
 ### 8. Logging
 
 Logs will automatically be created and manual maintanence is needed for cleaning these up.

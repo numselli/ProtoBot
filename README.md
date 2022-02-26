@@ -107,6 +107,7 @@ Optionally, enable PM2 to automatically start as a daemon: `pm2 startup`
 Then, run `pm2 start ecosystem.config.js` (add `--env production` if you want to run in production)
 
 If you want daemon startup, run `pm2 save`.
+
 ### 8. Logging
 
 Logs will automatically be created and manual maintanence is needed for cleaning these up.

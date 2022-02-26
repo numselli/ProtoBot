@@ -22,29 +22,23 @@ import type Logger from '@lib/interfaces/Logger';
 
 // Main
 export function run(client: Client, message: Message, args: string[], log: Logger): void {
-    let userID: string | undefined;
+    const userID = args[0]?.replace(/[<@!>]/g, '');
+
     if (!args[0]) {
         log('i', 'No boop arg provided!');
         message.reply('Who did you want to boop?');
         return;
-    } else if (/<@!?.+>/.test(args[0])) userID = args[0].replace(/[<@!>]/g, '');
-    else userID = args[0];
+    }
 
     if (userID === message.author.id) {
-        message.reply(`**Self boop?**
-<@${message.author.id}> boops themselves..?`);
+        message.reply(`**Self boop?**\n<@${message.author.id}> boops themselves..?`);
         return;
     }
 
     client.ustats.ensure(userID, client.defaults.USER_STATS);
     client.ustats.inc(userID, 'boops');
 
-    message.reply(
-        `**Boop!**
-<@${message.author.id}> boops <@${userID}>~!
-
-https://cdn.discordapp.com/emojis/777752005820416000.gif`
-    );
+    message.reply(`**Boop!**\n<@${message.author.id}> boops <@${userID}>~!\n\nhttps://cdn.discordapp.com/emojis/777752005820416000.gif`);
 }
 
 // Config

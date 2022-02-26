@@ -34,10 +34,7 @@ function fireStats(userID: string, message: Message, client: Client): void {
 }
 
 export function run(client: Client, message: Message, args: string[], log: Logger): void {
-    let userID: string | undefined;
-    if (!args[0]) userID = message.author.id;
-    else if (/<@!?.+>/.test(args[0])) userID = args[0].replace(/[<@!>]/g, '');
-    else userID = args[0];
+    const userID = args[0]?.replace(/[<@!>]/g, '') ?? message.author.id;
 
     if (!client.ustats.get(userID)) {
         client.users

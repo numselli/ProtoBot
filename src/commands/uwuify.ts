@@ -24,14 +24,16 @@ import type Logger from '@lib/interfaces/Logger';
 // Main
 export function run(client: Client, message: Message, args: string[], log: Logger): void {
     let intense = false;
-    if (args[0] === '-i') {
-        intense = true;
-        args.shift();
-    }
     if (args.length === 0) {
         message.reply('**Error:** No text provided!');
         return;
     }
+
+    if (args[0] === '-i') {
+        intense = true;
+        args.shift();
+    }
+
     const uwuify: Uwuifier = new Uwuifier();
     uwuify.actions = [
         '*blushes*',

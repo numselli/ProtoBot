@@ -45,14 +45,9 @@ export function run(client: Client, message: Message, args: string[], log: Logge
         };
         // Move to local scope
         const { cloud, bolt, cloud_bolt } = emotes;
-        message.reply(`Hehe, <@${userID}> **SMITTEN** by <@${message.author.id}>!
-\`\`\`
-${cloud}${cloud}${cloud}${cloud_bolt}${cloud}
-      ${bolt}
-     ${bolt}
-    ${bolt}
-   ${bolt}
-\`\`\``);
+        message.reply(
+            `Hehe, <@${userID}> **SMITTEN** by <@${message.author.id}>!\n\`\`\`\n${cloud}${cloud}${cloud}${cloud_bolt}${cloud}\n      ${bolt}\n     ${bolt}\n    ${bolt}\n   ${bolt}\n\`\`\``
+        );
     }
 }
 

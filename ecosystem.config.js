@@ -5,7 +5,7 @@ module.exports = {
           script: "./start.sh",
           env: {},
           env_production: {
-              PRODUCTION="1"
+              PRODUCTION: "1"
           }
         }
     ]

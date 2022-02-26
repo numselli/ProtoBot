@@ -1,13 +1,12 @@
 module.exports = {
-    apps : [
+    apps: [
         {
-          name: "protobot",
-          script: "./start.sh",
-          env: {},
-          env_production: {
-              PRODUCTION: "1"
-          }
+            name: 'protobot',
+            script: './start.sh',
+            env: {},
+            env_production: {
+                PRODUCTION: '1'
+            }
         }
     ]
-  }
-  
+};

@@ -6,7 +6,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- prettier-ignore-end -->
 
-A Discord furry bot
+ProtoBot is a powerful expandable Discord bot for furries and alike!
 
 [Add to your server!](https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=518151064640&scope=bot)
 
@@ -90,10 +90,23 @@ Your user ID.
 
 ### 7. First Startup
 
+#### Normal Run
+
 Run `./start.sh`.
 
 FOR PRODUCTION ENVIRONMENTS: Run `PRODUCTION=1 ./start.sh`
 
+#### With [PM2](https://pm2.keymetrics.io/)
+
+[PM2](https://pm2.keymetrics.io/) is a process manager for Node.js. It is a good alternative to using the normal start scripts.
+
+First, ensure PM2 is installed: `npm i -g pm2`
+
+Optionally, enable PM2 to automatically start as a daemon: `pm2 startup`
+
+Then, run `pm2 start ecosystem.config.js` (add `--env production` if you want to run in production)
+
+If you want daemon startup, run `pm2 save`.
 ### 8. Logging
 
 Logs will automatically be created and manual maintanence is needed for cleaning these up.

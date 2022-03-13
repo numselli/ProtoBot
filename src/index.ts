@@ -90,6 +90,9 @@ client.on('ready', async () => {
     })();
     log('i', 'Ready!');
     log('i', `Running ProtoBot on commit ${process.env.PROTOBOT_STARTSH_COMMIT}.`);
+    if (process.env.PROTOBOT_STARTSH_DIRTYSOURCE) {
+        log('w', 'Uncommitted changes present (dirty source tree)')
+    }
     if (process.env.PRODUCTION) log('i', 'Running in production mode. Verbose logging is disabled.');
     else log('i', 'Running in development mode. Verbose logging is enabled.');
 

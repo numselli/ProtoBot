@@ -13,7 +13,8 @@ while true; do
     echo 'bootstrap: Running ProtoBot with commit '"$COMMIT_HASH"'.';
     echo 'bootstrap: Check for dirty source...'
     (git diff --quiet && DIRTYSOURCE=0) || DIRTYSOURCE=1
-    echo 'bootstrap: DIRTYSOURCE is set to '"$DIRTYSOURCE"'.'
+    eds="$DIRTYSOURCE"
+    echo 'bootstrap: DIRTYSOURCE is set to '"${eds:="0"}"'.'
     echo 'bootstrap: Compiling...'
     tsc;
     echo 'bootstrap: Setting CWD to dist/';

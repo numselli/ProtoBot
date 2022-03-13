@@ -64,6 +64,9 @@ const client = new Client({
         discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
         discord.Intents.FLAGS.DIRECT_MESSAGES,
         discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
+    ],
+    partials: [
+        "CHANNEL"
     ]
 });
 
@@ -221,6 +224,15 @@ client.on('ready', async () => {
 // message will be a discord.Message object with the standard properties.
 // -- THIS REQUIRES THE GUILDMESSAGES PRIVILEGED INTENT
 client.on('messageCreate', (message: discord.Message) => {
+    // Log the message content if we are in verbose mode.
+    log(
+        'v',
+        chalk`{yellow [}{yellow.bold MSG}{yellow ]} ` +
+        chalk`{blue.bold @${message.author.tag}} ` +
+        chalk`{green.bold #${(<discord.TextChannel>message.channel).name ?? '<DM>'}} {green in ${message.guild?.name ?? "<DM>"}}: ` +
+        message.content
+    );
+
     // Let's (theoretically) say this person is brand new to us. We need
     // to use .ensure() to make sure they exist in the databases. This
     // does nothing if they are already in the DBs. If they aren't, we
@@ -234,12 +246,13 @@ client.on('messageCreate', (message: discord.Message) => {
 
     // ...but if it's a DM, clarify it to the user.
     if (message.channel.type === 'DM') {
+        log('i', 'Discouraged DM.')
         message.reply('Hey there! I do not accept DMs. Use me in a server.');
         return;
     }
     // Execute each hook from the database.
     client.hooks.forEach((hookData) => {
-        log('i', `${chalk.green('[')}${chalk.green.bold('HookRunner')}${chalk.green(']')} Running hook ${hookData.config.name}!`);
+        log('v', `${chalk.green('[')}${chalk.green.bold('HookRunner')}${chalk.green(']')} Running hook ${hookData.config.name}!`);
         hookData.run(client, message, log);
     });
     let msgIsCommand = false;

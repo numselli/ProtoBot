@@ -40,6 +40,20 @@ import type Command from '@lib/interfaces/Command'; // For command typing
 // Import the primary log function from the CWD.
 import log from './log';
 
+// Verify the currently running commit...
+log('i', 'Verifying we were started via the start script...');
+if (!process.env.PROTOBOT_STARTSH_COMMIT) {
+    log('e', 'Environment variable PROTOBOT_STARTSH_COMMIT is not set!', true);
+    log('w', "If you are seeing this message, it means you are running the bot's script directly.");
+    log('w', 'This is not recommended, and may cause unexpected behavior.');
+    log('w', 'After multiple bug reports of people using an invalid environment (like this one),');
+    log('w', 'the developer team has decided that direct execution should be disabled.');
+    log('w', 'Please use the start script instead.');
+    log('w', 'Reference issue #463 for more information.');
+    log('e', 'We were not started via the start script! Exiting (code 1)...', true);
+    process.exit(1);
+}
+
 // Initialize a Client instance, and provide the Discord intent flags.
 const client = new Client({
     intents: [
@@ -75,6 +89,9 @@ client.on('ready', async () => {
         log('i', '|/       |/ \\___/ (_______)   )_(  '); 
     })();
     log('i', 'Ready!');
+    log('i', `Running ProtoBot on commit ${process.env.PROTOBOT_STARTSH_COMMIT}.`);
+    if (process.env.PROTOBOT_STARTSH_DIRTYSOURCE) log('w', 'Uncommitted changes present (dirty source tree)');
+
     if (process.env.PRODUCTION) log('i', 'Running in production mode. Verbose logging is disabled.');
     else log('i', 'Running in development mode. Verbose logging is enabled.');
 

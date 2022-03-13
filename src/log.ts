@@ -162,7 +162,7 @@ export default function log(mode: 'v' | 'i' | 'w' | 'e' | 'CLOSE_STREAMS', messa
         switch (mode) {
             case 'v':
                 // Verbose
-                msg = `${chalk.cyan('[')}${chalk.cyan.bold('VERBOSE')}${chalk.cyan(']')} ${message}`;
+                msg = `${chalk.cyan('[')}${chalk.cyan.bold('VERB')}${chalk.cyan(']')} ${message}`;
                 break;
             case 'i':
                 // Info
@@ -174,7 +174,7 @@ export default function log(mode: 'v' | 'i' | 'w' | 'e' | 'CLOSE_STREAMS', messa
                 break;
             case 'e':
                 // Error
-                msg = `${chalk.red('[')}${chalk.red.bold('ERR')}${chalk.red(']')} ${message}`;
+                msg = `${chalk.red('[')}${chalk.red.bold('ERR!')}${chalk.red(']')} ${message}`;
                 break;
             default:
                 // Default

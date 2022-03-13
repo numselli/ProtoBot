@@ -28,7 +28,11 @@ export function run(client: Client, message: Message, args: string[], log: Logge
 
 I'm a Discord bot with furries in mind.
 
-I'm made mostly by **@BadBoyHaloCat#1826** and my secondary developer is **@DeveloperRaco#1337**.
+My maintainer's name is LogN or @BadBoyHaloCat#1826
+
+Running on commit \`${process.env.PROTOBOT_STARTSH_COMMIT}\`.${
+        process.env.PROTOBOT_STARTSH_DIRTYSOURCE ? ' Changes are present not in this commit.' : ''
+    }
 
 My prefix is \`${client.config.prefixes[0]}\`.
 

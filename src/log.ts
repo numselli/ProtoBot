@@ -146,18 +146,19 @@ export default function log(mode: 'v' | 'i' | 'w' | 'e' | 'CLOSE_STREAMS', messa
         });
         preparsedDate = preparsedDate.split(', ');
         preparsedDate[1] = preparsedDate[1].split(' ');
-        let preparsedTime: any = new Date(Date.now()).toLocaleTimeString('en-US' /* no opts needed */);
+        // I'm not even sure what locale this is, but it works.
+        let preparsedTime: any = new Date(Date.now()).toLocaleTimeString('it-IT');
         preparsedTime = preparsedTime.split(' ');
         preparsedTime[0] = preparsedTime[0].split(':');
 
         // Parse date/time
-        const parsedDate = `${chalk.green(preparsedDate[0])} ${chalk.yellow(preparsedDate[1][0])} ${chalk.yellow.bold(
+        const parsedDate = `${chalk.yellow(preparsedDate[1][0])} ${chalk.yellow.bold(
             preparsedDate[1][1]
         )} ${chalk.green.bold(preparsedDate[2])}`;
         const sep: string = chalk.yellow(':');
         const parsedTime = `${chalk.yellow.bold(preparsedTime[0][0])}${sep}${chalk.yellow.bold(preparsedTime[0][1])}${sep}${chalk.yellow.bold(
             preparsedTime[0][2]
-        )} ${chalk.red(preparsedTime[1])}`;
+        )}`;
 
         switch (mode) {
             case 'v':

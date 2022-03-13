@@ -52,56 +52,36 @@ export async function run(client: Client, message: Message, args: string[], log:
             l('i', 'Got git status!');
             embed.addField('Git Status', `\`\`\`\n$ git status\n\n${stdout === '' ? stderr : stdout}\n\`\`\``);
 
-            l('i', 'Adding files...');
-            exec('git add ..', (error2: ExecException | null, stdout2: string, stderr2: string) => {
+            l('i', 'Stashing files...');
+            exec('git stash', (error2: ExecException | null, stdout2: string, stderr2: string) => {
                 if (error2) {
                     l('e', `Failed to update: ${error2}`);
                     m.edit(`Failed to update: ${error2}`);
                 } else {
                     l('i', 'Added files!');
-                    embed.addField('Git Add Result', `\`\`\`\n$ git add ..\n\n${stdout2 === '' ? stderr2 : stdout2}\n\`\`\``);
+                    embed.addField('Git Stash Result', `\`\`\`\n$ git stash\n\n${stdout2 === '' ? stderr2 : stdout2}\n\`\`\``);
 
-                    l('i', 'Committing...');
+                    l('i', 'Syncing...');
 
-                    exec(
-                        'git commit -m "ProtoBot -- Update (Found uncommitted changes)"',
-                        (error3: ExecException | null, stderr3: string, stdout3: string) => {
-                            l('i', 'Committed!');
-                            embed.addField(
-                                'Git Commit Result',
-                                `\`\`\`\n$ git commit -m "ProtoBot -- Update (Found uncommitted changes)"\n\n${
-                                    stdout3 === '' ? stderr3 : stdout3
-                                }\n\`\`\``
-                            );
+                    exec('git fetch && git pull --no-rebase && git push', (error4: ExecException | null, stderr4: string, stdout4: string) => {
+                        if (error4) {
+                            l('e', `Failed to update: ${error4}`);
+                            m.edit(`Failed to update: ${error4}`);
+                        } else {
+                            l('i', 'Synced!');
+                            embed
+                                .addField(
+                                    'Git Sync (fetch -> pull -> push) Result',
+                                    `\`\`\`\n$ git fetch && git pull --no-rebase && git push\n\n${stdout4 === '' ? stderr4 : stdout4}\n\`\`\``
+                                )
+                                .addField('Status', '**Complete.**')
+                                .addField('Restart to apply changes', `To apply the update, run \`${client.config.prefixes[0]}restart\`.\nYou may want to run \`${client.config.prefixes[0]}exec git stash apply\` to re-instate unsaved changes.}`);
 
-                            l('i', 'Syncing...');
+                            m.edit({ embeds: [embed] });
 
-                            exec(
-                                'git fetch && git pull --no-rebase && git push',
-                                (error4: ExecException | null, stderr4: string, stdout4: string) => {
-                                    if (error4) {
-                                        l('e', `Failed to update: ${error4}`);
-                                        m.edit(`Failed to update: ${error4}`);
-                                    } else {
-                                        l('i', 'Synced!');
-                                        embed
-                                            .addField(
-                                                'Git Sync (fetch -> pull -> push) Result',
-                                                `\`\`\`\n$ git fetch && git pull --no-rebase && git push\n\n${
-                                                    stdout4 === '' ? stderr4 : stdout4
-                                                }\n\`\`\``
-                                            )
-                                            .addField('Status', '**Complete.**')
-                                            .addField('Restart to apply changes', `To apply the update, run ${client.config.prefixes[0]}restart.`);
-
-                                        m.edit({ embeds: [embed] });
-
-                                        l('i', 'Update completed!');
-                                    }
-                                }
-                            );
+                            l('i', 'Update completed!');
                         }
-                    );
+                    });
                 }
             });
         }

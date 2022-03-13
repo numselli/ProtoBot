@@ -89,6 +89,7 @@ client.on('ready', async () => {
         log('i', '|/       |/ \\___/ (_______)   )_(  '); 
     })();
     log('i', 'Ready!');
+    log('i', `Running ProtoBot on commit ${process.env.PROTOBOT_STARTSH_COMMIT}.`);
     if (process.env.PRODUCTION) log('i', 'Running in production mode. Verbose logging is disabled.');
     else log('i', 'Running in development mode. Verbose logging is enabled.');
 

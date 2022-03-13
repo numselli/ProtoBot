@@ -65,7 +65,9 @@ const client = new Client({
         discord.Intents.FLAGS.DIRECT_MESSAGES,
         discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
     ],
-    partials: ['CHANNEL']
+    partials: [
+        "CHANNEL"
+    ]
 });
 
 // When the client is ready...
@@ -226,9 +228,9 @@ client.on('messageCreate', (message: discord.Message) => {
     log(
         'v',
         chalk`{yellow [}{yellow.bold MSG}{yellow ]} ` +
-            chalk`{blue.bold @${message.author.tag}} ` +
-            chalk`{green.bold #${(<discord.TextChannel>message.channel).name ?? '<DM>'}} {green in ${message.guild?.name ?? '<DM>'}}: ` +
-            message.content
+        chalk`{blue.bold @${message.author.tag}} ` +
+        chalk`{green.bold #${(<discord.TextChannel>message.channel).name ?? '<DM>'}} {green in ${message.guild?.name ?? "<DM>"}}: ` +
+        message.content
     );
 
     // Let's (theoretically) say this person is brand new to us. We need
@@ -244,7 +246,7 @@ client.on('messageCreate', (message: discord.Message) => {
 
     // ...but if it's a DM, clarify it to the user.
     if (message.channel.type === 'DM') {
-        log('i', 'Discouraged DM.');
+        log('i', 'Discouraged DM.')
         message.reply('Hey there! I do not accept DMs. Use me in a server.');
         return;
     }

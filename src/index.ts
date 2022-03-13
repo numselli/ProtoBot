@@ -219,7 +219,7 @@ client.on('ready', async () => {
 // The most important part.
 // *** HANDLING MESSAGES ***
 // message will be a discord.Message object with the standard properties.
-// -- THIS REQUIRES THE GUILDMESSAGES PRIVILEDGED INTENT
+// -- THIS REQUIRES THE GUILDMESSAGES PRIVILEGED INTENT
 client.on('messageCreate', (message: discord.Message) => {
     // Let's (theoretically) say this person is brand new to us. We need
     // to use .ensure() to make sure they exist in the databases. This

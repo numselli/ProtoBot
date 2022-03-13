@@ -244,12 +244,10 @@ client.on('messageCreate', (message: discord.Message) => {
     });
     let msgIsCommand = false;
     let prefixLen = 0;
-    let prefixUsed;
     for (const prefix of client.config.prefixes)
         if (message.content.toLowerCase().startsWith(prefix)) {
             msgIsCommand = true;
             prefixLen = prefix.length;
-            prefixUsed = prefix;
             break;
         }
 

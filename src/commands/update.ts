@@ -75,7 +75,10 @@ export async function run(client: Client, message: Message, args: string[], log:
                                     `\`\`\`\n$ git fetch && git pull --no-rebase && git push\n\n${stdout4 === '' ? stderr4 : stdout4}\n\`\`\``
                                 )
                                 .addField('Status', '**Complete.**')
-                                .addField('Restart to apply changes', `To apply the update, run \`${client.config.prefixes[0]}restart\`.\nYou may want to run \`${client.config.prefixes[0]}exec git stash apply\` to re-instate unsaved changes.}`);
+                                .addField(
+                                    'Restart to apply changes',
+                                    `To apply the update, run \`${client.config.prefixes[0]}restart\`.\nYou may want to run \`${client.config.prefixes[0]}exec git stash apply\` to re-instate unsaved changes.}`
+                                );
 
                             m.edit({ embeds: [embed] });
 

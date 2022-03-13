@@ -152,9 +152,7 @@ export default function log(mode: 'v' | 'i' | 'w' | 'e' | 'CLOSE_STREAMS', messa
         preparsedTime[0] = preparsedTime[0].split(':');
 
         // Parse date/time
-        const parsedDate = `${chalk.yellow(preparsedDate[1][0])} ${chalk.yellow.bold(
-            preparsedDate[1][1]
-        )} ${chalk.green.bold(preparsedDate[2])}`;
+        const parsedDate = `${chalk.yellow(preparsedDate[1][0])} ${chalk.yellow.bold(preparsedDate[1][1])} ${chalk.green.bold(preparsedDate[2])}`;
         const sep: string = chalk.yellow(':');
         const parsedTime = `${chalk.yellow.bold(preparsedTime[0][0])}${sep}${chalk.yellow.bold(preparsedTime[0][1])}${sep}${chalk.yellow.bold(
             preparsedTime[0][2]

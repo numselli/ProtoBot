@@ -33,12 +33,19 @@ jobs:
                 node-version: [16.x]
 
         steps:
-            - name: Checkout
+            - name: Checkout (not on Nektos-Act)
+              if: ${{ !env.ACT }}
               uses: actions/checkout@v2
               with:
                   # Make sure the actual branch is checked out when running on pull requests
                   ref: ${{ github.head_ref }}
-                  repository: ${{github.event.pull_request.head.repo.full_name || github.repository }}
+                  repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+
+            - name: Checkout (on Nektos-Act)
+              if: ${{ env.ACT }}
+              uses: actions/checkout@v2
+              with:
+                  ref: ${{ github.head_ref }}
 
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v1

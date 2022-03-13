@@ -21,6 +21,7 @@ on:
 jobs:
     check:
         runs-on: ubuntu-latest
+        if: ${{ !env.ACT }}
         steps:
             - name: Check for new dependencies
               uses: hiwelo/new-dependencies-action@master

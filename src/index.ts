@@ -44,7 +44,7 @@ import log from './log';
 log('i', 'Verifying we were started via the start script...');
 if (!process.env.PROTOBOT_STARTSH_COMMIT) {
     log('e', 'Environment variable PROTOBOT_STARTSH_COMMIT is not set!', true);
-    log('w', 'If you are seeing this message, it means you are running the bot\'s script directly.');
+    log('w', "If you are seeing this message, it means you are running the bot's script directly.");
     log('w', 'This is not recommended, and may cause unexpected behavior.');
     log('w', 'After multiple bug reports of people using an invalid environment (like this one),');
     log('w', 'the developer team has decided that direct execution should be disabled.');
@@ -90,9 +90,8 @@ client.on('ready', async () => {
     })();
     log('i', 'Ready!');
     log('i', `Running ProtoBot on commit ${process.env.PROTOBOT_STARTSH_COMMIT}.`);
-    if (process.env.PROTOBOT_STARTSH_DIRTYSOURCE) {
-        log('w', 'Uncommitted changes present (dirty source tree)')
-    }
+    if (process.env.PROTOBOT_STARTSH_DIRTYSOURCE) log('w', 'Uncommitted changes present (dirty source tree)');
+
     if (process.env.PRODUCTION) log('i', 'Running in production mode. Verbose logging is disabled.');
     else log('i', 'Running in development mode. Verbose logging is enabled.');
 

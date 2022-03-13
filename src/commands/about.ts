@@ -30,7 +30,9 @@ I'm a Discord bot with furries in mind.
 
 My maintainer's name is LogN or @BadBoyHaloCat#1826
 
-Running on commit \`${process.env.PROTOBOT_STARTSH_COMMIT}\`.${process.env.PROTOBOT_STARTSH_DIRTYSOURCE ? ' Changes are present not in this commit.' : ''}
+Running on commit \`${process.env.PROTOBOT_STARTSH_COMMIT}\`.${
+        process.env.PROTOBOT_STARTSH_DIRTYSOURCE ? ' Changes are present not in this commit.' : ''
+    }
 
 My prefix is \`${client.config.prefixes[0]}\`.
 

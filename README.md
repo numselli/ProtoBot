@@ -16,6 +16,12 @@ ProtoBot is a Discord bot made by furries, for furries.
 
 ## Installing & Setup
 
+### HEY! We have an installer.
+
+Before you look at this, check out `install.sh`.
+
+---
+
 The following steps will help you to get ProtoBot running on your computer.
 
 We support **Linux** and **macOS 11 or greater**. Any Windows/OSX bugs will be treated with LOW PRIORITY.

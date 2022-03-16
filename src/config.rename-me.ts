@@ -29,7 +29,7 @@ function minutes(count: number): number {
 
 // Main
 const config: Config = {
-    token: 'your-super-cool-token',
+    token: 'PBCONF-DiscordBotToken', // Discord token
     dirs: {
         commands: './commands/',
         hooks: './hooks/'
@@ -44,7 +44,7 @@ const config: Config = {
         owos: seconds(30),
         uwus: seconds(30)
     },
-    ownerID: 'your-user-id'
+    ownerID: 'PBCONF-DiscordUserID' // Your user ID
 };
 
 // Export

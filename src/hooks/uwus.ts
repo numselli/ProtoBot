@@ -1,6 +1,6 @@
 /**
  * ProtoBot -- A Discord furry bot
- * Copyright (C) 2020, 2021  BadBoyHaloCat
+ * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

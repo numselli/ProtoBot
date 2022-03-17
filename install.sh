@@ -1,3 +1,4 @@
+#!/bin/bash
 # ProtoBot Install Script
 
 # Colors

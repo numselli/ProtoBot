@@ -175,5 +175,6 @@ echo ""
 
 echo_ok "All done!"
 echo_info "We should be ready for action now. Run ./start.sh to start the bot."
-echo_info "PM2 users: please run 'pm2 start --name ProtoBot bash -- $(pwd)/start.sh' to start the bot."
+echo_info "PM2 users: please run 'pm2 start ecosystem.config.js' to start the bot."
+echo_info "PM2 autostart users: run 'pm2 save'."
 echo_info "If there was a build error, install build-essential and then re-run this script."

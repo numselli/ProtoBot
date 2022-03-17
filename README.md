@@ -8,23 +8,23 @@
 
 ProtoBot is a powerful expandable Discord bot for furries and alike!
 
-[Add to your server!](https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=518151064640&scope=bot)
-
-## What is ProtoBot?
-
-ProtoBot is a Discord bot made by furries, for furries.
+[Add me to your server!](https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=518151064640&scope=bot)
 
 ## Installing & Setup
 
-### HEY! We have an installer.
+The following steps will help you get ProtoBot up and running on your computer.
 
-Before you look at this, check out `install.sh`.
+We support **Linux** and **macOS 11 or greater**. Any Windows/OSX bugs will be treated with LOW PRIORITY, and we will not consider
+adding install/start scripts in Batch any time in the future. *Use Linux, you Windows-oriented piece of trash. /hj*
 
----
+### CONSIDER THE FOLLOWING BEFORE CONTINUING WITH THE INSTALLATION!
 
-The following steps will help you to get ProtoBot running on your computer.
+ProtoBot is a public Discord bot because we wanted to enforce open-source ruling and allow for the growth of the community.
 
-We support **Linux** and **macOS 11 or greater**. Any Windows/OSX bugs will be treated with LOW PRIORITY.
+One of the things we have considered is people forking off on their own, and not contributing to the project. If you have something you'd like to see
+added to the project, please consider contributing to the project.
+
+Plus, ProtoBot relies on plenty of external services to function. Self-Hosting of ProtoBot is not polite!
 
 ### 1. Node.js
 
@@ -32,9 +32,9 @@ Follow the installation steps for [Node.js v16](https://nodejs.org/en/)
 
 Then install TypeScript: `npm install -g typescript`
 
-### 2. Enmap
+### 2. Build-Essential
 
-Install the [Enmap pre-requisites](https://enmap.evie.dev/install#pre-requisites). **DO NOT** run the `npm i enmap` command!
+Install `build-essential` for your distro; it should be available on macOS via the build tools in XCode.
 
 ### 3. Git
 
@@ -50,49 +50,14 @@ git clone https://github.com/thetayloredman/ProtoBot.git
 
 ### 5. Installing NPM Dependencies
 
-> **WARNING:** _This process may take a while._
+Execute `./install.sh`.
 
-Run the following command:
-
-```bash
-npm i
-```
-
-### 6. Configuring the Bot
-
-Copy the file `src/config.rename-me.ts` to `src/config.ts`. Edit the new file.
-
-> **NOTE:** _Only change values inside of the config export. Any other changes are unsupported._
-
-#### `token`
-
-Create a bot account (if you don't have one already) from [the Discord developer panel](discord.com/developers/applications)
-
-Create an application and add a bot. Copy the token. Paste it here.
-
-#### `dirs`
-
-> **WARNING:** _Changing these may break the command and hook handling modules._
-
-The directories used for commands and hooks. I wouldn't change these unless needed due to a directory rename.
-
-#### `prefixes`
-
-The bot's prefixes.
-
-#### `cooldowns`
-
-The cooldowns for commands and hooks.
-
-#### `ownerID`
-
+> One of the questions the installer asks is very important:
 > **_WARNING: DO NOT GIVE ANYBODY YOU DO NOT KNOW VERY WELL OWNER ACCESS!_**  
 > **ANYONE WITH OWNER ACCESS CAN GET DIRECT ACCESS TO A SHELL ON YOUR SYSTEM.**  
 > **I REPEAT, _NOBODY_ GETS OWNER ACCESS. I AM NOT RESPONSIBLE FOR ANY DAMAGE CAUSED IF YOU DO NOT OBEY THIS.**
 
 **Hey, did you read that thing above me? If not, read it. Did you read it? Read it again. This is serious.**
-
-Your user ID.
 
 ### 7. First Startup
 
@@ -116,7 +81,7 @@ If you want daemon startup, run `pm2 save`.
 
 ### 8. Logging
 
-Logs will automatically be created and manual maintanence is needed for cleaning these up.
+Logs will automatically be created and manual maintenance is needed for cleaning these up.
 
 ## Contributors ✨
 

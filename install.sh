@@ -131,7 +131,7 @@ case "$pm2_auto_start" in
         echo_info "Enabling automatic start on boot via PM2..."
         if [ -x "$(command -v pm2)" ]; then
             echo_ok "  PM2 found!"
-            sudo pm2 autostart
+            sudo pm2 startup
             echo_ok "  PM2 auto-start enabled!"
             echo_warning "${YELLOW}### You will need to execute pm2 start yourself the first time. ###${NOCOLOR}"
         else

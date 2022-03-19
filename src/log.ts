@@ -30,7 +30,6 @@
  ***************************************************************************/
 // TODO: Archive older log files with gzip or similar
 // TODO: Delete very old log files automatically
-// TODO: Flag to disable debug on production
 // TODO: Refactor API
 
 const runningInProd = process.env.PRODUCTION;

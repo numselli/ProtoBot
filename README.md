@@ -15,7 +15,7 @@ ProtoBot is a powerful expandable Discord bot for furries and alike!
 The following steps will help you get ProtoBot up and running on your computer.
 
 We support **Linux** and **macOS 11 or greater**. Any Windows/OSX bugs will be treated with LOW PRIORITY, and we will not consider
-adding install/start scripts in Batch any time in the future. *Use Linux, you Windows-oriented piece of trash. /hj*
+adding install/start scripts in Batch any time in the future. _Use Linux, you Windows-oriented piece of trash. /hj_
 
 ### CONSIDER THE FOLLOWING BEFORE CONTINUING WITH THE INSTALLATION!
 

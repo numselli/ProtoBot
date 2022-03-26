@@ -17,6 +17,7 @@
  */
 
 import type { Client, Message, User } from 'discord.js';
+import type CommandConfig from '@lib/interfaces/CommandConfig';
 
 // The number of users that should be displayed on the leaderboard at a
 // given time.
@@ -56,7 +57,7 @@ export async function run(client: Client, message: Message): Promise<void> {
 }
 
 // Config
-export const config = {
+export const config: CommandConfig = {
     name: 'uwus',
     description: 'Shows a leaderboard of the messages containing "uwu"!',
     enabled: true,

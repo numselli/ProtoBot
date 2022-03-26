@@ -21,6 +21,7 @@ import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
 import sleep from '@lib/sleep';
 import { MessageEmbed } from 'discord.js';
+import type CommandConfig from '@lib/interfaces/CommandConfig';
 
 interface CutieData {
     username: string;
@@ -49,7 +50,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 }
 
 // Config
-export const config = {
+export const config: CommandConfig = {
     name: 'cuties',
     description: 'See a list of cuties!',
     enabled: true,

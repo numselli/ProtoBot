@@ -20,6 +20,7 @@
 import { Client, Message, MessageEmbed } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
 import fetch from 'node-fetch';
+import type CommandConfig from '@lib/interfaces/CommandConfig';
 
 interface DogData {
     link: string;
@@ -33,7 +34,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 }
 
 // Config
-export const config = {
+export const config: CommandConfig = {
     name: 'dog',
     description: 'Get a dog picture!',
     enabled: true,

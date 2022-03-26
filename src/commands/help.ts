@@ -20,6 +20,7 @@
 import discord from 'discord.js';
 import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
+import type CommandConfig from '@lib/interfaces/CommandConfig';
 
 // Main
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
@@ -52,7 +53,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 }
 
 // Config
-export const config = {
+export const config: CommandConfig = {
     name: 'help',
     description: 'List all available commands!',
     enabled: true,

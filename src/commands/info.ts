@@ -20,6 +20,7 @@
 import type { Client, Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
+import type CommandConfig from '@lib/interfaces/CommandConfig';
 
 // Main
 function fireStats(userID: string, message: Message, client: Client): void {
@@ -54,7 +55,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 }
 
 // Config
-export const config = {
+export const config: CommandConfig = {
     name: 'info',
     description: "Get a user's stats!",
     enabled: true,

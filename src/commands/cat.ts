@@ -20,6 +20,7 @@
 import { Client, Message, MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 import type Logger from '@lib/interfaces/Logger';
+import type CommandConfig from '@lib/interfaces/CommandConfig';
 
 interface CatData {
     link: string;
@@ -33,7 +34,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 }
 
 // Config
-export const config = {
+export const config: CommandConfig = {
     name: 'cat',
     description: 'Get a cat picture~',
     enabled: true,

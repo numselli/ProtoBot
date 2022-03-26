@@ -20,6 +20,7 @@
 import { Client, Message, MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 import type Logger from '@lib/interfaces/Logger';
+import type CommandConfig from '@lib/interfaces/CommandConfig';
 
 interface KoalaData {
     link: string;
@@ -34,7 +35,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 }
 
 // Config
-export const config = {
+export const config: CommandConfig = {
     name: 'koala',
     description: 'Get a koala picture!',
     enabled: true,

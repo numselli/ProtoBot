@@ -19,6 +19,7 @@
 // Modules
 import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
+import type CommandConfig from '@lib/interfaces/CommandConfig';
 
 // Main
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
@@ -42,7 +43,7 @@ Feel free to send a DM to **@BadBoyHaloCat#1826** for support.
 }
 
 // Config
-export const config = {
+export const config: CommandConfig = {
     name: 'about',
     description: 'Learn about me!',
     enabled: true,

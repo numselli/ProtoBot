@@ -20,6 +20,7 @@
 import discord from 'discord.js';
 import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
+import type CommandConfig from '@lib/interfaces/CommandConfig';
 
 // Main
 interface CreditedUser {
@@ -78,7 +79,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 }
 
 // Config
-export const config = {
+export const config: CommandConfig = {
     name: 'credits',
     description: 'See the bot credits!',
     enabled: true,

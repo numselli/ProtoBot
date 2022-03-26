@@ -330,8 +330,19 @@ client.on('rateLimit', (data) => {
     log('w', 'Operations have been paused until the ratelimit is lifted!');
 });
 
+// Handle SIGTERM and SIGINT
+async function handleInterrupt(): Promise<void> {
+    log('w', 'Got SIGTERM or SIGINT, shutting down...');
+    log('w', 'Sync logs...');
+    await log('CLOSE_STREAMS');
+    process.exit();
+}
+process.on('SIGTERM', handleInterrupt);
+process.on('SIGINT', handleInterrupt);
+
 // When the process exits, wrap up.
 process.on('exit', (code) => {
+    log('w', 'Kill client...');
     client.destroy(); // Kill the client
     // NOTE: you can't log here
 });

@@ -62,7 +62,6 @@ export default class Client extends BaseClient {
             return;
         }
         this._isAlreadyDestroyed = true;
-        this.cooldowns.deleteAll();
         super.destroy();
     }
 }

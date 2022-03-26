@@ -46,9 +46,6 @@ export async function run(client: Client, message: Message, args: string[], log:
         client.restartData.set('time', Date.now());
         client.restartData.set('wasRestarted', true);
         log('w', 'Goodbye!');
-        log('w', 'Killing client...');
-        client.destroy();
-        log('w', 'Client killed.');
         log('w', 'Exiting with code 9 (RESTART)');
         process.exit(9);
     } else if (args[0] === 'branch') {

@@ -114,6 +114,7 @@ function writeItem(mode: 'v' | 'i' | 'w' | 'e', message: string): void {
 }
 
 // Main
+// Literal hell ensues below...
 export default function log(mode: 'CLOSE_STREAMS'): Promise<void>;
 export default function log(mode: 'v' | 'i' | 'w' | 'e', message: any, _bypassStackPrint?: boolean): void;
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

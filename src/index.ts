@@ -332,9 +332,6 @@ process.on('uncaughtException', async (error) => {
     log('e', 'Killing client...', true);
     client.destroy();
     log('e', 'Client killed.', true);
-    log('e', 'Closing databases...', true);
-    client.closeDatabases();
-    log('e', 'Closed databases.', true);
     log('e', 'An uncaught exception occured!', true);
     log('e', `Error thrown was:`, true);
     error.stack?.split('\n').forEach((item) => {

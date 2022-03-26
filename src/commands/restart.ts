@@ -41,9 +41,6 @@ export async function run(client: Client, message: Message, args: string[], log:
         log('w', 'Killing client...');
         client.destroy();
         log('w', 'Client killed.');
-        log('w', 'Closing databases...');
-        client.closeDatabases();
-        log('w', 'Closed databases.');
         log('w', 'Exiting with code 9 (RESTART)');
         process.exit(9);
     });

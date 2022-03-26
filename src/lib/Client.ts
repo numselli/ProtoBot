@@ -49,16 +49,4 @@ export default class Client extends BaseClient {
         this.commandsRefs = new Enmap(); // Refs are basically aliases that "link" to the actual command
         this.hooks = new Enmap();
     }
-
-    public async closeDatabases(): Promise<void> {
-        await this.cooldowns.close();
-        await this.tildes.close();
-        await this.owos.close();
-        await this.uwus.close();
-        await this.ustats.close();
-        await this.uconfs.close();
-        await this.markovMessages.close();
-        await this.fursonas.close();
-        await this.restartData.close();
-    }
 }

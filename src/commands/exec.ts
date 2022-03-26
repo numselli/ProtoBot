@@ -23,7 +23,7 @@ import { exec, ExecException } from 'child_process';
 import type Logger from '@lib/interfaces/Logger';
 
 // Main
-export function run(client: Client, message: Message, args: string[], log: Logger): void {
+export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
     // Safety check, because we don't want those hax0rs in
     let silent = false;
     if (args[0] === '-s') {

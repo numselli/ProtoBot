@@ -23,7 +23,7 @@ import type Logger from '@lib/interfaces/Logger';
 
 // Main
 // ===== COMMAND MADE BY Mr. EL =====
-export function run(client: Client, message: Message, args: string[], log: Logger): void {
+export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
     // If it's FurDevs, we can ping mr. el:
     if (message.guild?.id !== '731520035717251142') {
         message.reply('This command is only available in a special server! ;)');

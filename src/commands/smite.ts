@@ -26,7 +26,7 @@ interface IEmoteData {
     bolt: string;
     cloud_bolt: string;
 }
-export function run(client: Client, message: Message, args: string[], log: Logger): void {
+export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
     if (!args[0])
         message.reply('Who..?').then((m) => {
             setTimeout(async () => {

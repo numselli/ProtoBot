@@ -21,7 +21,7 @@ import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
 
 // Main
-export function run(client: Client, message: Message, args: string[], log: Logger): void {
+export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
     const userID = args[0]?.replace(/[<@!>]/g, '');
     if (!args[0]) {
         log('i', 'No hug arg provided!');

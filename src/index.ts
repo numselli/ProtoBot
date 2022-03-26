@@ -221,7 +221,7 @@ client.on('ready', async () => {
 // *** HANDLING MESSAGES ***
 // message will be a discord.Message object with the standard properties.
 // -- THIS REQUIRES THE GUILDMESSAGES PRIVILEGED INTENT
-client.on('messageCreate', (message: discord.Message) => {
+client.on('messageCreate', async (message) => {
     // Log the message content if we are in verbose mode.
     log(
         'v',
@@ -309,7 +309,13 @@ client.on('messageCreate', (message: discord.Message) => {
             message.reply("You aren't authorized to do that!");
             return;
         }
-        commandExec(client, message, args, log);
+        try {
+            await commandExec(client, message, args, log);
+        } catch (e) {
+            log('e', 'Command failed!');
+            log('e', e);
+            message.reply('Something went wrong! Notify a developer.');
+        }
     }
 });
 

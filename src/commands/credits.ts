@@ -33,7 +33,7 @@ interface CreditItem {
 
 type Credits = CreditItem[];
 
-export function run(client: Client, message: Message, args: string[], log: Logger): void {
+export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
     // Add credits data here
     const credits: Credits = [
         {

@@ -22,7 +22,7 @@ import Uwuifier from 'uwuifier';
 import type Logger from '@lib/interfaces/Logger';
 
 // Main
-export function run(client: Client, message: Message, args: string[], log: Logger): void {
+export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
     let intense = false;
     if (args.length === 0) {
         message.reply('**Error:** No text provided!');

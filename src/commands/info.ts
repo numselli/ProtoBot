@@ -33,7 +33,7 @@ function fireStats(userID: string, message: Message, client: Client): void {
     message.reply({ embeds: [embed] });
 }
 
-export function run(client: Client, message: Message, args: string[], log: Logger): void {
+export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
     const userID = args[0]?.replace(/[<@!>]/g, '') ?? message.author.id;
 
     if (!client.ustats.get(userID)) {

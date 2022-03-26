@@ -19,6 +19,6 @@
 import CommandConfig from '@lib/interfaces/CommandConfig';
 import type { Client, Message } from 'discord.js';
 
-type Logger = (mode: 'v' | 'i' | 'w' | 'e', message: string) => void;
+type Logger = (mode: 'v' | 'i' | 'w' | 'e', message?: any, _bypassStackPrint?: boolean) => void;
 
 export default Logger;

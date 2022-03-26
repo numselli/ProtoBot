@@ -37,6 +37,9 @@ import Client from '@lib/Client'; // The custom client files
 import discord from 'discord.js'; // <<< Discord!
 import type Command from '@lib/interfaces/Command'; // For command typing
 
+// FIXME: Remove me later, this is a bad idea.
+process.setMaxListeners(13);
+
 // Import the primary log function from the CWD.
 import log from './log';
 
@@ -55,7 +58,7 @@ if (!process.env.PROTOBOT_STARTSH_COMMIT) {
 }
 
 // Initialize a Client instance, and provide the Discord intent flags.
-const client = new Client({
+const client = new Client(log, {
     intents: [
         discord.Intents.FLAGS.GUILDS,
         discord.Intents.FLAGS.GUILD_MEMBERS,
@@ -312,8 +315,8 @@ client.on('messageCreate', async (message) => {
         try {
             await commandExec(client, message, args, log);
         } catch (e) {
-            log('e', 'Command failed!');
-            log('e', e);
+            log('e', 'Command failed!', true);
+            log('e', e, true);
             message.reply('Something went wrong! Notify a developer.');
         }
     }

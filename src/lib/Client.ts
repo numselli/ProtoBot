@@ -20,14 +20,20 @@ import config from '@root/config';
 import { Client as BaseClient, ClientOptions } from 'discord.js';
 import Enmap from 'enmap';
 import EnmapVerbose from '@lib/EnmapVerbose';
+import type Logger from '@lib/interfaces/Logger';
 
 function makeVerboseFunction(name: string): (q: string) => void {
     return (q: string) => EnmapVerbose(name, q);
 }
 
 export default class Client extends BaseClient {
-    public constructor(options: ClientOptions) {
+    private _isAlreadyDestroyed: boolean;
+    private _log: Logger;
+
+    public constructor(log: Logger, options: ClientOptions) {
         super(options);
+        this._log = log;
+        this._isAlreadyDestroyed = false;
         this.config = config;
         this.defaults = {
             USER_CONFS: { markov_optin: false },
@@ -48,5 +54,15 @@ export default class Client extends BaseClient {
         this.commandsConfig = new Enmap();
         this.commandsRefs = new Enmap(); // Refs are basically aliases that "link" to the actual command
         this.hooks = new Enmap();
+    }
+
+    public destroy(): void {
+        if (this._isAlreadyDestroyed) {
+            this._log('e', 'Client destroy: Client is already destroyed. Abort.', true);
+            return;
+        }
+        this._isAlreadyDestroyed = true;
+        this.cooldowns.deleteAll();
+        super.destroy();
     }
 }

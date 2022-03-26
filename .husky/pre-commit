@@ -2,4 +2,4 @@
 . "$(dirname "$0")/_/husky.sh"
 
 npm run test:staged
-npm run build -- --build
+npm run build -- --build --verbose

@@ -8,6 +8,7 @@ eprod="$PRODUCTION"
 echo 'bootstrap:            PRODUCTION is set to '"${eprod:="0"}"'.';
 
 while true; do
+    ./clean.sh
     echo 'bootstrap: Getting current commit hash...';
     COMMIT_HASH="$(git rev-parse HEAD)";
     echo 'bootstrap: Running ProtoBot with commit '"$COMMIT_HASH"'.';

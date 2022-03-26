@@ -2,37 +2,14 @@
 # Clean the ProtoBot workspace of unnecessary compilation
 # archives that are messy and hard to code with.
 
-# confirmation
-echo "WARNING"
-echo "Running this script will delete files from"
-echo "the ProtoBot workspace."
-echo ""
-echo "Examples of files deleted are compilation items"
-echo "such as ./dist/commands/*.js, but NOT DATABASES!"
-echo ""
-read -p "Are you 100% SURE you want to continue? [y/N] " isSure
-case "$isSure" in
-    [yY][eE][sS]|[yY]) 
-        # user said ok
-        echo "Copying out important data..."
-        mkdir DATA_BKP
-        mkdir DATA_BKP/data
-        cp -rv ./dist/data/* ./DATA_BKP/data/
-        echo "Clearing dist..."
-        rm -rfv ./dist/*
-        echo "Replacing data..."
-        mkdir dist/data
-        cp -rv ./DATA_BKP/data/* ./dist/data/
-        echo "Cleaning up..."
-        rm -rfv ./DATA_BKP/
-        echo "Done."
-        ;;
-    [nN][oO]|[nN])
-        echo "You rejected."
-        exit 1
-        ;;
-    *)
-        echo "Unknown input $isSure"
-        exit 2
-        ;;
-esac
+TMPDIR="$(mktemp -d /tmp/ProtoBot.clean.XXXXXXXX)"
+echo "distclean: Copying out important data to $TMPDIR..."
+cp -r ./dist/data/* $TMPDIR/
+echo "distclean: Clearing dist..."
+rm -rf ./dist/*
+echo "distclean: Replacing data..."
+mkdir dist/data
+cp -r $TMPDIR/* ./dist/data/
+echo "distclean: Cleaning up..."
+rm -rf $TMPDIR
+echo "distclean: Done."

@@ -321,7 +321,7 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
     } else {
         message.reply(`Please specify a command to execute. Here are the available commands:
 \`admin help\`: Shows this message
-\`admin (r|restart)\`: Restarts the bot
+\`admin (re|restart)\`: Restarts the bot
 \`admin (checkout|branch)\`: Change the Git branch we are running from
 \`admin (up|update)\`: Run a software update.
 \`admin (e|eval)\`: Evaluates a code snippet.

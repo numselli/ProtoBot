@@ -18,11 +18,7 @@ name: Prettier
 
 on:
     push:
-        branches:
-            - main
     pull_request:
-        branches:
-            - main
 
 jobs:
     prettier:

@@ -59,7 +59,7 @@ Ensure you are on your _fork_ before continuing. Create one on GitHub.
 
 ### Step 1: Commiting
 
-Run the following command:
+Run the following command: **ENSURE YOUR COMMIT MESSAGE MEETS THE CONVENTIONAL COMMITS STANDARD**
 
 ```bash
 git commit -m "Describe your changes here. Try to use less than 50 characters."
@@ -82,7 +82,7 @@ git push
 #### If you get a "cannot find upstream branch" error, run
 
 ```bash
-git push --set-upstream origin master
+git push --set-upstream origin main
 ```
 
 ### Step 3: Creating a Pull Request
@@ -97,7 +97,7 @@ Put useful information about the changes there.
 
 ### Step 4: All done!
 
-Your changes will be reviewed soon. Keep an eye on your pull request!
+Your changes will be reviewed soon. Keep an eye on your pull request! Eventually, it will be merged into `dev` and (soon after) `main`.
 
 ## Guidelines for contributing
 

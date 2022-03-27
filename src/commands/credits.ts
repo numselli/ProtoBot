@@ -62,7 +62,7 @@ export async function run(client: Client, message: Message, args: string[], log:
     const embed = new discord.MessageEmbed()
         .setTitle('Credits to all those who helped make ProtoBot possible')
         .setColor('RANDOM')
-        .setFooter('Thank you, all.')
+        .setFooter({ text: 'Thank you, all. Also see the Conventional-Commits table on the README.' })
         .setDescription('Come on, read this! They worked hard for it!');
 
     credits.forEach((item: CreditItem) => {

@@ -27,9 +27,9 @@ export async function run(client: Client, message: Message, args: string[], log:
     log('i', 'Giving help command info!');
     const embed = new discord.MessageEmbed()
         .setTitle('ProtoBot Help')
-        .setAuthor('ProtoBot')
+        .setAuthor({ name: 'ProtoBot' })
         .setTimestamp()
-        .setFooter(`Requested by ${message.author.tag}`)
+        .setFooter({ text: `Requested by ${message.author.tag}` })
         .setDescription('Here are all of my commands!');
 
     client.commandsConfig.forEach((command: { name: string; description: string; enabled: boolean; restrict: boolean | { users: string[] } }) => {

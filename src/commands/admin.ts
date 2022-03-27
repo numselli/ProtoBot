@@ -139,7 +139,7 @@ export async function run(client: Client, message: Message, args: string[], log:
         }
         let code: string = args.join(' ');
 
-        const embed = new MessageEmbed().setFooter(`Eval command executed by ${message.author.username}`).setTimestamp();
+        const embed = new MessageEmbed().setFooter({ text: `Eval command executed by ${message.author.username}` }).setTimestamp();
         let msg;
         let response;
         let e = false;
@@ -222,17 +222,17 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
         }
         const code: string = args.join(' ');
 
-        const embed = new MessageEmbed().setFooter(`Exec command executed by ${message.author.username}`).setTimestamp();
+        const embed = new MessageEmbed().setFooter({ text: `Exec command executed by ${message.author.username}` }).setTimestamp();
         let e = false;
 
         exec(code, (error: ExecException | null, stdout: string, stderr: string) => {
             if (error || stderr) e = true;
 
-            if (stderr) embed.addField('STDERR', `\`\`\`${stderr.substr(0, 2042)}\`\`\``);
+            if (stderr) embed.addField('STDERR', `\`\`\`${stderr.substring(0, 2042)}\`\`\``);
 
-            if (stdout) embed.addField('STDOUT', `\`\`\`${stdout.substr(0, 2042)}\`\`\``);
+            if (stdout) embed.addField('STDOUT', `\`\`\`${stdout.substring(0, 2042)}\`\`\``);
 
-            if (error) embed.addField('ExecError', `\`\`\`${error.toString().substr(0, 2042)}\`\`\``);
+            if (error) embed.addField('ExecError', `\`\`\`${error.toString().substring(0, 2042)}\`\`\``);
 
             const parsed = [(error ?? { toString: () => '' }).toString(), stderr, stdout].reduce((a, b) => (a.length > b.length ? a : b));
 

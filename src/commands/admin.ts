@@ -37,7 +37,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 
     log('i', `Admin command executed by ${message.author.tag}`);
 
-    if (args[0] === 'restart') {
+    if (args[0] === 'restart' || args[0] === 're') {
         log('w', `${message.author.tag} has triggered a restart!`);
         // restart bot
         await message.reply('Alright, restarting...');
@@ -49,7 +49,7 @@ export async function run(client: Client, message: Message, args: string[], log:
         log('w', 'Goodbye!');
         log('w', 'Exiting with code 9 (RESTART)');
         process.exit(9);
-    } else if (args[0] === 'branch') {
+    } else if (args[0] === 'branch' || args[0] === 'checkout') {
         if (!args[1]) {
             message.reply('What branch did you want to switch to?');
             return;
@@ -71,7 +71,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 
             m.edit({ embeds: [embed] });
         });
-    } else if (args[0] === 'update') {
+    } else if (args[0] === 'update' || args[0] === 'up') {
         const embed = new MessageEmbed().setTitle('Update').setDescription('Updating the bot... This may take a while...');
 
         function l(mode: 'v' | 'i' | 'w' | 'e', message: string): void {
@@ -127,7 +127,7 @@ export async function run(client: Client, message: Message, args: string[], log:
                 });
             }
         });
-    } else if (args[0] === 'eval') {
+    } else if (args[0] === 'eval' || args[0] === 'e') {
         args.shift();
         /**
          * Credit to WilsonTheWolf for some of this eval code!
@@ -212,7 +212,7 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
                 log(e ? 'e' : 'i', b);
             });
         }
-    } else if (args[0] === 'exec') {
+    } else if (args[0] === 'exec' || args[0] === 'ex') {
         args.shift();
 
         let silent = false;
@@ -321,11 +321,11 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
     } else {
         message.reply(`Please specify a command to execute. Here are the available commands:
 \`admin help\`: Shows this message
-\`admin restart\`: Restarts the bot
-\`admin branch\`: Change the Git branch we are running from
-\`admin update\`: Run a software update.
-\`admin eval\`: Evaluates a code snippet.
-\`admin exec\`: Runs a Bash command.`);
+\`admin (r|restart)\`: Restarts the bot
+\`admin (checkout|branch)\`: Change the Git branch we are running from
+\`admin (up|update)\`: Run a software update.
+\`admin (e|eval)\`: Evaluates a code snippet.
+\`admin (ex|exec)\`: Runs a Bash command.`);
         return;
     }
 }

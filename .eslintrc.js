@@ -4,7 +4,10 @@ module.exports = {
     },
     root: true,
     parser: '@typescript-eslint/parser',
-    plugins: ['@typescript-eslint'],
+    parserOptions: {
+        project: ['tsconfig.json', 'tsconfig.eslint.json']
+    },
+    plugins: ['@typescript-eslint', 'deprecation'],
     extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
     rules: {
         /* ======================================= */
@@ -94,6 +97,7 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': ['off'],
         '@typescript-eslint/ban-ts-comment': ['off'],
         '@typescript-eslint/no-var-requires': ['off'],
+        'deprecation/deprecation': ['warn'],
 
         /* VARIABLES --------------------------- */
         // These rules relate to variables and

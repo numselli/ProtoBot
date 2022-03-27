@@ -17,5 +17,6 @@
  */
 
 export default interface UserConfig {
-    markov_optin: boolean;
+    // DEPRECATED -- FIXME: Remove this
+    markov_optin?: boolean;
 }

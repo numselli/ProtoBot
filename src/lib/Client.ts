@@ -36,7 +36,7 @@ export default class Client extends BaseClient {
         this._isAlreadyDestroyed = false;
         this.config = config;
         this.defaults = {
-            USER_CONFS: { markov_optin: false },
+            USER_CONFS: {},
             USER_STATS: { hugs: 0, boops: 0, pats: 0 },
             COOLDOWNS: { owos: 0, uwus: 0, tildes: 0 }
         };

@@ -195,9 +195,22 @@ client.on('ready', async () => {
     }
     loadHooks(); // Execute that massive thing again.
 
-    // Status
+    // Status handling code
     // We assume the main prefix is always the first in the array.
-    client.user?.setActivity(`${client.config.prefixes[0]}about | Written for furries, by furries!`, { type: 'PLAYING' });
+    const allStatuses: ['PLAYING' | 'STREAMING' | 'LISTENING' | 'WATCHING' | 'COMPETING', string][] = [
+        // First index is the initial one.
+        ['PLAYING', `${client.config.prefixes[0]}about | Written for furries, by furries!`],
+        ['PLAYING', `${client.config.prefixes[0]}about | uwu`],
+        ['PLAYING', `${client.config.prefixes[0]}about | ah yes, much furry`],
+        ['PLAYING', `${client.config.prefixes[0]}about | I am not an uwu cat! - one of the developers, probably.`]
+    ];
+    setInterval(() => {
+        const status = allStatuses[Math.floor(Math.random() * allStatuses.length)];
+        log('i', `Change status: ${status[1]} (${status[0]})`);
+        client.user?.setActivity(status[1], { type: status[0] });
+    }, 10 * 60 * 1000); // Every 10 minutes.
+    log('i', 'Set status.');
+    client.user?.setActivity(allStatuses[0][1], { type: allStatuses[0][0] });
 
     // If we were restarted, based on the restartData Map, send the RestartTimer message to
     // the channel we were restarted in.
@@ -212,9 +225,7 @@ client.on('ready', async () => {
                 (Date.now() - <number>client.restartData.get('time')) / 1000
             } seconds).`
         );
-        client.restartData.set('wasRestarted', false); // TODO: Maybe check that there is no way for this to
-        //       not be set, as if it is set true at start we
-        //       always will nag the dev.
+        client.restartData.set('wasRestarted', false);
     }
     // A clean start
     else log('i', 'Not restarted.');
@@ -296,6 +307,7 @@ client.on('messageCreate', async (message) => {
         const { run: commandExec, config: commandConfig } = commandData;
         // Now we check for specific things to prevent the command from running
         // in it's configuration.
+        // TODO: be a little move verbose here with who and what
         if (!commandConfig.enabled) {
             log('i', 'Command is disabled!');
             message.reply('That command is disabled!');

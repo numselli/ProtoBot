@@ -115,7 +115,7 @@ export async function run(client: Client, message: Message, args: string[], log:
                                     .addField('Status', '**Complete.**')
                                     .addField(
                                         'Restart to apply changes',
-                                        `To apply the update, run \`${client.config.prefixes[0]}restart\`.\nYou may want to run \`${client.config.prefixes[0]}admin exec git stash apply\` to re-instate unsaved changes.}`
+                                        `To apply the update, run \`${client.config.prefixes[0]}restart\`.\nYou may want to run \`${client.config.prefixes[0]}admin exec git stash apply\` to re-instate unsaved changes.`
                                     );
 
                                 m.edit({ embeds: [embed] });

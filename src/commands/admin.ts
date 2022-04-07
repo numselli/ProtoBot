@@ -174,8 +174,8 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
         embed
             .setTitle(e ? '**Error**' : '**Success**')
             .setColor(e ? 'RED' : 'GREEN')
-            .setDescription(`\`\`\`${response.substr(0, 2042)}\`\`\``);
-        if (length >= 2049 && !silent) {
+            .setDescription(`\`\`\`${response.substr(0, 1018)}\`\`\``);
+        if (length >= 1025 && !silent) {
             // dont do this on silent items
             log(e ? 'e' : 'i', `An eval command executed by ${message.author.username}'s response was too long (${length}/2048).`);
             log(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
@@ -183,7 +183,7 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
             response.split('\n').forEach((b: string) => {
                 log(e ? 'e' : 'i', b);
             });
-            embed.addField('Note:', `The response was too long with a length of \`${length}/2048\` characters. it was logged to the console. `);
+            embed.addField('Note:', `The response was too long with a length of \`${length}/1024\` characters. it was logged to the console. `);
         } else if (!silent) {
             // use different log for silent items
             log(e ? 'e' : 'i', `An eval command has been executed by ${message.author.username}!`);
@@ -228,11 +228,11 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
         exec(code, (error: ExecException | null, stdout: string, stderr: string) => {
             if (error || stderr) e = true;
 
-            if (stderr) embed.addField('STDERR', `\`\`\`${stderr.substring(0, 2042)}\`\`\``);
+            if (stderr) embed.addField('STDERR', `\`\`\`${stderr.substring(0, 1018)}\`\`\``);
 
-            if (stdout) embed.addField('STDOUT', `\`\`\`${stdout.substring(0, 2042)}\`\`\``);
+            if (stdout) embed.addField('STDOUT', `\`\`\`${stdout.substring(0, 1018)}\`\`\``);
 
-            if (error) embed.addField('ExecError', `\`\`\`${error.toString().substring(0, 2042)}\`\`\``);
+            if (error) embed.addField('ExecError', `\`\`\`${error.toString().substring(0, 1018)}\`\`\``);
 
             const parsed = [(error ?? { toString: () => '' }).toString(), stderr, stdout].reduce((a, b) => (a.length > b.length ? a : b));
 
@@ -241,9 +241,9 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
                 .setColor(e ? 'RED' : 'GREEN')
                 .setDescription('Here is your output!');
 
-            if (parsed.length >= 2049 && !silent) {
+            if (parsed.length >= 1025 && !silent) {
                 // dont do this on silent items
-                log(e ? 'e' : 'i', `An exec command executed by ${message.author.username}'s response was too long (${parsed.length}/2048).`);
+                log(e ? 'e' : 'i', `An exec command executed by ${message.author.username}'s response was too long (${parsed.length}/1024).`);
                 log(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
                 log(e ? 'e' : 'i', 'Output:');
                 if (error) {
@@ -269,7 +269,7 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
                 }
                 embed.addField(
                     'Note:',
-                    `The response was too long with a length of \`${parsed.length}/2048\` characters. it was logged to the console.`
+                    `The response was too long with a length of \`${parsed.length}/1024\` characters. It was logged to the console.`
                 );
             } else if (!silent) {
                 // use different log for silent items

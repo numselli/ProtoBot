@@ -27,29 +27,22 @@ export async function run(client: Client, message: Message, args: string[], log:
     log('i', 'Giving help command info!');
     const embed = new discord.MessageEmbed()
         .setTitle('ProtoBot Help')
-        .setAuthor('ProtoBot')
+        .setAuthor({ name: 'ProtoBot' })
         .setTimestamp()
-        .setFooter(`Requested by ${message.author.tag}`)
+        .setFooter({ text: `Requested by ${message.author.tag}` })
         .setDescription('Here are all of my commands!');
 
-    client.commandsConfig.forEach((command: { name: string; description: string; enabled: boolean; restrict: boolean | { users: string[] } }) => {
-        embed.addField(
-            command.name,
-            `${command.description}${command.enabled ? '' : ' **[Disabled]**'}${command.restrict ? ' **[Restricted]**' : ''}`,
-            true
-        );
-    });
-
-    message.author
-        .send({ embeds: [embed] })
-        .then(() => {
-            message.reply('Sent the help menu to your DM!');
-        })
-        .catch((e) => {
-            message.reply(`**ERROR**: I failed to send the help menu to your DMs.\n\nThe error was: \`${e}\``);
-            log('w', `Failed to send embed to user DMs for help: ${e}`);
-            message.reply({ embeds: [embed] });
+    client.commands
+        .__readConfiguration__()
+        .forEach((command: { name: string; description: string; enabled: boolean; restrict: boolean | { users: string[] } }) => {
+            embed.addField(
+                command.name,
+                `${command.description}${command.enabled ? '' : ' **[Disabled]**'}${command.restrict ? ' **[Restricted]**' : ''}`,
+                true
+            );
         });
+
+    message.reply({ embeds: [embed] });
 }
 
 // Config

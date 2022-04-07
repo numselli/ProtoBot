@@ -35,7 +35,7 @@ import * as fs from 'fs'; // Filesystem access
 import chalk from 'chalk'; // Coloring for CLI - FIXME: update to v5 when TS is updated
 import Client from '@lib/Client'; // The custom client files
 import discord from 'discord.js'; // <<< Discord!
-import type Command from '@lib/interfaces/Command'; // For command typing
+import * as ready from '@lib/onready/index';
 
 // FIXME: Remove me later, this is a bad idea.
 process.setMaxListeners(13);
@@ -73,151 +73,11 @@ const client = new Client(log, {
 
 // When the client is ready...
 client.on('ready', async () => {
-    // Count the total user counts up. We do this by getting the total user count
-    // for each server and remove ourselves from it...
-    const userCountsPerGuild = client.guilds.cache.map((g) => g.memberCount - 1);
-    let userTotal = 0;
-    // ...and iterate through them to increment our user total...
-    userCountsPerGuild.forEach((item) => (userTotal += item));
-    // ...and get the average guild-user ratio.
-    const userAvg = userTotal / userCountsPerGuild.length;
-    // prettier-ignore
-    (() => {
-        log('i', ' _______  ______   _______ _________');
-        log('i', '(  ____ )(  ___ \\ (  ___  )\\__   __/');
-        log('i', '| (    )|| (   ) )| (   ) |   ) (  '); 
-        log('i', '| (____)|| (__/ / | |   | |   | |  '); 
-        log('i', '|  _____)|  __ (  | |   | |   | |  '); 
-        log('i', '| (      | (  \\ \\ | |   | |   | |  '); 
-        log('i', '| )      | )___) )| (___) |   | |  '); 
-        log('i', '|/       |/ \\___/ (_______)   )_(  '); 
-    })();
-    log('i', 'Ready!');
-    log('i', `Running ProtoBot on commit ${process.env.PROTOBOT_STARTSH_COMMIT}.`);
-    if (process.env.PROTOBOT_STARTSH_DIRTYSOURCE) log('w', 'Uncommitted changes present (dirty source tree)');
-
-    if (process.env.PRODUCTION) log('i', 'Running in production mode. Verbose logging is disabled.');
-    else log('i', 'Running in development mode. Verbose logging is enabled.');
-
-    // A lot of chalk prefixes to show the counts. A better way to handle this?
-    // Whoever wrote this (myself) needs some mental help.
-    log('i', `Username: ${chalk.red(client.user?.tag) ?? '(error: client.user is undefined)'}`);
-    log('i', `In ${chalk.red(client.guilds.cache.size)} guilds!`);
-    log('i', `With ${chalk.red(client.channels.cache.size)} channels!`);
-    log('i', `Total ${chalk.red(userTotal)} members, excluding myself!`);
-    log('i', `Average user count over all guilds: ${chalk.red(Math.round(userAvg))}`);
-    log('i', `Loaded ${chalk.red(client.config.prefixes.length)} prefixes!`);
-
-    // The root function used to load all of the command files.
-    function loadCmds(): void {
-        // Define our own local version of the log() function to be used within this function, to show it is
-        // the command loading handler.
-        function l(type: 'v' | 'i' | 'w' | 'e', message: any) {
-            log(type, `${chalk.yellow('[')}${chalk.yellow.bold('CMDLOAD')}${chalk.yellow(']')} ${message}`);
-        }
-        l('i', 'Beginning initial command load...');
-
-        // Read the root directory of the commands.
-        fs.readdir(client.config.dirs.commands, (err, files) => {
-            if (err) {
-                // Something went wrong. err = an Error object
-                l('e', `Failed to read directory ${client.config.dirs.commands}:`);
-                l('e', err);
-            } else
-                files.forEach((path) => {
-                    // Ensure that what we are reading is a core JavaScript compiled file.
-                    if (path.endsWith('.js')) {
-                        // Check that this file does not contain capitalized letters in it's names.
-                        // This is a violation. Logged as: 'CommandCasedWarning'
-                        if (path.replace('.js', '').toLowerCase() !== path.replace('.js', '')) {
-                            l('w', `CommandCasedWarning: Command at ${path} has a name with a capital letter!`);
-                            l('w', `Will be loaded as "${path.replace('.js', '').toLowerCase()}"!`);
-                            // Normalize the path. This should never be needed.
-                            path = path.toLowerCase();
-                        }
-
-                        // The command data is loaded from the path.
-                        const commandData = <Command>(
-                            require(client.config.dirs.commands.endsWith('/')
-                                ? client.config.dirs.commands + path
-                                : `${client.config.dirs.commands}/${path}`)
-                        );
-                        const cmdName = path.replace('.js', ''); // Set the command's name to the path without the extension.
-                        l('v', `Loading command "${cmdName}"...`); //
-                        client.commandsConfig.set(cmdName, commandData.config); // Set the command configuration into the command map.
-                        client.commands.set(cmdName, commandData); // Import the command into the main commands object.
-                        // Load aliases into the refs along with the base command
-                        l('v', `Loading command aliases for ${cmdName}...`);
-                        l('v', 'Loaded base alias!');
-                        client.commandsRefs.set(cmdName, cmdName); // The command's name itself will always be an alias, as
-                        // the code that handles aliases is not very well written.
-                        (commandData.config.aliases ?? []).forEach((alias) => {
-                            l('v', `Loaded alias ${alias}!`);
-                            client.commandsRefs.set(alias, cmdName); // Set the alias into the command referencing Map.
-                        });
-                        l('i', `Finished loading command "${cmdName}"!`);
-                    } else if (path.endsWith('.map')) return;
-                    // Ignore source maps
-                    // THIS IS A VIOLATION AND SHOULD NEVER THROW; We will not kill the process however.
-                    else l('w', `File in commands dir with unknown extension: ${path}`);
-                });
-        });
-    }
-    loadCmds(); // Execute the massive function block above.
-
-    // Same thing, load the hook files.
-    function loadHooks(): void {
-        // Consult loadCmds for most of this.
-        function l(type: 'v' | 'i' | 'w' | 'e', message: any) {
-            log(type, `${chalk.yellow('[')}${chalk.yellow.bold('HOOKLOAD')}${chalk.yellow(']')} ${message}`);
-        }
-        l('i', 'Beginning initial hook load...');
-        fs.readdir(client.config.dirs.hooks, (err, files) => {
-            if (err) {
-                l('e', `Failed to read directory ${client.config.dirs.hooks}:`);
-                l('e', err);
-            } else
-                files.forEach((path: string) => {
-                    if (path.endsWith('.js')) {
-                        // normal load, but in this case we import into the hook Map.
-                        const hookData = require(client.config.dirs.hooks.endsWith('/')
-                            ? client.config.dirs.hooks + path
-                            : `${client.config.dirs.hooks}/${path}`);
-                        const hookName = path.replace('.js', '');
-                        l('v', `Loading hook "${hookName}"...`);
-                        client.hooks.set(hookName, hookData);
-                        l('i', `Finished loading hook "${hookName}"!`);
-                    } else if (path.endsWith('.map')) return;
-                    // unknown ext
-                    else l('w', `File in hooks dir with unknown extension: ${path}`);
-                });
-        });
-    }
-    loadHooks(); // Execute that massive thing again.
-
-    // Status
-    // We assume the main prefix is always the first in the array.
-    client.user?.setActivity(`${client.config.prefixes[0]}about | Written for furries, by furries!`, { type: 'PLAYING' });
-
-    // If we were restarted, based on the restartData Map, send the RestartTimer message to
-    // the channel we were restarted in.
-    log('i', 'Checking if we were restarted...');
-    if (client.restartData.get('wasRestarted')) {
-        log('i', 'We have restarted. Sending message...');
-        const guild = client.guilds.cache.get(<string>client.restartData.get('serverId')); // Fetch the server we restarted in...
-        const channel = <discord.TextChannel>await guild?.channels.cache.get(<string>client.restartData.get('channelId')); // ...and get the channel...
-        const message = await channel?.messages.fetch(<string>client.restartData.get('messageId')); // ...and finally the message.
-        await message.reply(
-            `Done! Restart complete in ${Date.now() - <number>client.restartData.get('time')}ms (${
-                (Date.now() - <number>client.restartData.get('time')) / 1000
-            } seconds).`
-        );
-        client.restartData.set('wasRestarted', false); // TODO: Maybe check that there is no way for this to
-        //       not be set, as if it is set true at start we
-        //       always will nag the dev.
-    }
-    // A clean start
-    else log('i', 'Not restarted.');
+    ready.init(client, log);
+    client.commands.loadCommands();
+    ready.loadHooks(client, log);
+    ready.setStatus(client, log);
+    ready.handleRestart(client, log);
 });
 
 // The most important part.
@@ -268,52 +128,10 @@ client.on('messageCreate', async (message) => {
     // if it's a command, we handle it.
     if (msgIsCommand) {
         const args: string[] = message.content.slice(prefixLen).split(/ +/g);
-        let command = args.shift()?.toLowerCase() ?? '';
+        const command = args.shift()?.toLowerCase() ?? '';
 
-        // quit if the command couldn't be fetched
-        if (!command) return;
-
-        // verbose info
-        log('v', `Running command "${command}" for "${message.author.tag}" with args "${args.join(' ')}"!`);
-        log(
-            'v',
-            `Command found at: ${message.guild?.name ?? 'unknown'} (${message.guild?.id ?? 'unknown'}) => #${
-                <string>message.channel?.name ?? '#unknown'
-            } (${message.channel?.id ?? 'unknown'}) => ${message.id}`
-        );
-
-        log('v', 'Resolving alias...');
-        command = client.commandsRefs.get(command) ?? '';
-        log('v', `Alias resolved to "${command}"!`);
-
-        const commandData: Command | undefined = client.commands.get(command);
-        if (!commandData) {
-            // exit
-            log('i', `Failed to find command "${command}", exiting handler.`);
-            return;
-        }
-
-        const { run: commandExec, config: commandConfig } = commandData;
-        // Now we check for specific things to prevent the command from running
-        // in it's configuration.
-        if (!commandConfig.enabled) {
-            log('i', 'Command is disabled!');
-            message.reply('That command is disabled!');
-            return;
-        }
-        if (
-            commandConfig.restrict &&
-            commandConfig.restrict.users &&
-            !commandConfig.restrict.users.includes(message.author.id) &&
-            message.author.id !== client.config.ownerID
-        ) {
-            // User isn't authorised; the user is either not whitelisted to use the command and/or they're not an owner.
-            log('i', 'User unauthorized!');
-            message.reply("You aren't authorized to do that!");
-            return;
-        }
         try {
-            await commandExec(client, message, args, log);
+            await client.commands.run(command, args, message, client);
         } catch (e) {
             log('e', 'Command failed!', true);
             log('e', e, true);

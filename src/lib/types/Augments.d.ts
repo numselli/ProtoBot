@@ -34,6 +34,7 @@ import MarkovData from '@lib/interfaces/MarkovData';
 import Hook from '@lib/interfaces/Hook';
 import UserConfig from '@lib/interfaces/UserConfig';
 import UserStats from '@lib/interfaces/UserStats';
+import CommandHandler from '@lib/CommandHandler';
 
 // Discord.js
 declare module 'discord.js' {
@@ -55,9 +56,7 @@ declare module 'discord.js' {
         restartData: Enmap<string, unknown>;
 
         // In memory
-        commands: Enmap<string, Command>;
-        commandsConfig: Enmap<string, CommandConfig>; // NOTE: is this redundant?
-        commandsRefs: Enmap<string, string>;
+        commands: CommandHandler;
         hooks: Enmap<string, Hook>;
     }
 }

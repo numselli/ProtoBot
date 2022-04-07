@@ -37,7 +37,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 
     log('i', `Admin command executed by ${message.author.tag}`);
 
-    if (args[0] === 'restart') {
+    if (args[0] === 'restart' || args[0] === 're') {
         log('w', `${message.author.tag} has triggered a restart!`);
         // restart bot
         await message.reply('Alright, restarting...');
@@ -49,7 +49,7 @@ export async function run(client: Client, message: Message, args: string[], log:
         log('w', 'Goodbye!');
         log('w', 'Exiting with code 9 (RESTART)');
         process.exit(9);
-    } else if (args[0] === 'branch') {
+    } else if (args[0] === 'branch' || args[0] === 'checkout') {
         if (!args[1]) {
             message.reply('What branch did you want to switch to?');
             return;
@@ -71,7 +71,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 
             m.edit({ embeds: [embed] });
         });
-    } else if (args[0] === 'update') {
+    } else if (args[0] === 'update' || args[0] === 'up') {
         const embed = new MessageEmbed().setTitle('Update').setDescription('Updating the bot... This may take a while...');
 
         function l(mode: 'v' | 'i' | 'w' | 'e', message: string): void {
@@ -115,7 +115,7 @@ export async function run(client: Client, message: Message, args: string[], log:
                                     .addField('Status', '**Complete.**')
                                     .addField(
                                         'Restart to apply changes',
-                                        `To apply the update, run \`${client.config.prefixes[0]}restart\`.\nYou may want to run \`${client.config.prefixes[0]}admin exec git stash apply\` to re-instate unsaved changes.}`
+                                        `To apply the update, run \`${client.config.prefixes[0]}restart\`.\nYou may want to run \`${client.config.prefixes[0]}admin exec git stash apply\` to re-instate unsaved changes.`
                                     );
 
                                 m.edit({ embeds: [embed] });
@@ -127,7 +127,7 @@ export async function run(client: Client, message: Message, args: string[], log:
                 });
             }
         });
-    } else if (args[0] === 'eval') {
+    } else if (args[0] === 'eval' || args[0] === 'e') {
         args.shift();
         /**
          * Credit to WilsonTheWolf for some of this eval code!
@@ -139,7 +139,7 @@ export async function run(client: Client, message: Message, args: string[], log:
         }
         let code: string = args.join(' ');
 
-        const embed = new MessageEmbed().setFooter(`Eval command executed by ${message.author.username}`).setTimestamp();
+        const embed = new MessageEmbed().setFooter({ text: `Eval command executed by ${message.author.username}` }).setTimestamp();
         let msg;
         let response;
         let e = false;
@@ -212,7 +212,7 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
                 log(e ? 'e' : 'i', b);
             });
         }
-    } else if (args[0] === 'exec') {
+    } else if (args[0] === 'exec' || args[0] === 'ex') {
         args.shift();
 
         let silent = false;
@@ -222,17 +222,17 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
         }
         const code: string = args.join(' ');
 
-        const embed = new MessageEmbed().setFooter(`Exec command executed by ${message.author.username}`).setTimestamp();
+        const embed = new MessageEmbed().setFooter({ text: `Exec command executed by ${message.author.username}` }).setTimestamp();
         let e = false;
 
         exec(code, (error: ExecException | null, stdout: string, stderr: string) => {
             if (error || stderr) e = true;
 
-            if (stderr) embed.addField('STDERR', `\`\`\`${stderr.substr(0, 2042)}\`\`\``);
+            if (stderr) embed.addField('STDERR', `\`\`\`${stderr.substring(0, 2042)}\`\`\``);
 
-            if (stdout) embed.addField('STDOUT', `\`\`\`${stdout.substr(0, 2042)}\`\`\``);
+            if (stdout) embed.addField('STDOUT', `\`\`\`${stdout.substring(0, 2042)}\`\`\``);
 
-            if (error) embed.addField('ExecError', `\`\`\`${error.toString().substr(0, 2042)}\`\`\``);
+            if (error) embed.addField('ExecError', `\`\`\`${error.toString().substring(0, 2042)}\`\`\``);
 
             const parsed = [(error ?? { toString: () => '' }).toString(), stderr, stdout].reduce((a, b) => (a.length > b.length ? a : b));
 
@@ -321,11 +321,11 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
     } else {
         message.reply(`Please specify a command to execute. Here are the available commands:
 \`admin help\`: Shows this message
-\`admin restart\`: Restarts the bot
-\`admin branch\`: Change the Git branch we are running from
-\`admin update\`: Run a software update.
-\`admin eval\`: Evaluates a code snippet.
-\`admin exec\`: Runs a Bash command.`);
+\`admin (re|restart)\`: Restarts the bot
+\`admin (checkout|branch)\`: Change the Git branch we are running from
+\`admin (up|update)\`: Run a software update.
+\`admin (e|eval)\`: Evaluates a code snippet.
+\`admin (ex|exec)\`: Runs a Bash command.`);
         return;
     }
 }

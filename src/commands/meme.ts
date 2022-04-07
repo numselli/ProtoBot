@@ -36,7 +36,7 @@ export async function run(client: Client, message: Message, args: string[], log:
         .setTitle(body.title)
         .setURL(body.postLink)
         .setImage(body.url)
-        .setFooter(`From r/${body.subreddit}`);
+        .setFooter({ text: `From r/${body.subreddit}` });
     message.reply({ embeds: [embed] });
 }
 

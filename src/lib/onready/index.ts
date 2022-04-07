@@ -16,7 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default interface UserConfig {
-    // DEPRECATED -- FIXME: Remove this
-    markov_optin?: boolean;
-}
+import init from './init';
+import loadHooks from './loadhooks';
+import setStatus from './status';
+import handleRestart from './restart';
+
+export { init, loadHooks, setStatus, handleRestart };

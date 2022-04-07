@@ -32,13 +32,15 @@ export async function run(client: Client, message: Message, args: string[], log:
         .setFooter({ text: `Requested by ${message.author.tag}` })
         .setDescription('Here are all of my commands!');
 
-    client.commandsConfig.forEach((command: { name: string; description: string; enabled: boolean; restrict: boolean | { users: string[] } }) => {
-        embed.addField(
-            command.name,
-            `${command.description}${command.enabled ? '' : ' **[Disabled]**'}${command.restrict ? ' **[Restricted]**' : ''}`,
-            true
-        );
-    });
+    client.commands
+        .__readConfiguration__()
+        .forEach((command: { name: string; description: string; enabled: boolean; restrict: boolean | { users: string[] } }) => {
+            embed.addField(
+                command.name,
+                `${command.description}${command.enabled ? '' : ' **[Disabled]**'}${command.restrict ? ' **[Restricted]**' : ''}`,
+                true
+            );
+        });
 
     message.reply({ embeds: [embed] });
 }

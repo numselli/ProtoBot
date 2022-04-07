@@ -108,62 +108,7 @@ client.on('ready', async () => {
     log('i', `Average user count over all guilds: ${chalk.red(Math.round(userAvg))}`);
     log('i', `Loaded ${chalk.red(client.config.prefixes.length)} prefixes!`);
 
-    // The root function used to load all of the command files.
-    function loadCmds(): void {
-        // Define our own local version of the log() function to be used within this function, to show it is
-        // the command loading handler.
-        function l(type: 'v' | 'i' | 'w' | 'e', message: any) {
-            log(type, `${chalk.yellow('[')}${chalk.yellow.bold('CMDLOAD')}${chalk.yellow(']')} ${message}`);
-        }
-        l('i', 'Beginning initial command load...');
-
-        // Read the root directory of the commands.
-        fs.readdir(client.config.dirs.commands, (err, files) => {
-            if (err) {
-                // Something went wrong. err = an Error object
-                l('e', `Failed to read directory ${client.config.dirs.commands}:`);
-                l('e', err);
-            } else
-                files.forEach((path) => {
-                    // Ensure that what we are reading is a core JavaScript compiled file.
-                    if (path.endsWith('.js')) {
-                        // Check that this file does not contain capitalized letters in it's names.
-                        // This is a violation. Logged as: 'CommandCasedWarning'
-                        if (path.replace('.js', '').toLowerCase() !== path.replace('.js', '')) {
-                            l('w', `CommandCasedWarning: Command at ${path} has a name with a capital letter!`);
-                            l('w', `Will be loaded as "${path.replace('.js', '').toLowerCase()}"!`);
-                            // Normalize the path. This should never be needed.
-                            path = path.toLowerCase();
-                        }
-
-                        // The command data is loaded from the path.
-                        const commandData = <Command>(
-                            require(client.config.dirs.commands.endsWith('/')
-                                ? client.config.dirs.commands + path
-                                : `${client.config.dirs.commands}/${path}`)
-                        );
-                        const cmdName = path.replace('.js', ''); // Set the command's name to the path without the extension.
-                        l('v', `Loading command "${cmdName}"...`); //
-                        client.commandsConfig.set(cmdName, commandData.config); // Set the command configuration into the command map.
-                        client.commands.set(cmdName, commandData); // Import the command into the main commands object.
-                        // Load aliases into the refs along with the base command
-                        l('v', `Loading command aliases for ${cmdName}...`);
-                        l('v', 'Loaded base alias!');
-                        client.commandsRefs.set(cmdName, cmdName); // The command's name itself will always be an alias, as
-                        // the code that handles aliases is not very well written.
-                        (commandData.config.aliases ?? []).forEach((alias) => {
-                            l('v', `Loaded alias ${alias}!`);
-                            client.commandsRefs.set(alias, cmdName); // Set the alias into the command referencing Map.
-                        });
-                        l('i', `Finished loading command "${cmdName}"!`);
-                    } else if (path.endsWith('.map')) return;
-                    // Ignore source maps
-                    // THIS IS A VIOLATION AND SHOULD NEVER THROW; We will not kill the process however.
-                    else l('w', `File in commands dir with unknown extension: ${path}`);
-                });
-        });
-    }
-    loadCmds(); // Execute the massive function block above.
+    client.commands.loadCommands();
 
     // Same thing, load the hook files.
     function loadHooks(): void {
@@ -279,53 +224,10 @@ client.on('messageCreate', async (message) => {
     // if it's a command, we handle it.
     if (msgIsCommand) {
         const args: string[] = message.content.slice(prefixLen).split(/ +/g);
-        let command = args.shift()?.toLowerCase() ?? '';
+        const command = args.shift()?.toLowerCase() ?? '';
 
-        // quit if the command couldn't be fetched
-        if (!command) return;
-
-        // verbose info
-        log('v', `Running command "${command}" for "${message.author.tag}" with args "${args.join(' ')}"!`);
-        log(
-            'v',
-            `Command found at: ${message.guild?.name ?? 'unknown'} (${message.guild?.id ?? 'unknown'}) => #${
-                <string>message.channel?.name ?? '#unknown'
-            } (${message.channel?.id ?? 'unknown'}) => ${message.id}`
-        );
-
-        log('v', 'Resolving alias...');
-        command = client.commandsRefs.get(command) ?? '';
-        log('v', `Alias resolved to "${command}"!`);
-
-        const commandData: Command | undefined = client.commands.get(command);
-        if (!commandData) {
-            // exit
-            log('i', `Failed to find command "${command}", exiting handler.`);
-            return;
-        }
-
-        const { run: commandExec, config: commandConfig } = commandData;
-        // Now we check for specific things to prevent the command from running
-        // in it's configuration.
-        // TODO: be a little move verbose here with who and what
-        if (!commandConfig.enabled) {
-            log('i', 'Command is disabled!');
-            message.reply('That command is disabled!');
-            return;
-        }
-        if (
-            commandConfig.restrict &&
-            commandConfig.restrict.users &&
-            !commandConfig.restrict.users.includes(message.author.id) &&
-            message.author.id !== client.config.ownerID
-        ) {
-            // User isn't authorised; the user is either not whitelisted to use the command and/or they're not an owner.
-            log('i', 'User unauthorized!');
-            message.reply("You aren't authorized to do that!");
-            return;
-        }
         try {
-            await commandExec(client, message, args, log);
+            await client.commands.run(command, args, message, client);
         } catch (e) {
             log('e', 'Command failed!', true);
             log('e', e, true);

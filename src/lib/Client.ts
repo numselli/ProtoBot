@@ -21,6 +21,7 @@ import { Client as BaseClient, ClientOptions } from 'discord.js';
 import Enmap from 'enmap';
 import EnmapVerbose from '@lib/EnmapVerbose';
 import type Logger from '@lib/interfaces/Logger';
+import CommandHandler from './CommandHandler';
 
 function makeVerboseFunction(name: string): (q: string) => void {
     return (q: string) => EnmapVerbose(name, q);
@@ -50,9 +51,7 @@ export default class Client extends BaseClient {
         this.restartData = new Enmap({ name: 'restartData', verbose: makeVerboseFunction('restartData') });
 
         // In memory items
-        this.commands = new Enmap();
-        this.commandsConfig = new Enmap();
-        this.commandsRefs = new Enmap(); // Refs are basically aliases that "link" to the actual command
+        this.commands = new CommandHandler(this._log, this.config.dirs.commands);
         this.hooks = new Enmap();
     }
 

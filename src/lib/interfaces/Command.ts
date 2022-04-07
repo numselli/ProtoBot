@@ -22,5 +22,5 @@ import type Logger from '@lib/interfaces/Logger';
 
 export default interface Command {
     config: CommandConfig;
-    run: (client: Client, message: Message, args: string[], log: Logger) => void;
+    run: (client: Client, message: Message, args: string[], log: Logger) => Promise<void>;
 }

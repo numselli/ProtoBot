@@ -26,3 +26,19 @@ We collect the following types of information.
 -   Your Discord user's permissions (administrator, moderator, etc.)
 -   messages sent in your servers
 -   messages sent in private messages to the bot
+
+## 2. How We Use It and Who It's Shared With
+
+We use your data only to further your experience with ProtoBot. We do not share your data with any third parties.
+
+Some data is stored for analytical purposes, such as:
+
+-   commands used
+-   command usage statistics
+-   command usage statistics by user
+-   command usage statistics by server
+-   etc.
+
+## 3. Your Rights to Access and Change That Information
+
+Per your rights, you may access and change your information at any time. Do this by creating an issue on the repository or messaging 0xLogN at LogN#1826 on Discord.

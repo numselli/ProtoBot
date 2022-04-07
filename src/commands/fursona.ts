@@ -24,7 +24,6 @@ import type CommandConfig from '@lib/interfaces/CommandConfig';
 
 // Main
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
-    log('i', 'Fursona command fired!');
     // Get their fursona, PLS GIB I WANT AAAA >w<
 
     switch (args[0]) {

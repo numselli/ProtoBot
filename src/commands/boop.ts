@@ -26,7 +26,7 @@ export async function run(client: Client, message: Message, args: string[], log:
     const userID = args[0]?.replace(/[<@!>]/g, '');
 
     if (!args[0]) {
-        log('i', 'No boop arg provided!');
+        log('i', `Not specified who to boop in boop.ts`);
         message.reply('Who did you want to boop?');
         return;
     }

@@ -44,7 +44,7 @@ process.setMaxListeners(13);
 import log from './log';
 
 // Verify the currently running commit...
-log('i', 'Verifying we were started via the start script...');
+log('v', 'Verifying we were started via the start script...');
 if (!process.env.PROTOBOT_STARTSH_COMMIT) {
     log('e', 'Environment variable PROTOBOT_STARTSH_COMMIT is not set!', true);
     log('w', "If you are seeing this message, it means you are running the bot's script directly.");
@@ -107,13 +107,13 @@ client.on('messageCreate', async (message) => {
 
     // ...but if it's a DM, clarify it to the user.
     if (message.channel.type === 'DM') {
-        log('i', 'Discouraged DM.');
+        log('i', `Discouraged DM from ${message.author.tag}`);
         message.reply('Hey there! I do not accept DMs. Use me in a server.');
         return;
     }
     // Execute each hook from the database.
     client.hooks.forEach((hookData) => {
-        log('v', `${chalk.green('[')}${chalk.green.bold('HookRunner')}${chalk.green(']')} Running hook ${hookData.config.name}!`);
+        log('v', `Running hook ${hookData.config.name} for ${message.author.tag}!`);
         hookData.run(client, message, log);
     });
     let msgIsCommand = false;
@@ -133,7 +133,7 @@ client.on('messageCreate', async (message) => {
         try {
             await client.commands.run(command, args, message, client);
         } catch (e) {
-            log('e', 'Command failed!', true);
+            log('e', `Executing ${command} for ${message.author.tag} with args ${args} failed:`, true);
             log('e', e, true);
             message.reply('Something went wrong! Notify a developer.');
         }

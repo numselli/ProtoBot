@@ -24,7 +24,6 @@ import type CommandConfig from '@lib/interfaces/CommandConfig';
 
 // Main
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
-    log('i', 'Giving help command info!');
     const embed = new discord.MessageEmbed()
         .setTitle('ProtoBot Help')
         .setAuthor({ name: 'ProtoBot' })

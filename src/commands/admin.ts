@@ -318,6 +318,13 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
                 });
             }
         });
+    } else if (args[0] === 'reload' || args[0] === 'rl') {
+        log('i', 'Reloading commands...');
+        const pre = Date.now();
+        const msg = await message.channel.send('Reloading all commands...');
+        client.commands.loadCommands();
+        const post = Date.now();
+        msg.edit(`Reloaded all commands in ${post - pre}ms (${(post - pre) / 1000} seconds)!`);
     } else {
         message.reply(`Please specify a command to execute. Here are the available commands:
 \`admin help\`: Shows this message
@@ -325,7 +332,8 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
 \`admin (checkout|branch)\`: Change the Git branch we are running from
 \`admin (up|update)\`: Run a software update.
 \`admin (e|eval)\`: Evaluates a code snippet.
-\`admin (ex|exec)\`: Runs a Bash command.`);
+\`admin (ex|exec)\`: Runs a Bash command.
+\`admin (rl|reload)\`: Reload commands from the config.`);
         return;
     }
 }

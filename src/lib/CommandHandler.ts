@@ -55,10 +55,18 @@ export default class CommandHandler {
         this.log('v', `CommandHandler: new command handler ready, commands folder is ${commandsFolder}`);
     }
 
+    private _resetStore(): void {
+        this._commandRunners.clear();
+        this._commandConfigs.clear();
+        this._commandRefs.clear();
+    }
+
     /**
      * Loads all commands from the commands folder specified in the constructor.
      */
     public loadCommands(): void {
+        this._resetStore();
+
         this.log('v', `CommandHandler: loading commands from ${this.commandsFolder}`);
 
         // Read the root directory of the commands.
@@ -84,9 +92,7 @@ export default class CommandHandler {
                 }
 
                 // The command data is loaded from the path.
-                const commandData = <
-                    Command // Already normalized above.
-                >require('@root/' + this.commandsFolder + path);
+                const commandData = <Command>require('@root/' + this.commandsFolder + path);
                 const cmdName = path.replace('.js', '');
                 this.log('v', `Loading command "${cmdName}"...`);
                 this._commandConfigs.set(cmdName, commandData.config);

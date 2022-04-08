@@ -17,6 +17,7 @@
  */
 
 import config from '@root/config';
+import publicConfig from '@root/publicConfig';
 import { Client as BaseClient, ClientOptions } from 'discord.js';
 import Enmap from 'enmap';
 import EnmapVerbose from '@lib/EnmapVerbose';
@@ -36,23 +37,26 @@ export default class Client extends BaseClient {
         this._log = log;
         this._isAlreadyDestroyed = false;
         this.config = config;
+        this.publicConfig = publicConfig;
         this.defaults = {
-            USER_CONFS: {},
-            USER_STATS: { hugs: 0, boops: 0, pats: 0 },
+            USER_CONFIGURATION: {},
+            USER_STATISTICS: { hugs: 0, boops: 0, pats: 0 },
             COOLDOWNS: { owos: 0, uwus: 0, tildes: 0 }
         };
-        this.cooldowns = new Enmap({ name: 'cooldowns', verbose: makeVerboseFunction('cooldowns') });
         this.tildes = new Enmap({ name: 'tildes', verbose: makeVerboseFunction('tildes') });
         this.owos = new Enmap({ name: 'owos', verbose: makeVerboseFunction('owos') });
         this.uwus = new Enmap({ name: 'uwus', verbose: makeVerboseFunction('uwus') });
-        this.ustats = new Enmap({ name: 'ustats', verbose: makeVerboseFunction('ustats') });
-        this.uconfs = new Enmap({ name: 'uconfs', verbose: makeVerboseFunction('uconfs') });
+        this.userStatistics = new Enmap({ name: 'userStatistics', verbose: makeVerboseFunction('ustats') });
+        this.userConfiguration = new Enmap({ name: 'userStatistics', verbose: makeVerboseFunction('uconfs') });
         this.fursonas = new Enmap({ name: 'fursonas', verbose: makeVerboseFunction('fursonas') });
         this.restartData = new Enmap({ name: 'restartData', verbose: makeVerboseFunction('restartData') });
 
         // In memory items
-        this.commands = new CommandHandler(this._log, this.config.dirs.commands);
         this.hooks = new Enmap();
+        this.cooldowns = new Enmap();
+
+        // Generate the command handling instance.
+        this.commands = new CommandHandler(this._log, this.config.dirs.commands);
     }
 
     public destroy(): void {

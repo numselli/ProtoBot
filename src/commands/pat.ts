@@ -35,8 +35,8 @@ export async function run(client: Client, message: Message, args: string[], log:
         return;
     }
 
-    client.ustats.ensure(userID, client.defaults.USER_STATS);
-    client.ustats.inc(userID, 'pats');
+    client.userStatistics.ensure(userID, client.defaults.USER_STATISTICS);
+    client.userStatistics.inc(userID, 'pats');
 
     message.reply(`**Pat!**\n<@${message.author.id}> pats <@${userID}> on the head~!`);
 }

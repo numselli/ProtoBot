@@ -35,22 +35,24 @@ import Hook from '@lib/interfaces/Hook';
 import UserConfig from '@lib/interfaces/UserConfig';
 import UserStats from '@lib/interfaces/UserStats';
 import CommandHandler from '@lib/CommandHandler';
+import PublicConfig from '@lib/interfaces/PublicConfig';
 
 // Discord.js
 declare module 'discord.js' {
     interface Client {
         config: Config;
+        publicConfig: PublicConfig;
         defaults: {
-            USER_CONFS: UserConfig;
-            USER_STATS: UserStats;
+            USER_CONFIGURATION: UserConfig;
+            USER_STATISTICS: UserStats;
             COOLDOWNS: { owos: number; uwus: number; tildes: number };
         };
         cooldowns: Enmap<string, Cooldowns>;
         tildes: Enmap<string, number>;
         owos: Enmap<string, number>;
         uwus: Enmap<string, number>;
-        ustats: Enmap<string, UserStats>;
-        uconfs: Enmap<string, UserConfig>;
+        userStatistics: Enmap<string, UserStats>;
+        userConfiguration: Enmap<string, UserConfig>;
         markovMessages: Enmap<string, MarkovData>; // NOTE: remove markovs in the future perhaps?
         fursonas: Enmap<string, Fursona>;
         restartData: Enmap<string, unknown>;

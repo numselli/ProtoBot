@@ -23,7 +23,7 @@ import type CommandConfig from '@lib/interfaces/CommandConfig';
 
 // Main
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
-    message.reply(`**Oh hewwo there <@${message.author.id}>!**
+    message.reply(`**Oh hello there <@${message.author.id}>!**
 
 **I'm ProtoBot.**
 
@@ -39,7 +39,7 @@ My prefix is \`${client.config.prefixes[0]}\`.
 
 Feel free to send a DM to **@BadBoyHaloCat#1826** for support.
 
-**I'm open source!** https://github.com/thetayloredman/ProtoBot`);
+**I'm open source!** <${client.publicConfig.githubRepository}>`);
 }
 
 // Config

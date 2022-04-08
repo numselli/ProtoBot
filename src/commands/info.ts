@@ -24,7 +24,7 @@ import type CommandConfig from '@lib/interfaces/CommandConfig';
 
 // Main
 function fireStats(userID: string, message: Message, client: Client): void {
-    const uData: any = client.ustats.get(userID);
+    const uData: any = client.userStatistics.get(userID);
     const embed = new MessageEmbed()
         .setTitle(`User info for ${userID}`)
         .addField('Hugs', (uData.hugs ?? 0).toString())
@@ -37,11 +37,11 @@ function fireStats(userID: string, message: Message, client: Client): void {
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
     const userID = args[0]?.replace(/[<@!>]/g, '') ?? message.author.id;
 
-    if (!client.ustats.get(userID)) {
+    if (!client.userStatistics.get(userID)) {
         client.users
             .fetch(userID)
             .then((user) => {
-                client.ustats.ensure(user.id, client.defaults.USER_STATS);
+                client.userStatistics.ensure(user.id, client.defaults.USER_STATISTICS);
                 // @ts-ignore
                 fireStats(userID, message, client);
             })

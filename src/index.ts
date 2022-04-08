@@ -31,13 +31,12 @@ moduleAlias.addAliases({
 import 'source-map-support/register';
 
 // Modules
-import * as fs from 'fs'; // Filesystem access
 import chalk from 'chalk'; // Coloring for CLI - FIXME: update to v5 when TS is updated
 import Client from '@lib/Client'; // The custom client files
 import discord from 'discord.js'; // <<< Discord!
 import * as ready from '@lib/onready/index';
 
-// FIXME: Remove me later, this is a bad idea.
+// FIXME: Remove me later, this is a bad idea. Pending an enmap fix.
 process.setMaxListeners(13);
 
 // Import the primary log function from the CWD.
@@ -99,8 +98,8 @@ client.on('messageCreate', async (message) => {
     // does nothing if they are already in the DBs. If they aren't, we
     // will add them with the default values as defined in
     // client.defaults.
-    client.ustats.ensure(message.author.id, client.defaults.USER_STATS);
-    client.uconfs.ensure(message.author.id, client.defaults.USER_CONFS);
+    client.userStatistics.ensure(message.author.id, client.defaults.USER_STATISTICS);
+    client.userConfiguration.ensure(message.author.id, client.defaults.USER_CONFIGURATION);
     client.cooldowns.ensure(message.author.id, client.defaults.COOLDOWNS);
     // If this is a bot, return to prevent looping.
     if (message.author.bot) return;

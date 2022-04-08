@@ -36,8 +36,8 @@ export async function run(client: Client, message: Message, args: string[], log:
         return;
     }
 
-    client.ustats.ensure(userID, client.defaults.USER_STATS);
-    client.ustats.inc(userID, 'boops');
+    client.userStatistics.ensure(userID, client.defaults.USER_STATISTICS);
+    client.userStatistics.inc(userID, 'boops');
 
     message.reply(`**Boop!**\n<@${message.author.id}> boops <@${userID}>~!\n\nhttps://cdn.discordapp.com/emojis/777752005820416000.gif`);
 }

@@ -50,20 +50,20 @@
     "lint-staged": {
         "*.ts": [
             "eslint",
-            "prettier --write"
+            "prettier --check"
         ],
         "*.js": [
             "eslint",
-            "prettier --write"
+            "prettier --check"
         ],
         "*.md": [
-            "prettier --write"
+            "prettier --check"
         ],
         "*.yml": [
-            "prettier --write"
+            "prettier --check"
         ],
         "*.json": [
-            "prettier --write"
+            "prettier --check"
         ]
     }
 }

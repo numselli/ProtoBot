@@ -36,8 +36,8 @@ export async function run(client: Client, message: Message, args: string[], log:
         return;
     }
 
-    client.ustats.ensure(userID, client.defaults.USER_STATS);
-    client.ustats.inc(userID, 'hugs');
+    client.userStatistics.ensure(userID, client.defaults.USER_STATISTICS);
+    client.userStatistics.inc(userID, 'hugs');
 
     message.reply(`**HUG!**\n<@${message.author.id}> huggles <@${userID}> tightly.`);
 }

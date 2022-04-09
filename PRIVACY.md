@@ -1,44 +1,46 @@
 # ProtoBot Privacy Policy
 
+[based on patchbot's privacy policy; used as a reference for writing](https://patchbot.io/privacy-policy)
+
 ## Introduction
 
-ProtoBot is a multipurpose Discord bot developed by 0xLogN. "ProtoBot", "LogN", "we", or "us" refers to the development team behind ProtoBot.
+By using our Bot, you agree that you have read and agree to this policy.
 
-This Privacy Policy applies whenever you use the **hosted** ProtoBot version. **This policy does not apply to self-hosted instances, and may serve as a template.**
+This is our "Privacy Policy" which sets out the policy which governs our use of information you provide in connection with the ProtoBot Discord bot. The terms "you" and "your" refer to all individuals or entities accessing this website. The terms "we," "us," "our," refer to ProtoBot and the development team, and "bot" refers to our Discord bot itself.
 
-This policy describes:
+We may update this Privacy Policy from time to time. Changes in our Privacy Policy will be effective immediately. If you are a regular visitor of the bot, we recommend that you check this Privacy Policy on a regular basis. By using the website and/or bot, you consent to the collection, use and transfer of your information in accordance with this Privacy Policy. If you do not agree to this Privacy Policy, please do not use any of our services.
 
--   what we collect, how, and why
--   how we use it and who it's shared with
--   the rights you have to access and change that information
--   and how we protect that information
+## Privacy Statement
 
-If you do not want personal information to be collected, you may not use ProtoBot or join a server containing it.
+We care about the privacy and security of your data. We provide this policy as a guide to help you understand how we collect, use, and protect your personal information.
 
-## 1. Information We Collect
+This policy applies to information we collect through the bot, and to any information you provide to us.
 
-We collect the following types of information.
+It does not apply to information collected by us offline or through any other means or other service operated by us or any third party, or any external service operated by us or any third party that may be linked to ProtoBot.
 
-### 1.1. Information You Provide
+## The Information we Collect and How we Use It
 
--   Your Discord server metadata/information (server name, server ID, server icon, etc.)
--   Your Discord user information (user ID, username, discriminator, avatar, etc.)
--   Your Discord user's permissions (administrator, moderator, etc.)
--   messages sent in your servers
--   messages sent in private messages to the bot
+-   **Personally Identifiable Information (PII):** ProtoBot does collect personally identifiable information, but it is only used to further your ProtoBot experience.
+    -   The following information is collected:
+    -   **Username:** Your Discord username.
+    -   **Discord ID:** Your Discord ID.
+    -   **Discord Tag:** Your Discord tag.
+    -   **Discord Avatar:** Your Discord avatar.
+    -   **Mutual Servers:** The servers you share with the bot.
+    -   **Usage information:** Information about how you use the bot. This includes the commands you execute, how, where, and when.
+    -   **Server information:** Information about the servers you are in. This includes the server name, server ID, and server icon.
+-   **Information collected by third parties:** We do not collect any personally identifiable information from third parties.
 
-## 2. How We Use It and Who It's Shared With
+## How We Use Your Information
 
-We use your data only to further your experience with ProtoBot. We do not share your data with any third parties.
+We use your information only for the purposes set out in this privacy policy. The primary purposes of the information we collect are to:
 
-Some data is stored for analytical purposes, such as:
+-   **Provide and improve the bot:** We use the information (e.g. analytics) to provide and improve the bot.
+-   **Communicate with you:** We use the information (e.g. user ID) to communicate with you.
+-   **Improve our services:** We use the information to improve our services.
 
--   commands used
--   command usage statistics
--   command usage statistics by user
--   command usage statistics by server
--   etc.
+## How We Protect Your Information
 
-## 3. Your Rights to Access and Change That Information
+ProtoBot's team tries it's hardest to keep the information safe. We use a variety of security measures to protect against unauthorized access, such as firewalls, protected access, and secure socket layers (SSL).
 
-Per your rights, you may access and change your information at any time. Do this by creating an issue on the repository or messaging 0xLogN at LogN#1826 on Discord.
+There is always the possibility of unauthorized data exposure. ProtoBot does not accept any responsibility for any loss or damage that may occur as a result of your use of the bot.

@@ -37,7 +37,7 @@ jobs:
                   repository: ${{github.event.pull_request.head.repo.full_name || github.repository }}
 
             - name: Install tsc problem matcher
-              run: echo "::add-matcher::.github/problem-matcher/tsc.json"
+              run: echo "::add-matcher::.github/problem-matchers/tsc.json"
 
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v1

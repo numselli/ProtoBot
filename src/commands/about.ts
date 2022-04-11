@@ -29,7 +29,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 
 I'm a Discord bot with furries in mind.
 
-My maintainer's name is LogN or @BadBoyHaloCat#1826
+My maintainer's name is LogN.
 
 Running on commit \`${process.env.PROTOBOT_STARTSH_COMMIT}\`.${
         process.env.PROTOBOT_STARTSH_DIRTYSOURCE ? ' Changes are present not in this commit.' : ''
@@ -37,7 +37,7 @@ Running on commit \`${process.env.PROTOBOT_STARTSH_COMMIT}\`.${
 
 My prefix is \`${client.config.prefixes[0]}\`.
 
-Feel free to send a DM to **@BadBoyHaloCat#1826** for support.
+Feel free to send a DM to **LogN#1826** for support.
 
 **I'm open source!** <${client.publicConfig.githubRepository}>`);
 }

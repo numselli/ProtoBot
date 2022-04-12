@@ -32,7 +32,7 @@ export async function run(client: Client, message: Message, args: string[], log:
             if (!args[1]) {
                 log('i', 'Showing set help!');
                 message.reply(
-                    `\`\`\`adoc\n===== FURSONA HELP =====\n${client.config.prefixes[0]}fursona set name <name> :: Set your fursona's name\n${client.config.prefixes[0]}fursona set bio <bio>   :: Set your fursona's bio\n${client.config.prefixes[0]}fursona set type <type> :: Set your fursona's breed/type\n\`\`\``
+                    `\`\`\`adoc\n===== FURSONA HELP =====\n${client.config.prefix}fursona set name <name> :: Set your fursona's name\n${client.config.prefix}fursona set bio <bio>   :: Set your fursona's bio\n${client.config.prefix}fursona set type <type> :: Set your fursona's breed/type (but not in people lol)\n\`\`\``
                 );
                 return;
             }

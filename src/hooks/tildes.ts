@@ -30,9 +30,8 @@ export function run(client: Client, message: Message, log: Logger): void {
     // Check cooldown
     if (!cooldowns || cooldowns + client.config.cooldowns.tildes - Date.now() < 1) {
         let hasPrefix = false;
-        client.config.prefixes.forEach((prefix: string) => {
-            if (!hasPrefix && message.content.startsWith(prefix)) hasPrefix = true;
-        });
+        if (message.content.startsWith(client.config.prefix)) hasPrefix = true;
+
         if (message.content.endsWith('~') && !/~~+/.test(message.content) && message.content !== '~' && !hasPrefix) {
             //                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             //                           Don't flag strikethrough

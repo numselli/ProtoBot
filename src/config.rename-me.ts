@@ -38,7 +38,7 @@ const config: Config = {
     // be the "primary prefix", the one
     // displayed in most places.
     //          vvv
-    prefixes: ['~', 'proto, ', 'proto,', 'proto ', 'pb, ', 'pb,', 'pb ', 'protobot, ', 'protobot,', 'protobot '],
+    prefix: '~',
     cooldowns: {
         tildes: minutes(1),
         owos: seconds(30),

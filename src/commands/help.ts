@@ -112,7 +112,7 @@ export async function run(client: Client, message: Message, args: string[], log:
             .addField('Category', command.category, true)
             .addField('Enabled', command.enabled ? 'Yes' : 'No', true)
             .addField('Restricted', command.restrict ? 'Yes' : 'No', true)
-            .addField('Usage', `\`${client.config.prefixes[0]}${command.name} ${command.usage}\``, true);
+            .addField('Usage', `\`${client.config.prefix}${command.name}${command.usage ? ` ${command.usage}` : ''}\``, true);
 
         message.reply({ embeds: [embed] });
         return;

@@ -34,10 +34,6 @@ const config: Config = {
         commands: './commands/',
         hooks: './hooks/'
     },
-    // The first prefix listed here will
-    // be the "primary prefix", the one
-    // displayed in most places.
-    //          vvv
     prefix: '~',
     cooldowns: {
         tildes: minutes(1),

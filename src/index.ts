@@ -19,7 +19,7 @@
 // Import the moduleAlias module. This is used to allow importing of module
 // aliases, such as @lib (to the lib folder) and @root (to the root of the
 // source)
-import ma from 'module-alias';
+import moduleAlias from 'module-alias';
 
 moduleAlias.addAliases({
     '@lib': __dirname + '/lib', // Library files, such as core modules and clients.

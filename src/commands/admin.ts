@@ -22,6 +22,7 @@ import { MessageEmbed } from 'discord.js';
 import chalk from 'chalk';
 import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
+import { readBuffer, clearBuffer } from '@root/log';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 // Main
@@ -324,6 +325,12 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
         client.commands.loadCommands();
         const post = Date.now();
         msg.edit(`Reloaded all commands in ${post - pre}ms (${(post - pre) / 1000} seconds)!`);
+    } else if (args[0] === 'clearlogbuffer' || args[0] === 'clb') {
+        log('i', 'Clearing log buffer...');
+        const len = readBuffer().length;
+        clearBuffer();
+        message.reply(`Cleared log buffer of ${len} entries.`);
+        // TODO: read log buffer and send it to the user
     } else {
         message.reply(`Please specify a command to execute. Here are the available commands:
 \`admin help\`: Shows this message
@@ -332,7 +339,8 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
 \`admin (up|update)\`: Run a software update.
 \`admin (e|eval)\`: Evaluates a code snippet.
 \`admin (ex|exec)\`: Runs a Bash command.
-\`admin (rl|reload)\`: Reload commands from the config.`);
+\`admin (rl|reload)\`: Reload commands from the config.
+\`admin (clb|clearlogbuffer)\`: Clear the log buffer (use when low on memory)`);
         return;
     }
 }

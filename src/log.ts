@@ -81,6 +81,11 @@ function spawnLogStream(logLevel: 'verbose' | 'all' | 'warn' | 'err'): fs.WriteS
     }
 }
 
+// Store the log buffer in memory.
+type LogMode = 'v' | 'i' | 'w' | 'e';
+let buffer: [number, LogMode, string][] = [];
+let maxBufferSize = 500; // in lines
+
 // Create the log directory.
 try {
     fs.mkdirSync(`../logs/${logInitTime}${logFldrSuffix}/`);
@@ -95,7 +100,7 @@ const warnStr = spawnLogStream('warn');
 const errStr = spawnLogStream('err');
 
 // Function to log to the appropriate stream(s).
-function writeItem(mode: 'v' | 'i' | 'w' | 'e', message: string): void {
+function writeItem(mode: LogMode, message: string): void {
     const logArray: [fs.WriteStream, string][] = [
         [errStr, 'e'],
         [warnStr, 'w'],
@@ -113,9 +118,9 @@ function writeItem(mode: 'v' | 'i' | 'w' | 'e', message: string): void {
 // Main
 // Literal hell ensues below...
 export default function log(mode: 'CLOSE_STREAMS'): Promise<void>;
-export default function log(mode: 'v' | 'i' | 'w' | 'e', message: any, _bypassStackPrint?: boolean): void;
+export default function log(mode: LogMode, message: any, _bypassStackPrint?: boolean): void;
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function log(mode: 'v' | 'i' | 'w' | 'e' | 'CLOSE_STREAMS', message?: any, _bypassStackPrint = false): void | Promise<void> {
+export default function log(mode: LogMode | 'CLOSE_STREAMS', message?: any, _bypassStackPrint = false): void | Promise<void> {
     if (mode === 'CLOSE_STREAMS')
         // Close all of the file streams
         return new Promise((resolve) => {
@@ -135,7 +140,9 @@ export default function log(mode: 'v' | 'i' | 'w' | 'e' | 'CLOSE_STREAMS', messa
             message = util.inspect(message, { colors: true });
 
         let msg = '';
-        let preparsedDate: any = new Date(Date.now()).toLocaleDateString('en-US', {
+        const epoch = Date.now();
+        const date = new Date(epoch);
+        let preparsedDate: any = date.toLocaleDateString('en-US', {
             weekday: 'short',
             year: 'numeric',
             month: 'short',
@@ -144,7 +151,7 @@ export default function log(mode: 'v' | 'i' | 'w' | 'e' | 'CLOSE_STREAMS', messa
         preparsedDate = preparsedDate.split(', ');
         preparsedDate[1] = preparsedDate[1].split(' ');
         // I'm not even sure what locale this is, but it works.
-        let preparsedTime: any = new Date(Date.now()).toLocaleTimeString('it-IT');
+        let preparsedTime: any = date.toLocaleTimeString('it-IT');
         preparsedTime = preparsedTime.split(' ');
         preparsedTime[0] = preparsedTime[0].split(':');
 
@@ -188,6 +195,8 @@ export default function log(mode: 'v' | 'i' | 'w' | 'e' | 'CLOSE_STREAMS', messa
         console.log(msg);
         // @ts-ignore
         writeItem(mode, msg);
+        buffer.push([epoch, mode, strip(msg)]);
+        if (buffer.length > maxBufferSize) buffer.shift();
 
         // #125: Add stack traces for errors - BadBoyHaloCat
         if (mode === 'e' && !_bypassStackPrint) {
@@ -200,4 +209,16 @@ export default function log(mode: 'v' | 'i' | 'w' | 'e' | 'CLOSE_STREAMS', messa
 
         return undefined;
     }
+}
+
+export function clearBuffer(): void {
+    buffer = [];
+}
+
+export function changeMaxBufferSize(newSize: number): void {
+    maxBufferSize = newSize;
+}
+
+export function readBuffer(): [number, LogMode, string][] {
+    return buffer;
 }

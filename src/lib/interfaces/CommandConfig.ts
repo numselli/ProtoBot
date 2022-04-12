@@ -16,11 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import CommandCategory from '@lib/interfaces/CommandCategory';
+
 export default interface CommandConfig {
     name: string;
     description: string;
+    category: CommandCategory;
     enabled: boolean;
     aliases: string[];
+    usage: string;
 
     // To restrict the command, change the "false" to the following
     // format:

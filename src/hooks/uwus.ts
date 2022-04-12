@@ -30,9 +30,8 @@ export function run(client: Client, message: Message, log: Logger): void {
     // Check cooldown
     if (!cooldowns || cooldowns + client.config.cooldowns.uwus - Date.now() < 1) {
         let hasPrefix = false;
-        client.config.prefixes.forEach((prefix: string) => {
-            if (!hasPrefix && message.content.startsWith(prefix)) hasPrefix = true;
-        });
+        if (message.content.startsWith(client.config.prefix)) hasPrefix = true;
+
         if (message.content.toLowerCase().includes('uwu') && !hasPrefix) {
             client.uwus.ensure(message.author.id, 0);
             client.uwus.inc(message.author.id);

@@ -30,9 +30,7 @@ export function run(client: Client, message: Message, log: Logger): void {
     // Check cooldown
     if (!cooldowns || cooldowns + client.config.cooldowns.owos - Date.now() < 1) {
         let hasPrefix = false;
-        client.config.prefixes.forEach((prefix: string) => {
-            if (!hasPrefix && message.content.startsWith(prefix)) hasPrefix = true;
-        });
+        if (message.content.startsWith(client.config.prefix)) hasPrefix = true;
         if (message.content.toLowerCase().includes('owo') && !hasPrefix) {
             client.owos.ensure(message.author.id, 0);
             client.owos.inc(message.author.id);

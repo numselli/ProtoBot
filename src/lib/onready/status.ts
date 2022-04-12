@@ -24,10 +24,10 @@ export default function setStatus(client: Client, log: Logger): void {
     // We assume the main prefix is always the first in the array.
     const allStatuses: ['PLAYING' | 'STREAMING' | 'LISTENING' | 'WATCHING' | 'COMPETING', string][] = [
         // First index is the initial one.
-        ['PLAYING', `${client.config.prefixes[0]}about | Written for furries, by furries!`],
-        ['PLAYING', `${client.config.prefixes[0]}about | uwu`],
-        ['PLAYING', `${client.config.prefixes[0]}about | ah yes, much furry`],
-        ['PLAYING', `${client.config.prefixes[0]}about | I am not an uwu cat! - one of the developers, probably.`]
+        ['PLAYING', `${client.config.prefix}about | Written for furries, by furries!`],
+        ['PLAYING', `${client.config.prefix}about | uwu`],
+        ['PLAYING', `${client.config.prefix}about | ah yes, much furry`],
+        ['PLAYING', `${client.config.prefix}about | I am not an uwu cat! - one of the developers, probably.`]
     ];
     setInterval(() => {
         const status = allStatuses[Math.floor(Math.random() * allStatuses.length)];

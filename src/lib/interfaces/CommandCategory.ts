@@ -16,32 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Config types
-import Config from '@lib/interfaces/Config';
+type CommandCategory = 'other' | 'utility' | 'fun' | 'affection' | 'furry' | 'owner';
 
-// Ms conversion functions
-function seconds(count: number): number {
-    return 1000 * count;
-}
-function minutes(count: number): number {
-    return seconds(60) * count;
-}
-
-// Main
-const config: Config = {
-    token: 'PBCONF-DiscordBotToken', // Discord token
-    dirs: {
-        commands: './commands/',
-        hooks: './hooks/'
-    },
-    prefix: '~',
-    cooldowns: {
-        tildes: minutes(1),
-        owos: seconds(30),
-        uwus: seconds(30)
-    },
-    ownerID: 'PBCONF-DiscordUserID' // Your user ID
-};
-
-// Export
-export default config;
+export default CommandCategory;

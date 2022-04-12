@@ -114,12 +114,10 @@ client.on('messageCreate', async (message) => {
     });
     let msgIsCommand = false;
     let prefixLen = 0;
-    for (const prefix of client.config.prefixes)
-        if (message.content.toLowerCase().startsWith(prefix)) {
-            msgIsCommand = true;
-            prefixLen = prefix.length;
-            break;
-        }
+    if (message.content.toLowerCase().startsWith(client.config.prefix)) {
+        msgIsCommand = true;
+        prefixLen = client.config.prefix.length;
+    }
 
     // if it's a command, we handle it.
     if (msgIsCommand) {

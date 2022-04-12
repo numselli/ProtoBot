@@ -59,6 +59,8 @@ export async function run(client: Client, message: Message, args: string[], log:
 // Config
 export const config: CommandConfig = {
     name: 'uwuify',
+    category: 'fun',
+    usage: '[-i] [text]',
     description:
         'Converts all of your text to UwU-talk!\nIntense mode available with `-i` flag: `~uwuify -i text`\nPowered by [Uwuifier](https://github.com/Schotsl/Uwuifier)',
     enabled: true,

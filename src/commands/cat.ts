@@ -36,6 +36,8 @@ export async function run(client: Client, message: Message, args: string[], log:
 // Config
 export const config: CommandConfig = {
     name: 'cat',
+    category: 'fun',
+    usage: '',
     description: 'Get a cat picture~',
     enabled: true,
     aliases: ['meow', 'kitty'], // command aliases to load

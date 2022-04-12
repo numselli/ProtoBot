@@ -115,7 +115,7 @@ export async function run(client: Client, message: Message, args: string[], log:
                                     .addField('Status', '**Complete.**')
                                     .addField(
                                         'Restart to apply changes',
-                                        `To apply the update, run \`${client.config.prefixes[0]}restart\`.\nYou may want to run \`${client.config.prefixes[0]}admin exec git stash apply\` to re-instate unsaved changes.`
+                                        `To apply the update, run \`${client.config.prefix}restart\`.\nYou may want to run \`${client.config.prefix}admin exec git stash apply\` to re-instate unsaved changes.`
                                     );
 
                                 m.edit({ embeds: [embed] });
@@ -341,6 +341,8 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
 // Config
 export const config: CommandConfig = {
     name: 'admin',
+    category: 'owner',
+    usage: '[subcommand] [...arguments]',
     description: 'Manage the bot internals.',
     enabled: true,
     aliases: ['a', 'manage', 'system', 'sys'], // command aliases to load

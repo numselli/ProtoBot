@@ -45,7 +45,9 @@ export async function run(client: Client, message: Message, args: string[], log:
 // Config
 export const config: CommandConfig = {
     name: 'hug',
+    category: 'affection',
     description: 'Hug someone!',
+    usage: '<user>',
     enabled: true,
     aliases: [],
 

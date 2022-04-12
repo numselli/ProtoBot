@@ -57,7 +57,9 @@ export async function run(client: Client, message: Message, args: string[], log:
 // Config
 export const config: CommandConfig = {
     name: 'info',
+    category: 'utility',
     description: "Get a user's stats!",
+    usage: '[user]',
     enabled: true,
     aliases: ['user'],
 

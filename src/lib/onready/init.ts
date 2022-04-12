@@ -54,5 +54,5 @@ export default function init(client: Client, log: Logger): void {
     log('i', `With ${chalk.red(client.channels.cache.size)} channels!`);
     log('i', `Total ${chalk.red(userTotal)} members, excluding myself!`);
     log('i', `Average user count over all guilds: ${chalk.red(Math.round(userAvg))}`);
-    log('i', `Loaded ${chalk.red(client.config.prefixes.length)} prefixes!`);
+    log('i', `Prefix is set to '${client.config.prefix}'.`);
 }

@@ -16,7 +16,5 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default interface UserConfig {
-    // DEPRECATED -- FIXME: Remove this
-    markov_optin?: boolean;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export default interface UserConfig {}

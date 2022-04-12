@@ -22,7 +22,7 @@
         "chalk": "^4.1.2",
         "cli-highlight": "^2.1.11",
         "discord.js": "^13.6.0",
-        "enmap": "^5.8.13",
+        "enmap": "^5.9.0",
         "markov-strings": "^3.0.1",
         "module-alias": "^2.2.2",
         "node-fetch": "^2.6.7",

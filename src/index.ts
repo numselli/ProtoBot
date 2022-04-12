@@ -36,9 +36,6 @@ import Client from '@lib/Client'; // The custom client files
 import discord from 'discord.js'; // <<< Discord!
 import * as ready from '@lib/onready/index';
 
-// FIXME: Remove me later, this is a bad idea. Pending an enmap fix.
-process.setMaxListeners(13);
-
 // Import the primary log function from the CWD.
 import log from './log';
 

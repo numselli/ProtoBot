@@ -53,6 +53,9 @@ export async function run(client: Client, message: Message, args: string[], log:
 
         // Add each category to the embed
         commandsInCategory.forEach((category) => {
+            if (category[0] === 'owner' && message.author.id === client.config.ownerID) embed.addField(category[0], category[1].join(', '));
+            else return;
+
             embed.addField(category[0].toString(), category[1].join(', '), true);
         });
 

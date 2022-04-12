@@ -61,6 +61,7 @@ export const config: CommandConfig = {
     name: 'uwus',
     category: 'utility',
     description: 'Shows a leaderboard of the messages containing "uwu"!',
+    usage: '',
     enabled: true,
     aliases: [],
 

@@ -47,6 +47,7 @@ export const config: CommandConfig = {
     name: 'hug',
     category: 'affection',
     description: 'Hug someone!',
+    usage: '<user>',
     enabled: true,
     aliases: [],
 

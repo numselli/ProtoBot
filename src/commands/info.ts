@@ -59,6 +59,7 @@ export const config: CommandConfig = {
     name: 'info',
     category: 'utility',
     description: "Get a user's stats!",
+    usage: '[user]',
     enabled: true,
     aliases: ['user'],
 

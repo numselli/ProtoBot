@@ -120,6 +120,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 export const config: CommandConfig = {
     name: 'fursona',
     category: 'furry',
+    usage: '[subcommand] [...args]',
     description: 'See/edit your fursona details!',
     enabled: true,
     aliases: ['sona'],

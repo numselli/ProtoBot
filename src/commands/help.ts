@@ -101,8 +101,23 @@ export async function run(client: Client, message: Message, args: string[], log:
                 true
             );
         });
+    } else if (client.commands.__readConfiguration__().get(args[0].toLowerCase())) {
+        const command = client.commands.__readConfiguration__().get(args[0].toLowerCase()) as CommandConfig;
+        const embed = new discord.MessageEmbed()
+            .setTitle('ProtoBot Help')
+            .setAuthor({ name: 'ProtoBot' })
+            .setTimestamp()
+            .setFooter({ text: `Requested by ${message.author.tag}` })
+            .setDescription(`Here is the help for the command *${command.name}*`)
+            .addField('Description', command.description, true)
+            .addField('Category', command.category, true)
+            .addField('Enabled', command.enabled ? 'Yes' : 'No', true)
+            .addField('Restricted', command.restrict ? 'Yes' : 'No', true)
+            .addField('Usage', `\`${client.config.prefixes[0]}${command.name} ${command.usage}\``, true);
+
+        message.reply({ embeds: [embed] });
+        return;
     } else {
-        // TODO: command-based search
         message.reply(`I don't have any commands in the category *${args[0]}*. Run \`help\` to see all categories. (Tip: did you type a command?)`);
         return;
     }
@@ -113,6 +128,7 @@ export const config: CommandConfig = {
     name: 'help',
     category: 'utility',
     description: 'List all available commands!',
+    usage: '[category or command]',
     enabled: true,
     aliases: ['h'],
 

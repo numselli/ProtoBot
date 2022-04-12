@@ -61,6 +61,7 @@ export const config: CommandConfig = {
     name: 'tildes',
     category: 'utility',
     description: 'Shows a leaderboard of the messages containing "tilde"!',
+    usage: '',
     enabled: true,
     aliases: [],
 

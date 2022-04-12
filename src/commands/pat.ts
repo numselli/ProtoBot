@@ -46,6 +46,7 @@ export const config: CommandConfig = {
     name: 'pat',
     category: 'affection',
     description: 'Pat someone!',
+    usage: '',
     enabled: true,
     aliases: [],
 

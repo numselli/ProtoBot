@@ -45,6 +45,7 @@ export const config: CommandConfig = {
     name: 'meme',
     category: 'fun',
     description: 'Get a fresh meme!',
+    usage: '',
     enabled: true,
     aliases: [], // command aliases to load
 

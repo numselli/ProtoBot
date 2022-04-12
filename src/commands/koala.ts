@@ -39,6 +39,7 @@ export const config: CommandConfig = {
     name: 'koala',
     category: 'fun',
     description: 'Get a koala picture!',
+    usage: '',
     enabled: true,
     aliases: [], // command aliases to load
 

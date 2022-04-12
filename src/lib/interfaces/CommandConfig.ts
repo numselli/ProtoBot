@@ -24,6 +24,7 @@ export default interface CommandConfig {
     category: CommandCategory;
     enabled: boolean;
     aliases: string[];
+    usage: string;
 
     // To restrict the command, change the "false" to the following
     // format:

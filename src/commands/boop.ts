@@ -46,6 +46,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 export const config: CommandConfig = {
     name: 'boop',
     category: 'affection',
+    usage: '<user>',
     description: 'Boop someone!',
     enabled: true,
     aliases: [],

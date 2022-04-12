@@ -61,6 +61,7 @@ export const config: CommandConfig = {
     name: 'owos',
     category: 'utility',
     description: 'Shows a leaderboard of the messages containing "owo"!',
+    usage: '',
     enabled: true,
     aliases: [],
 

@@ -16,6 +16,7 @@
     "author": "BadBoyHaloCat",
     "license": "GPL-3.0",
     "dependencies": {
+        "@babel/eslint-parser": "^7.17.0",
         "better-sqlite3": "^7.5.1",
         "bytes": "^3.1.2",
         "chalk": "^4.1.2",
@@ -37,7 +38,6 @@
         "@types/node-fetch": "^2.5.11",
         "@typescript-eslint/eslint-plugin": "^4.33.0",
         "@typescript-eslint/parser": "^4.33.0",
-        "babel-eslint": "^10.1.0",
         "commitlint": "^16.2.3",
         "conventional-changelog-conventionalcommits": "^4.6.3",
         "eslint": "^7.32.0",

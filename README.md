@@ -48,7 +48,7 @@ In a destination folder, run this command:
 git clone https://github.com/thetayloredman/ProtoBot.git
 ```
 
-### 5. Installing NPM Dependencies
+### 5. Installing The Bot
 
 Execute `./install.sh`.
 
@@ -59,7 +59,7 @@ Execute `./install.sh`.
 
 **Hey, did you read that thing above me? If not, read it. Did you read it? Read it again. This is serious.**
 
-### 7. First Startup
+### 6. First Startup
 
 #### Normal Run
 
@@ -79,9 +79,16 @@ Then, run `pm2 start ecosystem.config.js` (add `--env production` if you want to
 
 If you want daemon startup, run `pm2 save`.
 
-### 8. Logging
+### 7. Logging
 
 Logs will automatically be created and manual maintenance is needed for cleaning these up.
+
+## Notable Mentions
+
+<table><tr>
+<td align="center"><a href="https://github.com/thetayloredman"><img src="https://avatars0.githubusercontent.com/u/26350849?v=4?s=100" width="100px;" alt=""/><br/><sub><b>thetayloredman</b></sub></a><br/>Maintainer</td>
+<td align="center"><a href="https://github.com/ilikestohack"><img src="https://avatars0.githubusercontent.com/u/47259933?v=4&s=100" width="100px;" alt=""/><br/><sub><b>ilikestohack</b></sub></a><br/>existing</td>
+</tr></table>
 
 ## Contributors ✨
 

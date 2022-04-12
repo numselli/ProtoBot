@@ -24,16 +24,14 @@
  ******************************************************************************/
 
 // Imports
-import Command from '@lib/interfaces/Command';
-import CommandConfig from '@lib/interfaces/CommandConfig';
 import Config from '@lib/interfaces/Config';
-import Cooldowns from '@lib/interfaces/Cooldowns';
+import Cooldowns from '@lib/interfaces/db/Cooldowns';
 import Enmap from 'enmap';
-import Fursona from '@lib/interfaces/Fursona';
+import Fursona from '@lib/interfaces/db/Fursona';
 import MarkovData from '@lib/interfaces/MarkovData';
 import Hook from '@lib/interfaces/Hook';
-import UserConfig from '@lib/interfaces/UserConfig';
-import UserStats from '@lib/interfaces/UserStats';
+import UserConfig from '@lib/interfaces/db/UserConfig';
+import UserStats from '@lib/interfaces/db/UserStats';
 import CommandHandler from '@lib/CommandHandler';
 import PublicConfig from '@lib/interfaces/PublicConfig';
 

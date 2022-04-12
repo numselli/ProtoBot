@@ -20,7 +20,7 @@
 import { Client, Message, MessageEmbed } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
 import fetch from 'node-fetch';
-import type CommandConfig from '@lib/interfaces/CommandConfig';
+import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 interface DogData {
     link: string;

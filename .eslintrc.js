@@ -8,7 +8,7 @@ module.exports = {
         project: ['tsconfig.json', 'tsconfig.eslint.json'],
         warnOnUnsupportedTypeScriptVersion: false
     },
-    plugins: ['@typescript-eslint', 'deprecation'],
+    plugins: ['@typescript-eslint', 'deprecation', 'unused-imports'],
     extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
     rules: {
         /* ======================================= */
@@ -107,7 +107,9 @@ module.exports = {
         'no-unused-vars': ['off'],
         '@typescript-eslint/no-unused-vars': ['off'],
         'no-undef': ['error'],
-        'no-use-before-define': ['error']
+        'no-use-before-define': ['error'],
+        'unused-imports/no-unused-imports': 'error',
+        'unused-imports/no-unused-vars': ['warn', { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }]
     },
     globals: {
         NodeJS: 'readonly'

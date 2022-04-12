@@ -17,7 +17,7 @@
  */
 
 import type Logger from '@lib/interfaces/Logger';
-import Command from './interfaces/Command';
+import Command from './interfaces/commands/Command';
 import fs from 'fs';
 import { Client, Message } from 'discord.js';
 

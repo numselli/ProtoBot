@@ -22,7 +22,7 @@ import { MessageEmbed } from 'discord.js';
 import chalk from 'chalk';
 import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
-import type CommandConfig from '@lib/interfaces/CommandConfig';
+import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 // Main
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
@@ -140,7 +140,6 @@ export async function run(client: Client, message: Message, args: string[], log:
         let code: string = args.join(' ');
 
         const embed = new MessageEmbed().setFooter({ text: `Eval command executed by ${message.author.username}` }).setTimestamp();
-        let msg;
         let response;
         let e = false;
         try {

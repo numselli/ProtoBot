@@ -17,7 +17,7 @@
  */
 
 import type { Client, Message, User } from 'discord.js';
-import type CommandConfig from '@lib/interfaces/CommandConfig';
+import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 // The number of users that should be displayed on the leaderboard at a
 // given time.

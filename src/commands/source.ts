@@ -25,7 +25,7 @@ function escapeMarkdown(text: string) {
 // Modules
 import type { Client, Message, Collection } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
-import type CommandConfig from '@lib/interfaces/CommandConfig';
+import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 // Main
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {

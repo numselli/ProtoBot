@@ -20,7 +20,7 @@
 import type { Client, Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
-import type CommandConfig from '@lib/interfaces/CommandConfig';
+import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 // Main
 function fireStats(userID: string, message: Message, client: Client): void {

@@ -20,7 +20,7 @@
 import { Client, Message, MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 import type Logger from '@lib/interfaces/Logger';
-import type CommandConfig from '@lib/interfaces/CommandConfig';
+import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 interface KoalaData {
     link: string;

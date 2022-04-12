@@ -19,7 +19,7 @@
 // Modules
 import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
-import type CommandConfig from '@lib/interfaces/CommandConfig';
+import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 // Main
 export function run(client: Client, message: Message, log: Logger): void {}

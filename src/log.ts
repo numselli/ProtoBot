@@ -1,5 +1,5 @@
-/**
- * ProtoBot -- A Discord furry bot
+/*
+ * ProtoBot -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,13 +24,10 @@
  * to take a look and potentially refactor it, that would be nice, but     *
  * please ensure the API stays the same, as it is used HUNDREDS OF TIMES   *
  * around the source code. Things we need to change are listed just        *
- * under this comment in TODO tags. Thank you for (hopefully) contributing *
+ * under this comment in todo tags. Thank you for (hopefully) contributing *
  * to the continued development of ProtoBot!                               *
  *                                      - ProtoBot Core Developer   0xLogN *
  ***************************************************************************/
-// TODO: Archive older log files with gzip or similar
-// TODO: Delete very old log files automatically
-// TODO: Refactor API
 
 const runningInProd = process.env.PRODUCTION;
 

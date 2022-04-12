@@ -1,54 +1,70 @@
+<div align="center">
+
 # ProtoBot
+
+</div>
 
 <!-- prettier-ignore-start -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=for-the-badge)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- prettier-ignore-end -->
 
-ProtoBot is a powerful Discord bot for furries and alike!
+<div align="center">
+
+## What is ProtoBot?
+
+</div>
+
+ProtoBot is a powerful Discord bot for furries and alike! It contains a variety of commands that can be used to make your server more fun and interactive.
 
 [Add me to your server!](https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=518151064640&scope=bot)
 
-## Installing & Setup
+<div align="center">
+
+## Installing and Setup
+
+</div>
 
 The following steps will help you get ProtoBot up and running on your computer.
 
 We support **Linux** and **macOS 11 or greater**. Any Windows/OSX bugs will be treated with LOW PRIORITY, and we will not consider
-adding install/start scripts in Batch any time in the future. _Use Linux, you Windows-oriented piece of trash. /hj_
+adding install/start scripts in Batch any time in the future. WSL is supported and recommended if you are to host using Windows, and we suggest using PM2 for process management.
 
 ### CONSIDER THE FOLLOWING BEFORE CONTINUING WITH THE INSTALLATION!
 
 ProtoBot is a public Discord bot because we wanted to enforce open-source ruling and allow for the growth of the community.
 
 One of the things we have considered is people forking off on their own, and not contributing to the project. If you have something you'd like to see
-added to the project, please consider contributing to the project.
+added to the project, please consider contributing to the project, instead of self-hosting.
 
-Plus, ProtoBot relies on plenty of external services to function. Self-Hosting of ProtoBot is not polite!
+Plus, ProtoBot relies on plenty of external services to function. Self-Hosting of ProtoBot is not endorsed!
 
-### 1. Node.js
+### 1. Install Prerequisites
+
+#### Node.js
 
 Follow the installation steps for [Node.js v16](https://nodejs.org/en/)
 
 Then install TypeScript: `npm install -g typescript`
 
-### 2. Build-Essential
+#### Build-Essential
 
-Install `build-essential` for your distro; it should be available on macOS via the build tools in XCode.
+Install `build-essential` for your system; it should be available on macOS via the build tools in XCode.
 
-### 3. Git
+#### Git
 
 Ensure [Git](https://git-scm.com/) is installed. On Linux, install it with your package manager, the package is probably named `git`.
 
-### 4. Cloning
+### 2. Download Source Code
 
-In a destination folder, run this command:
+In the destination folder (this can be moved later), run this command:
 
 ```bash
 git clone https://github.com/thetayloredman/ProtoBot.git
 ```
 
-### 5. Installing NPM Dependencies
+### 3. Preparing Configuration and Dependencies
 
 Execute `./install.sh`.
 
@@ -56,10 +72,11 @@ Execute `./install.sh`.
 > **_WARNING: DO NOT GIVE ANYBODY YOU DO NOT KNOW VERY WELL OWNER ACCESS!_**  
 > **ANYONE WITH OWNER ACCESS CAN GET DIRECT ACCESS TO A SHELL ON YOUR SYSTEM.**  
 > **I REPEAT, _NOBODY_ GETS OWNER ACCESS. I AM NOT RESPONSIBLE FOR ANY DAMAGE CAUSED IF YOU DO NOT OBEY THIS.**
+> Anyone with this user ID can access _any_ file on your system. **Keep. The. Owner. Account. Secure.** I suggest using 2FA on it.
 
 **Hey, did you read that thing above me? If not, read it. Did you read it? Read it again. This is serious.**
 
-### 7. First Startup
+### 4. First Startup
 
 #### Normal Run
 
@@ -79,9 +96,38 @@ Then, run `pm2 start ecosystem.config.js` (add `--env production` if you want to
 
 If you want daemon startup, run `pm2 save`.
 
-### 8. Logging
+### 5. Logging
 
 Logs will automatically be created and manual maintenance is needed for cleaning these up.
+
+## Notable Mentions
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/thetayloredman">
+        <img src="https://avatars0.githubusercontent.com/u/26350849?v=4?s=100" width="100px;" alt=""/>
+        <br/>
+        <sub>
+          <b>thetayloredman</b>
+        </sub>
+      </a>
+      <br/>
+      Maintainer
+    </td>
+    <td align="center">
+      <a href="https://github.com/ilikestohack">
+        <img src="https://avatars0.githubusercontent.com/u/47259933?v=4&s=100" width="100px;" alt=""/>
+        <br/>
+        <sub>
+          <b>ilikestohack</b>
+        </sub>
+      </a>
+      <br/>
+      existing
+    </td>
+  </tr>
+</table>
 
 ## Contributors ✨
 

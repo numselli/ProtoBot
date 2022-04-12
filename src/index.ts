@@ -1,5 +1,5 @@
-/**
- * ProtoBot -- A Discord furry bot
+/*
+ * ProtoBot -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -31,13 +31,10 @@ moduleAlias.addAliases({
 import 'source-map-support/register';
 
 // Modules
-import chalk from 'chalk'; // Coloring for CLI - FIXME: update to v5 when TS is updated
+import chalk from 'chalk'; // Coloring for CLI
 import Client from '@lib/Client'; // The custom client files
 import discord from 'discord.js'; // <<< Discord!
 import * as ready from '@lib/onready/index';
-
-// FIXME: Remove me later, this is a bad idea. Pending an enmap fix.
-process.setMaxListeners(13);
 
 // Import the primary log function from the CWD.
 import log from './log';

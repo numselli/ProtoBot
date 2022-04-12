@@ -19,6 +19,7 @@ name: 'ESLint'
 on:
     push:
     pull_request:
+        types: [opened, reopened]
 
 jobs:
     lint:
@@ -35,6 +36,9 @@ jobs:
                   # Make sure the actual branch is checked out when running on pull requests
                   ref: ${{ github.head_ref }}
                   repository: ${{github.event.pull_request.head.repo.full_name || github.repository }}
+
+            - name: Install eslint problem matcher
+              run: echo "::add-matcher::.github/problem-matchers/eslint.json"
 
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v1

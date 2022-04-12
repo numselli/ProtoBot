@@ -1,5 +1,5 @@
-/**
- * ProtoBot -- A Discord furry bot
+/*
+ * ProtoBot -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,60 +22,12 @@ import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
 import type CommandConfig from '@lib/interfaces/CommandConfig';
 
-// Main
-interface CreditedUser {
-    tag: string; // full tag "BadBoyHaloCat#1826"
-}
-
-interface CreditItem {
-    item: string;
-    users: CreditedUser[];
-}
-
-type Credits = CreditItem[];
-
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
-    // Add credits data here
-    const credits: Credits = [
-        {
-            item: 'Writing the core of ProtoBot',
-            users: [{ tag: 'BadBoyHaloCat#1826' }]
-        },
-        {
-            item: 'Infra: Hosting ProtoBot Gen2+',
-            users: [{ tag: 'UF17#2822' }]
-        },
-        {
-            item: 'Offering to rewrite all of ProtoBot',
-            users: [{ tag: 'antemortem#0110' }]
-        },
-        {
-            item: 'Inspiration',
-            users: [{ tag: 'DeveloperUmbreon#3344' }]
-        },
-        {
-            item: 'Just existing idk',
-            users: [{ tag: 'boa#1665' }, { tag: 'ElectricLeAluki#9621' }, { tag: 'charmines#1522' }]
-        }
-    ];
-
-    const embed = new discord.MessageEmbed()
-        .setTitle('Credits to all those who helped make ProtoBot possible')
-        .setColor('RANDOM')
-        .setFooter({ text: 'Thank you, all. Also see the Conventional-Commits table on the README.' })
-        .setDescription('Come on, read this! They worked hard for it!');
-
-    credits.forEach((item: CreditItem) => {
-        let str = '';
-        item.users.forEach((user: CreditedUser, index: number) => {
-            if (str.length === 0) str += `Thank you, ${user.tag}`;
-            else str += index !== item.users.length - 1 ? `, ${user.tag}` : `, and ${user.tag}`;
-        });
-
-        embed.addField(item.item, str);
-    });
-
-    message.reply({ embeds: [embed] });
+    // FIXME: remove command
+    // Yes, the path does end in 's-' not, 's'. there's an emoji.
+    message.reply(
+        `This command is deprecated and is going to be removed in a future release of ProtoBot. You probably want to look at <${client.publicConfig.githubRepository}/tree/main/#contributors-> instead.`
+    );
 }
 
 // Config

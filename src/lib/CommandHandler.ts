@@ -1,5 +1,5 @@
-/**
- * ProtoBot -- A Discord furry bot
+/*
+ * ProtoBot -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -142,8 +142,8 @@ export default class CommandHandler {
         const { run: commandExec, config: commandConfig } = commandData;
         // Now we check for specific things to prevent the command from running
         // in it's configuration.
-        // TODO: be a little move verbose here with who and what
         if (!commandConfig.enabled) {
+            this.log('i', `Command "${commandName}" is disabled (for ${message.author.tag}), exiting handler.`);
             this.log('i', 'Command is disabled!');
             message.reply('That command is disabled!');
             return Promise.resolve();
@@ -155,7 +155,7 @@ export default class CommandHandler {
             message.author.id !== client.config.ownerID
         ) {
             // User isn't authorised; the user is either not whitelisted to use the command and/or they're not an owner.
-            this.log('i', 'User unauthorized!');
+            this.log('i', `Command "${commandName}" is UNAUTHORIZED (for ${message.author.tag}), exiting handler.`);
             message.reply("You aren't authorized to do that!");
             return Promise.resolve();
         }

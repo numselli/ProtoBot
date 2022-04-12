@@ -1,10 +1,11 @@
-# ProtoBot
-
+<div align="center">
+  <h1>ProtoBot</h1>
 <!-- prettier-ignore-start -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- prettier-ignore-end -->
+</div>
 
 ProtoBot is a powerful Discord bot for furries and alike!
 
@@ -85,10 +86,32 @@ Logs will automatically be created and manual maintenance is needed for cleaning
 
 ## Notable Mentions
 
-<table><tr>
-<td align="center"><a href="https://github.com/thetayloredman"><img src="https://avatars0.githubusercontent.com/u/26350849?v=4?s=100" width="100px;" alt=""/><br/><sub><b>thetayloredman</b></sub></a><br/>Maintainer</td>
-<td align="center"><a href="https://github.com/ilikestohack"><img src="https://avatars0.githubusercontent.com/u/47259933?v=4&s=100" width="100px;" alt=""/><br/><sub><b>ilikestohack</b></sub></a><br/>existing</td>
-</tr></table>
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/thetayloredman">
+        <img src="https://avatars0.githubusercontent.com/u/26350849?v=4?s=100" width="100px;" alt=""/>
+        <br/>
+        <sub>
+          <b>thetayloredman</b>
+        </sub>
+      </a>
+      <br/>
+      Maintainer
+    </td>
+    <td align="center">
+      <a href="https://github.com/ilikestohack">
+        <img src="https://avatars0.githubusercontent.com/u/47259933?v=4&s=100" width="100px;" alt=""/>
+        <br/>
+        <sub>
+          <b>ilikestohack</b>
+        </sub>
+      </a>
+      <br/>
+      existing
+    </td>
+  </tr>
+</table>
 
 ## Contributors ✨
 

@@ -341,6 +341,7 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
 // Config
 export const config: CommandConfig = {
     name: 'admin',
+    category: 'owner',
     description: 'Manage the bot internals.',
     enabled: true,
     aliases: ['a', 'manage', 'system', 'sys'], // command aliases to load

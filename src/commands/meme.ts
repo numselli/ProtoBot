@@ -43,6 +43,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 // Config
 export const config: CommandConfig = {
     name: 'meme',
+    category: 'fun',
     description: 'Get a fresh meme!',
     enabled: true,
     aliases: [], // command aliases to load

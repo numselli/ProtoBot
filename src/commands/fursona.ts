@@ -119,6 +119,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 // Config
 export const config: CommandConfig = {
     name: 'fursona',
+    category: 'furry',
     description: 'See/edit your fursona details!',
     enabled: true,
     aliases: ['sona'],

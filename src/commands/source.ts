@@ -38,6 +38,7 @@ export async function run(client: Client, message: Message, args: string[], log:
 // Config
 export const config: CommandConfig = {
     name: 'source',
+    category: 'utility',
     description: 'Gets the source of the last message',
     enabled: true,
     aliases: ['src'],

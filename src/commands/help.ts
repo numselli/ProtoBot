@@ -21,32 +21,94 @@ import discord from 'discord.js';
 import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
 import type CommandConfig from '@lib/interfaces/CommandConfig';
+import CommandCategory from '@lib/interfaces/CommandCategory';
 
 // Main
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
-    const embed = new discord.MessageEmbed()
-        .setTitle('ProtoBot Help')
-        .setAuthor({ name: 'ProtoBot' })
-        .setTimestamp()
-        .setFooter({ text: `Requested by ${message.author.tag}` })
-        .setDescription('Here are all of my commands!');
+    // Create a list of command-category mappings
+    const maps: [string, CommandCategory][] = [];
 
-    client.commands
-        .__readConfiguration__()
-        .forEach((command: { name: string; description: string; enabled: boolean; restrict: boolean | { users: string[] } }) => {
+    client.commands.__readConfiguration__().forEach((command) => {
+        maps.push([command.name, command.category]);
+    });
+
+    // Filter the list to unique categories
+    const categories: CommandCategory[] = maps.map((x) => x[1]).filter((value, index, self) => self.indexOf(value) === index);
+
+    // Determine each command under a specific category
+    const commandsInCategory: [CommandCategory, string[]][] = [];
+    categories.forEach((category) => {
+        commandsInCategory.push([category, maps.filter((command) => command[1] === category).map((command) => command[0])]);
+    });
+
+    console.log(args, categories);
+
+    if (!args[0]) {
+        const embed = new discord.MessageEmbed()
+            .setTitle('ProtoBot Help')
+            .setAuthor({ name: 'ProtoBot' })
+            .setTimestamp()
+            .setFooter({ text: `Requested by ${message.author.tag}` })
+            .setDescription('No category was specified. Use `help [category]` to see the commands in a category. Here is a list of categories:');
+
+        // Add each category to the embed
+        commandsInCategory.forEach((category) => {
+            embed.addField(category[0].toString(), category[1].join(', '), true);
+        });
+
+        message.reply({ embeds: [embed] });
+        return;
+    } else if (categories.includes(args[0].toLowerCase() as CommandCategory)) {
+        const embed = new discord.MessageEmbed()
+            .setTitle('ProtoBot Help')
+            .setAuthor({ name: 'ProtoBot' })
+            .setTimestamp()
+            .setFooter({ text: `Requested by ${message.author.tag}` })
+            .setDescription(`Here are the commands in the category *${args[0].toLowerCase()}*:`);
+
+        // Add each command to the embed
+        commandsInCategory.forEach((category) => {
+            if (category[0] === (args[0].toLowerCase() as CommandCategory))
+                category[1].forEach((command) => {
+                    const commandData = client.commands.__readConfiguration__().get(command) as CommandConfig;
+                    embed.addField(
+                        commandData.name,
+                        `${commandData.description}${commandData.enabled ? '' : ' (disabled)'}${commandData.restrict ? ' (restricted)' : ''}`,
+                        true
+                    );
+                });
+        });
+
+        message.reply({ embeds: [embed] });
+        return;
+    } else if (args[0] === 'all') {
+        const embed = new discord.MessageEmbed()
+            .setTitle('ProtoBot Help')
+            .setAuthor({ name: 'ProtoBot' })
+            .setTimestamp()
+            .setFooter({ text: `Requested by ${message.author.tag}` })
+            .setDescription('Here are all of my commands!');
+
+        client.commands.__readConfiguration__().forEach((command) => {
             embed.addField(
                 command.name,
-                `${command.description}${command.enabled ? '' : ' **[Disabled]**'}${command.restrict ? ' **[Restricted]**' : ''}`,
+                `*${command.category}* ${command.description}${command.enabled ? '' : ' **[Disabled]**'}${
+                    command.restrict ? ' **[Restricted]**' : ''
+                }`,
                 true
             );
         });
-
-    message.reply({ embeds: [embed] });
+    } else {
+        // TODO: command-based search
+        message.reply(`I don't have any commands in the category *${args[0]}*. Run \`help\` to see all categories. (Tip: did you type a command?)`);
+        return;
+    }
 }
 
 // Config
 export const config: CommandConfig = {
     name: 'help',
+    category: 'utility',
     description: 'List all available commands!',
     enabled: true,
     aliases: ['h'],

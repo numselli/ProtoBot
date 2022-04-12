@@ -1,5 +1,7 @@
 <div align="center">
-  <h1>ProtoBot</h1>
+
+# ProtoBot
+
 </div>
 
 <!-- prettier-ignore-start -->
@@ -7,12 +9,6 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=for-the-badge)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- prettier-ignore-end -->
-
-<div align="center">
-
-# test
-
-</div>
 
 ProtoBot is a powerful Discord bot for furries and alike!
 

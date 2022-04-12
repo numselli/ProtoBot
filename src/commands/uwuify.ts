@@ -19,11 +19,10 @@
 // Modules
 import type { Client, Message } from 'discord.js';
 import Uwuifier from 'uwuifier';
-import type Logger from '@lib/interfaces/Logger';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 // Main
-export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
+export async function run(client: Client, message: Message, args: string[]): Promise<void> {
     let intense = false;
     if (args.length === 0) {
         message.reply('**Error:** No text provided!');

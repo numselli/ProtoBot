@@ -19,14 +19,13 @@
 // Imports
 import { Client, Message, MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
-import type Logger from '@lib/interfaces/Logger';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 interface KoalaData {
     link: string;
 }
 
-export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
+export async function run(client: Client, message: Message): Promise<void> {
     const msg = await message.reply('Fetching a koala picture...');
     const body = <KoalaData>await fetch('https://some-random-api.ml/img/koala').then((res) => res.json());
     const embed = new MessageEmbed().setTitle(`Koala for ${message.author.username}`).setImage(body.link).setTimestamp(Date.now()).setColor('RANDOM');

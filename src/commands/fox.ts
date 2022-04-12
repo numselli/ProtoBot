@@ -19,7 +19,6 @@
 // Imports
 import { Client, Message, MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
-import type Logger from '@lib/interfaces/Logger';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 interface FoxData {
@@ -27,7 +26,7 @@ interface FoxData {
     link: string;
 }
 
-export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
+export async function run(client: Client, message: Message): Promise<void> {
     const msg = await message.reply('Fetching a fox picture...');
     const body = <FoxData>await fetch('https://randomfox.ca/floof/').then((res) => res.json());
     const embed = new MessageEmbed()

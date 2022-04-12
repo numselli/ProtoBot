@@ -16,19 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// Modules
+import type { Client, Message, Collection } from 'discord.js';
+import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
+
 function escapeMarkdown(text: string) {
     const unescaped = text.replace(/\\(\*|_|`|~|\\)/g, '$1'); // unescape any "backslashed" character
     const escaped = unescaped.replace(/(\*|_|`|~|\\)/g, '\\$1'); // escape *, _, `, ~, \
     return escaped;
 }
 
-// Modules
-import type { Client, Message, Collection } from 'discord.js';
-import type Logger from '@lib/interfaces/Logger';
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
-
 // Main
-export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
+export async function run(client: Client, message: Message): Promise<void> {
     const messages = (await message.channel.messages.fetch({ limit: 2 })) as Collection<string, Message>;
 
     const m: Message = messages.last() as Message;

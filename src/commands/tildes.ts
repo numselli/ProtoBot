@@ -39,7 +39,7 @@ export async function run(client: Client, message: Message): Promise<void> {
     const buf = ['```adoc\n===== TILDE LEADERBOARD ====='];
 
     for (let i = 0; i < sorted.length && i < CUTOFF; i++) {
-        const [id, count] = sorted[i];
+        const [id] = sorted[i];
         if (id === message.author.id) placed = true;
 
         // eslint-disable-next-line no-await-in-loop

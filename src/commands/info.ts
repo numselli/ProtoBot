@@ -45,7 +45,7 @@ export async function run(client: Client, message: Message, args: string[], log:
                 // @ts-ignore
                 fireStats(userID, message, client);
             })
-            .catch((reason: any) => {
+            .catch(() => {
                 log('i', `Unknown user ${userID}!`);
                 message.reply('Unknown user!');
                 return;

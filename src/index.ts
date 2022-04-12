@@ -154,7 +154,7 @@ process.on('SIGINT', handleInterrupt);
 
 // When the process exits, wrap up.
 process.on('exit', (code) => {
-    log('w', 'Kill client...');
+    log('w', 'Kill client... (exit code ' + code + ')');
     client.destroy(); // Kill the client
     // NOTE: you can't log here
 });

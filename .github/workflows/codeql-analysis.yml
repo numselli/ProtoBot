@@ -21,6 +21,7 @@ on:
         branches-ignore:
             - 'dependabot/**'
     pull_request:
+        types: [opened, reopened]
     schedule:
         - cron: '0 12 * * *'
 

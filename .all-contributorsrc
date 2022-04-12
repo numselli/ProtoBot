@@ -6,26 +6,6 @@
   "commit": false,
   "contributors": [
     {
-      "login": "LostNuke",
-      "name": "LostNuke",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/36674771?v=4",
-      "profile": "https://github.com/LostNuke",
-      "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "Alcremie",
-      "name": "Ivan Lieder",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/54785334?v=4",
-      "profile": "https://github.com/Alcremie",
-      "contributions": [
-        "maintenance",
-        "code",
-        "review"
-      ]
-    },
-    {
       "login": "thetayloredman",
       "name": "BadBoyHaloCat",
       "avatar_url": "https://avatars0.githubusercontent.com/u/26350849?v=4",
@@ -43,6 +23,26 @@
         "review",
         "security",
         "test"
+      ]
+    },
+    {
+      "login": "LostNuke",
+      "name": "LostNuke",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/36674771?v=4",
+      "profile": "https://github.com/LostNuke",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Alcremie",
+      "name": "Ivan Lieder",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/54785334?v=4",
+      "profile": "https://github.com/Alcremie",
+      "contributions": [
+        "maintenance",
+        "code",
+        "review"
       ]
     },
     {

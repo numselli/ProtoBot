@@ -118,7 +118,7 @@ export async function run(client: Client, message: Message, args: string[], log:
         message.reply({ embeds: [embed] });
         return;
     } else {
-        message.reply(`I don't have any commands in the category *${args[0]}*. Run \`help\` to see all categories. (Tip: did you type a command?)`);
+        message.reply(`I don't have any commands named or in the category *${args[0]}*. Run \`help\` to see all categories.`);
         return;
     }
 }

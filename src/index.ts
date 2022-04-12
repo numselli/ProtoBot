@@ -31,7 +31,7 @@ moduleAlias.addAliases({
 import 'source-map-support/register';
 
 // Modules
-import chalk from 'chalk'; // Coloring for CLI - FIXME: update to v5 when TS is updated
+import chalk from 'chalk'; // Coloring for CLI
 import Client from '@lib/Client'; // The custom client files
 import discord from 'discord.js'; // <<< Discord!
 import * as ready from '@lib/onready/index';

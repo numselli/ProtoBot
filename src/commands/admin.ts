@@ -22,7 +22,7 @@ import { MessageEmbed } from 'discord.js';
 import chalk from 'chalk';
 import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
-import { readBuffer, clearBuffer } from '@root/log';
+import { readBuffer, clearBuffer, getMaxBufferSize, changeMaxBufferSize, LogMode, readBufferOfType } from '@root/log';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 // Main
@@ -75,7 +75,7 @@ export async function run(client: Client, message: Message, args: string[], log:
     } else if (args[0] === 'update' || args[0] === 'up') {
         const embed = new MessageEmbed().setTitle('Update').setDescription('Updating the bot... This may take a while...');
 
-        function l(mode: 'v' | 'i' | 'w' | 'e', message: string): void {
+        function l(mode: LogMode, message: string): void {
             return log(mode, `${chalk.green('[')}${chalk.green.bold('Updater')}${chalk.green(']')} ${message}`);
         }
 
@@ -330,7 +330,72 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
         const len = readBuffer().length;
         clearBuffer();
         message.reply(`Cleared log buffer of ${len} entries.`);
-        // TODO: read log buffer and send it to the user
+    } else if (args[0] === 'setmaxbuffer' || args[0] === 'smb') {
+        log('i', `Setting log buffer max to ${parseInt(args[1])} entries...`);
+        if (isNaN(parseInt(args[1]))) {
+            log('w', 'not a number');
+            message.reply('Not a number!');
+            return;
+        }
+        const old = getMaxBufferSize();
+        changeMaxBufferSize(parseInt(args[1]));
+        message.reply(`Changed maximum buffer size from ${old} to ${parseInt(args[1])} entries.`);
+    } else if (args[0] === 'readlog' || args[0] === 'rdl') {
+        let mode: LogMode = 'w';
+        if (!args[1]) {
+            message.reply('No TYPE specified, defaulting to `i`.');
+            mode = 'i';
+        }
+        switch ((args[1] ?? '').toLowerCase()) {
+            case 'v':
+            case 'verbose':
+                mode = 'v';
+                break;
+            case 'i':
+            case 'info':
+                mode = 'i';
+                break;
+            case 'w':
+            case 'warning':
+                mode = 'w';
+                break;
+            case 'e':
+            case 'error':
+                mode = 'e';
+                break;
+            default:
+                if (mode === 'i') break;
+                message.reply('Unknown modespec.');
+                return;
+        }
+        let buffer = readBufferOfType(mode);
+        if (parseInt(args[2])) {
+            message.channel.send(`Read ${buffer.length} entries of type \`${mode}\` from buffer. Shortening to ${parseInt(args[2])} entries.`);
+            buffer = buffer.slice(parseInt(args[2]) * -1);
+        } else if (buffer.length > 15) {
+            message.channel.send(`${buffer.length} entries found. Shortening to 15.`);
+            buffer = buffer.slice(-15);
+        }
+
+        if (buffer.length === 0) {
+            message.reply('No entries found.');
+            return;
+        }
+
+        let mtext = '```';
+        buffer.forEach((b) => {
+            mtext += `\n${b[2]}`;
+        });
+        mtext += '```';
+        try {
+            await message.channel.send(mtext);
+        } catch (e) {
+            message.channel.send(
+                'Failed to send message! Probably too long. Report this to yourself, LogN~! (located at commands/admin.ts rdl try-catch ONSEND)'
+            );
+            log('e', e);
+        }
+        return;
     } else {
         message.reply(`Please specify a command to execute. Here are the available commands:
 \`admin help\`: Shows this message
@@ -340,7 +405,9 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
 \`admin (e|eval)\`: Evaluates a code snippet.
 \`admin (ex|exec)\`: Runs a Bash command.
 \`admin (rl|reload)\`: Reload commands from the config.
-\`admin (clb|clearlogbuffer)\`: Clear the log buffer (use when low on memory)`);
+\`admin (clb|clearlogbuffer)\`: Clear the log buffer (use when low on memory)
+\`admin (smb|setmaxbuffer)\`: Set the maximum number of log entries to store in memory. **This is not persistent.**
+\`admin (rdl|readlog)\`: Read the log buffer. \`readlog\` takes two argument: the type (__v__erbose, __i__nfo, __w__arning, or __e__rror) to read. Then the # of messages to fetch (defaults to 15).`);
         return;
     }
 }

@@ -16,6 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-type Logger = (mode: 'v' | 'i' | 'w' | 'e', message?: any, _bypassStackPrint?: boolean) => void;
+import { LogMode } from '@root/log';
+
+type Logger = (mode: LogMode, message?: any, _bypassStackPrint?: boolean) => void;
 
 export default Logger;

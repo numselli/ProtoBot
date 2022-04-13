@@ -215,6 +215,10 @@ export function clearBuffer(): void {
     buffer = [];
 }
 
+export function getMaxBufferSize(): number {
+    return maxBufferSize;
+}
+
 export function changeMaxBufferSize(newSize: number): void {
     maxBufferSize = newSize;
 }
@@ -223,6 +227,15 @@ export function readBuffer(): [number, LogMode, string][] {
     return buffer;
 }
 
-export function readBufferOfType(mode: string): [number, string, string][] {
-    return buffer.filter(([, m]) => m === mode);
+export function readBufferOfType(mode: LogMode): [number, string, string][] {
+    return buffer.filter(([, m]) => {
+        // Shorten the verbose filter; everything should match it!
+        if (mode === 'v') return true;
+        else if (mode === 'i') return m === 'i' || m === 'w' || m === 'e';
+        else if (mode === 'w') return m === 'w' || m === 'e';
+        else if (mode === 'e') return m === 'e';
+        else return false;
+    });
 }
+
+export { LogMode };

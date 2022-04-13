@@ -113,10 +113,12 @@ export async function run(client: Client, message: Message, args: string[]): Pro
             .addField('Restricted', command.restrict ? 'Yes' : 'No', true)
             .addField('Usage', `\`${client.config.prefix}${command.name}${command.usage ? ` ${command.usage}` : ''}\``, true);
 
+        if (command.aliases.length !== 0) embed.addField('Aliases', command.aliases.join(', '), true);
+
         message.reply({ embeds: [embed] });
         return;
     } else {
-        message.reply(`I don't have any commands named or in the category *${args[0]}*. Run \`help\` to see all categories.`);
+        message.reply(`I don't have a commands or category named '*${args[0]}*'. Run \`help\` to see all categories.`);
         return;
     }
 }

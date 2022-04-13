@@ -92,13 +92,15 @@ export default class CommandHandler {
                 }
 
                 // The command data is loaded from the path.
-                const commandData = <Command>await import('../' + this.commandsFolder + path);
+                let commandData = <Command>await import('../' + this.commandsFolder + path);
+                // Because of the import() returning a null prototype, we need to do this to convert to Object.
+                commandData = { ...commandData };
                 const cmdName = path.replace('.js', '');
                 this.log('v', `Loading command "${cmdName}"...`);
                 this._commandConfigs.set(cmdName, commandData.config);
                 this._commandRunners.set(cmdName, commandData);
                 this._commandRefs.set(cmdName, cmdName);
-                (commandData.config.aliases ?? []).forEach((alias) => {
+                ((commandData.config.aliases as string[]) ?? []).forEach((alias) => {
                     this._commandRefs.set(alias, cmdName);
                 });
                 this.log('i', `Finished loading command "${cmdName}"!`);

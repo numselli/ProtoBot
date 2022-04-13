@@ -29,7 +29,7 @@ import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
     // Safety check
     if (message.author.id !== client.config.ownerID) {
-        console.log('e', `User ${message.author.tag} tried to use "admin", and the command filter didn't stop them!`);
+        log('e', `User ${message.author.tag} tried to use "admin", and the command filter didn't stop them!`);
         message.reply("You don't have permission to do that!");
         return;
     }

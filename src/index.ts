@@ -74,10 +74,9 @@ client.on('messageCreate', async (message) => {
     // Log the message content if we are in verbose mode.
     log(
         'v',
-        chalk`{yellow [}{yellow.bold MSG}{yellow ]} ` +
-            chalk`{blue.bold @${message.author.tag}} ` +
-            chalk`{green.bold #${(<discord.TextChannel>message.channel).name ?? '<DM>'}} {green in ${message.guild?.name ?? '<DM>'}}: ` +
-            message.content
+        `${chalk.yellow('[')}${chalk.yellow.bold('MSG')}${chalk.yellow(']')} ${chalk.blue.bold('@' + message.author.tag)} ${chalk.green.bold(
+            '#' + (message.channel as discord.TextChannel).name ?? '<DM>'
+        )}: ${message.content}`
     );
 
     // Let's (theoretically) say this person is brand new to us. We need

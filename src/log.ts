@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*
  * ProtoBot -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN

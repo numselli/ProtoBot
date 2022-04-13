@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import Hook from '@lib/interfaces/Hook';
 import Logger from '@lib/interfaces/Logger';
 import { Client } from 'discord.js';
 import fs from 'fs';
@@ -30,9 +31,11 @@ export default function loadHooks(client: Client, log: Logger): void {
             files.forEach(async (path: string) => {
                 if (path.endsWith('.js')) {
                     // normal load, but in this case we import into the hook Map.
-                    const hookData = await import(
+                    let hookData: Hook = await import(
                         '../../' + (client.config.dirs.hooks.endsWith('/') ? client.config.dirs.hooks + path : `${client.config.dirs.hooks}/${path}`)
                     );
+                    // Because of the import() returning a null prototype, we need to do this to convert to Object.
+                    hookData = { ...hookData };
                     const hookName = path.replace('.js', '');
                     log('v', `Loading hook "${hookName}"...`);
                     client.hooks.set(hookName, hookData);

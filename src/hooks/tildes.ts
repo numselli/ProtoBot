@@ -20,6 +20,7 @@
 import chalk from 'chalk';
 import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
+import { doesHavePrefix } from '@lib/utils/doesHavePrefix';
 
 // Main
 export function run(client: Client, message: Message, log: Logger): void {
@@ -29,10 +30,7 @@ export function run(client: Client, message: Message, log: Logger): void {
 
     // Check cooldown
     if (!cooldowns || cooldowns + client.config.cooldowns.tildes - Date.now() < 1) {
-        let hasPrefix = false;
-        if (message.content.startsWith(client.config.prefix)) hasPrefix = true;
-
-        if (message.content.endsWith('~') && !/~~+/.test(message.content) && message.content !== '~' && !hasPrefix) {
+        if (message.content.endsWith('~') && !/~~+/.test(message.content) && message.content !== '~' && !doesHavePrefix(message, client)) {
             //                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             //                           Don't flag strikethrough
             //                           markdown as a valid tilde!

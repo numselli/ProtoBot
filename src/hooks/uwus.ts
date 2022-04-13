@@ -20,6 +20,7 @@
 import chalk from 'chalk';
 import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
+import { doesHavePrefix } from '@lib/utils/doesHavePrefix';
 
 // Main
 export function run(client: Client, message: Message, log: Logger): void {
@@ -29,10 +30,7 @@ export function run(client: Client, message: Message, log: Logger): void {
 
     // Check cooldown
     if (!cooldowns || cooldowns + client.config.cooldowns.uwus - Date.now() < 1) {
-        let hasPrefix = false;
-        if (message.content.startsWith(client.config.prefix)) hasPrefix = true;
-
-        if (message.content.toLowerCase().includes('uwu') && !hasPrefix) {
+        if (message.content.toLowerCase().includes('uwu') && !doesHavePrefix(message, client)) {
             client.uwus.ensure(message.author.id, 0);
             client.uwus.inc(message.author.id);
             client.cooldowns.set(message.author.id, Date.now(), 'uwus');

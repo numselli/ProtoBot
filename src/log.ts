@@ -222,3 +222,7 @@ export function changeMaxBufferSize(newSize: number): void {
 export function readBuffer(): [number, LogMode, string][] {
     return buffer;
 }
+
+export function readBufferOfType(mode: string): [number, string, string][] {
+    return buffer.filter(([, m]) => m === mode);
+}

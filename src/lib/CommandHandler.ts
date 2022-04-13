@@ -113,6 +113,9 @@ export default class CommandHandler {
     public __readConfiguration__(): Map<string, Command['config']> {
         return this._commandConfigs;
     }
+    public __readRefs__(): Map<string, string> {
+        return this._commandRefs;
+    }
 
     /**
      * Execute a command after performing checks.

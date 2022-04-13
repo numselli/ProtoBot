@@ -41,11 +41,10 @@ export default class Client extends BaseClient {
         this.defaults = {
             USER_CONFIGURATION: {},
             USER_STATISTICS: { hugs: 0, boops: 0, pats: 0 },
-            COOLDOWNS: { owos: 0, uwus: 0, tildes: 0 }
+            COOLDOWNS: { owos: 0, uwus: 0, tildes: 0 },
+            EMOTE_TRACKER_COUNTERS: { owos: 0, uwus: 0, tildes: 0 }
         };
-        this.tildes = new Enmap({ name: 'tildes', verbose: makeVerboseFunction('tildes') });
-        this.owos = new Enmap({ name: 'owos', verbose: makeVerboseFunction('owos') });
-        this.uwus = new Enmap({ name: 'uwus', verbose: makeVerboseFunction('uwus') });
+        this.emoteCounterTrackers = new Enmap({ name: 'emoteCounterTrackers', verbose: makeVerboseFunction('emoteCounterTrackers') });
         this.userStatistics = new Enmap({ name: 'userStatistics', verbose: makeVerboseFunction('userStatistics') });
         this.userConfiguration = new Enmap({ name: 'userStatistics', verbose: makeVerboseFunction('userConfiguration') });
         this.fursonas = new Enmap({ name: 'fursonas', verbose: makeVerboseFunction('fursonas') });

@@ -31,8 +31,8 @@ export function run(client: Client, message: Message, log: Logger): void {
     // Check cooldown
     if (!cooldowns || cooldowns + client.config.cooldowns.owos - Date.now() < 1) {
         if (message.content.toLowerCase().includes('owo') && !doesHavePrefix(message, client)) {
-            client.owos.ensure(message.author.id, 0);
-            client.owos.inc(message.author.id);
+            client.emoteCounterTrackers.ensure(message.author.id, client.defaults.EMOTE_TRACKER_COUNTERS);
+            client.emoteCounterTrackers.inc(message.author.id, 'owos');
             client.cooldowns.set(message.author.id, Date.now(), 'owos');
 
             log(

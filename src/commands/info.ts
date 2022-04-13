@@ -30,9 +30,9 @@ function fireStats(userID: string, message: Message, client: Client): void {
         .addField('Hugs', (uData.hugs ?? 0).toString())
         .addField('Boops', (uData.boops ?? 0).toString())
         .addField('Pats', (uData.pats ?? 0).toString())
-        .addField('uwus', (client.uwus.get(userID) ?? 0).toString())
-        .addField('owos', (client.owos.get(userID) ?? 0).toString())
-        .addField('Tildes', (client.tildes.get(userID) ?? 0).toString());
+        .addField('uwus', (client.emoteCounterTrackers.get(userID, 'uwus') ?? 0).toString())
+        .addField('owos', (client.emoteCounterTrackers.get(userID, 'owos') ?? 0).toString())
+        .addField('Tildes', (client.emoteCounterTrackers.get(userID, 'tildes') ?? 0).toString());
     message.reply({ embeds: [embed] });
 }
 

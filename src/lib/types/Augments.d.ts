@@ -34,6 +34,7 @@ import UserConfig from '@lib/interfaces/db/UserConfig';
 import UserStats from '@lib/interfaces/db/UserStats';
 import CommandHandler from '@lib/CommandHandler';
 import PublicConfig from '@lib/interfaces/PublicConfig';
+import EmoteCounterData from '@lib/interfaces/db/EmoteCounterData';
 
 // Discord.js
 declare module 'discord.js' {
@@ -44,11 +45,10 @@ declare module 'discord.js' {
             USER_CONFIGURATION: UserConfig;
             USER_STATISTICS: UserStats;
             COOLDOWNS: { owos: number; uwus: number; tildes: number };
+            EMOTE_TRACKER_COUNTERS: EmoteCounterData;
         };
         cooldowns: Enmap<string, Cooldowns>;
-        tildes: Enmap<string, number>;
-        owos: Enmap<string, number>;
-        uwus: Enmap<string, number>;
+        emoteCounterTrackers: Enmap<string, EmoteCounterData>;
         userStatistics: Enmap<string, UserStats>;
         userConfiguration: Enmap<string, UserConfig>;
         markovMessages: Enmap<string, MarkovData>; // NOTE: remove markovs in the future perhaps?

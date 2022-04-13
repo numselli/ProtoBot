@@ -35,8 +35,8 @@ export function run(client: Client, message: Message, log: Logger): void {
             //                           Don't flag strikethrough
             //                           markdown as a valid tilde!
 
-            client.tildes.ensure(message.author.id, 0);
-            client.tildes.inc(message.author.id);
+            client.emoteCounterTrackers.ensure(message.author.id, client.defaults.EMOTE_TRACKER_COUNTERS);
+            client.emoteCounterTrackers.inc(message.author.id, 'tildes');
             client.cooldowns.set(message.author.id, Date.now(), 'tildes');
 
             log(

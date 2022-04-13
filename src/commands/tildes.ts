@@ -25,12 +25,12 @@ const CUTOFF = 10;
 
 function formatRow(index: number, user: User | null, client: Client): string {
     const ranking = (index + 1).toString().padStart(2, ' ');
-    const count = user ? client.tildes.get(user?.id) : 0;
+    const count = user ? client.emoteCounterTrackers.get(user?.id, 'tildes') : 0;
     return `${ranking} :: ${user ? `${user.tag} with ${count} tildes` : '(none)'}`;
 }
 
 export async function run(client: Client, message: Message): Promise<void> {
-    const sorted = client.tildes.map((count, id) => [id, count] as [string, number]).sort((a, b) => b[1] - a[1]);
+    const sorted = client.emoteCounterTrackers.map((values, id) => [id, values.tildes] as [string, number]).sort((a, b) => b[1] - a[1]);
 
     // Whether or not the user of the command has placed in the top of the
     // leaderboard.

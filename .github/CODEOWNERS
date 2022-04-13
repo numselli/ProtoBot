@@ -1,2 +1,9 @@
-# I am god. (basically)
+### .github/CODEOWNERS -- ProtoBot by 0xLogN
+###  CODEOWNERS POLICY  ###
+# By default, @thetayloredman owns all files. Only people @thetayloredman knows may be codeowners.
+# The person who has the most knowledge or significant changes to a file is the codeowner.
+# The codeowner is the person who is responsible for maintaining the code.
+# CODEOWNERS are subject to a maintainer's discretion.
+
+# @thetayloredman owns everything by default.
 * @thetayloredman

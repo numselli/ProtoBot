@@ -25,6 +25,10 @@ import type Logger from '@lib/interfaces/Logger';
 import { readBuffer, clearBuffer, getMaxBufferSize, changeMaxBufferSize, LogMode, readBufferOfType } from '@root/log';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
+// Hacky way to require()
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
 // Main
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
     // Safety check

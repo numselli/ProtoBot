@@ -46,8 +46,8 @@ export default class Client extends BaseClient {
         this.tildes = new Enmap({ name: 'tildes', verbose: makeVerboseFunction('tildes') });
         this.owos = new Enmap({ name: 'owos', verbose: makeVerboseFunction('owos') });
         this.uwus = new Enmap({ name: 'uwus', verbose: makeVerboseFunction('uwus') });
-        this.userStatistics = new Enmap({ name: 'userStatistics', verbose: makeVerboseFunction('ustats') });
-        this.userConfiguration = new Enmap({ name: 'userStatistics', verbose: makeVerboseFunction('uconfs') });
+        this.userStatistics = new Enmap({ name: 'userStatistics', verbose: makeVerboseFunction('userStatistics') });
+        this.userConfiguration = new Enmap({ name: 'userStatistics', verbose: makeVerboseFunction('userConfiguration') });
         this.fursonas = new Enmap({ name: 'fursonas', verbose: makeVerboseFunction('fursonas') });
         this.restartData = new Enmap({ name: 'restartData', verbose: makeVerboseFunction('restartData') });
 

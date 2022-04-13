@@ -17,7 +17,7 @@
  */
 
 import chalk from 'chalk';
-import log, { LogMode } from '../log';
+import log, { LogMode } from '@root/log';
 import bytes from 'bytes';
 
 function l(mode: LogMode, message: any) {

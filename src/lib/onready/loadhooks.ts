@@ -27,11 +27,12 @@ export default function loadHooks(client: Client, log: Logger): void {
             log('e', `Failed to read directory ${client.config.dirs.hooks}:`);
             log('e', err);
         } else
-            files.forEach((path: string) => {
+            files.forEach(async (path: string) => {
                 if (path.endsWith('.js')) {
                     // normal load, but in this case we import into the hook Map.
-                    const hookData = require('@root/' +
-                        (client.config.dirs.hooks.endsWith('/') ? client.config.dirs.hooks + path : `${client.config.dirs.hooks}/${path}`));
+                    const hookData = await import(
+                        '../../' + (client.config.dirs.hooks.endsWith('/') ? client.config.dirs.hooks + path : `${client.config.dirs.hooks}/${path}`)
+                    );
                     const hookName = path.replace('.js', '');
                     log('v', `Loading hook "${hookName}"...`);
                     client.hooks.set(hookName, hookData);

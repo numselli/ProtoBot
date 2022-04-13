@@ -79,7 +79,7 @@ export default class CommandHandler {
         }
 
         // Iterate over the files and load them.
-        files.forEach((path) => {
+        files.forEach(async (path) => {
             // Ensure that what we are reading is a core JavaScript compiled file.
             if (path.endsWith('.js')) {
                 // Check that this file does not contain capitalized letters in it's names.
@@ -92,7 +92,7 @@ export default class CommandHandler {
                 }
 
                 // The command data is loaded from the path.
-                const commandData = <Command>require('@root/' + this.commandsFolder + path);
+                const commandData = <Command>await import('../' + this.commandsFolder + path);
                 const cmdName = path.replace('.js', '');
                 this.log('v', `Loading command "${cmdName}"...`);
                 this._commandConfigs.set(cmdName, commandData.config);

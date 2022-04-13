@@ -16,16 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Import the moduleAlias module. This is used to allow importing of module
-// aliases, such as @lib (to the lib folder) and @root (to the root of the
-// source)
-import moduleAlias from 'module-alias';
-
-moduleAlias.addAliases({
-    '@lib': __dirname + '/lib', // Library files, such as core modules and clients.
-    '@root': __dirname + '/' // For direct access to uncompiled source.
-});
-
 // Import source-map-support and register it to allow better visibility of
 // error locations as shown in the TS default source maps.
 import 'source-map-support/register';

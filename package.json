@@ -3,10 +3,11 @@
     "version": "2.1.0",
     "description": "A Discord furry bot",
     "main": "dist/index.js",
+    "type": "module",
     "scripts": {
         "start": "chmod u+x ./start.sh; ./start.sh",
         "lint": "eslint .",
-        "build": "tsc",
+        "build": "tsc && tsc-alias",
         "prettier:check": "prettier . --check",
         "prettier": "prettier . -w",
         "prepare": "husky install",
@@ -19,16 +20,16 @@
         "@babel/eslint-parser": "^7.17.0",
         "better-sqlite3": "^7.5.1",
         "bytes": "^3.1.2",
-        "chalk": "^4.1.2",
+        "chalk": "^5.0.1",
         "cli-highlight": "^2.1.11",
         "discord.js": "^13.6.0",
         "enmap": "^5.9.0",
         "markov-strings": "^3.0.1",
         "module-alias": "^2.2.2",
-        "node-fetch": "^2.6.7",
+        "node-fetch": "^3.2.3",
         "prettier": "^2.6.2",
         "source-map-support": "^0.5.21",
-        "strip-ansi": "^6.0.0",
+        "strip-ansi": "^7.0.1",
         "uwuifier": "^4.0.5"
     },
     "devDependencies": {
@@ -46,6 +47,7 @@
         "eslint-plugin-unused-imports": "^2.0.0",
         "husky": "^7.0.0",
         "lint-staged": "^12.3.7",
+        "tsc-alias": "^1.6.6",
         "typescript": "^4.6.3"
     },
     "lint-staged": {

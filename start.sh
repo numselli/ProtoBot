@@ -45,7 +45,7 @@ while true; do
         npm install
     fi
     echo 'bootstrap: Compiling source tree...'
-    tsc;
+    npm run build
     echo 'bootstrap: Setting CWD to dist/';
     cd dist;
     echo 'bootstrap: Running ProtoBot...'
@@ -54,7 +54,7 @@ while true; do
     echo 'bootstrap:      PROTOBOT_STARTSH_COMMIT is set to '"${COMMIT_HASH}"'.';
     echo 'bootstrap: PROTOBOT_STARTSH_DIRTYSOURCE is set to '"${DIRTYSOURCE}"'.';
 
-    PRODUCTION=$PRODUCTION PROTOBOT_STARTSH_COMMIT="$COMMIT_HASH" PROTOBOT_STARTSH_DIRTYSOURCE="$DIRTYSOURCE" node .;
+    PRODUCTION=$PRODUCTION PROTOBOT_STARTSH_COMMIT="$COMMIT_HASH" PROTOBOT_STARTSH_DIRTYSOURCE="$DIRTYSOURCE" node --experimental-specifier-resolution=node .;
     if [ "$?" -eq 9 ]; then
         echo 'bootstrap: Restarting instantly: exit code was 9 (RESTART)'
     else

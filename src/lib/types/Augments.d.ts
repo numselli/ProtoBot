@@ -63,3 +63,10 @@ declare module 'discord.js' {
         hooks: Enmap<string, Hook>;
     }
 }
+
+// FIXME: Until enmap is fixed
+declare module 'enmap' {
+    export interface EnmapOptions {
+        autoEnsure?: unknown
+    }
+}

@@ -113,6 +113,7 @@ module.exports = {
 
         // no manual console.log
         'no-console': ['error'],
+        // Allow non-null assertions.
         '@typescript-eslint/no-non-null-assertion': ['off']
     },
     globals: {

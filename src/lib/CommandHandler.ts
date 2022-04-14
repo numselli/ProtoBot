@@ -159,7 +159,7 @@ export default class CommandHandler {
                 !(<{ users: string[] }>commandConfig.restrict).users.includes(message.author.id) &&
                 message.author.id !== client.config.ownerID) ||
                 ((<{ guildAdmins: boolean }>commandConfig.restrict).guildAdmins &&
-                    message.member!.permissionsIn(message.channel as TextChannel).has('ADMINISTRATOR')))
+                    !message.member!.permissionsIn(message.channel as TextChannel).has('ADMINISTRATOR')))
         ) {
             // User isn't authorised; the user is either not whitelisted to use the command and/or they're not an owner.
             this.log('i', `Command "${commandName}" is UNAUTHORIZED (for ${message.author.tag}), exiting handler.`);

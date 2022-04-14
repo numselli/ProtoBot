@@ -111,6 +111,10 @@ export async function run(client: Client, message: Message, args: string[], log:
                                 l('e', `Failed to update: ${error4}`);
                                 m.edit(`Failed to update: ${error4}`);
                             } else {
+                                let prefix = client.guildData.get(
+                                    message.guild!.id,
+                                    'prefix'
+                                );
                                 l('i', 'Synced!');
                                 embed
                                     .addField(
@@ -120,13 +124,7 @@ export async function run(client: Client, message: Message, args: string[], log:
                                     .addField('Status', '**Complete.**')
                                     .addField(
                                         'Restart to apply changes',
-                                        `To apply the update, run \`${client.guildData.get(
-                                            message.guild!.id,
-                                            'prefix'
-                                        )}restart\`.\nYou may want to run \`${client.guildData.get(
-                                            message.guild!.id,
-                                            'prefix'
-                                        )}admin exec git stash apply\` to re-instate unsaved changes.`
+                                        `To apply the update, run \`${prefix}restart\`.\nYou may want to run \`${prefix}admin exec git stash apply\` to re-instate unsaved changes.`
                                     );
 
                                 m.edit({ embeds: [embed] });

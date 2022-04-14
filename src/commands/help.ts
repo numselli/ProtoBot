@@ -109,7 +109,11 @@ export async function run(client: Client, message: Message, args: string[]): Pro
             .addField('Category', command.category, true)
             .addField('Enabled', command.enabled ? 'Yes' : 'No', true)
             .addField('Restricted', command.restrict ? 'Yes' : 'No', true)
-            .addField('Usage', `\`${client.guildData.get(message.guild!.id, "prefix")}${command.name}${command.usage ? ` ${command.usage}` : ''}\``, true);
+            .addField(
+                'Usage',
+                `\`${client.guildData.get(message.guild!.id, 'prefix')}${command.name}${command.usage ? ` ${command.usage}` : ''}\``,
+                true
+            );
 
         if (command.aliases.length !== 0) embed.addField('Aliases', command.aliases.join(', '), true);
 

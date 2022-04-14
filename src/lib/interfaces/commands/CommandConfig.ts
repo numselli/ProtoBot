@@ -30,5 +30,5 @@ export default interface CommandConfig {
     // format:
     //
     // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false | { users: string[] } | {guildAdmins: true};
+    restrict: false | { users: string[] } | { guildAdmins: true };
 }

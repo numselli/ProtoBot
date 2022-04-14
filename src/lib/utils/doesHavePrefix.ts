@@ -19,5 +19,5 @@
 import { Client, Message } from 'discord.js';
 
 export function doesHavePrefix(message: Message, client: Client): boolean {
-    return message.content.startsWith(client.guildData.get(message.guild!.id, "prefix")!);
+    return message.content.startsWith(client.guildData.get(message.guild!.id, 'prefix')!);
 }

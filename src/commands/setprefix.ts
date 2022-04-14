@@ -25,12 +25,12 @@ import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
     if (!args[0]) {
         log('i', 'User requested to see the prefix');
-        message.reply("Your guild's prefix is: " + client.guildData.get(message.guild!.id, "prefix"));
+        message.reply("Your guild's prefix is: " + client.guildData.get(message.guild!.id, 'prefix'));
         return;
     }
 
-    client.guildData.set(message.guild!.id, args[0], "prefix")
-    message.reply("I have set your guild prefix to " + args[0])
+    client.guildData.set(message.guild!.id, args[0], 'prefix');
+    message.reply('I have set your guild prefix to ' + args[0]);
 }
 
 // Config

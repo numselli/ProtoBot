@@ -111,10 +111,7 @@ export async function run(client: Client, message: Message, args: string[], log:
                                 l('e', `Failed to update: ${error4}`);
                                 m.edit(`Failed to update: ${error4}`);
                             } else {
-                                let prefix = client.guildData.get(
-                                    message.guild!.id,
-                                    'prefix'
-                                );
+                                const prefix = client.guildData.get(message.guild!.id, 'prefix');
                                 l('i', 'Synced!');
                                 embed
                                     .addField(

@@ -30,10 +30,7 @@ export async function run(client: Client, message: Message, args: string[], log:
         case 'set':
             log('i', 'Setting fursona!');
             if (!args[1]) {
-                let prefix = client.guildData.get(
-                    message.guild!.id,
-                    'prefix'
-                );
+                const prefix = client.guildData.get(message.guild!.id, 'prefix');
                 log('i', 'Showing set help!');
                 message.reply(
                     `\`\`\`adoc\n===== FURSONA HELP =====\n${prefix}fursona set name <name> :: Set your fursona's name\n${prefix}fursona set bio <bio>   :: Set your fursona's bio\n${prefix}fursona set type <type> :: Set your fursona's breed/type (but not in people lol)\n\`\`\``

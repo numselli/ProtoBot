@@ -108,6 +108,16 @@ client.on('messageCreate', async (message) => {
     if (message.content.toLowerCase().startsWith(prefix)) {
         msgIsCommand = true;
         prefixLen = prefix.length;
+    } else if (message.content.toLowerCase().startsWith(client.config.prefix)) {
+        msgIsCommand = true;
+        prefixLen = client.config.prefix.length;
+        log('i', 'emergency prefix override');
+        // FIXME: Runs on normal messages as well..
+        message.channel.send(
+            'WARNING: Emergency prefix override is enabled. The prefix for this server is actually `' +
+                prefix +
+                "`. Nag the developer to disable this if you don't like it."
+        );
     }
 
     // if it's a command, we handle it.

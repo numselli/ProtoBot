@@ -103,9 +103,11 @@ client.on('messageCreate', async (message) => {
     });
     let msgIsCommand = false;
     let prefixLen = 0;
-    if (message.content.toLowerCase().startsWith(client.config.prefix)) {
+    const prefix = client.guildData.get(message.guild!.id, "prefix")!;
+
+    if (message.content.toLowerCase().startsWith(prefix)) {
         msgIsCommand = true;
-        prefixLen = client.config.prefix.length;
+        prefixLen = prefix.length;
     }
 
     // if it's a command, we handle it.

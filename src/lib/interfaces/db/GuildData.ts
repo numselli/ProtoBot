@@ -16,8 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Client, Message } from 'discord.js';
-
-export function doesHavePrefix(message: Message, client: Client): boolean {
-    return message.content.startsWith(client.guildData.get(message.guild!.id, "prefix")!);
+export default interface GuildData {
+    prefix: string;
 }

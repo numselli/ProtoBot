@@ -112,7 +112,8 @@ module.exports = {
         'unused-imports/no-unused-vars': ['warn', { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }],
 
         // no manual console.log
-        'no-console': ['error']
+        'no-console': ['error'],
+        '@typescript-eslint/no-non-null-assertion': ['off']
     },
     globals: {
         NodeJS: 'readonly'

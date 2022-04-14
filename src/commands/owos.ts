@@ -16,18 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { Client, Message, User } from 'discord.js';
+import type { Client, Message } from 'discord.js';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
+import { formatRow } from '@lib/utils/formatTrackerRow';
 
 // The number of users that should be displayed on the leaderboard at a
 // given time.
 const CUTOFF = 10;
-
-function formatRow(index: number, user: User | null, client: Client): string {
-    const ranking = (index + 1).toString().padStart(2, ' ');
-    const count = user ? client.emoteCounterTrackers.get(user?.id, 'owos') : 0;
-    return `${ranking} :: ${user ? `${user.tag} with ${count} owos` : '(none)'}`;
-}
 
 export async function run(client: Client, message: Message): Promise<void> {
     const sorted = client.emoteCounterTrackers.map((values, id) => [id, values.owos] as [string, number]).sort((a, b) => b[1] - a[1]);
@@ -44,12 +39,12 @@ export async function run(client: Client, message: Message): Promise<void> {
 
         // eslint-disable-next-line no-await-in-loop
         const user = await client.users.fetch(id).catch(() => null);
-        buf.push(formatRow(i, user, client));
+        buf.push(formatRow('owos', i, user, client));
     }
 
     if (!placed) {
         const index = sorted.findIndex(([id]) => id === message.author.id);
-        if (index !== -1) buf.push('...', formatRow(index, message.author, client));
+        if (index !== -1) buf.push('...', formatRow('owos', index, message.author, client));
     }
 
     buf.push('```');

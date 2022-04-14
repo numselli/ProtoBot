@@ -19,7 +19,7 @@
 import type Logger from '@lib/interfaces/Logger';
 import Command from './interfaces/commands/Command';
 import fs from 'fs';
-import { Client, Message } from 'discord.js';
+import { Client, Message, TextChannel } from 'discord.js';
 
 /**
  * CommandHandler handles the storage and effective management of commands
@@ -155,9 +155,11 @@ export default class CommandHandler {
         }
         if (
             commandConfig.restrict &&
-            commandConfig.restrict.users &&
-            !commandConfig.restrict.users.includes(message.author.id) &&
-            message.author.id !== client.config.ownerID
+            (((<{ users: string[] }>commandConfig.restrict).users &&
+                !(<{ users: string[] }>commandConfig.restrict).users.includes(message.author.id) &&
+                message.author.id !== client.config.ownerID) ||
+                ((<{ guildAdmins: boolean }>commandConfig.restrict).guildAdmins &&
+                    message.member!.permissionsIn(message.channel as TextChannel).has('ADMINISTRATOR')))
         ) {
             // User isn't authorised; the user is either not whitelisted to use the command and/or they're not an owner.
             this.log('i', `Command "${commandName}" is UNAUTHORIZED (for ${message.author.tag}), exiting handler.`);

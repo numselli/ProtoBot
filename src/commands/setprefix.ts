@@ -16,19 +16,35 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import CommandCategory from '@lib/interfaces/commands/CommandCategory';
+// Modules
+import type { Client, Message } from 'discord.js';
+import type Logger from '@lib/interfaces/Logger';
+import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
-export default interface CommandConfig {
-    name: string;
-    description: string;
-    category: CommandCategory;
-    enabled: boolean;
-    aliases: string[];
-    usage: string;
+// Main
+export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
+    if (!args[0]) {
+        log('i', 'User requested to see the prefix');
+        message.reply("Your guild's prefix is: " + client.guildData.get(message.guild!.id, 'prefix'));
+        return;
+    }
+
+    client.guildData.set(message.guild!.id, args[0], 'prefix');
+    message.reply('I have set your guild prefix to ' + args[0]);
+}
+
+// Config
+export const config: CommandConfig = {
+    name: 'setprefix',
+    category: 'other',
+    description: "Set the guild's prefix",
+    usage: '<prefix>',
+    enabled: true,
+    aliases: [],
 
     // To restrict the command, change the "false" to the following
     // format:
     //
     // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false | { users: string[] } | { guildAdmins: true };
-}
+    restrict: { guildAdmins: true }
+};

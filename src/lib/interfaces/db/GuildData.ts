@@ -16,19 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import CommandCategory from '@lib/interfaces/commands/CommandCategory';
-
-export default interface CommandConfig {
-    name: string;
-    description: string;
-    category: CommandCategory;
-    enabled: boolean;
-    aliases: string[];
-    usage: string;
-
-    // To restrict the command, change the "false" to the following
-    // format:
-    //
-    // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false | { users: string[] } | { guildAdmins: true };
+export default interface GuildData {
+    prefix: string;
 }

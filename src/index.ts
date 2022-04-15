@@ -108,7 +108,7 @@ client.on('messageCreate', async (message) => {
     if (mlc.startsWith(prefix)) msgIsCommand = true;
     else if (mlc.startsWith(`<@${client.user!.id}>`) || mlc.startsWith(`<@!${client.user!.id}>`)) {
         msgIsCommand = true;
-        log('i', 'User used tag prefix');
+        log('i', `${message.author.tag} used mention-based prefix for command ${message.content}.`);
     }
 
     // if it's a command, we handle it.

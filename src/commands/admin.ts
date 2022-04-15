@@ -33,13 +33,6 @@ const require = createRequire(import.meta.url);
 
 // Main
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
-    // Safety check
-    if (message.author.id !== client.config.ownerID) {
-        log('e', `User ${message.author.tag} tried to use "admin", and the command filter didn't stop them!`);
-        message.reply("You don't have permission to do that!");
-        return;
-    }
-
     args[0] = args[0]?.toLowerCase();
 
     log('i', `Admin command executed by ${message.author.tag}: ${args[0]}`);

@@ -110,8 +110,7 @@ client.on('messageCreate', async (message) => {
         prefixLen = prefix.length;
         msgIsCommand = true;
     } else if (lowercasedMessageContent.startsWith(`<@${client.user!.id}>`) || lowercasedMessageContent.startsWith(`<@!${client.user!.id}>`)) {
-        if (lowercasedMessageContent.startsWith(`<@${client.user!.id}>`)) prefixLen = client.user!.id.length + 3;
-        else prefixLen = client.user!.id.length + 4;
+        prefixLen = client.user!.id.length + (lowercasedMessageContent.startsWith('<@!') ? 4 : 3);
         msgIsCommand = true;
         log('i', `${message.author.tag} used mention-based prefix for command ${message.content}.`);
     }

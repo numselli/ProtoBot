@@ -102,20 +102,23 @@ client.on('messageCreate', async (message) => {
         hookData.run(client, message, log);
     });
     let msgIsCommand = false;
+    let prefixLen = 0;
     const prefix = client.guildData.get(message.guild!.id, 'prefix')!;
     const lowercasedMessageContent = message.content.toLowerCase();
 
-    if (lowercasedMessageContent.startsWith(prefix)) msgIsCommand = true;
-    else if (lowercasedMessageContent.startsWith(`<@${client.user!.id}>`) || lowercasedMessageContent.startsWith(`<@!${client.user!.id}>`)) {
+    if (lowercasedMessageContent.startsWith(prefix)) {
+        prefixLen = prefix.length;
+        msgIsCommand = true;
+    } else if (lowercasedMessageContent.startsWith(`<@${client.user!.id}>`) || lowercasedMessageContent.startsWith(`<@!${client.user!.id}>`)) {
+        if (lowercasedMessageContent.startsWith(`<@${client.user!.id}>`)) prefixLen = client.user!.id.length + 3;
+        else prefixLen = client.user!.id.length + 4;
         msgIsCommand = true;
         log('i', `${message.author.tag} used mention-based prefix for command ${message.content}.`);
     }
 
     // if it's a command, we handle it.
     if (msgIsCommand) {
-        const msgarray = message.content.split(/ +/g);
-        msgarray.shift();
-        const args: string[] = msgarray;
+        const args: string[] = message.content.slice(prefixLen).split(/ +/g);
         const command = args.shift()!.toLowerCase();
 
         try {

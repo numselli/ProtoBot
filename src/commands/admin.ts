@@ -351,7 +351,7 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
             message.reply('No TYPE specified, defaulting to `i`.');
             mode = 'i';
         }
-        switch (args[1].toLowerCase()) {
+        switch ((args[1] ?? '').toLowerCase()) {
             case 'v':
             case 'verbose':
                 mode = 'v';

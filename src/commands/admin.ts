@@ -109,7 +109,8 @@ export async function run(client: Client, message: Message, args: string[], log:
     } else if (args[0] === 'eval' || args[0] === 'e') {
         if (getPermissionsForUser(client, log, message) < Permissions.BOT_OWNER) {
             log('w', `User ${message.author.tag} tried to use "admin eval", but they don't have permission!`);
-            message.reply('Nah bro, that command is for the bot owner only!');
+            message.reply('Nah, that command is for the bot owner only!');
+            return;
         }
 
         args.shift();
@@ -198,7 +199,8 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
     } else if (args[0] === 'exec' || args[0] === 'ex') {
         if (getPermissionsForUser(client, log, message) < Permissions.BOT_OWNER) {
             log('w', `User ${message.author.tag} tried to use "admin exec", but they don't have permission!`);
-            message.reply('Nah bro, that command is for the bot owner only!');
+            message.reply('Nah, that command is for the bot owner only!');
+            return;
         }
         args.shift();
 

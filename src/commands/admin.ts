@@ -27,6 +27,8 @@ import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 // Hacky way to require()
 import { createRequire } from 'module';
+import { Permissions } from '@lib/Permissions';
+import { getPermissionsForUser } from '@lib/getPermissionsForUser';
 const require = createRequire(import.meta.url);
 
 // Main
@@ -134,6 +136,11 @@ export async function run(client: Client, message: Message, args: string[], log:
             }
         });
     } else if (args[0] === 'eval' || args[0] === 'e') {
+        if (getPermissionsForUser(client, log, message) < Permissions.BOT_OWNER) {
+            log('w', `User ${message.author.tag} tried to use "admin eval", but they don't have permission!`);
+            message.reply('Nah bro, that command is for the bot owner only!');
+        }
+
         args.shift();
         /**
          * Credit to WilsonTheWolf for some of this eval code!
@@ -218,6 +225,10 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
             });
         }
     } else if (args[0] === 'exec' || args[0] === 'ex') {
+        if (getPermissionsForUser(client, log, message) < Permissions.BOT_OWNER) {
+            log('w', `User ${message.author.tag} tried to use "admin exec", but they don't have permission!`);
+            message.reply('Nah bro, that command is for the bot owner only!');
+        }
         args.shift();
 
         let silent = false;
@@ -407,8 +418,8 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
 \`admin (re|restart)\`: Restarts the bot
 \`admin (checkout|branch)\`: Change the Git branch we are running from
 \`admin (up|update)\`: Run a software update.
-\`admin (e|eval)\`: Evaluates a code snippet.
-\`admin (ex|exec)\`: Runs a Bash command.
+\`admin (e|eval)\`: Evaluates a code snippet. **BOT OWNER ONLY**
+\`admin (ex|exec)\`: Runs a Bash command. **BOT OWNER ONLY**
 \`admin (rl|reload)\`: Reload commands from the config.
 \`admin (clb|clearlogbuffer)\`: Clear the log buffer (use when low on memory)
 \`admin (smb|setmaxbuffer)\`: Set the maximum number of log entries to store in memory. **This is not persistent.**
@@ -430,5 +441,5 @@ export const config: CommandConfig = {
     // format:
     //
     // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: { users: [] } // owner only
+    restrict: Permissions.BOT_ADMINISTRATOR
 };

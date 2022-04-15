@@ -20,6 +20,7 @@ import type Logger from '@lib/interfaces/Logger';
 import Command from './interfaces/commands/Command';
 import fs from 'fs';
 import { Client, Message, TextChannel } from 'discord.js';
+import { getPermissionsForUser } from './getPermissionsForUser';
 
 /**
  * CommandHandler handles the storage and effective management of commands
@@ -154,14 +155,18 @@ export default class CommandHandler {
         }
         if (
             commandConfig.restrict &&
-            (((commandConfig.restrict as { users: string[] }).users &&
-                !(commandConfig.restrict as { users: string[] }).users.includes(message.author.id) &&
-                message.author.id !== client.config.ownerID) ||
-                ((commandConfig.restrict as { guildAdmins: boolean }).guildAdmins &&
-                    !message.member!.permissionsIn(message.channel as TextChannel).has('ADMINISTRATOR')))
+            ((typeof commandConfig.restrict === 'number' && getPermissionsForUser(client, this.log, message) < commandConfig.restrict) ||
+                (commandConfig.restrict instanceof Array && !commandConfig.restrict.includes(message.author.id)))
         ) {
             // User isn't authorized; the user is either not whitelisted to use the command and/or they're not an owner.
-            this.log('i', `Command "${commandName}" is UNAUTHORIZED (for ${message.author.tag}), exiting handler.`);
+            this.log(
+                'i',
+                `Command "${commandName}" is UNAUTHORIZED (for ${message.author.tag}), got ${getPermissionsForUser(
+                    client,
+                    this.log,
+                    message
+                )}, wanted >= ${commandConfig.restrict}, exiting handler.`
+            );
             message.reply("You aren't authorized to do that!");
             return Promise.resolve();
         }

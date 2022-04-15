@@ -16,22 +16,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import CommandCategory from '@lib/interfaces/commands/CommandCategory';
-import { Permissions } from '@lib/Permissions';
+export enum Permissions {
+    /** Nothing special. This person is just a number. */
+    NONE,
 
-export default interface CommandConfig {
-    name: string;
-    description: string;
-    category: CommandCategory;
-    enabled: boolean;
-    aliases: string[];
-    usage: string;
+    /** MANAGE_MESSAGES in the channel. */
+    CHANNEL_MODERATOR,
 
-    /**
-     * Restrict takes a few possibilities. It may be a Permissions entry, or an array of
-     * user IDs.
-     *
-     * Permissions is the minimum level to execute.
-     */
-    restrict: Permissions | string[] | false;
+    /** BAN_MEMBERS in the guild. */
+    SERVER_MODERATOR,
+
+    /** ADMINISTRATOR in the guild. */
+    SERVER_ADMINISTRATOR,
+
+    /** Guild owner. */
+    SERVER_OWNER,
+
+    /** In the config.adminIDs list. */
+    BOT_ADMINISTRATOR,
+
+    /** The one and only config.ownerID. */
+    BOT_OWNER
 }

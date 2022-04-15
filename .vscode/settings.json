@@ -9,15 +9,25 @@
         "builtins",
         "clearlogbuffer",
         "erbose",
+        "furries",
         "fursonas",
+        "GUILDMESSAGES",
         "isnan",
+        "lowercased",
         "modespec",
         "mtext",
+        "onready",
         "ONSEND",
         "owos",
+        "PROTOBOT",
+        "ratelimit",
+        "Ratelimited",
         "readlog",
         "rror",
         "setmaxbuffer",
-        "uwus"
+        "setprefix",
+        "STARTSH",
+        "uwus",
+        "whomst"
     ]
 }

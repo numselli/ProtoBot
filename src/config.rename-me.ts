@@ -40,6 +40,7 @@ const config: Config = {
         owos: seconds(30),
         uwus: seconds(30)
     },
+    adminIDs: [],
     ownerID: 'PBCONF-DiscordUserID' // Your user ID
 };
 

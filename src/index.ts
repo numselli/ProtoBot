@@ -161,7 +161,7 @@ process.on('uncaughtException', async (error) => {
     log('e', 'Killing client...', true);
     client.destroy();
     log('e', 'Client killed.', true);
-    log('e', 'An uncaught exception occured!', true);
+    log('e', 'An uncaught exception occurred!', true);
     log('e', `Error thrown was:`, true);
     error.stack?.split('\n').forEach((item) => {
         log('e', `${item}`, true);

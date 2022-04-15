@@ -20,6 +20,7 @@
 import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
+import { Permissions } from '@lib/Permissions';
 
 // Main
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
@@ -46,5 +47,5 @@ export const config: CommandConfig = {
     // format:
     //
     // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: { guildAdmins: true }
+    restrict: Permissions.SERVER_ADMINISTRATOR
 };

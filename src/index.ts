@@ -103,17 +103,27 @@ client.on('messageCreate', async (message) => {
     });
     let msgIsCommand = false;
     let prefixLen = 0;
-    const prefix = client.guildData.get(message.guild!.id, 'prefix')!;
+    const prefix = client.guildData.get(message.guild!.id, 'prefix');
 
     if (message.content.toLowerCase().startsWith(prefix)) {
         msgIsCommand = true;
         prefixLen = prefix.length;
+    } else if (message.content.toLowerCase().startsWith(client.config.prefix)) {
+        msgIsCommand = true;
+        prefixLen = client.config.prefix.length;
+        log('i', 'emergency prefix override');
+        // FIXME: Runs on normal messages as well..
+        message.channel.send(
+            'WARNING: Emergency prefix override is enabled. The prefix for this server is actually `' +
+                prefix +
+                "`. Nag the developer to disable this if you don't like it."
+        );
     }
 
     // if it's a command, we handle it.
     if (msgIsCommand) {
         const args: string[] = message.content.slice(prefixLen).split(/ +/g);
-        const command = args.shift()?.toLowerCase() ?? '';
+        const command = args.shift()!.toLowerCase();
 
         try {
             await client.commands.run(command, args, message, client);

@@ -18,6 +18,6 @@
 
 import { LogMode } from '@root/log';
 
-type Logger = (mode: LogMode, message?: any, _bypassStackPrint?: boolean) => void;
+type Logger = (mode: LogMode, message?: unknown, _bypassStackPrint?: boolean) => void;
 
 export default Logger;

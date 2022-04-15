@@ -16,9 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default interface EmoteCounterData {
-    uwus: number;
-    owos: number;
-    tildes: number;
+import type { Client, User } from 'discord.js';
+import type { EmoteCounterType } from '@lib/interfaces/db/EmoteCounterData';
+
+export function formatRow(type: EmoteCounterType, index: number, user: User | null, client: Client): string {
+    const ranking = (index + 1).toString().padStart(2, ' ');
+    const count = user ? client.emoteCounterTrackers.get(user?.id, type) : 0;
+    return `${ranking} :: ${user ? `${user.tag} with ${count} ${type}` : '(none)'}`;
 }
-export type EmoteCounterType = keyof EmoteCounterData;

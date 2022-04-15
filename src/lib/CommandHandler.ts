@@ -92,7 +92,7 @@ export default class CommandHandler {
                 }
 
                 // The command data is loaded from the path.
-                let commandData = <Command>await import('../' + this.commandsFolder + path);
+                let commandData = (await import('../' + this.commandsFolder + path)) as Command;
                 // Because of the import() returning a null prototype, we need to do this to convert to Object.
                 commandData = { ...commandData };
                 const cmdName = path.replace('.js', '');
@@ -100,7 +100,7 @@ export default class CommandHandler {
                 this._commandConfigs.set(cmdName, commandData.config);
                 this._commandRunners.set(cmdName, commandData);
                 this._commandRefs.set(cmdName, cmdName);
-                ((commandData.config.aliases as string[]) ?? []).forEach((alias) => {
+                commandData.config.aliases.forEach((alias) => {
                     this._commandRefs.set(alias, cmdName);
                 });
                 this.log('i', `Finished loading command "${cmdName}"!`);
@@ -127,10 +127,9 @@ export default class CommandHandler {
         this.log('v', `Running command "${commandName}" for "${message.author.tag}" with args "${args.join(' ')}"!`);
         this.log(
             'v',
-            `Command found at: ${message.guild?.name ?? 'unknown'} (${message.guild?.id ?? 'unknown'}) => #${
-                // @ts-ignore
-                <string>message.channel?.name ?? '#unknown'
-            } (${message.channel?.id ?? 'unknown'}) => ${message.id}`
+            `Command found at: ${message.guild!.name} (${message.guild!.id}) => #${(message.channel as TextChannel).name} (${
+                message.channel.id
+            }) => ${message.id}`
         );
 
         this.log('v', 'Resolving alias...');
@@ -155,13 +154,13 @@ export default class CommandHandler {
         }
         if (
             commandConfig.restrict &&
-            (((<{ users: string[] }>commandConfig.restrict).users &&
-                !(<{ users: string[] }>commandConfig.restrict).users.includes(message.author.id) &&
+            (((commandConfig.restrict as { users: string[] }).users &&
+                !(commandConfig.restrict as { users: string[] }).users.includes(message.author.id) &&
                 message.author.id !== client.config.ownerID) ||
-                ((<{ guildAdmins: boolean }>commandConfig.restrict).guildAdmins &&
-                    message.member!.permissionsIn(message.channel as TextChannel).has('ADMINISTRATOR')))
+                ((commandConfig.restrict as { guildAdmins: boolean }).guildAdmins &&
+                    !message.member!.permissionsIn(message.channel as TextChannel).has('ADMINISTRATOR')))
         ) {
-            // User isn't authorised; the user is either not whitelisted to use the command and/or they're not an owner.
+            // User isn't authorized; the user is either not whitelisted to use the command and/or they're not an owner.
             this.log('i', `Command "${commandName}" is UNAUTHORIZED (for ${message.author.tag}), exiting handler.`);
             message.reply("You aren't authorized to do that!");
             return Promise.resolve();

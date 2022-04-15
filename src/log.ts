@@ -47,7 +47,7 @@ const logInitTime: number = Date.now();
 try {
     fs.readdirSync('../logs/');
 } catch (e) {
-    if ((<{ code: string }>e).code === 'ENOENT')
+    if ((e as { code: string }).code === 'ENOENT')
         try {
             fs.mkdirSync('../logs/');
         } catch (e2) {
@@ -119,9 +119,9 @@ function writeItem(mode: LogMode, message: string): void {
 // Main
 // Literal hell ensues below...
 export default function log(mode: 'CLOSE_STREAMS'): Promise<void>;
-export default function log(mode: LogMode, message: any, _bypassStackPrint?: boolean): void;
+export default function log(mode: LogMode, message: unknown, _bypassStackPrint?: boolean): void;
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function log(mode: LogMode | 'CLOSE_STREAMS', message?: any, _bypassStackPrint = false): void | Promise<void> {
+export default function log(mode: LogMode | 'CLOSE_STREAMS', message?: unknown, _bypassStackPrint = false): void | Promise<void> {
     if (mode === 'CLOSE_STREAMS')
         // Close all of the file streams
         return new Promise((resolve) => {
@@ -143,6 +143,7 @@ export default function log(mode: LogMode | 'CLOSE_STREAMS', message?: any, _byp
         let msg = '';
         const epoch = Date.now();
         const date = new Date(epoch);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let preparsedDate: any = date.toLocaleDateString('en-US', {
             weekday: 'short',
             year: 'numeric',
@@ -152,6 +153,7 @@ export default function log(mode: LogMode | 'CLOSE_STREAMS', message?: any, _byp
         preparsedDate = preparsedDate.split(', ');
         preparsedDate[1] = preparsedDate[1].split(' ');
         // I'm not even sure what locale this is, but it works.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let preparsedTime: any = date.toLocaleTimeString('it-IT');
         preparsedTime = preparsedTime.split(' ');
         preparsedTime[0] = preparsedTime[0].split(':');
@@ -194,7 +196,6 @@ export default function log(mode: LogMode | 'CLOSE_STREAMS', message?: any, _byp
         msg = `${brackets[0]}${parsedDate} ${parsedTime}${brackets[1]} ${msg}`;
 
         console.log(msg);
-        // @ts-ignore
         writeItem(mode, msg);
         buffer.push([epoch, mode, strip(msg)]);
         if (buffer.length > maxBufferSize) buffer.shift();

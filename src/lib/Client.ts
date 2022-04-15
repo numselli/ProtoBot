@@ -24,7 +24,7 @@ import EnmapVerbose from '@lib/EnmapVerbose';
 import type Logger from '@lib/interfaces/Logger';
 import CommandHandler from './CommandHandler';
 
-function makeVerboseFunction(name: string): (q: string) => void {
+function makeVerboseFunction(name: string): (_q: string) => void {
     return (q: string) => EnmapVerbose(name, q);
 }
 

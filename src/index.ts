@@ -102,27 +102,20 @@ client.on('messageCreate', async (message) => {
         hookData.run(client, message, log);
     });
     let msgIsCommand = false;
-    let prefixLen = 0;
-    const prefix = client.guildData.get(message.guild!.id, 'prefix');
+    const prefix = client.guildData.get(message.guild!.id, 'prefix')!;
+    const mlc = message.content.toLowerCase();
 
-    if (message.content.toLowerCase().startsWith(prefix)) {
+    if (mlc.startsWith(prefix)) msgIsCommand = true;
+    else if (mlc.startsWith(`<@${client.user!.id}>`) || mlc.startsWith(`<@!${client.user!.id}>`)) {
         msgIsCommand = true;
-        prefixLen = prefix.length;
-    } else if (message.content.toLowerCase().startsWith(client.config.prefix)) {
-        msgIsCommand = true;
-        prefixLen = client.config.prefix.length;
-        log('i', 'emergency prefix override');
-        // FIXME: Runs on normal messages as well..
-        message.channel.send(
-            'WARNING: Emergency prefix override is enabled. The prefix for this server is actually `' +
-                prefix +
-                "`. Nag the developer to disable this if you don't like it."
-        );
+        log('i', 'User used tag prefix');
     }
 
     // if it's a command, we handle it.
     if (msgIsCommand) {
-        const args: string[] = message.content.slice(prefixLen).split(/ +/g);
+        const msgarray = message.content.split(/ +/g);
+        msgarray.shift();
+        const args: string[] = msgarray;
         const command = args.shift()!.toLowerCase();
 
         try {

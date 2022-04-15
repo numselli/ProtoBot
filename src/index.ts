@@ -103,10 +103,10 @@ client.on('messageCreate', async (message) => {
     });
     let msgIsCommand = false;
     const prefix = client.guildData.get(message.guild!.id, 'prefix')!;
-    const mlc = message.content.toLowerCase();
+    const lowercasedMessageContent = message.content.toLowerCase();
 
-    if (mlc.startsWith(prefix)) msgIsCommand = true;
-    else if (mlc.startsWith(`<@${client.user!.id}>`) || mlc.startsWith(`<@!${client.user!.id}>`)) {
+    if (lowercasedMessageContent.startsWith(prefix)) msgIsCommand = true;
+    else if (lowercasedMessageContent.startsWith(`<@${client.user!.id}>`) || lowercasedMessageContent.startsWith(`<@!${client.user!.id}>`)) {
         msgIsCommand = true;
         log('i', `${message.author.tag} used mention-based prefix for command ${message.content}.`);
     }

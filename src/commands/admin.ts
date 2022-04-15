@@ -56,28 +56,6 @@ export async function run(client: Client, message: Message, args: string[], log:
         log('w', 'Goodbye!');
         log('w', 'Exiting with code 9 (RESTART)');
         process.exit(9);
-    } else if (args[0] === 'branch' || args[0] === 'checkout') {
-        if (!args[1]) {
-            message.reply('What branch did you want to switch to?');
-            return;
-        }
-
-        let embed = new MessageEmbed()
-            .setTitle('Branch Switch')
-            .setDescription(`Please wait.. Switching to \`${args[1]}\`...`)
-            .addField('Status', `\`$ git branch ${args[1]}\``);
-
-        const m = await message.reply({ embeds: [embed] });
-
-        exec(`git checkout ${args[1]}`, (error: ExecException | null, stdout: string, stderr: string) => {
-            embed = new MessageEmbed()
-                .setTitle(`Branch Switch [${stderr.startsWith('Switched') ? 'Complete' : 'Failed'}]`)
-                .setDescription(stderr.startsWith('Switched') ? `Switched to branch ${args[1]}` : 'Failed to switch to branch. (Does it exist?)');
-
-            if (stderr) embed.addField('Log', `\`\`\`\n${stderr ?? '<none>'}${stdout !== '' ? `\n${stdout}` : ''}\n\`\`\``);
-
-            m.edit({ embeds: [embed] });
-        });
     } else if (args[0] === 'update' || args[0] === 'up') {
         const embed = new MessageEmbed().setTitle('Update').setDescription('Updating the bot... This may take a while...');
 
@@ -416,7 +394,6 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
         message.reply(`Please specify a command to execute. Here are the available commands:
 \`admin help\`: Shows this message
 \`admin (re|restart)\`: Restarts the bot
-\`admin (checkout|branch)\`: Change the Git branch we are running from
 \`admin (up|update)\`: Run a software update.
 \`admin (e|eval)\`: Evaluates a code snippet. **BOT OWNER ONLY**
 \`admin (ex|exec)\`: Runs a Bash command. **BOT OWNER ONLY**

@@ -17,6 +17,7 @@
  */
 
 import CommandCategory from '@lib/interfaces/commands/CommandCategory';
+import { Permissions } from '@lib/Permissions';
 
 export default interface CommandConfig {
     name: string;
@@ -26,9 +27,11 @@ export default interface CommandConfig {
     aliases: string[];
     usage: string;
 
-    // To restrict the command, change the "false" to the following
-    // format:
-    //
-    // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false | { users: string[] };
+    /**
+     * Restrict takes a few possibilities. It may be a Permissions entry, or an array of
+     * user IDs.
+     *
+     * Permissions is the minimum level to execute.
+     */
+    restrict: Permissions | string[] | false;
 }

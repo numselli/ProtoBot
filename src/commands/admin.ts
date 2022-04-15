@@ -27,17 +27,12 @@ import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 // Hacky way to require()
 import { createRequire } from 'module';
+import { Permissions } from '@lib/Permissions';
+import { getPermissionsForUser } from '@lib/getPermissionsForUser';
 const require = createRequire(import.meta.url);
 
 // Main
 export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
-    // Safety check
-    if (message.author.id !== client.config.ownerID) {
-        log('e', `User ${message.author.tag} tried to use "admin", and the command filter didn't stop them!`);
-        message.reply("You don't have permission to do that!");
-        return;
-    }
-
     args[0] = args[0]?.toLowerCase();
 
     log('i', `Admin command executed by ${message.author.tag}: ${args[0]}`);
@@ -54,28 +49,6 @@ export async function run(client: Client, message: Message, args: string[], log:
         log('w', 'Goodbye!');
         log('w', 'Exiting with code 9 (RESTART)');
         process.exit(9);
-    } else if (args[0] === 'branch' || args[0] === 'checkout') {
-        if (!args[1]) {
-            message.reply('What branch did you want to switch to?');
-            return;
-        }
-
-        let embed = new MessageEmbed()
-            .setTitle('Branch Switch')
-            .setDescription(`Please wait.. Switching to \`${args[1]}\`...`)
-            .addField('Status', `\`$ git branch ${args[1]}\``);
-
-        const m = await message.reply({ embeds: [embed] });
-
-        exec(`git checkout ${args[1]}`, (error: ExecException | null, stdout: string, stderr: string) => {
-            embed = new MessageEmbed()
-                .setTitle(`Branch Switch [${stderr.startsWith('Switched') ? 'Complete' : 'Failed'}]`)
-                .setDescription(stderr.startsWith('Switched') ? `Switched to branch ${args[1]}` : 'Failed to switch to branch. (Does it exist?)');
-
-            if (stderr) embed.addField('Log', `\`\`\`\n${stderr ?? '<none>'}${stdout !== '' ? `\n${stdout}` : ''}\n\`\`\``);
-
-            m.edit({ embeds: [embed] });
-        });
     } else if (args[0] === 'update' || args[0] === 'up') {
         const embed = new MessageEmbed().setTitle('Update').setDescription('Updating the bot... This may take a while...');
 
@@ -111,6 +84,7 @@ export async function run(client: Client, message: Message, args: string[], log:
                                 l('e', `Failed to update: ${error4}`);
                                 m.edit(`Failed to update: ${error4}`);
                             } else {
+                                const prefix = client.guildData.get(message.guild!.id, 'prefix');
                                 l('i', 'Synced!');
                                 embed
                                     .addField(
@@ -120,7 +94,7 @@ export async function run(client: Client, message: Message, args: string[], log:
                                     .addField('Status', '**Complete.**')
                                     .addField(
                                         'Restart to apply changes',
-                                        `To apply the update, run \`${client.config.prefix}restart\`.\nYou may want to run \`${client.config.prefix}admin exec git stash apply\` to re-instate unsaved changes.`
+                                        `To apply the update, run \`${prefix}restart\`.\nYou may want to run \`${prefix}admin exec git stash apply\` to re-instate unsaved changes.`
                                     );
 
                                 m.edit({ embeds: [embed] });
@@ -133,6 +107,11 @@ export async function run(client: Client, message: Message, args: string[], log:
             }
         });
     } else if (args[0] === 'eval' || args[0] === 'e') {
+        if (getPermissionsForUser(client, log, message) < Permissions.BOT_OWNER) {
+            log('w', `User ${message.author.tag} tried to use "admin eval", but they don't have permission!`);
+            message.reply('Nah bro, that command is for the bot owner only!');
+        }
+
         args.shift();
         /**
          * Credit to WilsonTheWolf for some of this eval code!
@@ -156,7 +135,7 @@ export async function run(client: Client, message: Message, args: string[], log:
             if (typeof response !== 'string') response = require('util').inspect(response, { depth: 3 });
         } catch (err) {
             e = true;
-            response = (<Error>err).toString();
+            response = (err as Error).toString();
             const Linter = require('eslint').Linter;
             const linter = new Linter();
             const lint = linter.verify(code, {
@@ -164,7 +143,7 @@ export async function run(client: Client, message: Message, args: string[], log:
                 extends: 'eslint:recommended',
                 parserOptions: { ecmaVersion: 12 }
             });
-            const error = lint.find((e: any) => e.fatal);
+            const error = lint.find((e: { fatal: boolean }) => e.fatal);
             if (error) {
                 const line = code.split('\n')[error.line - 1];
                 const match = line.slice(error.column - 1).match(/\w+/i);
@@ -217,6 +196,10 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
             });
         }
     } else if (args[0] === 'exec' || args[0] === 'ex') {
+        if (getPermissionsForUser(client, log, message) < Permissions.BOT_OWNER) {
+            log('w', `User ${message.author.tag} tried to use "admin exec", but they don't have permission!`);
+            message.reply('Nah bro, that command is for the bot owner only!');
+        }
         args.shift();
 
         let silent = false;
@@ -404,10 +387,9 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
         message.reply(`Please specify a command to execute. Here are the available commands:
 \`admin help\`: Shows this message
 \`admin (re|restart)\`: Restarts the bot
-\`admin (checkout|branch)\`: Change the Git branch we are running from
 \`admin (up|update)\`: Run a software update.
-\`admin (e|eval)\`: Evaluates a code snippet.
-\`admin (ex|exec)\`: Runs a Bash command.
+\`admin (e|eval)\`: Evaluates a code snippet. **BOT OWNER ONLY**
+\`admin (ex|exec)\`: Runs a Bash command. **BOT OWNER ONLY**
 \`admin (rl|reload)\`: Reload commands from the config.
 \`admin (clb|clearlogbuffer)\`: Clear the log buffer (use when low on memory)
 \`admin (smb|setmaxbuffer)\`: Set the maximum number of log entries to store in memory. **This is not persistent.**
@@ -429,5 +411,5 @@ export const config: CommandConfig = {
     // format:
     //
     // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: { users: [] } // owner only
+    restrict: Permissions.BOT_ADMINISTRATOR
 };

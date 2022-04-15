@@ -16,9 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default interface EmoteCounterData {
-    uwus: number;
-    owos: number;
-    tildes: number;
+export default interface GuildData {
+    prefix: string;
 }
-export type EmoteCounterType = keyof EmoteCounterData;

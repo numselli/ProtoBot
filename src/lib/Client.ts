@@ -24,7 +24,7 @@ import EnmapVerbose from '@lib/EnmapVerbose';
 import type Logger from '@lib/interfaces/Logger';
 import CommandHandler from './CommandHandler';
 
-function makeVerboseFunction(name: string): (q: string) => void {
+function makeVerboseFunction(name: string): (_q: string) => void {
     return (q: string) => EnmapVerbose(name, q);
 }
 
@@ -42,13 +42,15 @@ export default class Client extends BaseClient {
             USER_CONFIGURATION: {},
             USER_STATISTICS: { hugs: 0, boops: 0, pats: 0 },
             COOLDOWNS: { owos: 0, uwus: 0, tildes: 0 },
-            EMOTE_TRACKER_COUNTERS: { owos: 0, uwus: 0, tildes: 0 }
+            EMOTE_TRACKER_COUNTERS: { owos: 0, uwus: 0, tildes: 0 },
+            GUILD_DATA: { prefix: config.prefix }
         };
         this.emoteCounterTrackers = new Enmap({ name: 'emoteCounterTrackers', verbose: makeVerboseFunction('emoteCounterTrackers') });
         this.userStatistics = new Enmap({ name: 'userStatistics', verbose: makeVerboseFunction('userStatistics') });
-        this.userConfiguration = new Enmap({ name: 'userStatistics', verbose: makeVerboseFunction('userConfiguration') });
+        this.userConfiguration = new Enmap({ name: 'userConfiguration', verbose: makeVerboseFunction('userConfiguration') });
         this.fursonas = new Enmap({ name: 'fursonas', verbose: makeVerboseFunction('fursonas') });
         this.restartData = new Enmap({ name: 'restartData', verbose: makeVerboseFunction('restartData') });
+        this.guildData = new Enmap({ name: 'guildData', verbose: makeVerboseFunction('guildData'), autoEnsure: this.defaults.GUILD_DATA });
 
         // In memory items
         this.hooks = new Enmap();

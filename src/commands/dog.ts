@@ -27,7 +27,7 @@ interface DogData {
 
 export async function run(client: Client, message: Message): Promise<void> {
     const msg = await message.reply('Fetching a dog picture...');
-    const body = <DogData>await fetch('https://some-random-api.ml/img/dog').then((res) => res.json());
+    const body = (await fetch('https://some-random-api.ml/img/dog').then((res) => res.json())) as DogData;
     const embed = new MessageEmbed().setTitle(`Dog for ${message.author.username}`).setImage(body.link).setTimestamp(Date.now()).setColor('RANDOM');
     msg.edit({ embeds: [embed] });
 }

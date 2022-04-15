@@ -51,8 +51,7 @@ export async function run(client: Client, message: Message, args: string[]): Pro
         '*boops your nose*'
     ];
     const msg: string = uwuify.uwuifySentence(args.join(' '));
-    // @ts-ignore
-    message.reply(`${intense ? msg.replace(/u/gi, 'UwU').replace(/o/gi, 'OwO') : msg}`, { split: { prepend: '...', append: '...' } });
+    message.channel.send(intense ? msg.replace(/u/gi, 'UwU').replace(/o/gi, 'OwO') : msg.substring(0, 2000));
 }
 
 // Config

@@ -18,34 +18,34 @@
 
 // Modules
 import type { Client, Message } from 'discord.js';
+import type Logger from '@lib/interfaces/Logger';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
-
-function escapeMarkdown(text: string) {
-    const unescaped = text.replace(/\\(\*|_|`|~|\\)/g, '$1'); // unescape any "backslashed" character
-    const escaped = unescaped.replace(/(\*|_|`|~|\\)/g, '\\$1'); // escape *, _, `, ~, \
-    return escaped;
-}
+import { Permissions } from '@lib/Permissions';
 
 // Main
-export async function run(client: Client, message: Message): Promise<void> {
-    const messages = await message.channel.messages.fetch({ limit: 2 });
+export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
+    if (!args[0]) {
+        log('i', 'User requested to see the prefix');
+        message.reply("Your guild's prefix is: " + client.guildData.get(message.guild!.id, 'prefix'));
+        return;
+    }
 
-    const m: Message = messages.last() as Message;
-    message.reply(`Content of message ID \`${m.id}\` in channel <#${m.channel.id}>:\n\n${escapeMarkdown(m.content)}`);
+    client.guildData.set(message.guild!.id, args[0], 'prefix');
+    message.reply('I have set your guild prefix to ' + args[0]);
 }
 
 // Config
 export const config: CommandConfig = {
-    name: 'source',
-    category: 'utility',
-    description: 'Gets the source of the last message',
-    usage: '',
+    name: 'setprefix',
+    category: 'other',
+    description: "Set the guild's prefix",
+    usage: '<prefix>',
     enabled: true,
-    aliases: ['src'],
+    aliases: [],
 
     // To restrict the command, change the "false" to the following
     // format:
     //
     // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false
+    restrict: Permissions.SERVER_ADMINISTRATOR
 };

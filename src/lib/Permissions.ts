@@ -16,9 +16,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default interface EmoteCounterData {
-    uwus: number;
-    owos: number;
-    tildes: number;
+export enum Permissions {
+    /** Nothing special. This person is just a number. */
+    NONE,
+
+    /** MANAGE_MESSAGES in the channel. */
+    CHANNEL_MODERATOR,
+
+    /** BAN_MEMBERS in the guild. */
+    SERVER_MODERATOR,
+
+    /** ADMINISTRATOR in the guild. */
+    SERVER_ADMINISTRATOR,
+
+    /** Guild owner. */
+    SERVER_OWNER,
+
+    /** In the config.adminIDs list. */
+    BOT_ADMINISTRATOR,
+
+    /** The one and only config.ownerID. */
+    BOT_OWNER
 }
-export type EmoteCounterType = keyof EmoteCounterData;

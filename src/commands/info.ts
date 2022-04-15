@@ -24,15 +24,16 @@ import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 // Main
 function fireStats(userID: string, message: Message, client: Client): void {
-    const uData: any = client.userStatistics.get(userID);
+    const uData = client.userStatistics.get(userID)!;
+    const ETD = client.emoteCounterTrackers.get(userID)!;
     const embed = new MessageEmbed()
         .setTitle(`User info for ${userID}`)
-        .addField('Hugs', (uData.hugs ?? 0).toString())
-        .addField('Boops', (uData.boops ?? 0).toString())
-        .addField('Pats', (uData.pats ?? 0).toString())
-        .addField('uwus', (client.emoteCounterTrackers.get(userID, 'uwus') ?? 0).toString())
-        .addField('owos', (client.emoteCounterTrackers.get(userID, 'owos') ?? 0).toString())
-        .addField('Tildes', (client.emoteCounterTrackers.get(userID, 'tildes') ?? 0).toString());
+        .addField('Hugs', uData.hugs.toString())
+        .addField('Boops', uData.boops.toString())
+        .addField('Pats', uData.pats.toString())
+        .addField('uwus', ETD.uwus.toString())
+        .addField('owos', ETD.owos.toString())
+        .addField('Tildes', ETD.tildes.toString());
     message.reply({ embeds: [embed] });
 }
 
@@ -44,7 +45,6 @@ export async function run(client: Client, message: Message, args: string[], log:
             .fetch(userID)
             .then((user) => {
                 client.userStatistics.ensure(user.id, client.defaults.USER_STATISTICS);
-                // @ts-ignore
                 fireStats(userID, message, client);
             })
             .catch(() => {

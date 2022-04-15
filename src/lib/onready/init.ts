@@ -49,7 +49,7 @@ export default function init(client: Client, log: Logger): void {
 
     // A lot of chalk prefixes to show the counts. A better way to handle this?
     // Whoever wrote this (myself) needs some mental help.
-    log('i', `Username: ${chalk.red(client.user?.tag) ?? '(error: client.user is undefined)'}`);
+    log('i', `Username: ${chalk.red(client.user!.tag)}`);
     log('i', `In ${chalk.red(client.guilds.cache.size)} guilds!`);
     log('i', `With ${chalk.red(client.channels.cache.size)} channels!`);
     log('i', `Total ${chalk.red(userTotal)} members, excluding myself!`);

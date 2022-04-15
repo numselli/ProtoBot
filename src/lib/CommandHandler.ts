@@ -19,7 +19,8 @@
 import type Logger from '@lib/interfaces/Logger';
 import Command from './interfaces/commands/Command';
 import fs from 'fs';
-import { Client, Message } from 'discord.js';
+import { Client, Message, TextChannel } from 'discord.js';
+import { getPermissionsForUser } from './getPermissionsForUser';
 
 /**
  * CommandHandler handles the storage and effective management of commands
@@ -92,7 +93,7 @@ export default class CommandHandler {
                 }
 
                 // The command data is loaded from the path.
-                let commandData = <Command>await import('../' + this.commandsFolder + path);
+                let commandData = (await import('../' + this.commandsFolder + path)) as Command;
                 // Because of the import() returning a null prototype, we need to do this to convert to Object.
                 commandData = { ...commandData };
                 const cmdName = path.replace('.js', '');
@@ -100,7 +101,7 @@ export default class CommandHandler {
                 this._commandConfigs.set(cmdName, commandData.config);
                 this._commandRunners.set(cmdName, commandData);
                 this._commandRefs.set(cmdName, cmdName);
-                ((commandData.config.aliases as string[]) ?? []).forEach((alias) => {
+                commandData.config.aliases.forEach((alias) => {
                     this._commandRefs.set(alias, cmdName);
                 });
                 this.log('i', `Finished loading command "${cmdName}"!`);
@@ -127,10 +128,9 @@ export default class CommandHandler {
         this.log('v', `Running command "${commandName}" for "${message.author.tag}" with args "${args.join(' ')}"!`);
         this.log(
             'v',
-            `Command found at: ${message.guild?.name ?? 'unknown'} (${message.guild?.id ?? 'unknown'}) => #${
-                // @ts-ignore
-                <string>message.channel?.name ?? '#unknown'
-            } (${message.channel?.id ?? 'unknown'}) => ${message.id}`
+            `Command found at: ${message.guild!.name} (${message.guild!.id}) => #${(message.channel as TextChannel).name} (${
+                message.channel.id
+            }) => ${message.id}`
         );
 
         this.log('v', 'Resolving alias...');
@@ -155,12 +155,18 @@ export default class CommandHandler {
         }
         if (
             commandConfig.restrict &&
-            commandConfig.restrict.users &&
-            !commandConfig.restrict.users.includes(message.author.id) &&
-            message.author.id !== client.config.ownerID
+            ((typeof commandConfig.restrict === 'number' && getPermissionsForUser(client, this.log, message) < commandConfig.restrict) ||
+                (commandConfig.restrict instanceof Array && !commandConfig.restrict.includes(message.author.id)))
         ) {
-            // User isn't authorised; the user is either not whitelisted to use the command and/or they're not an owner.
-            this.log('i', `Command "${commandName}" is UNAUTHORIZED (for ${message.author.tag}), exiting handler.`);
+            // User isn't authorized; the user is either not whitelisted to use the command and/or they're not an owner.
+            this.log(
+                'i',
+                `Command "${commandName}" is UNAUTHORIZED (for ${message.author.tag}), got ${getPermissionsForUser(
+                    client,
+                    this.log,
+                    message
+                )}, wanted >= ${commandConfig.restrict}, exiting handler.`
+            );
             message.reply("You aren't authorized to do that!");
             return Promise.resolve();
         }

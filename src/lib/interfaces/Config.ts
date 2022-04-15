@@ -23,5 +23,6 @@ export default interface Config {
     dirs: { commands: string; hooks: string };
     prefix: string;
     cooldowns: { [key in keyof Cooldowns]: number /* (ms) */ };
+    adminIDs: string[];
     ownerID: string;
 }

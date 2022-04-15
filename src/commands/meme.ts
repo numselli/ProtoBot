@@ -21,7 +21,7 @@ import { Client, Message, MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
-interface MemeData {
+interface EpicMemeData {
     postLink: string;
     title: string;
     url: string;
@@ -29,7 +29,7 @@ interface MemeData {
 }
 
 export async function run(client: Client, message: Message): Promise<void> {
-    const body = <MemeData>await fetch('https://meme-api.herokuapp.com/gimme').then((res) => res.json());
+    const body = (await fetch('https://meme-api.herokuapp.com/gimme').then((res) => res.json())) as EpicMemeData;
     const embed = new MessageEmbed()
         .setColor('RANDOM')
         .setTitle(body.title)

@@ -35,6 +35,7 @@ import UserStats from '@lib/interfaces/db/UserStats';
 import CommandHandler from '@lib/CommandHandler';
 import PublicConfig from '@lib/interfaces/PublicConfig';
 import EmoteCounterData from '@lib/interfaces/db/EmoteCounterData';
+import GuildData from '@lib/interfaces/db/guildData';
 
 // Discord.js
 declare module 'discord.js' {
@@ -46,6 +47,7 @@ declare module 'discord.js' {
             USER_STATISTICS: UserStats;
             COOLDOWNS: { owos: number; uwus: number; tildes: number };
             EMOTE_TRACKER_COUNTERS: EmoteCounterData;
+            GUILD_DATA: GuildData;
         };
         cooldowns: Enmap<string, Cooldowns>;
         emoteCounterTrackers: Enmap<string, EmoteCounterData>;
@@ -54,9 +56,17 @@ declare module 'discord.js' {
         markovMessages: Enmap<string, MarkovData>; // NOTE: remove markovs in the future perhaps?
         fursonas: Enmap<string, Fursona>;
         restartData: Enmap<string, unknown>;
+        guildData: Enmap<string, GuildData>;
 
         // In memory
         commands: CommandHandler;
         hooks: Enmap<string, Hook>;
+    }
+}
+
+// FIXME: Until enmap is fixed
+declare module 'enmap' {
+    export interface EnmapOptions {
+        autoEnsure?: unknown;
     }
 }

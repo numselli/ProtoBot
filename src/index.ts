@@ -103,15 +103,23 @@ client.on('messageCreate', async (message) => {
     });
     let msgIsCommand = false;
     let prefixLen = 0;
-    if (message.content.toLowerCase().startsWith(client.config.prefix)) {
+    const prefix = client.guildData.get(message.guild!.id, 'prefix')!;
+    const lowercasedMessageContent = message.content.toLowerCase();
+
+    if (lowercasedMessageContent.startsWith(prefix)) {
+        prefixLen = prefix.length;
         msgIsCommand = true;
-        prefixLen = client.config.prefix.length;
+    } else if (lowercasedMessageContent.startsWith(`<@${client.user!.id}>`) || lowercasedMessageContent.startsWith(`<@!${client.user!.id}>`)) {
+        prefixLen = client.user!.id.length + (lowercasedMessageContent.startsWith('<@!') ? 4 : 3);
+        if (lowercasedMessageContent.charAt(prefixLen) === ' ') prefixLen++;
+        msgIsCommand = true;
+        log('i', `${message.author.tag} used mention-based prefix for command ${message.content}.`);
     }
 
     // if it's a command, we handle it.
     if (msgIsCommand) {
         const args: string[] = message.content.slice(prefixLen).split(/ +/g);
-        const command = args.shift()?.toLowerCase() ?? '';
+        const command = args.shift()!.toLowerCase();
 
         try {
             await client.commands.run(command, args, message, client);
@@ -153,7 +161,7 @@ process.on('uncaughtException', async (error) => {
     log('e', 'Killing client...', true);
     client.destroy();
     log('e', 'Client killed.', true);
-    log('e', 'An uncaught exception occured!', true);
+    log('e', 'An uncaught exception occurred!', true);
     log('e', `Error thrown was:`, true);
     error.stack?.split('\n').forEach((item) => {
         log('e', `${item}`, true);

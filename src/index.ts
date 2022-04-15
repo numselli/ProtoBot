@@ -103,21 +103,17 @@ client.on('messageCreate', async (message) => {
     });
     let msgIsCommand = false;
     let prefixLen = 0;
-    const prefix = client.guildData.get(message.guild!.id, 'prefix');
+    const prefix = client.guildData.get(message.guild!.id, 'prefix')!;
+    const lowercasedMessageContent = message.content.toLowerCase();
 
-    if (message.content.toLowerCase().startsWith(prefix)) {
-        msgIsCommand = true;
+    if (lowercasedMessageContent.startsWith(prefix)) {
         prefixLen = prefix.length;
-    } else if (message.content.toLowerCase().startsWith(client.config.prefix)) {
         msgIsCommand = true;
-        prefixLen = client.config.prefix.length;
-        log('i', 'emergency prefix override');
-        // FIXME: Runs on normal messages as well..
-        message.channel.send(
-            'WARNING: Emergency prefix override is enabled. The prefix for this server is actually `' +
-                prefix +
-                "`. Nag the developer to disable this if you don't like it."
-        );
+    } else if (lowercasedMessageContent.startsWith(`<@${client.user!.id}>`) || lowercasedMessageContent.startsWith(`<@!${client.user!.id}>`)) {
+        prefixLen = client.user!.id.length + (lowercasedMessageContent.startsWith('<@!') ? 4 : 3);
+        if (lowercasedMessageContent.charAt(prefixLen) === ' ') prefixLen++;
+        msgIsCommand = true;
+        log('i', `${message.author.tag} used mention-based prefix for command ${message.content}.`);
     }
 
     // if it's a command, we handle it.

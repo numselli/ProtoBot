@@ -103,7 +103,7 @@ client.on('messageCreate', async (message) => {
     });
     let msgIsCommand = false;
     let prefixLen = 0;
-    const prefix = client.guildData.get(message.guild!.id, 'prefix')!;
+    const prefix = client.guildData.get(message.guild!.id, 'prefix');
 
     if (message.content.toLowerCase().startsWith(prefix)) {
         msgIsCommand = true;
@@ -123,7 +123,7 @@ client.on('messageCreate', async (message) => {
     // if it's a command, we handle it.
     if (msgIsCommand) {
         const args: string[] = message.content.slice(prefixLen).split(/ +/g);
-        const command = args.shift()?.toLowerCase() ?? '';
+        const command = args.shift()!.toLowerCase();
 
         try {
             await client.commands.run(command, args, message, client);

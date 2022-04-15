@@ -20,7 +20,7 @@ import chalk from 'chalk';
 import log, { LogMode } from '@root/log';
 import bytes from 'bytes';
 
-function l(mode: LogMode, message: any) {
+function l(mode: LogMode, message: unknown) {
     log(mode, `${chalk.blue('[')}${chalk.blue.bold('MemStat')}${chalk.blue(']')} ${message}`);
 }
 

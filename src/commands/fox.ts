@@ -28,7 +28,7 @@ interface FoxData {
 
 export async function run(client: Client, message: Message): Promise<void> {
     const msg = await message.reply('Fetching a fox picture...');
-    const body = <FoxData>await fetch('https://randomfox.ca/floof/').then((res) => res.json());
+    const body = (await fetch('https://randomfox.ca/floof/').then((res) => res.json())) as FoxData;
     const embed = new MessageEmbed()
         .setTitle(`Fox for ${message.author.username}`)
         .setImage(body.image)

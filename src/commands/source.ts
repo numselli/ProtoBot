@@ -17,7 +17,7 @@
  */
 
 // Modules
-import type { Client, Message, Collection } from 'discord.js';
+import type { Client, Message } from 'discord.js';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
 function escapeMarkdown(text: string) {
@@ -28,7 +28,7 @@ function escapeMarkdown(text: string) {
 
 // Main
 export async function run(client: Client, message: Message): Promise<void> {
-    const messages = (await message.channel.messages.fetch({ limit: 2 })) as Collection<string, Message>;
+    const messages = await message.channel.messages.fetch({ limit: 2 });
 
     const m: Message = messages.last() as Message;
     message.reply(`Content of message ID \`${m.id}\` in channel <#${m.channel.id}>:\n\n${escapeMarkdown(m.content)}`);

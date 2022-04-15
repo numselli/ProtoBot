@@ -27,7 +27,7 @@ interface CatData {
 
 export async function run(client: Client, message: Message): Promise<void> {
     const msg = await message.reply('Fetching a cat picture...');
-    const body = <CatData>await fetch('https://some-random-api.ml/img/cat').then((res) => res.json());
+    const body = (await fetch('https://some-random-api.ml/img/cat').then((res) => res.json())) as CatData;
     const embed = new MessageEmbed().setTitle(`Cat for ${message.author.username}`).setImage(body.link).setTimestamp(Date.now()).setColor('RANDOM');
     msg.edit({ embeds: [embed] });
 }

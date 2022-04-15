@@ -26,12 +26,12 @@ export default async function handleRestart(client: Client, log: Logger): Promis
     log('i', 'Checking if we were restarted...');
     if (client.restartData.get('wasRestarted')) {
         log('i', 'We have restarted. Sending message...');
-        const guild = client.guilds.cache.get(<string>client.restartData.get('serverId')); // Fetch the server we restarted in...
-        const channel = <discord.TextChannel>await guild?.channels.cache.get(<string>client.restartData.get('channelId')); // ...and get the channel...
-        const message = await channel?.messages.fetch(<string>client.restartData.get('messageId')); // ...and finally the message.
+        const guild = client.guilds.cache.get(client.restartData.get('serverId') as string); // Fetch the server we restarted in...
+        const channel = (await guild?.channels.cache.get(client.restartData.get('channelId') as string)) as discord.TextChannel; // ...and get the channel...
+        const message = await channel?.messages.fetch(client.restartData.get('messageId') as string); // ...and finally the message.
         await message.reply(
-            `Done! Restart complete in ${Date.now() - <number>client.restartData.get('time')}ms (${
-                (Date.now() - <number>client.restartData.get('time')) / 1000
+            `Done! Restart complete in ${Date.now() - (client.restartData.get('time') as number)}ms (${
+                (Date.now() - (client.restartData.get('time') as number)) / 1000
             } seconds).`
         );
         client.restartData.set('wasRestarted', false);

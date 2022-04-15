@@ -97,8 +97,8 @@ export async function run(client: Client, message: Message, args: string[]): Pro
                 true
             );
         });
-    } else if (client.commands.__readRefs__().get(args[0].toLowerCase()) ?? '') {
-        const command = client.commands.__readConfiguration__().get(client.commands.__readRefs__().get(args[0].toLowerCase()) ?? '') as CommandConfig;
+    } else if (client.commands.__readRefs__().get(args[0].toLowerCase())) {
+        const command = client.commands.__readConfiguration__().get(client.commands.__readRefs__().get(args[0].toLowerCase())!) as CommandConfig;
         const embed = new discord.MessageEmbed()
             .setTitle('ProtoBot Help')
             .setAuthor({ name: 'ProtoBot' })

@@ -157,7 +157,7 @@ export async function run(client: Client, message: Message, args: string[], log:
             if (typeof response !== 'string') response = require('util').inspect(response, { depth: 3 });
         } catch (err) {
             e = true;
-            response = (<Error>err).toString();
+            response = (err as Error).toString();
             const Linter = require('eslint').Linter;
             const linter = new Linter();
             const lint = linter.verify(code, {
@@ -165,7 +165,7 @@ export async function run(client: Client, message: Message, args: string[], log:
                 extends: 'eslint:recommended',
                 parserOptions: { ecmaVersion: 12 }
             });
-            const error = lint.find((e: any) => e.fatal);
+            const error = lint.find((e: { fatal: boolean }) => e.fatal);
             if (error) {
                 const line = code.split('\n')[error.line - 1];
                 const match = line.slice(error.column - 1).match(/\w+/i);
@@ -351,7 +351,7 @@ ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
             message.reply('No TYPE specified, defaulting to `i`.');
             mode = 'i';
         }
-        switch ((args[1] ?? '').toLowerCase()) {
+        switch (args[1].toLowerCase()) {
             case 'v':
             case 'verbose':
                 mode = 'v';

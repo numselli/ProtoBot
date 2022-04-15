@@ -25,7 +25,7 @@ import { formatRow } from '@lib/utils/formatTrackerRow';
 const CUTOFF = 10;
 
 export async function run(client: Client, message: Message): Promise<void> {
-    const sorted = client.emoteCounterTrackers.map((values, id) => [id, values.uwus] as [string, number]).sort((a, b) => b[1] - a[1]);
+    const sorted = client.emoteCounterTrackers.map((values, id) => [id, values.uwus] as const).sort((a, b) => b[1] - a[1]);
 
     // Whether or not the user of the command has placed in the top of the
     // leaderboard.

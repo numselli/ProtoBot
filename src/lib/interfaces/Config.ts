@@ -24,5 +24,6 @@ export default interface Config {
     prefix: string;
     cooldowns: { [key in keyof Cooldowns]: number /* (ms) */ };
     adminIDs: string[];
+    superAdminIDs: string[];
     ownerID: string;
 }

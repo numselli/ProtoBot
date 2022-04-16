@@ -122,7 +122,10 @@ export default class FursonaCommand extends Command {
 
                 // They have one!
                 log('i', 'Displaying fursona!');
-                const embed = new MessageEmbed().setTitle('Fursona').setDescription('Here is your current fursona information.');
+                const embed = new MessageEmbed()
+                    .setTitle('Fursona')
+                    .setDescription('Here is your current fursona information.')
+                    .setColor(client.publicConfig.colors.color4);
 
                 embed.addField('Name', fursona.name || '<unset>', true);
                 embed.addField('Bio', fursona.bio || '<unset>', true);

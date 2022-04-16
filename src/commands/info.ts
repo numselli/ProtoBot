@@ -31,7 +31,8 @@ function fireStats(userID: string, message: Message, client: Client): void {
         .addField('Pats', uData.pats.toString())
         .addField('uwus', ETD.uwus.toString())
         .addField('owos', ETD.owos.toString())
-        .addField('Tildes', ETD.tildes.toString());
+        .addField('Tildes', ETD.tildes.toString())
+        .setColor(client.publicConfig.colors.color1);
     message.reply({ embeds: [embed] });
 }
 

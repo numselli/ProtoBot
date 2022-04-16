@@ -63,7 +63,8 @@ export default class HelpCommand extends Command {
                 .setAuthor({ name: 'ProtoBot' })
                 .setTimestamp()
                 .setFooter({ text: `Requested by ${message.author.tag}` })
-                .setDescription('No category was specified. Use `help [category]` to see the commands in a category. Here is a list of categories:');
+                .setDescription('No category was specified. Use `help [category]` to see the commands in a category. Here is a list of categories:')
+                .setColor(client.publicConfig.colors.color5);
 
             // Add each category to the embed
             commandsInCategory.forEach((category) => {
@@ -80,7 +81,8 @@ export default class HelpCommand extends Command {
                 .setAuthor({ name: 'ProtoBot' })
                 .setTimestamp()
                 .setFooter({ text: `Requested by ${message.author.tag}` })
-                .setDescription(`Here are the commands in the category *${args[0].toLowerCase()}*:`);
+                .setDescription(`Here are the commands in the category *${args[0].toLowerCase()}*:`)
+                .setColor(client.publicConfig.colors.color5);
 
             // Add each command to the embed
             commandsInCategory.forEach((category) => {
@@ -103,7 +105,8 @@ export default class HelpCommand extends Command {
                 .setAuthor({ name: 'ProtoBot' })
                 .setTimestamp()
                 .setFooter({ text: `Requested by ${message.author.tag}` })
-                .setDescription('Here are all of my commands!');
+                .setDescription('Here are all of my commands!')
+                .setColor(client.publicConfig.colors.color5);
 
             client.commands.__readConfiguration__().forEach((command) => {
                 embed.addField(

@@ -16,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Modules
-import type { Client, Message } from 'discord.js';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
+import Command from '@lib/structures/Command';
+import type { Message } from 'discord.js';
 
 function escapeMarkdown(text: string) {
     const unescaped = text.replace(/\\(\*|_|`|~|\\)/g, '$1'); // unescape any "backslashed" character
@@ -26,26 +26,28 @@ function escapeMarkdown(text: string) {
     return escaped;
 }
 
-// Main
-export async function run(client: Client, message: Message): Promise<void> {
-    const messages = await message.channel.messages.fetch({ limit: 2 });
+export default class SourceCommand extends Command {
+    public getConfig(): CommandConfig {
+        return {
+            name: 'source',
+            category: 'utility',
+            description: 'Gets the source of the last message',
+            usage: '',
+            enabled: true,
+            aliases: ['src'],
 
-    const m: Message = messages.last() as Message;
-    message.reply(`Content of message ID \`${m.id}\` in channel <#${m.channel.id}>:\n\n${escapeMarkdown(m.content)}`);
+            // To restrict the command, change the "false" to the following
+            // format:
+            //
+            // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
+            restrict: false
+        };
+    }
+
+    public async run(message: Message<boolean>): Promise<void> {
+        const messages = await message.channel.messages.fetch({ limit: 2 });
+
+        const m: Message = messages.last() as Message;
+        message.reply(`Content of message ID \`${m.id}\` in channel <#${m.channel.id}>:\n\n${escapeMarkdown(m.content)}`);
+    }
 }
-
-// Config
-export const config: CommandConfig = {
-    name: 'source',
-    category: 'utility',
-    description: 'Gets the source of the last message',
-    usage: '',
-    enabled: true,
-    aliases: ['src'],
-
-    // To restrict the command, change the "false" to the following
-    // format:
-    //
-    // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false
-};

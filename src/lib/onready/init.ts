@@ -17,8 +17,8 @@
  */
 
 import Logger from '@lib/interfaces/Logger';
-import { Client } from 'discord.js';
 import chalk from 'chalk';
+import { Client } from 'discord.js';
 
 export default function init(client: Client, log: Logger): void {
     // Count the total user counts up. We do this by getting the total user count

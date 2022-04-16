@@ -17,10 +17,12 @@
  */
 
 import type Logger from '@lib/interfaces/Logger';
-import Command from './interfaces/commands/Command';
-import fs from 'fs';
+import Command from '@lib/structures/Command';
 import { Client, Message, TextChannel } from 'discord.js';
+import fs from 'fs';
+
 import { getPermissionsForUser } from './getPermissionsForUser';
+import CommandConfig from './interfaces/commands/CommandConfig';
 
 /**
  * CommandHandler handles the storage and effective management of commands
@@ -31,9 +33,10 @@ export default class CommandHandler {
     private log: Logger;
 
     /** The internal storage facility for the commands. */
-    private _commandRunners: Map<string, Command>;
-    private _commandConfigs: Map<string, Command['config']>;
+    private _commandClassInstances: Map<string, Command>;
+    private _commandConfigs: Map<string, CommandConfig>;
     private _commandRefs: Map<string, string>;
+    private client: Client;
 
     /** The commands folder. */
     private readonly commandsFolder: string;
@@ -43,12 +46,13 @@ export default class CommandHandler {
      * @param logger The logger to use. This is a global logger, so it is not dependent on the client.
      * @param commandsFolder The folder that commands are located in.
      */
-    constructor(logger: Logger, commandsFolder: string) {
+    public constructor(logger: Logger, commandsFolder: string, client: Client) {
         this.log = logger;
-        this._commandRunners = new Map();
+        this._commandClassInstances = new Map();
         this._commandConfigs = new Map();
         this._commandRefs = new Map();
         this.commandsFolder = commandsFolder;
+        this.client = client;
 
         // Common issue in the folder name.
         if (!this.commandsFolder.endsWith('/')) this.commandsFolder += '/';
@@ -57,7 +61,7 @@ export default class CommandHandler {
     }
 
     private _resetStore(): void {
-        this._commandRunners.clear();
+        this._commandClassInstances.clear();
         this._commandConfigs.clear();
         this._commandRefs.clear();
     }
@@ -73,7 +77,7 @@ export default class CommandHandler {
         // Read the root directory of the commands.
         let files: string[] = [];
         try {
-            files = fs.readdirSync(this.commandsFolder);
+            files = fs.readdirSync(this.commandsFolder).filter((path) => path.endsWith('.js'));
         } catch (e) {
             this.log('e', `Failed to read directory ${this.commandsFolder}:`);
             this.log('e', e);
@@ -81,39 +85,33 @@ export default class CommandHandler {
 
         // Iterate over the files and load them.
         files.forEach(async (path) => {
-            // Ensure that what we are reading is a core JavaScript compiled file.
-            if (path.endsWith('.js')) {
-                // Check that this file does not contain capitalized letters in it's names.
-                // This is a violation. Logged as: 'CommandCasedWarning'
-                if (path.replace('.js', '').toLowerCase() !== path.replace('.js', '')) {
-                    this.log('w', `CommandCasedWarning: Command at ${path} has a name with a capital letter!`);
-                    this.log('w', `Will be loaded as "${path.replace('.js', '').toLowerCase()}"!`);
-                    // Normalize the path. This should never be needed.
-                    path = path.toLowerCase();
-                }
+            if (path.replace('.js', '').toLowerCase() !== path.replace('.js', '')) {
+                this.log('w', `CommandCasedWarning: Command at ${path} has a name with a capital letter!`);
+                this.log('w', `Will be loaded as "${path.replace('.js', '').toLowerCase()}"!`);
+                // Normalize the path. This should never be needed.
+                path = path.toLowerCase();
+            }
 
-                // The command data is loaded from the path.
-                let commandData = (await import('../' + this.commandsFolder + path)) as Command;
-                // Because of the import() returning a null prototype, we need to do this to convert to Object.
-                commandData = { ...commandData };
-                const cmdName = path.replace('.js', '');
-                this.log('v', `Loading command "${cmdName}"...`);
-                this._commandConfigs.set(cmdName, commandData.config);
-                this._commandRunners.set(cmdName, commandData);
-                this._commandRefs.set(cmdName, cmdName);
-                commandData.config.aliases.forEach((alias) => {
-                    this._commandRefs.set(alias, cmdName);
-                });
-                this.log('i', `Finished loading command "${cmdName}"!`);
-            } else if (path.endsWith('.map')) return;
-            // Ignore source maps
-            // THIS IS A VIOLATION AND SHOULD NEVER THROW; We will not kill the process however.
-            else this.log('w', `File in commands dir with unknown extension: ${path}`);
+            // The command data is loaded from the path.
+            this.log('v', `Loading command "${path.replace('.js', '')}"...`);
+            const CommandClass = (await import('../' + this.commandsFolder + path)).default as Command;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            const command = new CommandClass(this.client, this.log);
+            const cmdName = path.replace('.js', '');
+            const cmdConfig = command.getConfig();
+            this._commandConfigs.set(cmdName, cmdConfig);
+            this._commandClassInstances.set(cmdName, command);
+            this._commandRefs.set(cmdName, cmdName);
+            cmdConfig.aliases.forEach((alias: string) => {
+                this._commandRefs.set(alias, cmdName);
+            });
+            this.log('i', `Finished loading command "${cmdName}"!`);
         });
     }
 
     /** JUST FOR HELP! */
-    public __readConfiguration__(): Map<string, Command['config']> {
+    public __readConfiguration__(): Map<string, CommandConfig> {
         return this._commandConfigs;
     }
     public __readRefs__(): Map<string, string> {
@@ -137,14 +135,14 @@ export default class CommandHandler {
         commandName = this._commandRefs.get(commandName) ?? '';
         this.log('v', `Alias resolved to "${commandName}"!`);
 
-        const commandData: Command | undefined = this._commandRunners.get(commandName);
+        const commandData: Command | undefined = this._commandClassInstances.get(commandName);
         if (!commandData) {
             // exit
             this.log('i', `Failed to find command "${commandName}", exiting handler.`);
             return Promise.resolve();
         }
 
-        const { run: commandExec, config: commandConfig } = commandData;
+        const commandConfig = commandData.getConfig();
         // Now we check for specific things to prevent the command from running
         // in it's configuration.
         if (!commandConfig.enabled) {
@@ -172,6 +170,6 @@ export default class CommandHandler {
         }
 
         // eslint-disable-next-line consistent-return
-        return commandExec(client, message, args, this.log);
+        return commandData.run(message, args);
     }
 }

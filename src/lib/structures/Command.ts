@@ -16,24 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Modules
-import type { Client, Message } from 'discord.js';
+import CommandConfig from '@lib/interfaces/commands/CommandConfig';
 import type Logger from '@lib/interfaces/Logger';
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
+import { Client, Message } from 'discord.js';
 
-// Main
-export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {}
+export default abstract class Command {
+    protected client: Client;
+    protected log: Logger;
 
-// Config
-export const config: CommandConfig = {
-    name: 'My Cool Command',
-    description: 'Does stuff',
-    enabled: true,
-    aliases: [], // command aliases to load
+    // eslint-disable-next-line @typescript-eslint/no-empty-function, no-empty-function
+    public constructor(client: Client, log: Logger) {
+        this.client = client;
+        this.log = log;
+    }
 
-    // To restrict the command, change the "false" to the following
-    // format:
-    //
-    // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false
-};
+    public abstract run(message: Message, args: string[]): Promise<void>;
+    public abstract getConfig(): CommandConfig;
+}

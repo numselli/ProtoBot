@@ -16,13 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Modules
-import chalk from 'chalk';
-import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
 import { doesHavePrefix } from '@lib/utils/doesHavePrefix';
+import chalk from 'chalk';
+import type { Client, Message } from 'discord.js';
 
-// Main
 export function run(client: Client, message: Message, log: Logger): void {
     // Get the user's current cooldowns (in timestamps)
 

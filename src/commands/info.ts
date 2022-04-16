@@ -16,13 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Modules
+import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
+import Command from '@lib/structures/Command';
 import type { Client, Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
-import type Logger from '@lib/interfaces/Logger';
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
-// Main
 function fireStats(userID: string, message: Message, client: Client): void {
     const uData = client.userStatistics.get(userID)!;
     const ETD = client.emoteCounterTrackers.get(userID)!;
@@ -37,37 +35,40 @@ function fireStats(userID: string, message: Message, client: Client): void {
     message.reply({ embeds: [embed] });
 }
 
-export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
-    const userID = args[0]?.replace(/[<@!>]/g, '') ?? message.author.id;
+export default class InfoCommand extends Command {
+    public getConfig(): CommandConfig {
+        return {
+            name: 'info',
+            category: 'utility',
+            description: "Get a user's stats!",
+            usage: '[user]',
+            enabled: true,
+            aliases: ['user'],
 
-    if (!client.userStatistics.get(userID)) {
-        client.users
-            .fetch(userID)
-            .then((user) => {
-                client.userStatistics.ensure(user.id, client.defaults.USER_STATISTICS);
-                fireStats(userID, message, client);
-            })
-            .catch(() => {
-                log('i', `Unknown user ${userID}!`);
-                message.reply('Unknown user!');
-                return;
-            });
-        return;
-    } else fireStats(userID, message, client);
+            // To restrict the command, change the "false" to the following
+            // format:
+            //
+            // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
+            restrict: false
+        };
+    }
+    public async run(message: Message<boolean>, args: string[]): Promise<void> {
+        const { client, log } = this;
+        const userID = args[0]?.replace(/[<@!>]/g, '') ?? message.author.id;
+
+        if (!client.userStatistics.get(userID)) {
+            client.users
+                .fetch(userID)
+                .then((user) => {
+                    client.userStatistics.ensure(user.id, client.defaults.USER_STATISTICS);
+                    fireStats(userID, message, client);
+                })
+                .catch(() => {
+                    log('i', `Unknown user ${userID}!`);
+                    message.reply('Unknown user!');
+                    return;
+                });
+            return;
+        } else fireStats(userID, message, client);
+    }
 }
-
-// Config
-export const config: CommandConfig = {
-    name: 'info',
-    category: 'utility',
-    description: "Get a user's stats!",
-    usage: '[user]',
-    enabled: true,
-    aliases: ['user'],
-
-    // To restrict the command, change the "false" to the following
-    // format:
-    //
-    // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false
-};

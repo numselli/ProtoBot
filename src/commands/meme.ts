@@ -17,9 +17,10 @@
  */
 
 // Imports
-import { Client, Message, MessageEmbed } from 'discord.js';
-import fetch from 'node-fetch';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
+import Command from '@lib/structures/Command';
+import { Message, MessageEmbed } from 'discord.js';
+import fetch from 'node-fetch';
 
 interface EpicMemeData {
     postLink: string;
@@ -28,29 +29,32 @@ interface EpicMemeData {
     subreddit: string;
 }
 
-export async function run(client: Client, message: Message): Promise<void> {
-    const body = (await fetch('https://meme-api.herokuapp.com/gimme').then((res) => res.json())) as EpicMemeData;
-    const embed = new MessageEmbed()
-        .setColor('RANDOM')
-        .setTitle(body.title)
-        .setURL(body.postLink)
-        .setImage(body.url)
-        .setFooter({ text: `From r/${body.subreddit}` });
-    message.reply({ embeds: [embed] });
+export default class MemeCommand extends Command {
+    public getConfig(): CommandConfig {
+        return {
+            name: 'meme',
+            category: 'fun',
+            description: 'Get a fresh meme!',
+            usage: '',
+            enabled: true,
+            aliases: [], // command aliases to load
+
+            // To restrict the command, change the "false" to the following
+            // format:
+            //
+            // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
+            restrict: false
+        };
+    }
+
+    public async run(message: Message): Promise<void> {
+        const body = (await fetch('https://meme-api.herokuapp.com/gimme').then((res) => res.json())) as EpicMemeData;
+        const embed = new MessageEmbed()
+            .setColor('RANDOM')
+            .setTitle(body.title)
+            .setURL(body.postLink)
+            .setImage(body.url)
+            .setFooter({ text: `From r/${body.subreddit}` });
+        message.reply({ embeds: [embed] });
+    }
 }
-
-// Config
-export const config: CommandConfig = {
-    name: 'meme',
-    category: 'fun',
-    description: 'Get a fresh meme!',
-    usage: '',
-    enabled: true,
-    aliases: [], // command aliases to load
-
-    // To restrict the command, change the "false" to the following
-    // format:
-    //
-    // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false
-};

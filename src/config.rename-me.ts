@@ -40,6 +40,9 @@ const config: Config = {
         uwus: seconds(30)
     },
     adminIDs: [],
+    // WARNING: These users can do whatever they want with your system.
+    // They have the same power to run code as 'owners'. Be careful!
+    superAdminIDs: [],
     ownerID: 'PBCONF-DiscordUserID' // Your user ID
 };
 

@@ -129,7 +129,7 @@ export default class AdminCommand extends Command {
                 }
             });
         } else if (args[0] === 'eval' || args[0] === 'e') {
-            if (getPermissionsForUser(client, log, message) < Permissions.BOT_OWNER) {
+            if (getPermissionsForUser(client, log, message) < Permissions.BOT_SUPER_ADMIN) {
                 log('w', `User ${message.author.tag} tried to use "admin eval", but they don't have permission!`);
                 message.reply('Nah, that command is for the bot owner only!');
                 return;
@@ -219,7 +219,7 @@ export default class AdminCommand extends Command {
                 });
             }
         } else if (args[0] === 'exec' || args[0] === 'ex') {
-            if (getPermissionsForUser(client, log, message) < Permissions.BOT_OWNER) {
+            if (getPermissionsForUser(client, log, message) < Permissions.BOT_SUPER_ADMIN) {
                 log('w', `User ${message.author.tag} tried to use "admin exec", but they don't have permission!`);
                 message.reply('Nah, that command is for the bot owner only!');
                 return;
@@ -412,8 +412,8 @@ export default class AdminCommand extends Command {
     \`admin help\`: Shows this message
     \`admin (re|restart)\`: Restarts the bot
     \`admin (up|update)\`: Run a software update.
-    \`admin (e|eval)\`: Evaluates a code snippet. **BOT OWNER ONLY**
-    \`admin (ex|exec)\`: Runs a Bash command. **BOT OWNER ONLY**
+    \`admin (e|eval)\`: Evaluates a code snippet. **SuperAdmins only**
+    \`admin (ex|exec)\`: Runs a Bash command. **SuperAdmins only**
     \`admin (rl|reload)\`: Reload commands from the config.
     \`admin (clb|clearlogbuffer)\`: Clear the log buffer (use when low on memory)
     \`admin (smb|setmaxbuffer)\`: Set the maximum number of log entries to store in memory. **This is not persistent.**

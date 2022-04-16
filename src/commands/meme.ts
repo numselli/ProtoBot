@@ -54,7 +54,8 @@ export default class MemeCommand extends Command {
             .setTitle(body.title)
             .setURL(body.postLink)
             .setImage(body.url)
-            .setFooter({ text: `From r/${body.subreddit}` });
+            .setFooter({ text: `From r/${body.subreddit}` })
+            .setColor('RANDOM');
         message.reply({ embeds: [embed] });
     }
 }

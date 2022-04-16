@@ -67,7 +67,10 @@ export default class AdminCommand extends Command {
             log('w', 'Exiting with code 9 (RESTART)');
             process.exit(9);
         } else if (args[0] === 'update' || args[0] === 'up') {
-            const embed = new MessageEmbed().setTitle('Update').setDescription('Updating the bot... This may take a while...');
+            const embed = new MessageEmbed()
+                .setTitle('Update')
+                .setDescription('Updating the bot... This may take a while...')
+                .setColor(client.publicConfig.colors.color2);
 
             function l(mode: LogMode, message: string): void {
                 return log(mode, `${chalk.green('[')}${chalk.green.bold('Updater')}${chalk.green(']')} ${message}`);
@@ -146,7 +149,10 @@ export default class AdminCommand extends Command {
             }
             let code: string = args.join(' ');
 
-            const embed = new MessageEmbed().setFooter({ text: `Eval command executed by ${message.author.username}` }).setTimestamp();
+            const embed = new MessageEmbed()
+                .setFooter({ text: `Eval command executed by ${message.author.username}` })
+                .setTimestamp()
+                .setColor(client.publicConfig.colors.color3);
             let response;
             let e = false;
             try {
@@ -233,8 +239,11 @@ export default class AdminCommand extends Command {
             }
             const code: string = args.join(' ');
 
-            const embed = new MessageEmbed().setFooter({ text: `Exec command executed by ${message.author.username}` }).setTimestamp();
             let e = false;
+            const embed = new MessageEmbed()
+                .setFooter({ text: `Exec command executed by ${message.author.username}` })
+                .setTimestamp()
+                .setColor(client.publicConfig.colors.color3);
 
             exec(code, (error: ExecException | null, stdout: string, stderr: string) => {
                 if (error || stderr) e = true;

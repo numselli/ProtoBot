@@ -22,6 +22,7 @@ import 'source-map-support/register';
 
 import Client from '@lib/Client'; // The custom client files
 import * as ready from '@lib/onready/index';
+import Hook from '@lib/structures/Hook';
 import chalk from 'chalk'; // Coloring for CLI
 import { Intents, TextChannel } from 'discord.js'; // <<< Discord!
 
@@ -96,9 +97,10 @@ client.on('messageCreate', async (message) => {
         return;
     }
     // Execute each hook from the database.
-    client.hooks.forEach((hookData) => {
-        log('v', `Running hook ${hookData.config.name} for ${message.author.tag}!`);
-        hookData.run(client, message, log);
+    client.hooks.forEach((hookData: Hook) => {
+        const cfg = hookData.getConfig();
+        log('v', `Running hook ${cfg.name} for ${message.author.tag}!`);
+        hookData.run(message);
     });
     let msgIsCommand = false;
     let prefixLen = 0;

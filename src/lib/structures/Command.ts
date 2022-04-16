@@ -24,7 +24,6 @@ export default abstract class Command {
     protected client: Client;
     protected log: Logger;
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function, no-empty-function
     public constructor(client: Client, log: Logger) {
         this.client = client;
         this.log = log;

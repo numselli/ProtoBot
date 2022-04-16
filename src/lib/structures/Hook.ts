@@ -17,9 +17,22 @@
  */
 
 import type Logger from '@lib/interfaces/Logger';
-import type { Client, Message } from 'discord.js';
+import { Client, Message } from 'discord.js';
 
-export default interface Hook {
-    config: { name: string; description: string };
-    run: (client: Client, message: Message, log: Logger) => void;
+export interface HookConfig {
+    name: string;
+    description: string;
+}
+
+export default abstract class Hook {
+    protected client: Client;
+    protected log: Logger;
+
+    public constructor(client: Client, log: Logger) {
+        this.client = client;
+        this.log = log;
+    }
+
+    public abstract run(message: Message): void;
+    public abstract getConfig(): HookConfig;
 }

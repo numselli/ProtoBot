@@ -17,7 +17,8 @@
  */
 
 import { Permissions } from '@lib/Permissions';
-import { Message, Client, TextChannel } from 'discord.js';
+import { Client, Message, TextChannel } from 'discord.js';
+
 import Logger from './interfaces/Logger';
 
 /**

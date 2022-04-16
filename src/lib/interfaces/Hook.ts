@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
+import type { Client, Message } from 'discord.js';
 
 export default interface Hook {
     config: { name: string; description: string };

@@ -27,7 +27,6 @@ function minutes(count: number): number {
     return seconds(60) * count;
 }
 
-// Main
 const config: Config = {
     token: 'PBCONF-DiscordBotToken', // Discord token
     dirs: {

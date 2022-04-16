@@ -16,12 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Modules
 import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 
-// Main
 export function run(client: Client, message: Message, log: Logger): void {}
 
 // Config

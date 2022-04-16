@@ -3,6 +3,7 @@
     // tab size of 4 spaces.
     "editor.tabSize": 4,
     "cSpell.words": [
+        "adoc",
         "arning",
         "Boop",
         "Boops",
@@ -13,6 +14,7 @@
         "fursonas",
         "GUILDMESSAGES",
         "isnan",
+        "leaderboard",
         "lowercased",
         "modespec",
         "mtext",
@@ -27,6 +29,8 @@
         "setmaxbuffer",
         "setprefix",
         "STARTSH",
+        "Uwuifier",
+        "uwuify",
         "uwus",
         "whomst"
     ]

@@ -17,33 +17,41 @@
  */
 
 // Imports
-import { Client, Message, MessageEmbed } from 'discord.js';
-import fetch from 'node-fetch';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
+import Command from '@lib/structures/Command';
+import { Message, MessageEmbed } from 'discord.js';
+import fetch from 'node-fetch';
 
 interface CatData {
     link: string;
 }
 
-export async function run(client: Client, message: Message): Promise<void> {
-    const msg = await message.reply('Fetching a cat picture...');
-    const body = (await fetch('https://some-random-api.ml/img/cat').then((res) => res.json())) as CatData;
-    const embed = new MessageEmbed().setTitle(`Cat for ${message.author.username}`).setImage(body.link).setTimestamp(Date.now()).setColor('RANDOM');
-    msg.edit({ embeds: [embed] });
+export default class CatCommand extends Command {
+    public getConfig(): CommandConfig {
+        return {
+            name: 'cat',
+            category: 'fun',
+            usage: '',
+            description: 'Get a cat picture~',
+            enabled: true,
+            aliases: ['meow', 'kitty'], // command aliases to load
+
+            // To restrict the command, change the "false" to the following
+            // format:
+            //
+            // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
+            restrict: false
+        };
+    }
+
+    public async run(message: Message): Promise<void> {
+        const msg = await message.reply('Fetching a cat picture...');
+        const body = (await fetch('https://some-random-api.ml/img/cat').then((res) => res.json())) as CatData;
+        const embed = new MessageEmbed()
+            .setTitle(`Cat for ${message.author.username}`)
+            .setImage(body.link)
+            .setTimestamp(Date.now())
+            .setColor('RANDOM');
+        msg.edit({ embeds: [embed] });
+    }
 }
-
-// Config
-export const config: CommandConfig = {
-    name: 'cat',
-    category: 'fun',
-    usage: '',
-    description: 'Get a cat picture~',
-    enabled: true,
-    aliases: ['meow', 'kitty'], // command aliases to load
-
-    // To restrict the command, change the "false" to the following
-    // format:
-    //
-    // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false
-};

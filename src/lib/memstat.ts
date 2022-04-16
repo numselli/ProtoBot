@@ -16,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import chalk from 'chalk';
 import log, { LogMode } from '@root/log';
 import bytes from 'bytes';
+import chalk from 'chalk';
 
 function l(mode: LogMode, message: unknown) {
     log(mode, `${chalk.blue('[')}${chalk.blue.bold('MemStat')}${chalk.blue(']')} ${message}`);

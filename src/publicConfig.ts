@@ -21,7 +21,6 @@
 // Config types
 import type PublicConfig from '@lib/interfaces/PublicConfig';
 
-// Main
 const publicConfig: PublicConfig = {
     githubRepository: 'https://github.com/thetayloredman/ProtoBot'
 };

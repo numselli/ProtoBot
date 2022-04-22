@@ -17,7 +17,8 @@
  */
 
 import { Permissions } from '@lib/Permissions';
-import { Message, Client, TextChannel } from 'discord.js';
+import { Client, Message, TextChannel } from 'discord.js';
+
 import Logger from './interfaces/Logger';
 
 /**
@@ -30,6 +31,9 @@ export function getPermissionsForUser(client: Client, log: Logger, message: Mess
     if (client.config.ownerID === message.author.id) {
         log('v', `user is OWNER, return value BOT_OWNER: ${Permissions.BOT_OWNER}`);
         return Permissions.BOT_OWNER;
+    } else if (client.config.superAdminIDs.includes(message.author.id)) {
+        log('v', `user is Super Admin, return value BOT_SUPER_ADMIN: ${Permissions.BOT_SUPER_ADMIN}`);
+        return Permissions.BOT_SUPER_ADMIN;
     } else if (client.config.adminIDs.includes(message.author.id)) {
         log('v', `user is ADMIN, return value BOT_ADMINISTRATOR: ${Permissions.BOT_ADMINISTRATOR}`);
         return Permissions.BOT_ADMINISTRATOR;

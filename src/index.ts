@@ -20,11 +20,11 @@
 // error locations as shown in the TS default source maps.
 import 'source-map-support/register';
 
-// Modules
-import chalk from 'chalk'; // Coloring for CLI
 import Client from '@lib/Client'; // The custom client files
-import discord from 'discord.js'; // <<< Discord!
 import * as ready from '@lib/onready/index';
+import Hook from '@lib/structures/Hook';
+import chalk from 'chalk'; // Coloring for CLI
+import { Intents, TextChannel } from 'discord.js'; // <<< Discord!
 
 // Import the primary log function from the CWD.
 import log from './log';
@@ -46,13 +46,13 @@ if (!process.env.PROTOBOT_STARTSH_COMMIT) {
 // Initialize a Client instance, and provide the Discord intent flags.
 const client = new Client(log, {
     intents: [
-        discord.Intents.FLAGS.GUILDS,
-        discord.Intents.FLAGS.GUILD_MEMBERS,
-        discord.Intents.FLAGS.GUILD_INVITES,
-        discord.Intents.FLAGS.GUILD_MESSAGES, // We may need to apply for this intent at verification
-        discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        discord.Intents.FLAGS.DIRECT_MESSAGES,
-        discord.Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MEMBERS,
+        Intents.FLAGS.GUILD_INVITES,
+        Intents.FLAGS.GUILD_MESSAGES, // We may need to apply for this intent at verification
+        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        Intents.FLAGS.DIRECT_MESSAGES,
+        Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
     ],
     partials: ['CHANNEL']
 });
@@ -75,7 +75,7 @@ client.on('messageCreate', async (message) => {
     log(
         'v',
         `${chalk.yellow('[')}${chalk.yellow.bold('MSG')}${chalk.yellow(']')} ${chalk.blue.bold('@' + message.author.tag)} ${chalk.green.bold(
-            '#' + (message.channel as discord.TextChannel).name ?? '<DM>'
+            '#' + (message.channel as TextChannel).name ?? '<DM>'
         )}: ${message.content}`
     );
 
@@ -97,9 +97,10 @@ client.on('messageCreate', async (message) => {
         return;
     }
     // Execute each hook from the database.
-    client.hooks.forEach((hookData) => {
-        log('v', `Running hook ${hookData.config.name} for ${message.author.tag}!`);
-        hookData.run(client, message, log);
+    client.hooks.forEach((hookData: Hook) => {
+        const cfg = hookData.getConfig();
+        log('v', `Running hook ${cfg.name} for ${message.author.tag}!`);
+        hookData.run(message);
     });
     let msgIsCommand = false;
     let prefixLen = 0;

@@ -17,39 +17,43 @@
  */
 
 // Imports
-import { Client, Message, MessageEmbed } from 'discord.js';
-import fetch from 'node-fetch';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
+import Command from '@lib/structures/Command';
+import { Message, MessageEmbed } from 'discord.js';
+import fetch from 'node-fetch';
 
 interface FoxData {
     image: string;
     link: string;
 }
 
-export async function run(client: Client, message: Message): Promise<void> {
-    const msg = await message.reply('Fetching a fox picture...');
-    const body = (await fetch('https://randomfox.ca/floof/').then((res) => res.json())) as FoxData;
-    const embed = new MessageEmbed()
-        .setTitle(`Fox for ${message.author.username}`)
-        .setImage(body.image)
-        .setTimestamp(Date.now())
-        .setDescription(`[Link](${body.link})`)
-        .setColor('RANDOM');
-    msg.edit({ embeds: [embed] });
+export default class FoxCommand extends Command {
+    public getConfig(): CommandConfig {
+        return {
+            name: 'fox',
+            category: 'fun',
+            usage: '',
+            description: 'Get a cute fox picture!',
+            enabled: true,
+            aliases: ['foxxo'], // command aliases to load
+
+            // To restrict the command, change the "false" to the following
+            // format:
+            //
+            // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
+            restrict: false
+        };
+    }
+
+    public async run(message: Message): Promise<void> {
+        const msg = await message.reply('Fetching a fox picture...');
+        const body = (await fetch('https://randomfox.ca/floof/').then((res) => res.json())) as FoxData;
+        const embed = new MessageEmbed()
+            .setTitle(`Fox for ${message.author.username}`)
+            .setImage(body.image)
+            .setTimestamp(Date.now())
+            .setDescription(`[Link](${body.link})`)
+            .setColor('RANDOM');
+        msg.edit({ embeds: [embed] });
+    }
 }
-
-// Config
-export const config: CommandConfig = {
-    name: 'fox',
-    category: 'fun',
-    usage: '',
-    description: 'Get a cute fox picture!',
-    enabled: true,
-    aliases: ['foxxo'], // command aliases to load
-
-    // To restrict the command, change the "false" to the following
-    // format:
-    //
-    // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false
-};

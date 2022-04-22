@@ -18,6 +18,9 @@ name: 'ESLint'
 
 on:
     push:
+        branches:
+            - main
+            - dev
     pull_request:
 
 jobs:

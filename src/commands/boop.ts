@@ -16,44 +16,47 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Modules
-import type { Client, Message } from 'discord.js';
-import type Logger from '@lib/interfaces/Logger';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
+import Command from '@lib/structures/Command';
+import type { Message } from 'discord.js';
 
-// Main
-export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
-    const userID = args[0]?.replace(/[<@!>]/g, '');
+export default class BoopCommand extends Command {
+    public getConfig(): CommandConfig {
+        return {
+            name: 'boop',
+            category: 'affection',
+            usage: '<user>',
+            description: 'Boop someone!',
+            enabled: true,
+            aliases: [],
 
-    if (!args[0]) {
-        log('i', `Not specified who to boop in boop.ts`);
-        message.reply('Who did you want to boop?');
-        return;
+            // To restrict the command, change the "false" to the following
+            // format:
+            //
+            // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
+            restrict: false
+        };
     }
 
-    if (userID === message.author.id) {
-        message.reply(`**Self boop?**\n<@${message.author.id}> boops themselves..?`);
-        return;
+    public async run(message: Message, args: string[]): Promise<void> {
+        const { client, log } = this;
+
+        const userID = args[0]?.replace(/[<@!>]/g, '');
+
+        if (!args[0]) {
+            log('i', `Not specified who to boop in boop.ts`);
+            message.reply('Who did you want to boop?');
+            return;
+        }
+
+        if (userID === message.author.id) {
+            message.reply(`**Self boop?**\n<@${message.author.id}> boops themselves..?`);
+            return;
+        }
+
+        client.userStatistics.ensure(userID, client.defaults.USER_STATISTICS);
+        client.userStatistics.inc(userID, 'boops');
+
+        message.reply(`**Boop!**\n<@${message.author.id}> boops <@${userID}>~!\n\nhttps://cdn.discordapp.com/emojis/777752005820416000.gif`);
     }
-
-    client.userStatistics.ensure(userID, client.defaults.USER_STATISTICS);
-    client.userStatistics.inc(userID, 'boops');
-
-    message.reply(`**Boop!**\n<@${message.author.id}> boops <@${userID}>~!\n\nhttps://cdn.discordapp.com/emojis/777752005820416000.gif`);
 }
-
-// Config
-export const config: CommandConfig = {
-    name: 'boop',
-    category: 'affection',
-    usage: '<user>',
-    description: 'Boop someone!',
-    enabled: true,
-    aliases: [],
-
-    // To restrict the command, change the "false" to the following
-    // format:
-    //
-    // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false
-};

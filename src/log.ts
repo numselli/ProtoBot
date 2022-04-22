@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /*
  * ProtoBot -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
@@ -16,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+/* eslint-disable no-console */
 
 /************************************READ ME BEFORE EDITING THIS FILE*******
  * Hey there, fellow explorer! This file is core to the functioning of     *
@@ -116,7 +117,6 @@ function writeItem(mode: LogMode, message: string): void {
     else if (mode === 'v') if (!runningInProd) logArray[3][0].write(`${strip(message)}\n`);
 }
 
-// Main
 // Literal hell ensues below...
 export default function log(mode: 'CLOSE_STREAMS'): Promise<void>;
 export default function log(mode: LogMode, message: unknown, _bypassStackPrint?: boolean): void;

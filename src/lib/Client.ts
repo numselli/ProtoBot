@@ -54,7 +54,7 @@ export default class Client extends BaseClient {
         this.guildData = new Enmap({ name: 'guildData', verbose: makeVerboseFunction('guildData'), autoEnsure: this.defaults.GUILD_DATA });
 
         // In memory items
-        this.hooks = new Enmap();
+        this.hooks = new Enmap({ cloneLevel: 'none' });
         this.cooldowns = new Enmap();
 
         // Generate the command handling instance.

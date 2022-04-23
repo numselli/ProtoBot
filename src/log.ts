@@ -18,22 +18,9 @@
 
 /* eslint-disable no-console */
 
-/************************************READ ME BEFORE EDITING THIS FILE*******
- * Hey there, fellow explorer! This file is core to the functioning of     *
- * ProtoBot. It handles logging and file writes for the log archives.      *
- * This code was written a long time ago, back when persistent logging     *
- * was implemented, so it may not make much sense. If someone is willing   *
- * to take a look and potentially refactor it, that would be nice, but     *
- * please ensure the API stays the same, as it is used HUNDREDS OF TIMES   *
- * around the source code. Things we need to change are listed just        *
- * under this comment in todo tags. Thank you for (hopefully) contributing *
- * to the continued development of ProtoBot!                               *
- *                                      - ProtoBot Core Developer   0xLogN *
- ***************************************************************************/
-
 const runningInProd = process.env.PRODUCTION;
 
-// Import the necessary modules for the logger
+import Logger from '@lib/interfaces/Logger';
 import chalk from 'chalk'; // Chalk handles fancy coloring.
 import * as fs from 'fs'; // To create the write streams.
 import strip from 'strip-ansi'; // To clean off the ANSI escape codes for the log files.
@@ -43,44 +30,52 @@ import * as util from 'util'; // Utilities.
 // A certain log level is always logged to all below it, so for example, if you were
 // to log an error, it would be logged to all levels.
 
-// The timestamp when the logfile was created (now).
-const logInitTime: number = Date.now();
-try {
-    fs.readdirSync('../logs/');
-} catch (e) {
-    if ((e as { code: string }).code === 'ENOENT')
-        try {
-            fs.mkdirSync('../logs/');
-        } catch (e2) {
-            console.error(e2);
-            process.exit(1);
-        }
-    else {
-        console.error(e);
-        process.exit(1);
+/**
+ * Print *message* and exit *code*.
+ */
+function die(code: number, message: unknown): never {
+    console.error(message);
+    process.exit(code);
+}
+
+/**
+ * Catch any FS error and log it.
+ */
+// eslint-disable-next-line consistent-return
+function catchFSErrors<T>(execute: (...n: unknown[]) => T): T {
+    try {
+        return execute();
+    } catch (e) {
+        die(1, e);
     }
 }
 
-const logFldrSuffix = runningInProd ? '.prod' : '.dev';
+// The timestamp when the logfile was created (now).
+const logInitTime: number = Date.now();
+const logFolderSuffix = runningInProd ? '.prod' : '.dev';
 
-// Spawn a logfile and it's respective streams.
+try {
+    fs.readdirSync('../logs/');
+} catch (e) {
+    if ((e as { code: string }).code === 'ENOENT') catchFSErrors(() => fs.mkdirSync('../logs/'));
+    else die(1, e);
+}
+
+// Spawn a log file and it's respective streams.
 // Disable consistent-return. This is a bug in eslint, where a process.exit() does not count
 // as a return.
 // eslint-disable-next-line consistent-return
 function spawnLogStream(logLevel: 'verbose' | 'all' | 'warn' | 'err'): fs.WriteStream {
-    try {
-        const logStream: fs.WriteStream = fs.createWriteStream(`../logs/${logInitTime}${logFldrSuffix}/${logLevel}.log`);
+    return catchFSErrors(() => {
+        const logStream: fs.WriteStream = fs.createWriteStream(`../logs/${logInitTime}${logFolderSuffix}/${logLevel}.log`);
         logStream.write(`### ProtoBot - Log File @ ${logLevel}/${logInitTime}\n`);
         if (runningInProd) logStream.write('### This is a production mode log file.\n');
 
         if (logLevel === 'verbose' && runningInProd)
-            logStream.write('### Logging at loglevel VERBOSE is disabled in production.\n### Check ENV.PRODUCTION.\n');
+            logStream.write('### Logging at log level VERBOSE is disabled in production.\n### Check ENV.PRODUCTION.\n');
 
         return logStream;
-    } catch (e) {
-        console.error(e);
-        process.exit(1);
-    }
+    });
 }
 
 // Store the log buffer in memory.
@@ -89,12 +84,7 @@ let buffer: [number, LogMode, string][] = [];
 let maxBufferSize = 500; // in lines
 
 // Create the log directory.
-try {
-    fs.mkdirSync(`../logs/${logInitTime}${logFldrSuffix}/`);
-} catch (e) {
-    console.error(e);
-    process.exit(1);
-}
+catchFSErrors(() => fs.mkdirSync(`../logs/${logInitTime}${logFolderSuffix}`));
 
 const verboseStr = spawnLogStream('verbose');
 const allStr = spawnLogStream('all');
@@ -111,107 +101,101 @@ function writeItem(mode: LogMode, message: string): void {
     ];
     if (runningInProd) logArray.pop();
 
-    if (mode === 'e') for (const [stream, _] of logArray) stream.write(`${strip(message)}\n`);
-    else if (mode === 'w') for (const [stream, _] of logArray.slice(1)) stream.write(`${strip(message)}\n`);
-    else if (mode === 'i') for (const [stream, _] of logArray.slice(2)) stream.write(`${strip(message)}\n`);
+    if (mode === 'e') for (const [stream] of logArray) stream.write(`${strip(message)}\n`);
+    else if (mode === 'w') for (const [stream] of logArray.slice(1)) stream.write(`${strip(message)}\n`);
+    else if (mode === 'i') for (const [stream] of logArray.slice(2)) stream.write(`${strip(message)}\n`);
     else if (mode === 'v') if (!runningInProd) logArray[3][0].write(`${strip(message)}\n`);
 }
 
-// Literal hell ensues below...
-export default function log(mode: 'CLOSE_STREAMS'): Promise<void>;
-export default function log(mode: LogMode, message: unknown, _bypassStackPrint?: boolean): void;
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export default function log(mode: LogMode | 'CLOSE_STREAMS', message?: unknown, _bypassStackPrint = false): void | Promise<void> {
-    if (mode === 'CLOSE_STREAMS')
-        // Close all of the file streams
-        return new Promise((resolve) => {
-            errStr.end(() => {
-                warnStr.end(() => {
-                    allStr.end(() => {
-                        resolve();
-                    });
-                });
+function generateTimePrefix(epoch: number): string {
+    const date = new Date(epoch);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let preparsedDate: any = date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+    preparsedDate = preparsedDate.split(', ');
+    preparsedDate[1] = preparsedDate[1].split(' ');
+    // I'm not even sure what locale this is, but it works.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let preparsedTime: any = date.toLocaleTimeString('it-IT');
+    preparsedTime = preparsedTime.split(' ');
+    preparsedTime[0] = preparsedTime[0].split(':');
+
+    // Parse date/time
+    const parsedDate = `${chalk.yellow(preparsedDate[1][0])} ${chalk.yellow.bold(preparsedDate[1][1])} ${chalk.green.bold(preparsedDate[2])}`;
+    const sep: string = chalk.yellow(':');
+    const parsedTime = `${chalk.yellow.bold(preparsedTime[0][0])}${sep}${chalk.yellow.bold(preparsedTime[0][1])}${sep}${chalk.yellow.bold(
+        preparsedTime[0][2]
+    )}`;
+
+    const brackets: string[] = [chalk.yellow('['), chalk.yellow(']')];
+
+    return `${brackets[0]}${parsedDate} ${parsedTime}${brackets[1]}`;
+}
+
+function preprocess(message: unknown): [string, number, string] {
+    const epoch = Date.now();
+    if (typeof message !== 'string') message = util.inspect(message);
+    return [message as string, epoch, generateTimePrefix(epoch)];
+}
+
+function postprocess(message: string, type: LogMode, epoch: number): void {
+    console.log(message);
+    writeItem(type, message);
+    buffer.push([epoch, type, message]);
+    // FIXME: In an edge case where buffer size is *dropped*, it does not decrease
+    // all of the way.
+    if (buffer.length > maxBufferSize) buffer.shift();
+}
+
+function verbose(m: unknown): void {
+    if (runningInProd) return;
+    const [message, epoch, timePrefix] = preprocess(m);
+    postprocess(`${timePrefix} ${chalk.cyan('[')}${chalk.cyan.bold('VERB')}${chalk.cyan(']')} ${message}`, 'v', epoch);
+}
+function info(m: unknown): void {
+    const [message, epoch, timePrefix] = preprocess(m);
+    postprocess(`${timePrefix} ${chalk.blue('[')}${chalk.blue.bold('INFO')}${chalk.blue(']')} ${message}`, 'i', epoch);
+}
+function warn(m: unknown): void {
+    const [message, epoch, timePrefix] = preprocess(m);
+    postprocess(`${timePrefix} ${chalk.yellow('[')}${chalk.yellow.bold('WARN')}${chalk.yellow(']')} ${message}`, 'w', epoch);
+}
+function error(m: unknown): void {
+    const [message, epoch, timePrefix] = preprocess(m);
+    postprocess(`${timePrefix} ${chalk.red('[')}${chalk.red.bold('ERR')}${chalk.red(']')} ${message}`, 'e', epoch);
+}
+function errorWithStack(m: unknown): void {
+    error(m);
+
+    const s = new Error('Temporary stack creation error').stack || '';
+    const a = s.split('\n');
+    // Remove the error itself.
+    a.shift();
+
+    for (const entry of a) error('STACK: ' + entry);
+}
+
+/**
+ * Clean up the log files. This is only needed on process exit and this will not
+ * allow writing of any more logs to disk.
+ * @returns Resolves once finished.
+ */
+async function cleanup(): Promise<void> {
+    return new Promise((resolve) => {
+        errStr.end(() => {
+            warnStr.end(() => {
+                allStr.end(() => resolve());
             });
         });
-    else {
-        if (mode === 'v' && runningInProd) return undefined;
-
-        if (typeof message !== 'string')
-            // Use util.inspect to color the message
-            message = util.inspect(message, { colors: true });
-
-        let msg = '';
-        const epoch = Date.now();
-        const date = new Date(epoch);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let preparsedDate: any = date.toLocaleDateString('en-US', {
-            weekday: 'short',
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-        });
-        preparsedDate = preparsedDate.split(', ');
-        preparsedDate[1] = preparsedDate[1].split(' ');
-        // I'm not even sure what locale this is, but it works.
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let preparsedTime: any = date.toLocaleTimeString('it-IT');
-        preparsedTime = preparsedTime.split(' ');
-        preparsedTime[0] = preparsedTime[0].split(':');
-
-        // Parse date/time
-        const parsedDate = `${chalk.yellow(preparsedDate[1][0])} ${chalk.yellow.bold(preparsedDate[1][1])} ${chalk.green.bold(preparsedDate[2])}`;
-        const sep: string = chalk.yellow(':');
-        const parsedTime = `${chalk.yellow.bold(preparsedTime[0][0])}${sep}${chalk.yellow.bold(preparsedTime[0][1])}${sep}${chalk.yellow.bold(
-            preparsedTime[0][2]
-        )}`;
-
-        switch (mode) {
-            case 'v':
-                // Verbose
-                msg = `${chalk.cyan('[')}${chalk.cyan.bold('VERB')}${chalk.cyan(']')} ${message}`;
-                break;
-            case 'i':
-                // Info
-                msg = `${chalk.blue('[')}${chalk.blue.bold('INFO')}${chalk.blue(']')} ${message}`;
-                break;
-            case 'w':
-                // Warning
-                msg = `${chalk.yellow('[')}${chalk.yellow.bold('WARN')}${chalk.yellow(']')} ${message}`;
-                break;
-            case 'e':
-                // Error
-                msg = `${chalk.red('[')}${chalk.red.bold('ERR!')}${chalk.red(']')} ${message}`;
-                break;
-            default:
-                // Default
-                msg = `${chalk.blue('[')}${chalk.blue.bold('INFO')}${chalk.blue(']')} ${message}`;
-
-                // Throw a warning for invalid name
-                log('w', `[log] Invalid log level ${mode}`);
-                break;
-        }
-
-        const brackets: string[] = [chalk.yellow('['), chalk.yellow(']')];
-
-        msg = `${brackets[0]}${parsedDate} ${parsedTime}${brackets[1]} ${msg}`;
-
-        console.log(msg);
-        writeItem(mode, msg);
-        buffer.push([epoch, mode, strip(msg)]);
-        if (buffer.length > maxBufferSize) buffer.shift();
-
-        // #125: Add stack traces for errors - BadBoyHaloCat
-        if (mode === 'e' && !_bypassStackPrint) {
-            const s = new Error('Temporary stack creation error').stack || '';
-            const a = s.split('\n');
-            a.shift();
-
-            for (const entry of a) log('e', 'STACK: ' + entry, true);
-        }
-
-        return undefined;
-    }
+    });
 }
+
+const toBeExported: Logger = { verbose, info, warn, error, cleanup, errorWithStack };
+export default toBeExported;
 
 export function clearBuffer(): void {
     buffer = [];

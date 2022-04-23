@@ -63,7 +63,7 @@ export default class Client extends BaseClient {
 
     public destroy(): void {
         if (this._isAlreadyDestroyed) {
-            this._log('e', 'Client destroy: Client is already destroyed. Abort.', true);
+            this._log.error('Client destroy: Client is already destroyed. Abort.');
             return;
         }
         this._isAlreadyDestroyed = true;

@@ -42,7 +42,7 @@ export default class SetPrefixCommand extends Command {
     public async run(message: Message<boolean>, args: string[]): Promise<void> {
         const { client, log } = this;
         if (!args[0]) {
-            log('i', 'User requested to see the prefix');
+            log.info('User requested to see the prefix');
             message.reply("Your guild's prefix is: " + client.guildData.get(message.guild!.id, 'prefix'));
             return;
         }

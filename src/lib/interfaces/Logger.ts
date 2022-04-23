@@ -16,8 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { LogMode } from '@root/log';
-
-type Logger = (mode: LogMode, message?: unknown, _bypassStackPrint?: boolean) => void;
-
-export default Logger;
+export default interface Logger {
+    verbose(message: unknown): void;
+    info(message: unknown): void;
+    warn(message: unknown): void;
+    error(message: unknown): void;
+    errorWithStack(message: unknown): void;
+    cleanup(): Promise<void>;
+}

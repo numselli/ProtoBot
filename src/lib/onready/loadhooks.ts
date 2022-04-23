@@ -22,11 +22,11 @@ import { Client } from 'discord.js';
 import fs from 'fs';
 
 export default function loadHooks(client: Client, log: Logger): void {
-    log('i', 'beginning initial hook load...');
+    log.info('beginning initial hook load...');
     fs.readdir(client.config.dirs.hooks, (err, files) => {
         if (err) {
-            log('e', `Failed to read directory ${client.config.dirs.hooks}:`);
-            log('e', err);
+            log.error(`Failed to read directory ${client.config.dirs.hooks}:`);
+            log.errorWithStack(err);
         } else
             files.forEach(async (path: string) => {
                 if (path.endsWith('.js')) {
@@ -38,15 +38,15 @@ export default function loadHooks(client: Client, log: Logger): void {
                         )
                     ).default;
                     const hookName = path.replace('.js', '');
-                    log('v', `Loading hook "${hookName}"...`);
+                    log.verbose(`Loading hook "${hookName}"...`);
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     const hookInstance = new HookClass(client, log);
                     client.hooks.set(hookName, hookInstance);
-                    log('i', `Finished loading hook "${hookName}"!`);
+                    log.info(`Finished loading hook "${hookName}"!`);
                 } else if (path.endsWith('.map')) return;
                 // unknown ext
-                else log('w', `File in hooks dir with unknown extension: ${path}`);
+                else log.warn(`File in hooks dir with unknown extension: ${path}`);
             });
     });
 }

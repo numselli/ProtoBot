@@ -22,14 +22,10 @@ import Hook, { HookConfig } from '@lib/structures/Hook';
 import { doesHavePrefix } from '@lib/utils/doesHavePrefix';
 import type { Client, Message } from 'discord.js';
 
-function checkAndSet(
-    client: Client,
-    cooldowns: Cooldowns,
-    l: Logger,
-    m: Message,
-    checkString: 'uwu' | 'owo' | '~',
-    dbName: 'uwus' | 'owos' | 'tildes'
-): void {
+type Checkers = 'uwu' | 'owo' | '~';
+type DBName = 'uwus' | 'owos' | 'tildes';
+
+function checkAndSet(client: Client, cooldowns: Cooldowns, l: Logger, m: Message, checkString: Checkers, dbName: DBName): void {
     if (
         ((checkString !== '~' && m.content.toLowerCase().includes(checkString)) ||
             (m.content.endsWith('~') && !/~~+/.test(m.content) && m.content !== '~')) &&
@@ -39,7 +35,7 @@ function checkAndSet(
         client.emoteCounterTrackers.ensure(m.author.id, client.defaults.EMOTE_TRACKER_COUNTERS);
         client.emoteCounterTrackers.inc(m.author.id, dbName);
         client.cooldowns.set(m.author.id, Date.now(), dbName);
-        l('i', `${dbName}: added ${checkString} for ${m.author.tag}.`);
+        l.info(`${dbName}: added ${checkString} for ${m.author.tag}.`);
     }
 }
 

@@ -27,30 +27,30 @@ import Logger from './interfaces/Logger';
  */
 export function getPermissionsForUser(client: Client, log: Logger, message: Message): Permissions {
     // FIXME: buggy in DMs.
-    log('v', `permission checking ${message.author.tag} @ ${message.guild!.name}/#${(message.channel as TextChannel).name ?? '<DM>'}`);
+    log.verbose(`permission checking ${message.author.tag} @ ${message.guild!.name}/#${(message.channel as TextChannel).name ?? '<DM>'}`);
     if (client.config.ownerID === message.author.id) {
-        log('v', `user is OWNER, return value BOT_OWNER: ${Permissions.BOT_OWNER}`);
+        log.verbose(`user is OWNER, return value BOT_OWNER: ${Permissions.BOT_OWNER}`);
         return Permissions.BOT_OWNER;
     } else if (client.config.superAdminIDs.includes(message.author.id)) {
-        log('v', `user is Super Admin, return value BOT_SUPER_ADMIN: ${Permissions.BOT_SUPER_ADMIN}`);
+        log.verbose(`user is Super Admin, return value BOT_SUPER_ADMIN: ${Permissions.BOT_SUPER_ADMIN}`);
         return Permissions.BOT_SUPER_ADMIN;
     } else if (client.config.adminIDs.includes(message.author.id)) {
-        log('v', `user is ADMIN, return value BOT_ADMINISTRATOR: ${Permissions.BOT_ADMINISTRATOR}`);
+        log.verbose(`user is ADMIN, return value BOT_ADMINISTRATOR: ${Permissions.BOT_ADMINISTRATOR}`);
         return Permissions.BOT_ADMINISTRATOR;
     } else if (message.guild!.ownerId === message.author.id) {
-        log('v', `user is guild owner, return value SERVER_OWNER: ${Permissions.SERVER_OWNER}`);
+        log.verbose(`user is guild owner, return value SERVER_OWNER: ${Permissions.SERVER_OWNER}`);
         return Permissions.SERVER_OWNER;
     } else if (message.member!.permissions.has('ADMINISTRATOR')) {
-        log('v', `user is server admin, return value SERVER_ADMINISTRATOR: ${Permissions.SERVER_ADMINISTRATOR}`);
+        log.verbose(`user is server admin, return value SERVER_ADMINISTRATOR: ${Permissions.SERVER_ADMINISTRATOR}`);
         return Permissions.SERVER_ADMINISTRATOR;
     } else if (message.member!.permissions.has('BAN_MEMBERS')) {
-        log('v', `user is server moderator, return value SERVER_MODERATOR: ${Permissions.SERVER_MODERATOR}`);
+        log.verbose(`user is server moderator, return value SERVER_MODERATOR: ${Permissions.SERVER_MODERATOR}`);
         return Permissions.SERVER_MODERATOR;
     } else if (message.member!.permissionsIn(message.channel as TextChannel).has('MANAGE_MESSAGES')) {
-        log('v', `user is channel moderator, return value CHANNEL_MODERATOR: ${Permissions.CHANNEL_MODERATOR}`);
+        log.verbose(`user is channel moderator, return value CHANNEL_MODERATOR: ${Permissions.CHANNEL_MODERATOR}`);
         return Permissions.CHANNEL_MODERATOR;
     } else {
-        log('v', `user is a boring noob, return value NONE: ${Permissions.NONE}`);
+        log.verbose(`user is a boring noob, return value NONE: ${Permissions.NONE}`);
         return Permissions.NONE;
     }
 }

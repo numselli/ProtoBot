@@ -65,7 +65,7 @@ export default class InfoCommand extends Command {
                     fireStats(userID, message, client);
                 })
                 .catch(() => {
-                    log('i', `Unknown user ${userID}!`);
+                    log.info(`Unknown user ${userID}!`);
                     message.reply('Unknown user!');
                     return;
                 });

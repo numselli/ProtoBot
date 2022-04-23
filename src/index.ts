@@ -30,16 +30,16 @@ import { Intents, TextChannel } from 'discord.js'; // <<< Discord!
 import log from './log';
 
 // Verify the currently running commit...
-log('v', 'Verifying we were started via the start script...');
+log.verbose('Verifying we were started via the start script...');
 if (!process.env.PROTOBOT_STARTSH_COMMIT) {
-    log('e', 'Environment variable PROTOBOT_STARTSH_COMMIT is not set!', true);
-    log('w', "If you are seeing this message, it means you are running the bot's script directly.");
-    log('w', 'This is not recommended, and may cause unexpected behavior.');
-    log('w', 'After multiple bug reports of people using an invalid environment (like this one),');
-    log('w', 'the developer team has decided that direct execution should be disabled.');
-    log('w', 'Please use the start script instead.');
-    log('w', 'Reference issue #463 for more information.');
-    log('e', 'We were not started via the start script! Exiting (code 1)...', true);
+    log.error('Environment variable PROTOBOT_STARTSH_COMMIT is not set!');
+    log.warn("If you are seeing this message, it means you are running the bot's script directly.");
+    log.warn('This is not recommended, and may cause unexpected behavior.');
+    log.warn('After multiple bug reports of people using an invalid environment (like this one),');
+    log.warn('the developer team has decided that direct execution should be disabled.');
+    log.warn('Please use the start script instead.');
+    log.warn('Reference issue #463 for more information.');
+    log.error('We were not started via the start script! Exiting (code 1)...');
     process.exit(1);
 }
 
@@ -72,8 +72,7 @@ client.on('ready', async () => {
 // -- THIS REQUIRES THE GUILDMESSAGES PRIVILEGED INTENT
 client.on('messageCreate', async (message) => {
     // Log the message content if we are in verbose mode.
-    log(
-        'v',
+    log.verbose(
         `${chalk.yellow('[')}${chalk.yellow.bold('MSG')}${chalk.yellow(']')} ${chalk.blue.bold('@' + message.author.tag)} ${chalk.green.bold(
             '#' + (message.channel as TextChannel).name ?? '<DM>'
         )}: ${message.content}`
@@ -92,14 +91,14 @@ client.on('messageCreate', async (message) => {
 
     // ...but if it's a DM, clarify it to the user.
     if (message.channel.type === 'DM') {
-        log('i', `Discouraged DM from ${message.author.tag}`);
+        log.info(`Discouraged DM from ${message.author.tag}`);
         message.reply('Hey there! I do not accept DMs. Use me in a server.');
         return;
     }
     // Execute each hook from the database.
     client.hooks.forEach((hookData: Hook) => {
         const cfg = hookData.getConfig();
-        log('v', `Running hook ${cfg.name} for ${message.author.tag}!`);
+        log.verbose(`Running hook ${cfg.name} for ${message.author.tag}!`);
         hookData.run(message);
     });
     let msgIsCommand = false;
@@ -114,7 +113,7 @@ client.on('messageCreate', async (message) => {
         prefixLen = client.user!.id.length + (lowercasedMessageContent.startsWith('<@!') ? 4 : 3);
         if (lowercasedMessageContent.charAt(prefixLen) === ' ') prefixLen++;
         msgIsCommand = true;
-        log('i', `${message.author.tag} used mention-based prefix for command ${message.content}.`);
+        log.info(`${message.author.tag} used mention-based prefix for command ${message.content}.`);
     }
 
     // if it's a command, we handle it.
@@ -125,8 +124,8 @@ client.on('messageCreate', async (message) => {
         try {
             await client.commands.run(command, args, message, client);
         } catch (e) {
-            log('e', `Executing ${command} for ${message.author.tag} with args ${args} failed:`, true);
-            log('e', e, true);
+            log.error(`Executing ${command} for ${message.author.tag} with args ${args} failed:`);
+            log.error(e);
             message.reply('Something went wrong! Notify a developer.');
         }
     }
@@ -134,17 +133,17 @@ client.on('messageCreate', async (message) => {
 
 // Handle rate limits
 client.on('rateLimit', (data) => {
-    log('w', 'Got hit with a ratelimit!');
-    log('w', `Ratelimited when performing ${data.method} ${data.path}`);
-    log('w', `API route was ${data.route} and limit hit was ${data.limit}/${data.timeout}ms (${data.timeout / 1000} seconds).`);
-    log('w', 'Operations have been paused until the ratelimit is lifted!');
+    log.warn('Got hit with a ratelimit!');
+    log.warn(`Ratelimited when performing ${data.method} ${data.path}`);
+    log.warn(`API route was ${data.route} and limit hit was ${data.limit}/${data.timeout}ms (${data.timeout / 1000} seconds).`);
+    log.warn('Operations have been paused until the ratelimit is lifted!');
 });
 
 // Handle SIGTERM and SIGINT
 async function handleInterrupt(): Promise<void> {
-    log('w', 'Got SIGTERM or SIGINT, shutting down...');
-    log('w', 'Sync logs...');
-    await log('CLOSE_STREAMS');
+    log.warn('Got SIGTERM or SIGINT, shutting down...');
+    log.warn('Sync logs...');
+    await log.cleanup();
     process.exit();
 }
 process.on('SIGTERM', handleInterrupt);
@@ -152,33 +151,33 @@ process.on('SIGINT', handleInterrupt);
 
 // When the process exits, wrap up.
 process.on('exit', (code) => {
-    log('w', 'Kill client... (exit code ' + code + ')');
+    log.warn('Kill client... (exit code ' + code + ')');
     client.destroy(); // Kill the client
     // NOTE: you can't log here
 });
 
 // If we get an uncaught exception, close ASAP.
 process.on('uncaughtException', async (error) => {
-    log('e', 'Killing client...', true);
+    log.error('Killing client...');
     client.destroy();
-    log('e', 'Client killed.', true);
-    log('e', 'An uncaught exception occurred!', true);
-    log('e', `Error thrown was:`, true);
+    log.error('Client killed.');
+    log.error('An uncaught exception occurred!');
+    log.error(`Error thrown was:`);
     error.stack?.split('\n').forEach((item) => {
-        log('e', `${item}`, true);
+        log.error(`${item}`);
     });
-    log('e', 'Stack trace dump:', true);
+    log.error('Stack trace dump:');
     let stack = new Error().stack?.split('\n');
     stack?.shift();
     if (!stack) stack = [];
 
     stack.forEach((item) => {
-        log('e', `${item}`, true);
+        log.error(`${item}`);
     });
-    log('e', 'Process exiting.', true);
-    log('e', 'Exit code 5.', true);
-    log('e', 'Goodbye!', true);
-    await log('CLOSE_STREAMS');
+    log.error('Process exiting.');
+    log.error('Exit code 5.');
+    log.error('Goodbye!');
+    await log.cleanup();
     process.exit(5);
 });
 

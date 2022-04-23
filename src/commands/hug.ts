@@ -41,13 +41,13 @@ export default class HugCommand extends Command {
         const { client, log } = this;
         const userID = args[0]?.replace(/[<@!>]/g, '');
         if (!args[0]) {
-            log('i', 'No hug arg provided!');
+            log.info('No hug arg provided!');
             message.reply('Who did you want to hug?');
             return;
         }
 
         if (userID === message.author.id) {
-            log('i', 'Cannot hug self!');
+            log.info('Cannot hug self!');
             message.reply('How are you gonna hug yourself?');
             return;
         }

@@ -23,9 +23,9 @@ import { Client } from 'discord.js';
 export default async function handleRestart(client: Client, log: Logger): Promise<void> {
     // If we were restarted, based on the restartData Map, send the RestartTimer message to
     // the channel we were restarted in.
-    log('i', 'Checking if we were restarted...');
+    log.info('Checking if we were restarted...');
     if (client.restartData.get('wasRestarted')) {
-        log('i', 'We have restarted. Sending message...');
+        log.info('We have restarted. Sending message...');
         const guild = client.guilds.cache.get(client.restartData.get('serverId') as string); // Fetch the server we restarted in...
         const channel = (await guild?.channels.cache.get(client.restartData.get('channelId') as string)) as discord.TextChannel; // ...and get the channel...
         const message = await channel?.messages.fetch(client.restartData.get('messageId') as string); // ...and finally the message.
@@ -37,5 +37,5 @@ export default async function handleRestart(client: Client, log: Logger): Promis
         client.restartData.set('wasRestarted', false);
     }
     // A clean start
-    else log('i', 'Not restarted.');
+    else log.info('Not restarted.');
 }

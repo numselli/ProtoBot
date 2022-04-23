@@ -31,9 +31,9 @@ export default function setStatus(client: Client, log: Logger): void {
     ];
     setInterval(() => {
         const status = allStatuses[Math.floor(Math.random() * allStatuses.length)];
-        log('i', `Change status: ${status[1]} (${status[0]})`);
+        log.info(`Change status: ${status[1]} (${status[0]})`);
         client.user?.setActivity(status[1], { type: status[0] });
     }, 10 * 60 * 1000); // Every 10 minutes.
-    log('i', 'Set status.');
+    log.info('Set status.');
     client.user?.setActivity(allStatuses[0][1], { type: allStatuses[0][0] });
 }

@@ -31,28 +31,28 @@ export default function init(client: Client, log: Logger): void {
     const userAvg = userTotal / userCountsPerGuild.length;
     // prettier-ignore
     (() => {
-        log('i', ' _______  ______   _______ _________');
-        log('i', '(  ____ )(  ___ \\ (  ___  )\\__   __/');
-        log('i', '| (    )|| (   ) )| (   ) |   ) (  '); 
-        log('i', '| (____)|| (__/ / | |   | |   | |  '); 
-        log('i', '|  _____)|  __ (  | |   | |   | |  '); 
-        log('i', '| (      | (  \\ \\ | |   | |   | |  '); 
-        log('i', '| )      | )___) )| (___) |   | |  '); 
-        log('i', '|/       |/ \\___/ (_______)   )_(  '); 
+        log.info(' _______  ______   _______ _________');
+        log.info('(  ____ )(  ___ \\ (  ___  )\\__   __/');
+        log.info('| (    )|| (   ) )| (   ) |   ) (  '); 
+        log.info('| (____)|| (__/ / | |   | |   | |  '); 
+        log.info('|  _____)|  __ (  | |   | |   | |  '); 
+        log.info('| (      | (  \\ \\ | |   | |   | |  '); 
+        log.info('| )      | )___) )| (___) |   | |  '); 
+        log.info('|/       |/ \\___/ (_______)   )_(  '); 
     })();
-    log('i', 'Ready!');
-    log('i', `Running ProtoBot on commit ${process.env.PROTOBOT_STARTSH_COMMIT}.`);
-    if (process.env.PROTOBOT_STARTSH_DIRTYSOURCE) log('w', 'Uncommitted changes present (dirty source tree)');
+    log.info('Ready!');
+    log.info(`Running ProtoBot on commit ${process.env.PROTOBOT_STARTSH_COMMIT}.`);
+    if (process.env.PROTOBOT_STARTSH_DIRTYSOURCE) log.warn('Uncommitted changes present (dirty source tree)');
 
-    if (process.env.PRODUCTION) log('i', 'Running in production mode. Verbose logging is disabled.');
-    else log('i', 'Running in development mode. Verbose logging is enabled.');
+    if (process.env.PRODUCTION) log.info('Running in production mode. Verbose logging is disabled.');
+    else log.info('Running in development mode. Verbose logging is enabled.');
 
     // A lot of chalk prefixes to show the counts. A better way to handle this?
     // Whoever wrote this (myself) needs some mental help.
-    log('i', `Username: ${chalk.red(client.user!.tag)}`);
-    log('i', `In ${chalk.red(client.guilds.cache.size)} guilds!`);
-    log('i', `With ${chalk.red(client.channels.cache.size)} channels!`);
-    log('i', `Total ${chalk.red(userTotal)} members, excluding myself!`);
-    log('i', `Average user count over all guilds: ${chalk.red(Math.round(userAvg))}`);
-    log('i', `Prefix is set to '${client.config.prefix}'.`);
+    log.info(`Username: ${chalk.red(client.user!.tag)}`);
+    log.info(`In ${chalk.red(client.guilds.cache.size)} guilds!`);
+    log.info(`With ${chalk.red(client.channels.cache.size)} channels!`);
+    log.info(`Total ${chalk.red(userTotal)} members, excluding myself!`);
+    log.info(`Average user count over all guilds: ${chalk.red(Math.round(userAvg))}`);
+    log.info(`Prefix is set to '${client.config.prefix}'.`);
 }

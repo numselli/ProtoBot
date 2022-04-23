@@ -42,7 +42,7 @@ export default class PatCommand extends Command {
         const { client, log } = this;
         const userID = args[0]?.replace(/[<@!>]/g, '');
         if (!args[0]) {
-            log('i', 'No boop arg provided!');
+            log.info('No boop arg provided!');
             message.reply('Who did you want to pat?');
             return;
         }

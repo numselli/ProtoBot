@@ -57,7 +57,7 @@ export default class CommandHandler {
         // Common issue in the folder name.
         if (!this.commandsFolder.endsWith('/')) this.commandsFolder += '/';
 
-        this.log('v', `CommandHandler: new command handler ready, commands folder is ${commandsFolder}`);
+        this.log.verbose(`CommandHandler: new command handler ready, commands folder is ${commandsFolder}`);
     }
 
     private _resetStore(): void {
@@ -72,28 +72,28 @@ export default class CommandHandler {
     public loadCommands(): void {
         this._resetStore();
 
-        this.log('v', `CommandHandler: loading commands from ${this.commandsFolder}`);
+        this.log.verbose(`CommandHandler: loading commands from ${this.commandsFolder}`);
 
         // Read the root directory of the commands.
         let files: string[] = [];
         try {
             files = fs.readdirSync(this.commandsFolder).filter((path) => path.endsWith('.js'));
         } catch (e) {
-            this.log('e', `Failed to read directory ${this.commandsFolder}:`);
-            this.log('e', e);
+            this.log.error(`Failed to read directory ${this.commandsFolder}:`);
+            this.log.errorWithStack(e);
         }
 
         // Iterate over the files and load them.
         files.forEach(async (path) => {
             if (path.replace('.js', '').toLowerCase() !== path.replace('.js', '')) {
-                this.log('w', `CommandCasedWarning: Command at ${path} has a name with a capital letter!`);
-                this.log('w', `Will be loaded as "${path.replace('.js', '').toLowerCase()}"!`);
+                this.log.warn(`CommandCasedWarning: Command at ${path} has a name with a capital letter!`);
+                this.log.warn(`Will be loaded as "${path.replace('.js', '').toLowerCase()}"!`);
                 // Normalize the path. This should never be needed.
                 path = path.toLowerCase();
             }
 
             // The command data is loaded from the path.
-            this.log('v', `Loading command "${path.replace('.js', '')}"...`);
+            this.log.verbose(`Loading command "${path.replace('.js', '')}"...`);
             const CommandClass = (await import('../' + this.commandsFolder + path)).default as Command;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
@@ -106,7 +106,7 @@ export default class CommandHandler {
             cmdConfig.aliases.forEach((alias: string) => {
                 this._commandRefs.set(alias, cmdName);
             });
-            this.log('i', `Finished loading command "${cmdName}"!`);
+            this.log.info(`Finished loading command "${cmdName}"!`);
         });
     }
 
@@ -123,22 +123,21 @@ export default class CommandHandler {
      */
     public run(commandName: string, args: string[], message: Message, client: Client): Promise<unknown> {
         // verbose info
-        this.log('v', `Running command "${commandName}" for "${message.author.tag}" with args "${args.join(' ')}"!`);
-        this.log(
-            'v',
+        this.log.verbose(`Running command "${commandName}" for "${message.author.tag}" with args "${args.join(' ')}"!`);
+        this.log.verbose(
             `Command found at: ${message.guild!.name} (${message.guild!.id}) => #${(message.channel as TextChannel).name} (${
                 message.channel.id
             }) => ${message.id}`
         );
 
-        this.log('v', 'Resolving alias...');
+        this.log.verbose('Resolving alias...');
         commandName = this._commandRefs.get(commandName) ?? '';
-        this.log('v', `Alias resolved to "${commandName}"!`);
+        this.log.verbose(`Alias resolved to "${commandName}"!`);
 
         const commandData: Command | undefined = this._commandClassInstances.get(commandName);
         if (!commandData) {
             // exit
-            this.log('i', `Failed to find command "${commandName}", exiting handler.`);
+            this.log.info(`Failed to find command "${commandName}", exiting handler.`);
             return Promise.resolve();
         }
 
@@ -146,8 +145,8 @@ export default class CommandHandler {
         // Now we check for specific things to prevent the command from running
         // in it's configuration.
         if (!commandConfig.enabled) {
-            this.log('i', `Command "${commandName}" is disabled (for ${message.author.tag}), exiting handler.`);
-            this.log('i', 'Command is disabled!');
+            this.log.info(`Command "${commandName}" is disabled (for ${message.author.tag}), exiting handler.`);
+            this.log.info('Command is disabled!');
             message.reply('That command is disabled!');
             return Promise.resolve();
         }
@@ -157,8 +156,7 @@ export default class CommandHandler {
                 (commandConfig.restrict instanceof Array && !commandConfig.restrict.includes(message.author.id)))
         ) {
             // User isn't authorized; the user is either not whitelisted to use the command and/or they're not an owner.
-            this.log(
-                'i',
+            this.log.info(
                 `Command "${commandName}" is UNAUTHORIZED (for ${message.author.tag}), got ${getPermissionsForUser(
                     client,
                     this.log,

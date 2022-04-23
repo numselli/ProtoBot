@@ -44,7 +44,7 @@ export default class BoopCommand extends Command {
         const userID = args[0]?.replace(/[<@!>]/g, '');
 
         if (!args[0]) {
-            log('i', `Not specified who to boop in boop.ts`);
+            log.info(`Not specified who to boop in boop.ts`);
             message.reply('Who did you want to boop?');
             return;
         }

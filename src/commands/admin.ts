@@ -21,7 +21,6 @@ import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
 import { Permissions } from '@lib/Permissions';
 import Command from '@lib/structures/Command';
 import { changeMaxBufferSize, clearBuffer, getMaxBufferSize, LogMode, readBuffer, readBufferOfType } from '@root/log';
-import chalk from 'chalk';
 import { exec, ExecException } from 'child_process';
 import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
@@ -50,12 +49,24 @@ export default class AdminCommand extends Command {
     public async run(message: Message, args: string[]): Promise<void> {
         const { client, log } = this;
 
+        // TODO: Find another way to handle this.
+        /**
+         * Compatibility layer for the Version 2 log & Version 1 loggers. This is a temporary solution until
+         * I find a better way to do this - LogN.
+         */
+        function legacyLog(mode: LogMode, message: unknown) {
+            if (mode === 'i') log.info(message);
+            else if (mode === 'w') log.warn(message);
+            else if (mode === 'e') log.error(message);
+            else if (mode === 'v') log.verbose(message);
+        }
+
         args[0] = args[0]?.toLowerCase();
 
-        log('i', `Admin command executed by ${message.author.tag}: ${args[0]}`);
+        log.info(`Admin command executed by ${message.author.tag}: ${args[0]}`);
 
         if (args[0] === 'restart' || args[0] === 're') {
-            log('w', `${message.author.tag} has triggered a restart!`);
+            log.warn(`${message.author.tag} has triggered a restart!`);
             // restart bot
             await message.reply('Alright, restarting...');
             client.restartData.set('serverId', message.guild?.id);
@@ -63,77 +74,12 @@ export default class AdminCommand extends Command {
             client.restartData.set('messageId', message.id);
             client.restartData.set('time', Date.now());
             client.restartData.set('wasRestarted', true);
-            log('w', 'Goodbye!');
-            log('w', 'Exiting with code 9 (RESTART)');
+            log.warn('Goodbye!');
+            log.warn('Exiting with code 9 (RESTART)');
             process.exit(9);
-        } else if (args[0] === 'update' || args[0] === 'up') {
-            const embed = new MessageEmbed()
-                .setTitle('Update')
-                .setDescription('Updating the bot... This may take a while...')
-                .setColor(client.publicConfig.colors.color2);
-
-            function l(mode: LogMode, message: string): void {
-                return log(mode, `${chalk.green('[')}${chalk.green.bold('Updater')}${chalk.green(']')} ${message}`);
-            }
-
-            l('i', 'Getting git status...');
-
-            const m = await message.reply({ embeds: [embed] });
-
-            exec('git status', (error: ExecException | null, stdout: string, stderr: string) => {
-                if (error) {
-                    l('e', `Failed to update: ${error}`);
-                    m.edit(`Failed to update: ${error}`);
-                } else {
-                    l('i', 'Got git status!');
-                    embed.addField('Git Status', `\`\`\`\n$ git status\n\n${stdout === '' ? stderr : stdout}\n\`\`\``);
-
-                    l('i', 'Stashing files...');
-                    exec('git stash', (error2: ExecException | null, stdout2: string, stderr2: string) => {
-                        if (error2) {
-                            l('e', `Failed to update: ${error2}`);
-                            m.edit(`Failed to update: ${error2}`);
-                        } else {
-                            l('i', 'Added files!');
-                            embed.addField('Git Stash Result', `\`\`\`\n$ git stash\n\n${stdout2 === '' ? stderr2 : stdout2}\n\`\`\``);
-
-                            l('i', 'Syncing...');
-
-                            exec(
-                                'git fetch && git pull --no-rebase && git push',
-                                (error4: ExecException | null, stderr4: string, stdout4: string) => {
-                                    if (error4) {
-                                        l('e', `Failed to update: ${error4}`);
-                                        m.edit(`Failed to update: ${error4}`);
-                                    } else {
-                                        const prefix = client.guildData.get(message.guild!.id, 'prefix');
-                                        l('i', 'Synced!');
-                                        embed
-                                            .addField(
-                                                'Git Sync (fetch -> pull -> push) Result',
-                                                `\`\`\`\n$ git fetch && git pull --no-rebase && git push\n\n${
-                                                    stdout4 === '' ? stderr4 : stdout4
-                                                }\n\`\`\``
-                                            )
-                                            .addField('Status', '**Complete.**')
-                                            .addField(
-                                                'Restart to apply changes',
-                                                `To apply the update, run \`${prefix}restart\`.\nYou may want to run \`${prefix}admin exec git stash apply\` to re-instate unsaved changes.`
-                                            );
-
-                                        m.edit({ embeds: [embed] });
-
-                                        l('i', 'Update completed!');
-                                    }
-                                }
-                            );
-                        }
-                    });
-                }
-            });
         } else if (args[0] === 'eval' || args[0] === 'e') {
             if (getPermissionsForUser(client, log, message) < Permissions.BOT_SUPER_ADMIN) {
-                log('w', `User ${message.author.tag} tried to use "admin eval", but they don't have permission!`);
+                log.warn(`User ${message.author.tag} tried to use "admin eval", but they don't have permission!`);
                 message.reply('Nah, that command is for the bot owner only!');
                 return;
             }
@@ -189,20 +135,20 @@ export default class AdminCommand extends Command {
                 .setDescription(`\`\`\`${response.substr(0, 1018)}\`\`\``);
             if (length >= 1025 && !silent) {
                 // dont do this on silent items
-                log(e ? 'e' : 'i', `An eval command executed by ${message.author.username}'s response was too long (${length}/2048).`);
-                log(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
-                log(e ? 'e' : 'i', 'Output:');
+                legacyLog(e ? 'e' : 'i', `An eval command executed by ${message.author.username}'s response was too long (${length}/2048).`);
+                legacyLog(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
+                legacyLog(e ? 'e' : 'i', 'Output:');
                 response.split('\n').forEach((b: string) => {
-                    log(e ? 'e' : 'i', b);
+                    legacyLog(e ? 'e' : 'i', b);
                 });
                 embed.addField('Note:', `The response was too long with a length of \`${length}/1024\` characters. it was logged to the console. `);
             } else if (!silent) {
                 // use different log for silent items
-                log(e ? 'e' : 'i', `An eval command has been executed by ${message.author.username}!`);
-                log(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
-                log(e ? 'e' : 'i', 'Output:');
+                legacyLog(e ? 'e' : 'i', `An eval command has been executed by ${message.author.username}!`);
+                legacyLog(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
+                legacyLog(e ? 'e' : 'i', 'Output:');
                 response.split('\n').forEach((b: string) => {
-                    log(e ? 'e' : 'i', b);
+                    legacyLog(e ? 'e' : 'i', b);
                 });
             }
 
@@ -210,23 +156,23 @@ export default class AdminCommand extends Command {
                 try {
                     message.reply({ embeds: [embed] });
                 } catch (e) {
-                    log('e', e as string);
+                    legacyLog('e', e as string);
                 }
             else {
                 message.delete().catch(() => {
                     // delete silent msg
-                    log('e', 'Failed to delete command message with silent eval!');
+                    legacyLog('e', 'Failed to delete command message with silent eval!');
                 });
-                log(e ? 'e' : 'i', 'Silent eval output:');
-                log(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
-                log(e ? 'e' : 'i', 'Output:');
+                legacyLog(e ? 'e' : 'i', 'Silent eval output:');
+                legacyLog(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
+                legacyLog(e ? 'e' : 'i', 'Output:');
                 response.split('\n').forEach((b: string) => {
-                    log(e ? 'e' : 'i', b);
+                    legacyLog(e ? 'e' : 'i', b);
                 });
             }
         } else if (args[0] === 'exec' || args[0] === 'ex') {
             if (getPermissionsForUser(client, log, message) < Permissions.BOT_SUPER_ADMIN) {
-                log('w', `User ${message.author.tag} tried to use "admin exec", but they don't have permission!`);
+                log.warn(`User ${message.author.tag} tried to use "admin exec", but they don't have permission!`);
                 message.reply('Nah, that command is for the bot owner only!');
                 return;
             }
@@ -263,28 +209,31 @@ export default class AdminCommand extends Command {
 
                 if (parsed.length >= 1025 && !silent) {
                     // dont do this on silent items
-                    log(e ? 'e' : 'i', `An exec command executed by ${message.author.username}'s response was too long (${parsed.length}/1024).`);
-                    log(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
-                    log(e ? 'e' : 'i', 'Output:');
+                    legacyLog(
+                        e ? 'e' : 'i',
+                        `An exec command executed by ${message.author.username}'s response was too long (${parsed.length}/1024).`
+                    );
+                    legacyLog(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
+                    legacyLog(e ? 'e' : 'i', 'Output:');
                     if (error) {
-                        log(e ? 'e' : 'i', 'ExecError:');
+                        legacyLog(e ? 'e' : 'i', 'ExecError:');
                         error
                             .toString()
                             .split('\n')
                             .forEach((b: string) => {
-                                log(e ? 'e' : 'i', b);
+                                legacyLog(e ? 'e' : 'i', b);
                             });
                     }
                     if (stderr) {
-                        log(e ? 'e' : 'i', 'STDERR:');
+                        legacyLog(e ? 'e' : 'i', 'STDERR:');
                         stderr.split('\n').forEach((b: string) => {
-                            log(e ? 'e' : 'i', b);
+                            legacyLog(e ? 'e' : 'i', b);
                         });
                     }
                     if (stdout) {
-                        log(e ? 'e' : 'i', 'STDOUT:');
+                        legacyLog(e ? 'e' : 'i', 'STDOUT:');
                         stdout.split('\n').forEach((b: string) => {
-                            log(e ? 'e' : 'i', b);
+                            legacyLog(e ? 'e' : 'i', b);
                         });
                     }
                     embed.addField(
@@ -293,28 +242,28 @@ export default class AdminCommand extends Command {
                     );
                 } else if (!silent) {
                     // use different log for silent items
-                    log(e ? 'e' : 'i', `An exec command has been executed by ${message.author.username}!`);
-                    log(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
-                    log(e ? 'e' : 'i', 'Output:');
+                    legacyLog(e ? 'e' : 'i', `An exec command has been executed by ${message.author.username}!`);
+                    legacyLog(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
+                    legacyLog(e ? 'e' : 'i', 'Output:');
                     if (error) {
-                        log(e ? 'e' : 'i', 'ExecError:');
+                        legacyLog(e ? 'e' : 'i', 'ExecError:');
                         error
                             .toString()
                             .split('\n')
                             .forEach((b: string) => {
-                                log(e ? 'e' : 'i', b);
+                                legacyLog(e ? 'e' : 'i', b);
                             });
                     }
                     if (stderr) {
-                        log(e ? 'e' : 'i', 'STDERR:');
+                        legacyLog(e ? 'e' : 'i', 'STDERR:');
                         stderr.split('\n').forEach((b: string) => {
-                            log(e ? 'e' : 'i', b);
+                            legacyLog(e ? 'e' : 'i', b);
                         });
                     }
                     if (stdout) {
-                        log(e ? 'e' : 'i', 'STDOUT:');
+                        legacyLog(e ? 'e' : 'i', 'STDOUT:');
                         stdout.split('\n').forEach((b: string) => {
-                            log(e ? 'e' : 'i', b);
+                            legacyLog(e ? 'e' : 'i', b);
                         });
                     }
                 }
@@ -323,37 +272,37 @@ export default class AdminCommand extends Command {
                     try {
                         message.reply({ embeds: [embed] });
                     } catch (e) {
-                        log('e', e as string);
+                        legacyLog('e', e as string);
                     }
                 else {
                     message.delete().catch(() => {
                         // delete silent msg
-                        log('e', 'Failed to delete command message with silent exec!');
+                        legacyLog('e', 'Failed to delete command message with silent exec!');
                     });
-                    log(e ? 'e' : 'i', 'Silent exec output:');
-                    log(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
-                    log(e ? 'e' : 'i', 'Output:');
+                    legacyLog(e ? 'e' : 'i', 'Silent exec output:');
+                    legacyLog(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
+                    legacyLog(e ? 'e' : 'i', 'Output:');
                     parsed.split('\n').forEach((b: string) => {
-                        log(e ? 'e' : 'i', b);
+                        legacyLog(e ? 'e' : 'i', b);
                     });
                 }
             });
         } else if (args[0] === 'reload' || args[0] === 'rl') {
-            log('i', 'Reloading commands...');
+            log.info('Reloading commands...');
             const pre = Date.now();
             const msg = await message.channel.send('Reloading all commands...');
             client.commands.loadCommands();
             const post = Date.now();
             msg.edit(`Reloaded all commands in ${post - pre}ms (${(post - pre) / 1000} seconds)!`);
         } else if (args[0] === 'clearlogbuffer' || args[0] === 'clb') {
-            log('i', 'Clearing log buffer...');
+            log.info('Clearing log buffer...');
             const len = readBuffer().length;
             clearBuffer();
             message.reply(`Cleared log buffer of ${len} entries.`);
         } else if (args[0] === 'setmaxbuffer' || args[0] === 'smb') {
-            log('i', `Setting log buffer max to ${parseInt(args[1])} entries...`);
+            log.info(`Setting log buffer max to ${parseInt(args[1])} entries...`);
             if (isNaN(parseInt(args[1]))) {
-                log('w', 'not a number');
+                log.warn('not a number');
                 message.reply('Not a number!');
                 return;
             }
@@ -413,14 +362,13 @@ export default class AdminCommand extends Command {
                 message.channel.send(
                     'Failed to send message! Probably too long. Report this to yourself, LogN~! (located at commands/admin.ts rdl try-catch ONSEND)'
                 );
-                log('e', e);
+                legacyLog('e', e);
             }
             return;
         } else {
             message.reply(`Please specify a command to execute. Here are the available commands:
     \`admin help\`: Shows this message
     \`admin (re|restart)\`: Restarts the bot
-    \`admin (up|update)\`: Run a software update.
     \`admin (e|eval)\`: Evaluates a code snippet. **SuperAdmins only**
     \`admin (ex|exec)\`: Runs a Bash command. **SuperAdmins only**
     \`admin (rl|reload)\`: Reload commands from the config.

@@ -44,10 +44,10 @@ export default class FursonaCommand extends Command {
 
         switch (args[0]) {
             case 'set':
-                log('i', 'Setting fursona!');
+                log.info('Setting fursona!');
                 if (!args[1]) {
                     const prefix = client.guildData.get(message.guild!.id, 'prefix');
-                    log('i', 'Showing set help!');
+                    log.info('Showing set help!');
                     message.reply(
                         `\`\`\`adoc\n===== FURSONA HELP =====\n${prefix}fursona set name <name> :: Set your fursona's name\n${prefix}fursona set bio <bio>   :: Set your fursona's bio\n${prefix}fursona set type <type> :: Set your fursona's breed/type (but not in people lol)\n\`\`\``
                     );
@@ -115,13 +115,13 @@ export default class FursonaCommand extends Command {
                 // If they haven't set one...
                 const fursona = client.fursonas.get(message.author.id);
                 if (!fursona) {
-                    log('i', 'No fursona for user!');
+                    log.info('No fursona for user!');
                     message.reply("You haven't set a fursona yet! To do this, run the command `fursona set`.");
                     return;
                 }
 
                 // They have one!
-                log('i', 'Displaying fursona!');
+                log.info('Displaying fursona!');
                 const embed = new MessageEmbed()
                     .setTitle('Fursona')
                     .setDescription('Here is your current fursona information.')

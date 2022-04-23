@@ -16,8 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable no-console */
-
 const runningInProd = process.env.PRODUCTION;
 
 import Logger from '@lib/interfaces/Logger';
@@ -34,6 +32,7 @@ import * as util from 'util'; // Utilities.
  * Print *message* and exit *code*.
  */
 function die(code: number, message: unknown): never {
+    // eslint-disable-next-line no-console
     console.error(message);
     process.exit(code);
 }
@@ -143,6 +142,7 @@ function preprocess(message: unknown): [string, number, string] {
 }
 
 function postprocess(message: string, type: LogMode, epoch: number): void {
+    // eslint-disable-next-line no-console
     console.log(message);
     writeItem(type, message);
     buffer.push([epoch, type, message]);

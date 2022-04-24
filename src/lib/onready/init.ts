@@ -32,14 +32,13 @@ export default function init(client: LexiClient, log: LexiLogger): void {
     const userAvg = userTotal / userCountsPerGuild.length;
     // prettier-ignore
     (() => {
-        log.info(' _______  ______   _______ _________');
-        log.info('(  ____ )(  ___ \\ (  ___  )\\__   __/');
-        log.info('| (    )|| (   ) )| (   ) |   ) (  '); 
-        log.info('| (____)|| (__/ / | |   | |   | |  '); 
-        log.info('|  _____)|  __ (  | |   | |   | |  '); 
-        log.info('| (      | (  \\ \\ | |   | |   | |  '); 
-        log.info('| )      | )___) )| (___) |   | |  '); 
-        log.info('|/       |/ \\___/ (_______)   )_(  '); 
+        log.info(String.raw` ___      _______  __   __  ___  `);
+        log.info(String.raw`|   |    |       ||  |_|  ||   | `);
+        log.info(String.raw`|   |    |    ___||       ||   | `);
+        log.info(String.raw`|   |    |   |___ |       ||   | `);
+        log.info(String.raw`|   |___ |    ___| |     | |   | `);
+        log.info(String.raw`|       ||   |___ |   _   ||   | `);
+        log.info(String.raw`|_______||_______||__| |__||___| `);
     })();
     log.info('Ready!');
     log.info(`Running Lexi on commit ${process.env.LEXI_STARTSH_COMMIT}.`);

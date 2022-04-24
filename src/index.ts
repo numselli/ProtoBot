@@ -25,15 +25,15 @@ import LexiClient from '#lib/structures/LexiClient';
 import log from '#root/log';
 
 // Verify the currently running commit...
-log.verbose('Verifying we were started via the start script...');
+log.info('Verifying we were started via the start script...');
 if (!process.env.LEXI_STARTSH_COMMIT) {
     log.error('Environment variable LEXI_STARTSH_COMMIT is not set!');
-    log.warn("If you are seeing this message, it means you are running the bot's script directly.");
-    log.warn('This is not recommended, and may cause unexpected behavior.');
-    log.warn('After multiple bug reports of people using an invalid environment (like this one),');
-    log.warn('the developer team has decided that direct execution should be disabled.');
-    log.warn('Please use the start script instead.');
-    log.warn('Reference issue #463 for more information.');
+    log.error("If you are seeing this message, it means you are running the bot's script directly.");
+    log.error('This is not recommended, and may cause unexpected behavior.');
+    log.error('After multiple bug reports of people using an invalid environment (like this one),');
+    log.error('the developer team has decided that direct execution should be disabled.');
+    log.error('Please use the start script instead.');
+    log.error('Reference issue #463 for more information.');
     log.error('We were not started via the start script! Exiting (code 1)...');
     process.exit(1);
 }
@@ -109,7 +109,7 @@ client.on('messageCreate', async (message) => {
         prefixLen = client.user!.id.length + (lowercasedMessageContent.startsWith('<@!') ? 4 : 3);
         if (lowercasedMessageContent.charAt(prefixLen) === ' ') prefixLen++;
         msgIsCommand = true;
-        log.info(`${message.author.tag} used mention-based prefix for command ${message.content}.`);
+        log.verbose(`${message.author.tag} used mention-based prefix for command ${message.content}.`);
     }
 
     // if it's a command, we handle it.
@@ -121,7 +121,7 @@ client.on('messageCreate', async (message) => {
             await client.commands.run(command, args, message, client);
         } catch (e) {
             log.error(`Executing ${command} for ${message.author.tag} with args ${args} failed:`);
-            log.error(e);
+            log.errorWithStack(e);
             message.reply('Something went wrong! Notify a developer.');
         }
     }
@@ -172,7 +172,7 @@ process.on('uncaughtException', async (error) => {
     });
     log.error('Process exiting.');
     log.error('Exit code 5.');
-    log.error('Goodbye!');
+    log.errorWithStack('Goodbye!');
     await log.cleanup();
     process.exit(5);
 });

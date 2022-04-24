@@ -16,13 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { Client, Message } from 'discord.js';
+import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 
 import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
-import Command from '#lib/structures/Command';
+import type LexiClient from '#lib/structures/LexiClient';
+import LexiCommand from '#lib/structures/LexiCommand';
 
-function fireStats(userID: string, message: Message, client: Client): void {
+function fireStats(userID: string, message: Message, client: LexiClient): void {
     const uData = client.userStatistics.get(userID)!;
     const ETD = client.emoteCounterTrackers.get(userID)!;
     const embed = new MessageEmbed()
@@ -37,7 +38,7 @@ function fireStats(userID: string, message: Message, client: Client): void {
     message.reply({ embeds: [embed] });
 }
 
-export default class InfoCommand extends Command {
+export default class InfoCommand extends LexiCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'info',

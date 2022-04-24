@@ -16,16 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Client, Message } from 'discord.js';
+import type { Message } from 'discord.js';
 
-import CommandConfig from '#lib/interfaces/commands/CommandConfig';
+import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
 import type Logger from '#lib/interfaces/Logger';
+import type LexiClient from '#lib/structures/LexiClient';
 
-export default abstract class Command {
-    protected client: Client;
+export default abstract class LexiCommand {
+    protected client: LexiClient;
     protected log: Logger;
 
-    public constructor(client: Client, log: Logger) {
+    public constructor(client: LexiClient, log: Logger) {
         this.client = client;
         this.log = log;
     }

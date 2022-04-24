@@ -17,18 +17,19 @@
  */
 
 // Imports
-import { Message, MessageEmbed } from 'discord.js';
+import type { Message } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 
 import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
-import Command from '#lib/structures/Command';
+import LexiCommand from '#lib/structures/LexiCommand';
 
 interface FoxData {
     image: string;
     link: string;
 }
 
-export default class FoxCommand extends Command {
+export default class FoxCommand extends LexiCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'fox',

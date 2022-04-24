@@ -16,17 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { Client, Message } from 'discord.js';
+import type { Message } from 'discord.js';
 
-import Cooldowns from '#lib/interfaces/db/Cooldowns';
+import type Cooldowns from '#lib/interfaces/db/Cooldowns';
 import type Logger from '#lib/interfaces/Logger';
-import Hook, { HookConfig } from '#lib/structures/Hook';
+import type LexiClient from '#lib/structures/LexiClient';
+import type { LexiHookConfig } from '#lib/structures/LexiHook';
+import LexiHook from '#lib/structures/LexiHook';
 import { doesHavePrefix } from '#lib/utils/doesHavePrefix';
 
 type Checkers = 'uwu' | 'owo' | '~';
 type DBName = 'uwus' | 'owos' | 'tildes';
 
-function checkAndSet(client: Client, cooldowns: Cooldowns, l: Logger, m: Message, checkString: Checkers, dbName: DBName): void {
+function checkAndSet(client: LexiClient, cooldowns: Cooldowns, l: Logger, m: Message, checkString: Checkers, dbName: DBName): void {
     if (
         ((checkString !== '~' && m.content.toLowerCase().includes(checkString)) ||
             (m.content.endsWith('~') && !/~~+/.test(m.content) && m.content !== '~')) &&
@@ -40,8 +42,8 @@ function checkAndSet(client: Client, cooldowns: Cooldowns, l: Logger, m: Message
     }
 }
 
-export default class EmoteCountersHook extends Hook {
-    public getConfig(): HookConfig {
+export default class EmoteCountersHook extends LexiHook {
+    public getConfig(): LexiHookConfig {
         return {
             name: 'emoteCounters',
             description: 'Detects a message containing "owo", "uwu", or ends in "~" and logs it.'

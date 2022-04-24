@@ -16,8 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Client, Message } from 'discord.js';
+import type { Message } from 'discord.js';
 
-export function doesHavePrefix(message: Message, client: Client): boolean {
+import type LexiClient from '#lib/structures/LexiClient';
+
+export function doesHavePrefix(message: Message, client: LexiClient): boolean {
     return message.content.startsWith(client.guildData.get(message.guild!.id, 'prefix')!);
 }

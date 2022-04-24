@@ -19,15 +19,18 @@
 // Import source-map-support and register it to allow better visibility of
 // error locations as shown in the TS default source maps.
 import 'source-map-support/register';
+// No-op because of import sorting
+// eslint-disable-next-line no-empty-function, @typescript-eslint/no-empty-function
+(() => {})();
 
-import chalk from 'chalk'; // Coloring for CLI
-import { Intents, TextChannel } from 'discord.js'; // <<< Discord!
+import chalk from 'chalk';
+import type { TextChannel } from 'discord.js';
+import { Intents } from 'discord.js';
 
-import LexiClient from '#lib/LexiClient'; // The custom client files
 import * as ready from '#lib/onready/index';
-import Hook from '#lib/structures/Hook';
+import LexiClient from '#lib/structures/LexiClient';
+import type LexiHook from '#lib/structures/LexiHook';
 
-// Import the primary log function from the CWD.
 import log from './log';
 
 // Verify the currently running commit...
@@ -97,7 +100,7 @@ client.on('messageCreate', async (message) => {
         return;
     }
     // Execute each hook from the database.
-    client.hooks.forEach((hookData: Hook) => {
+    client.hooks.forEach((hookData: LexiHook) => {
         const cfg = hookData.getConfig();
         log.verbose(`Running hook ${cfg.name} for ${message.author.tag}!`);
         hookData.run(message);

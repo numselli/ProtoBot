@@ -106,6 +106,7 @@ module.exports = {
         'valid-typeof': ['error'],
         'license-header/header': ['error', 'src/header.ts'],
         '@typescript-eslint/explicit-member-accessibility': ['error'],
+        '@typescript-eslint/consistent-type-imports': ['error'],
         'simple-import-sort/imports': ['error'],
         'simple-import-sort/exports': ['error']
     },

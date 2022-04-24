@@ -16,12 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as discord from 'discord.js';
-import { Client } from 'discord.js';
+import type * as discord from 'discord.js';
 
-import Logger from '#lib/interfaces/Logger';
+import type Logger from '#lib/interfaces/Logger';
+import type LexiClient from '#lib/structures/LexiClient';
 
-export default async function handleRestart(client: Client, log: Logger): Promise<void> {
+export default async function handleRestart(client: LexiClient, log: Logger): Promise<void> {
     // If we were restarted, based on the restartData Map, send the RestartTimer message to
     // the channel we were restarted in.
     log.info('Checking if we were restarted...');

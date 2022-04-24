@@ -17,11 +17,11 @@
  */
 
 import chalk from 'chalk';
-import { Client } from 'discord.js';
 
-import Logger from '#lib/interfaces/Logger';
+import type Logger from '#lib/interfaces/Logger';
+import type LexiClient from '#lib/structures/LexiClient';
 
-export default function init(client: Client, log: Logger): void {
+export default function init(client: LexiClient, log: Logger): void {
     // Count the total user counts up. We do this by getting the total user count
     // for each server and remove ourselves from it...
     const userCountsPerGuild = client.guilds.cache.map((g) => g.memberCount - 1);

@@ -19,7 +19,7 @@
 import type { Message } from 'discord.js';
 
 import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
-import Command from '#lib/structures/Command';
+import LexiCommand from '#lib/structures/LexiCommand';
 
 function escapeMarkdown(text: string) {
     const unescaped = text.replace(/\\(\*|_|`|~|\\)/g, '$1'); // unescape any "backslashed" character
@@ -27,7 +27,7 @@ function escapeMarkdown(text: string) {
     return escaped;
 }
 
-export default class SourceCommand extends Command {
+export default class SourceCommand extends LexiCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'source',

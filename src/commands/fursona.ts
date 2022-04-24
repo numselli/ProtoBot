@@ -16,12 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Message, MessageEmbed } from 'discord.js';
+import type { Message } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 
 import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
-import Command from '#lib/structures/Command';
+import LexiCommand from '#lib/structures/LexiCommand';
 
-export default class FursonaCommand extends Command {
+export default class FursonaCommand extends LexiCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'fursona',

@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Client } from 'discord.js';
 import fs from 'fs';
 
-import Logger from '#lib/interfaces/Logger';
-import Hook from '#lib/structures/Hook';
+import type Logger from '#lib/interfaces/Logger';
+import type LexiClient from '#lib/structures/LexiClient';
+import type LexiHook from '#lib/structures/LexiHook';
 
-export default function loadHooks(client: Client, log: Logger): void {
+export default function loadHooks(client: LexiClient, log: Logger): void {
     log.info('beginning initial hook load...');
     fs.readdir(client.config.dirs.hooks, (err, files) => {
         if (err) {
@@ -32,7 +32,7 @@ export default function loadHooks(client: Client, log: Logger): void {
             files.forEach(async (path: string) => {
                 if (path.endsWith('.js')) {
                     // normal load, but in this case we import into the hook Map.
-                    const HookClass: Hook = (
+                    const HookClass: LexiHook = (
                         await import(
                             '../../' +
                                 (client.config.dirs.hooks.endsWith('/') ? client.config.dirs.hooks + path : `${client.config.dirs.hooks}/${path}`)

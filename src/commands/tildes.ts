@@ -19,14 +19,14 @@
 import type { Message } from 'discord.js';
 
 import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
-import Command from '#lib/structures/Command';
+import LexiCommand from '#lib/structures/LexiCommand';
 import { formatRow } from '#lib/utils/formatTrackerRow';
 
 // The number of users that should be displayed on the leaderboard at a
 // given time.
 const CUTOFF = 10;
 
-export default class TildesCommand extends Command {
+export default class TildesCommand extends LexiCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'tildes',

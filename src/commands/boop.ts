@@ -19,9 +19,9 @@
 import type { Message } from 'discord.js';
 
 import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
-import Command from '#lib/structures/Command';
+import LexiCommand from '#lib/structures/LexiCommand';
 
-export default class BoopCommand extends Command {
+export default class BoopCommand extends LexiCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'boop',

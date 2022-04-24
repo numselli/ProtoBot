@@ -16,14 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Client, Message, TextChannel } from 'discord.js';
+import type { Message, TextChannel } from 'discord.js';
 import fs from 'fs';
 
 import type Logger from '#lib/interfaces/Logger';
-import Command from '#lib/structures/Command';
+import type LexiClient from '#lib/structures/LexiClient';
+import type LexiCommand from '#lib/structures/LexiCommand';
 
 import { getPermissionsForUser } from './getPermissionsForUser';
-import CommandConfig from './interfaces/commands/CommandConfig';
+import type CommandConfig from './interfaces/commands/CommandConfig';
 
 /**
  * CommandHandler handles the storage and effective management of commands
@@ -34,10 +35,10 @@ export default class LexiCommandHandler {
     private log: Logger;
 
     /** The internal storage facility for the commands. */
-    private _commandClassInstances: Map<string, Command>;
+    private _commandClassInstances: Map<string, LexiCommand>;
     private _commandConfigs: Map<string, CommandConfig>;
     private _commandRefs: Map<string, string>;
-    private client: Client;
+    private client: LexiClient;
 
     /** The commands folder. */
     private readonly commandsFolder: string;
@@ -47,7 +48,7 @@ export default class LexiCommandHandler {
      * @param logger The logger to use. This is a global logger, so it is not dependent on the client.
      * @param commandsFolder The folder that commands are located in.
      */
-    public constructor(logger: Logger, commandsFolder: string, client: Client) {
+    public constructor(logger: Logger, commandsFolder: string, client: LexiClient) {
         this.log = logger;
         this._commandClassInstances = new Map();
         this._commandConfigs = new Map();
@@ -95,7 +96,7 @@ export default class LexiCommandHandler {
 
             // The command data is loaded from the path.
             this.log.verbose(`Loading command "${path.replace('.js', '')}"...`);
-            const CommandClass = (await import('../' + this.commandsFolder + path)).default as Command;
+            const CommandClass = (await import('../' + this.commandsFolder + path)).default as LexiCommand;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const command = new CommandClass(this.client, this.log);
@@ -122,7 +123,7 @@ export default class LexiCommandHandler {
     /**
      * Execute a command after performing checks.
      */
-    public run(commandName: string, args: string[], message: Message, client: Client): Promise<unknown> {
+    public run(commandName: string, args: string[], message: Message, client: LexiClient): Promise<unknown> {
         // verbose info
         this.log.verbose(`Running command "${commandName}" for "${message.author.tag}" with args "${args.join(' ')}"!`);
         this.log.verbose(
@@ -135,7 +136,7 @@ export default class LexiCommandHandler {
         commandName = this._commandRefs.get(commandName) ?? '';
         this.log.verbose(`Alias resolved to "${commandName}"!`);
 
-        const commandData: Command | undefined = this._commandClassInstances.get(commandName);
+        const commandData: LexiCommand | undefined = this._commandClassInstances.get(commandName);
         if (!commandData) {
             // exit
             this.log.info(`Failed to find command "${commandName}", exiting handler.`);

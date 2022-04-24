@@ -16,11 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Client } from 'discord.js';
+import type Logger from '#lib/interfaces/Logger';
+import type LexiClient from '#lib/structures/LexiClient';
 
-import Logger from '#lib/interfaces/Logger';
-
-export default function setStatus(client: Client, log: Logger): void {
+export default function setStatus(client: LexiClient, log: Logger): void {
     // Status handling code
     // We assume the main prefix is always the first in the array.
     const allStatuses: ['PLAYING' | 'STREAMING' | 'LISTENING' | 'WATCHING' | 'COMPETING', string][] = [

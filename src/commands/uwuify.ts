@@ -20,7 +20,7 @@ import type { Message } from 'discord.js';
 import Uwuifier from 'uwuifier';
 
 import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
-import Command from '#lib/structures/Command';
+import LexiCommand from '#lib/structures/LexiCommand';
 
 const uwuify: Uwuifier = new Uwuifier();
 uwuify.actions = [
@@ -39,7 +39,7 @@ uwuify.actions = [
     '*boops your nose*'
 ];
 
-export default class UwuifyCommand extends Command {
+export default class UwuifyCommand extends LexiCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'uwuify',

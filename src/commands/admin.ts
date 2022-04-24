@@ -16,7 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { exec, ExecException } from 'child_process';
+import type { ExecException } from 'child_process';
+import { exec } from 'child_process';
 import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 // Hacky way to require()
@@ -25,11 +26,12 @@ import { createRequire } from 'module';
 import { getPermissionsForUser } from '#lib/getPermissionsForUser';
 import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
 import { Permissions } from '#lib/Permissions';
-import Command from '#lib/structures/Command';
-import { changeMaxBufferSize, clearBuffer, getMaxBufferSize, LogMode, readBuffer, readBufferOfType } from '#root/log';
+import LexiCommand from '#lib/structures/LexiCommand';
+import type { LogMode } from '#root/log';
+import { changeMaxBufferSize, clearBuffer, getMaxBufferSize, readBuffer, readBufferOfType } from '#root/log';
 const require = createRequire(import.meta.url);
 
-export default class AdminCommand extends Command {
+export default class AdminCommand extends LexiCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'admin',

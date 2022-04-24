@@ -16,7 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Client as BaseClient, ClientOptions } from 'discord.js';
+import type { ClientOptions } from 'discord.js';
+import { Client as BaseClient } from 'discord.js';
 import Enmap from 'enmap';
 
 import EnmapVerbose from '#lib/EnmapVerbose';

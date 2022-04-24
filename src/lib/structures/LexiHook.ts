@@ -16,24 +16,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Client, Message } from 'discord.js';
+import type { Message } from 'discord.js';
 
 import type Logger from '#lib/interfaces/Logger';
+import type LexiClient from '#lib/structures/LexiClient';
 
-export interface HookConfig {
+export interface LexiHookConfig {
     name: string;
     description: string;
 }
 
-export default abstract class Hook {
-    protected client: Client;
+export default abstract class LexiHook {
+    protected client: LexiClient;
     protected log: Logger;
 
-    public constructor(client: Client, log: Logger) {
+    public constructor(client: LexiClient, log: Logger) {
         this.client = client;
         this.log = log;
     }
 
     public abstract run(message: Message): void;
-    public abstract getConfig(): HookConfig;
+    public abstract getConfig(): LexiHookConfig;
 }

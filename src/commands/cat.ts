@@ -17,17 +17,18 @@
  */
 
 // Imports
-import { Message, MessageEmbed } from 'discord.js';
+import type { Message } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 
 import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
-import Command from '#lib/structures/Command';
+import LexiCommand from '#lib/structures/LexiCommand';
 
 interface CatData {
     link: string;
 }
 
-export default class CatCommand extends Command {
+export default class CatCommand extends LexiCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'cat',

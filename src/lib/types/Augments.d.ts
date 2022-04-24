@@ -24,19 +24,19 @@
  ******************************************************************************/
 
 // Imports
-import Enmap from 'enmap';
+import type Enmap from 'enmap';
 
-import Config from '#lib/interfaces/Config';
-import Cooldowns from '#lib/interfaces/db/Cooldowns';
-import EmoteCounterData from '#lib/interfaces/db/EmoteCounterData';
-import Fursona from '#lib/interfaces/db/Fursona';
-import GuildData from '#lib/interfaces/db/guildData';
-import UserConfig from '#lib/interfaces/db/UserConfig';
-import UserStats from '#lib/interfaces/db/UserStats';
-import Hook from '#lib/interfaces/Hook';
-import MarkovData from '#lib/interfaces/MarkovData';
-import PublicConfig from '#lib/interfaces/PublicConfig';
-import LexiCommandHandler from '#lib/LexiCommandHandler';
+import type Config from '#lib/interfaces/Config';
+import type Cooldowns from '#lib/interfaces/db/Cooldowns';
+import type EmoteCounterData from '#lib/interfaces/db/EmoteCounterData';
+import type Fursona from '#lib/interfaces/db/Fursona';
+import type GuildData from '#lib/interfaces/db/guildData';
+import type UserConfig from '#lib/interfaces/db/UserConfig';
+import type UserStats from '#lib/interfaces/db/UserStats';
+import type Hook from '#lib/interfaces/Hook';
+import type MarkovData from '#lib/interfaces/MarkovData';
+import type PublicConfig from '#lib/interfaces/PublicConfig';
+import type LexiCommandHandler from '#lib/LexiCommandHandler';
 
 // Discord.js
 declare module 'discord.js' {

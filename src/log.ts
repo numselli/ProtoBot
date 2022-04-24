@@ -23,7 +23,7 @@ import * as fs from 'fs'; // To create the write streams.
 import strip from 'strip-ansi'; // To clean off the ANSI escape codes for the log files.
 import * as util from 'util'; // Utilities.
 
-import Logger from '#lib/interfaces/Logger';
+import type Logger from '#lib/interfaces/Logger';
 
 // Create the logging streams for all of the log levels.
 // A certain log level is always logged to all below it, so for example, if you were

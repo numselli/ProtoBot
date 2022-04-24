@@ -17,10 +17,11 @@
  */
 
 // Imports
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
-import Command from '@lib/structures/Command';
 import { Message, MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
+
+import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
+import Command from '#lib/structures/Command';
 
 interface FoxData {
     image: string;

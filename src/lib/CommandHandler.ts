@@ -16,10 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type Logger from '@lib/interfaces/Logger';
-import Command from '@lib/structures/Command';
 import { Client, Message, TextChannel } from 'discord.js';
 import fs from 'fs';
+
+import type Logger from '#lib/interfaces/Logger';
+import Command from '#lib/structures/Command';
 
 import { getPermissionsForUser } from './getPermissionsForUser';
 import CommandConfig from './interfaces/commands/CommandConfig';

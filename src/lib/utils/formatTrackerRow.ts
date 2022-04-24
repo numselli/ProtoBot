@@ -16,8 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { EmoteCounterType } from '@lib/interfaces/db/EmoteCounterData';
 import type { Client, User } from 'discord.js';
+
+import type { EmoteCounterType } from '#lib/interfaces/db/EmoteCounterData';
 
 export function formatRow(type: EmoteCounterType, index: number, user: User | null, client: Client): string {
     const ranking = (index + 1).toString().padStart(2, ' ');

@@ -16,9 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import log from '@root/log';
 import chalk from 'chalk';
 import { highlight } from 'cli-highlight';
+
+import log from '#root/log';
 
 /**
  * Called on every query to the Enmap internal database.

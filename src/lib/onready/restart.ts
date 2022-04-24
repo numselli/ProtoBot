@@ -16,9 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Logger from '@lib/interfaces/Logger';
 import * as discord from 'discord.js';
 import { Client } from 'discord.js';
+
+import Logger from '#lib/interfaces/Logger';
 
 export default async function handleRestart(client: Client, log: Logger): Promise<void> {
     // If we were restarted, based on the restartData Map, send the RestartTimer message to

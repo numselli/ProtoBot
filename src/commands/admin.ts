@@ -16,16 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { getPermissionsForUser } from '@lib/getPermissionsForUser';
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
-import { Permissions } from '@lib/Permissions';
-import Command from '@lib/structures/Command';
-import { changeMaxBufferSize, clearBuffer, getMaxBufferSize, LogMode, readBuffer, readBufferOfType } from '@root/log';
 import { exec, ExecException } from 'child_process';
 import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 // Hacky way to require()
 import { createRequire } from 'module';
+
+import { getPermissionsForUser } from '#lib/getPermissionsForUser';
+import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
+import { Permissions } from '#lib/Permissions';
+import Command from '#lib/structures/Command';
+import { changeMaxBufferSize, clearBuffer, getMaxBufferSize, LogMode, readBuffer, readBufferOfType } from '#root/log';
 const require = createRequire(import.meta.url);
 
 export default class AdminCommand extends Command {

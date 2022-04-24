@@ -16,9 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import CommandConfig from '@lib/interfaces/commands/CommandConfig';
-import type Logger from '@lib/interfaces/Logger';
 import { Client, Message } from 'discord.js';
+
+import CommandConfig from '#lib/interfaces/commands/CommandConfig';
+import type Logger from '#lib/interfaces/Logger';
 
 export default abstract class Command {
     protected client: Client;

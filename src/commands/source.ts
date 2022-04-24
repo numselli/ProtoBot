@@ -16,9 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
-import Command from '@lib/structures/Command';
 import type { Message } from 'discord.js';
+
+import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
+import Command from '#lib/structures/Command';
 
 function escapeMarkdown(text: string) {
     const unescaped = text.replace(/\\(\*|_|`|~|\\)/g, '$1'); // unescape any "backslashed" character

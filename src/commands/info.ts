@@ -16,10 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
-import Command from '@lib/structures/Command';
 import type { Client, Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
+
+import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
+import Command from '#lib/structures/Command';
 
 function fireStats(userID: string, message: Message, client: Client): void {
     const uData = client.userStatistics.get(userID)!;

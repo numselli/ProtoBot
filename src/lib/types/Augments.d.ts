@@ -24,18 +24,19 @@
  ******************************************************************************/
 
 // Imports
-import CommandHandler from '@lib/CommandHandler';
-import Config from '@lib/interfaces/Config';
-import Cooldowns from '@lib/interfaces/db/Cooldowns';
-import EmoteCounterData from '@lib/interfaces/db/EmoteCounterData';
-import Fursona from '@lib/interfaces/db/Fursona';
-import GuildData from '@lib/interfaces/db/guildData';
-import UserConfig from '@lib/interfaces/db/UserConfig';
-import UserStats from '@lib/interfaces/db/UserStats';
-import Hook from '@lib/interfaces/Hook';
-import MarkovData from '@lib/interfaces/MarkovData';
-import PublicConfig from '@lib/interfaces/PublicConfig';
 import Enmap from 'enmap';
+
+import CommandHandler from '#lib/CommandHandler';
+import Config from '#lib/interfaces/Config';
+import Cooldowns from '#lib/interfaces/db/Cooldowns';
+import EmoteCounterData from '#lib/interfaces/db/EmoteCounterData';
+import Fursona from '#lib/interfaces/db/Fursona';
+import GuildData from '#lib/interfaces/db/guildData';
+import UserConfig from '#lib/interfaces/db/UserConfig';
+import UserStats from '#lib/interfaces/db/UserStats';
+import Hook from '#lib/interfaces/Hook';
+import MarkovData from '#lib/interfaces/MarkovData';
+import PublicConfig from '#lib/interfaces/PublicConfig';
 
 // Discord.js
 declare module 'discord.js' {

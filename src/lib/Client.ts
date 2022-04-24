@@ -16,12 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import EnmapVerbose from '@lib/EnmapVerbose';
-import type Logger from '@lib/interfaces/Logger';
-import config from '@root/config';
-import publicConfig from '@root/publicConfig';
 import { Client as BaseClient, ClientOptions } from 'discord.js';
 import Enmap from 'enmap';
+
+import EnmapVerbose from '#lib/EnmapVerbose';
+import type Logger from '#lib/interfaces/Logger';
+import config from '#root/config';
+import publicConfig from '#root/publicConfig';
 
 import CommandHandler from './CommandHandler';
 

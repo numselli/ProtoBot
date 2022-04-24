@@ -16,9 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
-import Command from '@lib/structures/Command';
 import { Message, MessageEmbed } from 'discord.js';
+
+import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
+import Command from '#lib/structures/Command';
 
 export default class FursonaCommand extends Command {
     public getConfig(): CommandConfig {

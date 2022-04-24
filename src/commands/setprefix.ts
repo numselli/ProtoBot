@@ -16,10 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
-import { Permissions } from '@lib/Permissions';
-import Command from '@lib/structures/Command';
 import type { Message } from 'discord.js';
+
+import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
+import { Permissions } from '#lib/Permissions';
+import Command from '#lib/structures/Command';
 
 export default class SetPrefixCommand extends Command {
     public getConfig(): CommandConfig {

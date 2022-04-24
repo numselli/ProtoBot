@@ -19,7 +19,7 @@
 // A non-secret version of this configuration file.
 
 // Config types
-import type PublicConfig from '@lib/interfaces/PublicConfig';
+import type PublicConfig from '#lib/interfaces/PublicConfig';
 
 const publicConfig: PublicConfig = {
     githubRepository: 'https://github.com/thetayloredman/Lexi',

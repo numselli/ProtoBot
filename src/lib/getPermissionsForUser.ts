@@ -16,8 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Permissions } from '@lib/Permissions';
 import { Client, Message, TextChannel } from 'discord.js';
+
+import { Permissions } from '#lib/Permissions';
 
 import Logger from './interfaces/Logger';
 

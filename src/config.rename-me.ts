@@ -17,7 +17,7 @@
  */
 
 // Config types
-import Config from '@lib/interfaces/Config';
+import Config from '#lib/interfaces/Config';
 
 // Ms conversion functions
 function seconds(count: number): number {

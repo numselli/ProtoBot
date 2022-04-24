@@ -20,11 +20,12 @@
 // error locations as shown in the TS default source maps.
 import 'source-map-support/register';
 
-import Client from '@lib/Client'; // The custom client files
-import * as ready from '@lib/onready/index';
-import Hook from '@lib/structures/Hook';
 import chalk from 'chalk'; // Coloring for CLI
 import { Intents, TextChannel } from 'discord.js'; // <<< Discord!
+
+import Client from '#lib/Client'; // The custom client files
+import * as ready from '#lib/onready/index';
+import Hook from '#lib/structures/Hook';
 
 // Import the primary log function from the CWD.
 import log from './log';

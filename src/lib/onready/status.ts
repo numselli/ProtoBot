@@ -16,8 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Logger from '@lib/interfaces/Logger';
 import { Client } from 'discord.js';
+
+import Logger from '#lib/interfaces/Logger';
 
 export default function setStatus(client: Client, log: Logger): void {
     // Status handling code

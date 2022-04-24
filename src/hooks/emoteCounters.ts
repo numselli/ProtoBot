@@ -16,11 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Cooldowns from '@lib/interfaces/db/Cooldowns';
-import type Logger from '@lib/interfaces/Logger';
-import Hook, { HookConfig } from '@lib/structures/Hook';
-import { doesHavePrefix } from '@lib/utils/doesHavePrefix';
 import type { Client, Message } from 'discord.js';
+
+import Cooldowns from '#lib/interfaces/db/Cooldowns';
+import type Logger from '#lib/interfaces/Logger';
+import Hook, { HookConfig } from '#lib/structures/Hook';
+import { doesHavePrefix } from '#lib/utils/doesHavePrefix';
 
 type Checkers = 'uwu' | 'owo' | '~';
 type DBName = 'uwus' | 'owos' | 'tildes';

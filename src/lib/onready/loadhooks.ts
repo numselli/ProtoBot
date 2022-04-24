@@ -16,10 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Logger from '@lib/interfaces/Logger';
-import Hook from '@lib/structures/Hook';
 import { Client } from 'discord.js';
 import fs from 'fs';
+
+import Logger from '#lib/interfaces/Logger';
+import Hook from '#lib/structures/Hook';
 
 export default function loadHooks(client: Client, log: Logger): void {
     log.info('beginning initial hook load...');

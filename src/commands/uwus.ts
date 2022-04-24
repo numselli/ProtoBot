@@ -16,10 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
-import Command from '@lib/structures/Command';
-import { formatRow } from '@lib/utils/formatTrackerRow';
 import type { Message } from 'discord.js';
+
+import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
+import Command from '#lib/structures/Command';
+import { formatRow } from '#lib/utils/formatTrackerRow';
 
 // The number of users that should be displayed on the leaderboard at a
 // given time.

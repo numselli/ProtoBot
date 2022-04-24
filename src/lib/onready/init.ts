@@ -16,9 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Logger from '@lib/interfaces/Logger';
 import chalk from 'chalk';
 import { Client } from 'discord.js';
+
+import Logger from '#lib/interfaces/Logger';
 
 export default function init(client: Client, log: Logger): void {
     // Count the total user counts up. We do this by getting the total user count

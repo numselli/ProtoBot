@@ -16,10 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
-import Command from '@lib/structures/Command';
 import type { Message } from 'discord.js';
 import Uwuifier from 'uwuifier';
+
+import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
+import Command from '#lib/structures/Command';
 
 const uwuify: Uwuifier = new Uwuifier();
 uwuify.actions = [

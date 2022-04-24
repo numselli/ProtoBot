@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Cooldowns from '@lib/interfaces/db/Cooldowns';
+import Cooldowns from '#lib/interfaces/db/Cooldowns';
 
 export default interface Config {
     token: string;

@@ -16,10 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import CommandCategory from '@lib/interfaces/commands/CommandCategory';
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
-import Command from '@lib/structures/Command';
 import { Message, MessageEmbed } from 'discord.js';
+
+import CommandCategory from '#lib/interfaces/commands/CommandCategory';
+import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
+import Command from '#lib/structures/Command';
 
 export default class HelpCommand extends Command {
     public getConfig(): CommandConfig {

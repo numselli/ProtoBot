@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import CommandCategory from '@lib/interfaces/commands/CommandCategory';
-import { Permissions } from '@lib/Permissions';
+import CommandCategory from '#lib/interfaces/commands/CommandCategory';
+import { Permissions } from '#lib/Permissions';
 
 export default interface CommandConfig {
     name: string;

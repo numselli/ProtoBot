@@ -12,18 +12,6 @@
 
 <div align="center">
 
-## An update on the status of Lexi development
-
-</div>
-
-> Hi. My name is [0xLogN](https://logn.tk/) also known as [@thetayloredman](https://github.com/thetayloredman). I am a software developer and I am currently the maintainer of this project (Lexi).
->
-> Due to a lack of developer resources and the fact that I am a student, I am currently at a slow point in Lexi development. I hit a peak in the last few weeks and I am currently working on a few new core features, but I am not going to be able to keep up the pace. There are not many new features coming in, and **Lexi is basically on life-support**. In order to bring the project back, I'm going to need a _LOT_ of help.
->
-> Send me a DM on discord `@LogN#1826` and I will allow feature requests directly, or you can create an issue (_recommended_). **Please.** Help me bring this project back. (v3 eventually?)
-
-<div align="center">
-
 ## What is Lexi?
 
 </div>

@@ -18,7 +18,7 @@
 
 const runningInProd = process.env.PRODUCTION;
 
-import chalk from 'chalk'; // Chalk handles fancy coloring.
+import * as colorette from 'colorette';
 import * as fs from 'fs'; // To create the write streams.
 import strip from 'strip-ansi'; // To clean off the ANSI escape codes for the log files.
 import * as util from 'util'; // Utilities.
@@ -125,13 +125,15 @@ function generateTimePrefix(epoch: number): string {
     preparsedTime[0] = preparsedTime[0].split(':');
 
     // Parse date/time
-    const parsedDate = `${chalk.yellow(preparsedDate[1][0])} ${chalk.yellow.bold(preparsedDate[1][1])} ${chalk.green.bold(preparsedDate[2])}`;
-    const sep: string = chalk.yellow(':');
-    const parsedTime = `${chalk.yellow.bold(preparsedTime[0][0])}${sep}${chalk.yellow.bold(preparsedTime[0][1])}${sep}${chalk.yellow.bold(
-        preparsedTime[0][2]
+    const parsedDate = `${colorette.yellow(preparsedDate[1][0])} ${colorette.yellow(colorette.bold(preparsedDate[1][1]))} ${colorette.green(
+        colorette.bold(preparsedDate[2])
     )}`;
+    const sep: string = colorette.yellow(':');
+    const parsedTime = `${colorette.yellow(colorette.bold(preparsedTime[0][0]))}${sep}${colorette.yellow(
+        colorette.bold(preparsedTime[0][1])
+    )}${sep}${colorette.yellow(colorette.bold(preparsedTime[0][2]))}`;
 
-    const brackets: string[] = [chalk.yellow('['), chalk.yellow(']')];
+    const brackets: string[] = [colorette.yellow('['), colorette.yellow(']')];
 
     return `${brackets[0]}${parsedDate} ${parsedTime}${brackets[1]}`;
 }
@@ -159,16 +161,16 @@ function doPrintLog(prefix: string, mode: LogMode, msg: unknown) {
 
 function verbose(m: unknown): void {
     if (runningInProd) return;
-    doPrintLog(`${chalk.cyan('[')}${chalk.cyan.bold('VERB')}${chalk.cyan(']')}`, 'v', m);
+    doPrintLog(colorette.cyan(`[${colorette.bold('VERB')}]`), 'v', m);
 }
 function info(m: unknown): void {
-    doPrintLog(`${chalk.blue('[')}${chalk.blue.bold('INFO')}${chalk.blue(']')}`, 'i', m);
+    doPrintLog(colorette.blue(`[${colorette.bold('INFO')}]`), 'i', m);
 }
 function warn(m: unknown): void {
-    doPrintLog(`${chalk.yellow('[')}${chalk.yellow.bold('WARN')}${chalk.yellow(']')}`, 'w', m);
+    doPrintLog(colorette.yellow(`[${colorette.bold('WARN')}]`), 'w', m);
 }
 function error(m: unknown): void {
-    doPrintLog(`${chalk.red('[')}${chalk.red.bold('ERR')}${chalk.red(']')}`, 'e', m);
+    doPrintLog(colorette.red(`[${colorette.bold('ERR!')}]`), 'e', m);
 }
 function errorWithStack(m: unknown): void {
     error(m);

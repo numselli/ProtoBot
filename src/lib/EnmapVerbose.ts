@@ -16,8 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import chalk from 'chalk';
 import { highlight } from 'cli-highlight';
+import * as colorette from 'colorette';
 
 import log from '#root/log';
 
@@ -25,11 +25,10 @@ import log from '#root/log';
  * Called on every query to the Enmap internal database.
  * @param query The SQL query ran
  */
-export default function EnmapVerbose(dbname: string, query: string): void {
+export default function EnmapVerbose(dbName: string, query: string): void {
     log.verbose(
-        `${chalk.blue('[')}${chalk.blue.bold('DatabaseQuery')}${chalk.blue(']')} ${chalk.underline('Query')} ${chalk.red(dbname)}: ${highlight(
-            query,
-            { language: 'sql' }
-        )}`
+        `${colorette.blue(`[${colorette.bold('DatabaseQuery')}]`)} ${colorette.underline('Query')} ${colorette.red(dbName)}: ${highlight(query, {
+            language: 'sql'
+        })}`
     );
 }

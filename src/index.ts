@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import chalk from 'chalk';
+import * as colorette from 'colorette';
 import type { TextChannel } from 'discord.js';
 import { Intents } from 'discord.js';
 
@@ -68,9 +68,9 @@ client.on('ready', async () => {
 client.on('messageCreate', async (message) => {
     // Log the message content if we are in verbose mode.
     log.verbose(
-        `${chalk.yellow('[')}${chalk.yellow.bold('MSG')}${chalk.yellow(']')} ${chalk.blue.bold(`@${message.author.tag}`)} ${chalk.green.bold(
-            `#${(message.channel as TextChannel).name}` ?? '<DM>'
-        )}: ${message.content}`
+        `${colorette.yellow(`[${colorette.bold('MSG')}]`)} ${`${colorette.bold(colorette.blue(`@${message.author.tag}`))} ${colorette.green(
+            `#${(message.channel as TextChannel).name ?? '<DM>'}`
+        )}`}: ${message.content}`
     );
 
     // Let's (theoretically) say this person is brand new to us. We need

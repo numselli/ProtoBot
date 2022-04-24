@@ -1,5 +1,5 @@
 {
-    "name": "protobot",
+    "name": "lexi",
     "version": "2.1.0",
     "description": "A Discord furry bot",
     "main": "dist/index.js",

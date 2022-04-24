@@ -52,7 +52,7 @@ export function getPermissionsForUser(client: LexiClient, log: Logger, message: 
         log.verbose(`user is channel moderator, return value CHANNEL_MODERATOR: ${Permissions.CHANNEL_MODERATOR}`);
         return Permissions.CHANNEL_MODERATOR;
     } else {
-        log.verbose(`user is a boring noob, return value NONE: ${Permissions.NONE}`);
+        log.verbose(`no matches, return value NONE: ${Permissions.NONE}`);
         return Permissions.NONE;
     }
 }

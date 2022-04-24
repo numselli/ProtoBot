@@ -50,7 +50,7 @@ export default class EmoteCountersHook extends LexiHook {
         };
     }
 
-    public run(message: Message): void {
+    public async run(message: Message): Promise<void> {
         const { log, client } = this;
         const cooldowns = client.cooldowns.ensure(message.author.id, client.defaults.COOLDOWNS);
         checkAndSet(client, cooldowns, log, message, 'uwu', 'uwus');

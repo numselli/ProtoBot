@@ -29,7 +29,6 @@ import { Intents } from 'discord.js';
 
 import * as ready from '#lib/onready/index';
 import LexiClient from '#lib/structures/LexiClient';
-import type LexiHook from '#lib/structures/LexiHook';
 
 import log from './log';
 
@@ -100,11 +99,12 @@ client.on('messageCreate', async (message) => {
         return;
     }
     // Execute each hook from the database.
-    client.hooks.forEach((hookData: LexiHook) => {
-        const cfg = hookData.getConfig();
+    for (const /*  */ hook of client.hooks.array()) {
+        const cfg = hook.getConfig();
         log.verbose(`Running hook ${cfg.name} for ${message.author.tag}!`);
-        hookData.run(message);
-    });
+        // eslint-disable-next-line no-await-in-loop
+        await hook.run(message);
+    }
     let msgIsCommand = false;
     let prefixLen = 0;
     const prefix = client.guildData.get(message.guild!.id, 'prefix')!;

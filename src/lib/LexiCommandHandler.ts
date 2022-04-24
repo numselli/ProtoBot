@@ -123,7 +123,7 @@ export default class LexiCommandHandler {
     /**
      * Execute a command after performing checks.
      */
-    public run(commandName: string, args: string[], message: Message, client: LexiClient): Promise<unknown> {
+    public async run(commandName: string, args: string[], message: Message, client: LexiClient): Promise<unknown> {
         // verbose info
         this.log.verbose(`Running command "${commandName}" for "${message.author.tag}" with args "${args.join(' ')}"!`);
         this.log.verbose(

@@ -34,7 +34,6 @@ import type GuildData from '#lib/interfaces/db/guildData';
 import type UserConfig from '#lib/interfaces/db/UserConfig';
 import type UserStats from '#lib/interfaces/db/UserStats';
 import type Hook from '#lib/interfaces/Hook';
-import type MarkovData from '#lib/interfaces/MarkovData';
 import type PublicConfig from '#lib/interfaces/PublicConfig';
 import type LexiCommandHandler from '#lib/LexiCommandHandler';
 
@@ -54,7 +53,6 @@ declare module 'discord.js' {
         emoteCounterTrackers: Enmap<string, EmoteCounterData>;
         userStatistics: Enmap<string, UserStats>;
         userConfiguration: Enmap<string, UserConfig>;
-        markovMessages: Enmap<string, MarkovData>; // NOTE: remove markovs in the future perhaps?
         fursonas: Enmap<string, Fursona>;
         restartData: Enmap<string, unknown>;
         guildData: Enmap<string, GuildData>;

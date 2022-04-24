@@ -35,6 +35,6 @@ export default abstract class LexiHook {
         this.log = log;
     }
 
-    public abstract run(message: Message): void;
+    public abstract run(message: Message): Promise<void>;
     public abstract getConfig(): LexiHookConfig;
 }

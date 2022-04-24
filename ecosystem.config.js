@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
         {
-            name: 'ProtoBot',
+            name: 'Lexi',
             script: './start.sh',
             env: {},
             env_production: {

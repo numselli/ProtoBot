@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -41,8 +41,8 @@ export default function init(client: Client, log: Logger): void {
         log.info('|/       |/ \\___/ (_______)   )_(  '); 
     })();
     log.info('Ready!');
-    log.info(`Running ProtoBot on commit ${process.env.PROTOBOT_STARTSH_COMMIT}.`);
-    if (process.env.PROTOBOT_STARTSH_DIRTYSOURCE) log.warn('Uncommitted changes present (dirty source tree)');
+    log.info(`Running Lexi on commit ${process.env.LEXI_STARTSH_COMMIT}.`);
+    if (process.env.LEXI_STARTSH_DIRTYSOURCE) log.warn('Uncommitted changes present (dirty source tree)');
 
     if (process.env.PRODUCTION) log.info('Running in production mode. Verbose logging is disabled.');
     else log.info('Running in development mode. Verbose logging is enabled.');

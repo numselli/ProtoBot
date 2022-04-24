@@ -1,21 +1,21 @@
 # THE ONLY LEGITIMATE WAY TO START THE DISCORD BOT!
 RESTART_DELAY_SECONDS="${RESTART_DELAY_SECONDS:-30}"
 
-echo 'bootstrap: ProtoBot Auto-Restart Bootstrap';
-echo 'bootstrap: This script will start ProtoBot with the correct environment variables.';
-echo 'bootstrap: This script will also restart ProtoBot if it crashes.';
+echo 'bootstrap: Lexi Auto-Restart Bootstrap';
+echo 'bootstrap: This script will start Lexi with the correct environment variables.';
+echo 'bootstrap: This script will also restart Lexi if it crashes.';
 echo 'bootstrap: Environment set:'
 echo 'bootstrap: RESTART_DELAY_SECONDS is set to '"${RESTART_DELAY_SECONDS}"' seconds.';
 eprod="$PRODUCTION"
 echo 'bootstrap:            PRODUCTION is set to '"${eprod:="0"}"'.';
 
 while true; do
-    echo 'bootstrap: Starting ProtoBot...';
+    echo 'bootstrap: Starting Lexi...';
     echo 'bootstrap: Cleaning dist tree...';
     ./clean.sh
     echo 'bootstrap: Getting current commit hash...';
     COMMIT_HASH="$(git rev-parse HEAD)";
-    echo 'bootstrap: Running ProtoBot with commit '"$COMMIT_HASH"'.';
+    echo 'bootstrap: Running Lexi with commit '"$COMMIT_HASH"'.';
     echo 'bootstrap: Check for dirty source...'
     (git diff --quiet && DIRTYSOURCE=0) || DIRTYSOURCE=1
     eds="$DIRTYSOURCE"
@@ -48,13 +48,13 @@ while true; do
     npm run build
     echo 'bootstrap: Setting CWD to dist/';
     cd dist;
-    echo 'bootstrap: Running ProtoBot...'
+    echo 'bootstrap: Running Lexi...'
     echo 'bootstrap: Final env:'
     echo 'bootstrap:                   PRODUCTION is set to '"${PRODUCTION}"'.';
-    echo 'bootstrap:      PROTOBOT_STARTSH_COMMIT is set to '"${COMMIT_HASH}"'.';
-    echo 'bootstrap: PROTOBOT_STARTSH_DIRTYSOURCE is set to '"${DIRTYSOURCE}"'.';
+    echo 'bootstrap:      LEXI_STARTSH_COMMIT is set to '"${COMMIT_HASH}"'.';
+    echo 'bootstrap: LEXI_STARTSH_DIRTYSOURCE is set to '"${DIRTYSOURCE}"'.';
 
-    PRODUCTION=$PRODUCTION PROTOBOT_STARTSH_COMMIT="$COMMIT_HASH" PROTOBOT_STARTSH_DIRTYSOURCE="$DIRTYSOURCE" node --experimental-specifier-resolution=node .;
+    PRODUCTION=$PRODUCTION LEXI_STARTSH_COMMIT="$COMMIT_HASH" LEXI_STARTSH_DIRTYSOURCE="$DIRTYSOURCE" node --experimental-specifier-resolution=node .;
     if [ "$?" -eq 9 ]; then
         echo 'bootstrap: Restarting instantly: exit code was 9 (RESTART)'
     else

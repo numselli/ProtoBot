@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -31,8 +31,8 @@ import log from './log';
 
 // Verify the currently running commit...
 log.verbose('Verifying we were started via the start script...');
-if (!process.env.PROTOBOT_STARTSH_COMMIT) {
-    log.error('Environment variable PROTOBOT_STARTSH_COMMIT is not set!');
+if (!process.env.LEXI_STARTSH_COMMIT) {
+    log.error('Environment variable LEXI_STARTSH_COMMIT is not set!');
     log.warn("If you are seeing this message, it means you are running the bot's script directly.");
     log.warn('This is not recommended, and may cause unexpected behavior.');
     log.warn('After multiple bug reports of people using an invalid environment (like this one),');

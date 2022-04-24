@@ -1,25 +1,25 @@
-# Contributing to ProtoBot
+# Contributing to Lexi
 
 First of all, _thank you for considering contributing_. It helps a **lot** and
 helps remove some of the burden from our developer team.
 
 This file will assist you with everything you need to know about
-[**_setting up a ProtoBot development/testing environment_**](#setting-up-a-developmenttesting-environment),
+[**_setting up a Lexi development/testing environment_**](#setting-up-a-developmenttesting-environment),
 [**_writing code that will be approved_**](#writing-code-that-will-be-approved),
 and [**_submitting your code_**](#submitting-your-code). It also has [**_guidelines for contributing_**](#guidelines-for-contributing).
 
 ## Setting up a development/testing environment
 
-In order to work on ProtoBot, you need a working development environment.
+In order to work on Lexi, you need a working development environment.
 
 ### Step 1: Prerequisites
 
-ProtoBot has some prerequisites that need to be met in order to test your new
+Lexi has some prerequisites that need to be met in order to test your new
 features.
 
 #### Node.js
 
-For ProtoBot to function, you need to install the
+For Lexi to function, you need to install the
 [Node.js JavaScript Runtime](https://nodejs.org/).
 
 Install version `12.x.x LTS`, **NOT** version `14`.
@@ -31,7 +31,7 @@ it.
 
 #### Enmap
 
-ProtoBot depends on Enmap and SQLite3 for data storage. Follow the
+Lexi depends on Enmap and SQLite3 for data storage. Follow the
 [Enmap Prerequisites Installation](https://enmap.evie.dev/install#pre-requisites)
 steps and then return here.
 

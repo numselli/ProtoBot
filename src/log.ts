@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -67,7 +67,7 @@ try {
 function spawnLogStream(logLevel: 'verbose' | 'all' | 'warn' | 'err'): fs.WriteStream {
     return catchFSErrors(() => {
         const logStream: fs.WriteStream = fs.createWriteStream(`../logs/${logInitTime}${logFolderSuffix}/${logLevel}.log`);
-        logStream.write(`### ProtoBot - Log File @ ${logLevel}/${logInitTime}\n`);
+        logStream.write(`### Lexi - Log File @ ${logLevel}/${logInitTime}\n`);
         if (runningInProd) logStream.write('### This is a production mode log file.\n');
 
         if (logLevel === 'verbose' && runningInProd)

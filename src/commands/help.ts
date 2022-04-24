@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -59,8 +59,8 @@ export default class HelpCommand extends Command {
 
         if (!args[0]) {
             const embed = new MessageEmbed()
-                .setTitle('ProtoBot Help')
-                .setAuthor({ name: 'ProtoBot' })
+                .setTitle('Lexi Help')
+                .setAuthor({ name: 'Lexi' })
                 .setTimestamp()
                 .setFooter({ text: `Requested by ${message.author.tag}` })
                 .setDescription('No category was specified. Use `help [category]` to see the commands in a category. Here is a list of categories:')
@@ -77,8 +77,8 @@ export default class HelpCommand extends Command {
             return;
         } else if (categories.includes(args[0].toLowerCase() as CommandCategory)) {
             const embed = new MessageEmbed()
-                .setTitle('ProtoBot Help')
-                .setAuthor({ name: 'ProtoBot' })
+                .setTitle('Lexi Help')
+                .setAuthor({ name: 'Lexi' })
                 .setTimestamp()
                 .setFooter({ text: `Requested by ${message.author.tag}` })
                 .setDescription(`Here are the commands in the category *${args[0].toLowerCase()}*:`)
@@ -101,8 +101,8 @@ export default class HelpCommand extends Command {
             return;
         } else if (args[0] === 'all') {
             const embed = new MessageEmbed()
-                .setTitle('ProtoBot Help')
-                .setAuthor({ name: 'ProtoBot' })
+                .setTitle('Lexi Help')
+                .setAuthor({ name: 'Lexi' })
                 .setTimestamp()
                 .setFooter({ text: `Requested by ${message.author.tag}` })
                 .setDescription('Here are all of my commands!')
@@ -120,8 +120,8 @@ export default class HelpCommand extends Command {
         } else if (client.commands.__readRefs__().get(args[0].toLowerCase())) {
             const command = client.commands.__readConfiguration__().get(client.commands.__readRefs__().get(args[0].toLowerCase())!) as CommandConfig;
             const embed = new MessageEmbed()
-                .setTitle('ProtoBot Help')
-                .setAuthor({ name: 'ProtoBot' })
+                .setTitle('Lexi Help')
+                .setAuthor({ name: 'Lexi' })
                 .setTimestamp()
                 .setFooter({ text: `Requested by ${message.author.tag}` })
                 .setDescription(`Here is the help for the command *${command.name}*`)

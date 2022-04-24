@@ -60,7 +60,7 @@ representative at an online or offline event.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the community leaders responsible for enforcement at
-Discord (@LogN#1826) or via email ([protobot@0xlogn.dev](mailto:protobot@0xlogn.dev)).
+Discord (@LogN#1826) or via email ([lexibot@0xlogn.dev](mailto:lexibot@0xlogn.dev)).
 All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the

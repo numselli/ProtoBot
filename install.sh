@@ -1,5 +1,5 @@
 #!/bin/bash
-# ProtoBot Install Script
+# Lexi Install Script
 
 # Colors
 NOCOLOR='\033[0m'
@@ -48,8 +48,8 @@ echo_error() {
 
 # Intro
 echo_info "OwO What's This?"
-echo_info "Welcome to the ProtoBot Installer!"
-echo_info "This script will guide you through the installation of ProtoBot."
+echo_info "Welcome to the Lexi Installer!"
+echo_info "This script will guide you through the installation of Lexi."
 echo ""
 
 # Update repo

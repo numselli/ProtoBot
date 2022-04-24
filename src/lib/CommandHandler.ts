@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ import CommandConfig from './interfaces/commands/CommandConfig';
 
 /**
  * CommandHandler handles the storage and effective management of commands
- * in ProtoBot.
+ * in Lexi.
  */
 export default class CommandHandler {
     /** The logger for this command handler. */

@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,9 +18,9 @@
 
 /******************************************************************************
  * Hello kind stranger!                                                       *
- * This code was written as a key part of the TypeScript rewrite of ProtoBot. *
+ * This code was written as a key part of the TypeScript rewrite of Lexi. *
  * This makes barely any sense to me, but seems to be the best way to do it.  *
- * This file is critical. DO NOT DELETE IT!     - ProtoBot Maintainer, 0xLogN *
+ * This file is critical. DO NOT DELETE IT!     - Lexi Maintainer, 0xLogN *
  ******************************************************************************/
 
 // Imports

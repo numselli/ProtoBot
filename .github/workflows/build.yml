@@ -48,7 +48,7 @@ jobs:
                   node-version: ${{ matrix.node-version }}
 
             - name: Install dependencies
-              run: npm ci
+              run: yarn install --frozen-lockfile
 
             # we'll get an error if we don't make an (empty)
             # config file.
@@ -57,4 +57,4 @@ jobs:
 
             # run the build
             - name: Build
-              run: npm run build
+              run: yarn run build

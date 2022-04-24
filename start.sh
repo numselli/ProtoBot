@@ -24,28 +24,28 @@ while true; do
         echo 'bootstrap: cacher: Creating .pb-cache directory...';
         mkdir .pb-cache
     fi
-    if [[ ! -f ".pb-cache/package.json" || ! -f ".pb-cache/package-lock.json" ]]; then
-        echo 'bootstrap: cacher: Missing package.json or package-lock.json, DIMMOD=1. Recache.';
+    if [[ ! -f ".pb-cache/package.json" || ! -f ".pb-cache/yarn.lock" ]]; then
+        echo 'bootstrap: cacher: Missing package.json or yarn.lock, DIMMOD=1. Recache.';
         DIMMOD=1
         cp package.json .pb-cache/package.json
-        cp package-lock.json .pb-cache/package-lock.json
+        cp yarn.lock .pb-cache/yarn.lock
     fi
     if [[ "$(cat package.json)" != "$(cat .pb-cache/package.json)" ]]; then
         echo 'bootstrap: cacher: package.json has changed, DIMMOD=1. Recache.';
         DIMMOD=1
         cp package.json .pb-cache/package.json
     fi
-    if [[ "$(cat package-lock.json)" != "$(cat .pb-cache/package-lock.json)" ]]; then
-        echo 'bootstrap: cacher: package-lock.json has changed, DIMMOD=1. Recache.';
+    if [[ "$(cat yarn.lock)" != "$(cat .pb-cache/yarn.lock)" ]]; then
+        echo 'bootstrap: cacher: yarn.lock has changed, DIMMOD=1. Recache.';
         DIMMOD=1
-        cp package-lock.json .pb-cache/package-lock.json
+        cp yarn.lock .pb-cache/yarn.lock
     fi
     if [[ "$DIMMOD" == 1 ]]; then
         echo 'bootstrap: dimmod: DIMMOD=1. Re-install dependencies.';
-        npm install
+        yarn
     fi
     echo 'bootstrap: Compiling source tree...'
-    npm run build
+    yarn run build
     echo 'bootstrap: Setting CWD to dist/';
     cd dist;
     echo 'bootstrap: Running Lexi...'

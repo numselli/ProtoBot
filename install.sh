@@ -100,6 +100,7 @@ check_dependency head --version
 check_dependency tail --version
 check_dependency sort --version
 check_dependency npm --version
+check_dependency yarn --version
 check_dependency git --version
 check_dependency sed --version
 check_dependency awk --version
@@ -168,7 +169,7 @@ fi
 echo ""
 
 echo_info "Install dependencies..."
-npm install
+yarn
 echo_ok "Dependencies installed."
 
 echo ""

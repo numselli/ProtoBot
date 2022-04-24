@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npm run test:staged
-npm run build
+yarn run test:staged
+yarn run build

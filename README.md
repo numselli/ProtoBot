@@ -46,7 +46,7 @@ Plus, Lexi relies on plenty of external services to function. Self-Hosting of Le
 
 Follow the installation steps for [Node.js v16](https://nodejs.org/en/)
 
-Then install TypeScript: `npm install -g typescript`
+Then install TypeScript: `yarn global add typescript`
 
 #### Build-Essential
 
@@ -88,7 +88,7 @@ FOR PRODUCTION ENVIRONMENTS: Run `PRODUCTION=1 ./start.sh`
 
 [PM2](https://pm2.keymetrics.io/) is a process manager for Node.js. It is a good alternative to using the normal start scripts.
 
-First, ensure PM2 is installed: `npm i -g pm2`
+First, ensure PM2 is installed: `yarn global add pm2`
 
 Optionally, enable PM2 to automatically start as a daemon: `pm2 startup`
 

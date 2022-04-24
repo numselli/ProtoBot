@@ -1,5 +1,5 @@
 {
-    "name": "lexi",
+    "name": "protobot",
     "version": "2.1.0",
     "description": "A Discord furry bot",
     "main": "dist/index.js",
@@ -11,7 +11,7 @@
         "prettier:check": "prettier . --check",
         "prettier": "prettier . -w",
         "prepare": "husky install",
-        "test": "npm run lint; npm run prettier:check; npm run build",
+        "test": "yarn run lint; yarn run prettier:check; yarn run build",
         "test:staged": "npx lint-staged"
     },
     "author": "BadBoyHaloCat",

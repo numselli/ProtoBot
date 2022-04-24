@@ -37,7 +37,7 @@ steps and then return here.
 
 ### Step 2: Installing dependencies
 
-Now, run the command `npm install` in your terminal. This will install all of
+Now, run the command `yarn` in your terminal. This will install all of
 our dependencies, and build `better-sqlite3` from source. **This may take a
 while.**
 

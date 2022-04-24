@@ -26,7 +26,6 @@
 // Imports
 import Enmap from 'enmap';
 
-import CommandHandler from '#lib/CommandHandler';
 import Config from '#lib/interfaces/Config';
 import Cooldowns from '#lib/interfaces/db/Cooldowns';
 import EmoteCounterData from '#lib/interfaces/db/EmoteCounterData';
@@ -37,6 +36,7 @@ import UserStats from '#lib/interfaces/db/UserStats';
 import Hook from '#lib/interfaces/Hook';
 import MarkovData from '#lib/interfaces/MarkovData';
 import PublicConfig from '#lib/interfaces/PublicConfig';
+import LexiCommandHandler from '#lib/LexiCommandHandler';
 
 // Discord.js
 declare module 'discord.js' {
@@ -60,7 +60,7 @@ declare module 'discord.js' {
         guildData: Enmap<string, GuildData>;
 
         // In memory
-        commands: CommandHandler;
+        commands: LexiCommandHandler;
         hooks: Enmap<string, Hook>;
     }
 }

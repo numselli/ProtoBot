@@ -23,7 +23,7 @@ import 'source-map-support/register';
 import chalk from 'chalk'; // Coloring for CLI
 import { Intents, TextChannel } from 'discord.js'; // <<< Discord!
 
-import Client from '#lib/Client'; // The custom client files
+import LexiClient from '#lib/LexiClient'; // The custom client files
 import * as ready from '#lib/onready/index';
 import Hook from '#lib/structures/Hook';
 
@@ -45,7 +45,7 @@ if (!process.env.LEXI_STARTSH_COMMIT) {
 }
 
 // Initialize a Client instance, and provide the Discord intent flags.
-const client = new Client(log, {
+const client = new LexiClient(log, {
     intents: [
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MEMBERS,

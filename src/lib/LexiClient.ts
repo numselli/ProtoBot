@@ -21,16 +21,15 @@ import Enmap from 'enmap';
 
 import EnmapVerbose from '#lib/EnmapVerbose';
 import type Logger from '#lib/interfaces/Logger';
+import LexiCommandHandler from '#lib/LexiCommandHandler';
 import config from '#root/config';
 import publicConfig from '#root/publicConfig';
-
-import CommandHandler from './CommandHandler';
 
 function makeVerboseFunction(name: string): (_q: string) => void {
     return (q: string) => EnmapVerbose(name, q);
 }
 
-export default class Client extends BaseClient {
+export default class LexiClient extends BaseClient {
     private _isAlreadyDestroyed: boolean;
     private _log: Logger;
 
@@ -59,7 +58,7 @@ export default class Client extends BaseClient {
         this.cooldowns = new Enmap();
 
         // Generate the command handling instance.
-        this.commands = new CommandHandler(this._log, this.config.dirs.commands, this);
+        this.commands = new LexiCommandHandler(this._log, this.config.dirs.commands, this);
     }
 
     public destroy(): void {

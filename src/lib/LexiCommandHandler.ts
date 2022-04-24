@@ -29,7 +29,7 @@ import CommandConfig from './interfaces/commands/CommandConfig';
  * CommandHandler handles the storage and effective management of commands
  * in Lexi.
  */
-export default class CommandHandler {
+export default class LexiCommandHandler {
     /** The logger for this command handler. */
     private log: Logger;
 

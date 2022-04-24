@@ -19,9 +19,9 @@
 // A non-secret version of this configuration file.
 
 // Config types
-import type PublicConfig from '#lib/interfaces/PublicConfig';
+import type LexiPublicConfig from '#lib/interfaces/LexiPublicConfig';
 
-const publicConfig: PublicConfig = {
+const publicConfig: LexiPublicConfig = {
     githubRepository: 'https://github.com/thetayloredman/Lexi',
 
     colors: {

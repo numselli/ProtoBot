@@ -17,7 +17,7 @@
  */
 
 // Config types
-import type Config from '#lib/interfaces/Config';
+import type LexiConfig from '#lib/interfaces/LexiConfig';
 
 // Ms conversion functions
 function seconds(count: number): number {
@@ -27,7 +27,7 @@ function minutes(count: number): number {
     return seconds(60) * count;
 }
 
-const config: Config = {
+const config: LexiConfig = {
     token: 'PBCONF-DiscordBotToken', // Discord token
     dirs: {
         commands: './commands/',

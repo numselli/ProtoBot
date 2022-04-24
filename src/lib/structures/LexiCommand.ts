@@ -18,15 +18,15 @@
 
 import type { Message } from 'discord.js';
 
-import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
-import type Logger from '#lib/interfaces/Logger';
+import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
+import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
 
 export default abstract class LexiCommand {
     protected client: LexiClient;
-    protected log: Logger;
+    protected log: LexiLogger;
 
-    public constructor(client: LexiClient, log: Logger) {
+    public constructor(client: LexiClient, log: LexiLogger) {
         this.client = client;
         this.log = log;
     }

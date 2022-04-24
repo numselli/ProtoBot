@@ -18,11 +18,11 @@
 
 import fs from 'fs';
 
-import type Logger from '#lib/interfaces/Logger';
+import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
 import type LexiHook from '#lib/structures/LexiHook';
 
-export default function loadHooks(client: LexiClient, log: Logger): void {
+export default function loadHooks(client: LexiClient, log: LexiLogger): void {
     log.info('beginning initial hook load...');
     fs.readdir(client.config.dirs.hooks, (err, files) => {
         if (err) {

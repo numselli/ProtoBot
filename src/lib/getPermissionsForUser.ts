@@ -18,16 +18,15 @@
 
 import type { Message, TextChannel } from 'discord.js';
 
+import type LexiLogger from '#lib/interfaces/LexiLogger';
 import { Permissions } from '#lib/Permissions';
 import type LexiClient from '#lib/structures/LexiClient';
-
-import type Logger from './interfaces/Logger';
 
 /**
  * Get the user's permissions value in a guild. See the Permissions enum.
  * @param message The message of whomst author to check permissions for. Why a message? Channel details are needed.
  */
-export function getPermissionsForUser(client: LexiClient, log: Logger, message: Message): Permissions {
+export function getPermissionsForUser(client: LexiClient, log: LexiLogger, message: Message): Permissions {
     // FIXME: buggy in DMs.
     log.verbose(`permission checking ${message.author.tag} @ ${message.guild!.name}/#${(message.channel as TextChannel).name ?? '<DM>'}`);
     if (client.config.ownerID === message.author.id) {

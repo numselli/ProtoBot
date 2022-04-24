@@ -16,14 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type Cooldowns from '#lib/interfaces/db/Cooldowns';
+type HexColor = `#${string}`;
 
-export default interface Config {
-    token: string;
-    dirs: { commands: string; hooks: string };
-    prefix: string;
-    cooldowns: { [key in keyof Cooldowns]: number /* (ms) */ };
-    adminIDs: string[];
-    superAdminIDs: string[];
-    ownerID: string;
+export default interface LexiPublicConfig {
+    githubRepository: string;
+
+    colors: {
+        color1: HexColor;
+        color2: HexColor;
+        color3: HexColor;
+        color4: HexColor;
+        color5: HexColor;
+    };
 }

@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type CommandCategory from '#lib/interfaces/commands/CommandCategory';
+import type LexiCommandCategory from '#lib/interfaces/commands/LexiCommandCategory';
 import type { Permissions } from '#lib/Permissions';
 
-export default interface CommandConfig {
+export default interface LexiCommandConfig {
     name: string;
     description: string;
-    category: CommandCategory;
+    category: LexiCommandCategory;
     enabled: boolean;
     aliases: string[];
     usage: string;

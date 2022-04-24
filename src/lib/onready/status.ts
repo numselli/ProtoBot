@@ -16,10 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type Logger from '#lib/interfaces/Logger';
+import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
 
-export default function setStatus(client: LexiClient, log: Logger): void {
+export default function setStatus(client: LexiClient, log: LexiLogger): void {
     // Status handling code
     // We assume the main prefix is always the first in the array.
     const allStatuses: ['PLAYING' | 'STREAMING' | 'LISTENING' | 'WATCHING' | 'COMPETING', string][] = [

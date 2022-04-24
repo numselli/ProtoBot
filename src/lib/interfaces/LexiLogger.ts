@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export default interface Logger {
+export default interface LexiLogger {
     verbose(message: unknown): void;
     info(message: unknown): void;
     warn(message: unknown): void;

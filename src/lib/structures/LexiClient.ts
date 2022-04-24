@@ -21,15 +21,15 @@ import { Client as BaseClient } from 'discord.js';
 import Enmap from 'enmap';
 
 import EnmapVerbose from '#lib/EnmapVerbose';
-import type Config from '#lib/interfaces/Config';
 import type Cooldowns from '#lib/interfaces/db/Cooldowns';
 import type EmoteCounterData from '#lib/interfaces/db/EmoteCounterData';
 import type Fursona from '#lib/interfaces/db/Fursona';
 import type GuildData from '#lib/interfaces/db/GuildData';
 import type UserConfig from '#lib/interfaces/db/UserConfig';
 import type UserStats from '#lib/interfaces/db/UserStats';
-import type Logger from '#lib/interfaces/Logger';
-import type PublicConfig from '#lib/interfaces/PublicConfig';
+import type LexiConfig from '#lib/interfaces/LexiConfig';
+import type LexiLogger from '#lib/interfaces/LexiLogger';
+import type LexiPublicConfig from '#lib/interfaces/LexiPublicConfig';
 import LexiCommandHandler from '#lib/LexiCommandHandler';
 import type LexiHook from '#lib/structures/LexiHook';
 import config from '#root/config';
@@ -41,10 +41,10 @@ function makeVerboseFunction(name: string): (_q: string) => void {
 
 export default class LexiClient extends BaseClient {
     private _isAlreadyDestroyed: boolean;
-    private _log: Logger;
+    private _log: LexiLogger;
 
-    public config: Config;
-    public publicConfig: PublicConfig;
+    public config: LexiConfig;
+    public publicConfig: LexiPublicConfig;
     public defaults: {
         USER_CONFIGURATION: UserConfig;
         USER_STATISTICS: UserStats;
@@ -64,7 +64,7 @@ export default class LexiClient extends BaseClient {
     public hooks: Enmap<string, LexiHook>;
     public commands: LexiCommandHandler;
 
-    public constructor(log: Logger, options: ClientOptions) {
+    public constructor(log: LexiLogger, options: ClientOptions) {
         super(options);
         this._log = log;
         this._isAlreadyDestroyed = false;

@@ -19,7 +19,7 @@
 import type { Message } from 'discord.js';
 
 import type Cooldowns from '#lib/interfaces/db/Cooldowns';
-import type Logger from '#lib/interfaces/Logger';
+import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
 import type { LexiHookConfig } from '#lib/structures/LexiHook';
 import LexiHook from '#lib/structures/LexiHook';
@@ -28,7 +28,7 @@ import { doesHavePrefix } from '#lib/utils/doesHavePrefix';
 type Checkers = 'uwu' | 'owo' | '~';
 type DBName = 'uwus' | 'owos' | 'tildes';
 
-function checkAndSet(client: LexiClient, cooldowns: Cooldowns, l: Logger, m: Message, checkString: Checkers, dbName: DBName): void {
+function checkAndSet(client: LexiClient, cooldowns: Cooldowns, l: LexiLogger, m: Message, checkString: Checkers, dbName: DBName): void {
     if (
         ((checkString !== '~' && m.content.toLowerCase().includes(checkString)) ||
             (m.content.endsWith('~') && !/~~+/.test(m.content) && m.content !== '~')) &&

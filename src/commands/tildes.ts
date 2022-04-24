@@ -18,7 +18,7 @@
 
 import type { Message } from 'discord.js';
 
-import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
+import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
 import LexiCommand from '#lib/structures/LexiCommand';
 import { formatRow } from '#lib/utils/formatTrackerRow';
 

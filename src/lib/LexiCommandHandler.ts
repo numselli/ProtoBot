@@ -19,12 +19,11 @@
 import type { Message, TextChannel } from 'discord.js';
 import fs from 'fs';
 
-import type Logger from '#lib/interfaces/Logger';
+import { getPermissionsForUser } from '#lib/getPermissionsForUser';
+import type LexiCommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
+import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
 import type LexiCommand from '#lib/structures/LexiCommand';
-
-import { getPermissionsForUser } from './getPermissionsForUser';
-import type CommandConfig from './interfaces/commands/CommandConfig';
 
 /**
  * CommandHandler handles the storage and effective management of commands
@@ -32,11 +31,11 @@ import type CommandConfig from './interfaces/commands/CommandConfig';
  */
 export default class LexiCommandHandler {
     /** The logger for this command handler. */
-    private log: Logger;
+    private log: LexiLogger;
 
     /** The internal storage facility for the commands. */
     private _commandClassInstances: Map<string, LexiCommand>;
-    private _commandConfigs: Map<string, CommandConfig>;
+    private _commandConfigs: Map<string, LexiCommandConfig>;
     private _commandRefs: Map<string, string>;
     private client: LexiClient;
 
@@ -48,7 +47,7 @@ export default class LexiCommandHandler {
      * @param logger The logger to use. This is a global logger, so it is not dependent on the client.
      * @param commandsFolder The folder that commands are located in.
      */
-    public constructor(logger: Logger, commandsFolder: string, client: LexiClient) {
+    public constructor(logger: LexiLogger, commandsFolder: string, client: LexiClient) {
         this.log = logger;
         this._commandClassInstances = new Map();
         this._commandConfigs = new Map();
@@ -113,7 +112,7 @@ export default class LexiCommandHandler {
     }
 
     /** JUST FOR HELP! */
-    public __readConfiguration__(): Map<string, CommandConfig> {
+    public __readConfiguration__(): Map<string, LexiCommandConfig> {
         return this._commandConfigs;
     }
     public __readRefs__(): Map<string, string> {

@@ -19,7 +19,7 @@
 import type { Message } from 'discord.js';
 import Uwuifier from 'uwuifier';
 
-import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
+import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
 import LexiCommand from '#lib/structures/LexiCommand';
 
 const uwuify: Uwuifier = new Uwuifier();

@@ -18,10 +18,10 @@
 
 import type * as discord from 'discord.js';
 
-import type Logger from '#lib/interfaces/Logger';
+import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
 
-export default async function handleRestart(client: LexiClient, log: Logger): Promise<void> {
+export default async function handleRestart(client: LexiClient, log: LexiLogger): Promise<void> {
     // If we were restarted, based on the restartData Map, send the RestartTimer message to
     // the channel we were restarted in.
     log.info('Checking if we were restarted...');

@@ -18,7 +18,7 @@
 
 import type { Message } from 'discord.js';
 
-import type Logger from '#lib/interfaces/Logger';
+import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
 
 export interface LexiHookConfig {
@@ -28,9 +28,9 @@ export interface LexiHookConfig {
 
 export default abstract class LexiHook {
     protected client: LexiClient;
-    protected log: Logger;
+    protected log: LexiLogger;
 
-    public constructor(client: LexiClient, log: Logger) {
+    public constructor(client: LexiClient, log: LexiLogger) {
         this.client = client;
         this.log = log;
     }

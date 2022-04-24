@@ -19,7 +19,7 @@
 import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 
-import type CommandConfig from '#lib/interfaces/commands/CommandConfig';
+import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
 import type LexiClient from '#lib/structures/LexiClient';
 import LexiCommand from '#lib/structures/LexiCommand';
 

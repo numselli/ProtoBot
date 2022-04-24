@@ -16,16 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-type HexColor = `#${string}`;
+type LexiCommandCategory = 'other' | 'utility' | 'fun' | 'affection' | 'furry' | 'owner';
 
-export default interface PublicConfig {
-    githubRepository: string;
-
-    colors: {
-        color1: HexColor;
-        color2: HexColor;
-        color3: HexColor;
-        color4: HexColor;
-        color5: HexColor;
-    };
-}
+export default LexiCommandCategory;

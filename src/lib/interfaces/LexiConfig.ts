@@ -16,6 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-type CommandCategory = 'other' | 'utility' | 'fun' | 'affection' | 'furry' | 'owner';
+import type Cooldowns from '#lib/interfaces/db/Cooldowns';
 
-export default CommandCategory;
+export default interface LexiConfig {
+    token: string;
+    dirs: { commands: string; hooks: string };
+    prefix: string;
+    cooldowns: { [key in keyof Cooldowns]: number /* (ms) */ };
+    adminIDs: string[];
+    superAdminIDs: string[];
+    ownerID: string;
+}

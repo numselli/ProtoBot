@@ -23,7 +23,7 @@ import * as fs from 'fs'; // To create the write streams.
 import strip from 'strip-ansi'; // To clean off the ANSI escape codes for the log files.
 import * as util from 'util'; // Utilities.
 
-import type Logger from '#lib/interfaces/Logger';
+import type LexiLogger from '#lib/interfaces/LexiLogger';
 
 // Create the logging streams for all of the log levels.
 // A certain log level is always logged to all below it, so for example, if you were
@@ -195,7 +195,7 @@ async function cleanup(): Promise<void> {
     });
 }
 
-const toBeExported: Logger = { verbose, info, warn, error, cleanup, errorWithStack };
+const toBeExported: LexiLogger = { verbose, info, warn, error, cleanup, errorWithStack };
 export default toBeExported;
 
 export function clearBuffer(): void {

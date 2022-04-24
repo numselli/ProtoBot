@@ -29,8 +29,7 @@ import { Intents } from 'discord.js';
 
 import * as ready from '#lib/onready/index';
 import LexiClient from '#lib/structures/LexiClient';
-
-import log from './log';
+import log from '#root/log';
 
 // Verify the currently running commit...
 log.verbose('Verifying we were started via the start script...');

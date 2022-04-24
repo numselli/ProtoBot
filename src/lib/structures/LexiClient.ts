@@ -21,8 +21,17 @@ import { Client as BaseClient } from 'discord.js';
 import Enmap from 'enmap';
 
 import EnmapVerbose from '#lib/EnmapVerbose';
+import type Config from '#lib/interfaces/Config';
+import type Cooldowns from '#lib/interfaces/db/Cooldowns';
+import type EmoteCounterData from '#lib/interfaces/db/EmoteCounterData';
+import type Fursona from '#lib/interfaces/db/Fursona';
+import type GuildData from '#lib/interfaces/db/GuildData';
+import type UserConfig from '#lib/interfaces/db/UserConfig';
+import type UserStats from '#lib/interfaces/db/UserStats';
 import type Logger from '#lib/interfaces/Logger';
+import type PublicConfig from '#lib/interfaces/PublicConfig';
 import LexiCommandHandler from '#lib/LexiCommandHandler';
+import type LexiHook from '#lib/structures/LexiHook';
 import config from '#root/config';
 import publicConfig from '#root/publicConfig';
 
@@ -33,6 +42,27 @@ function makeVerboseFunction(name: string): (_q: string) => void {
 export default class LexiClient extends BaseClient {
     private _isAlreadyDestroyed: boolean;
     private _log: Logger;
+
+    public config: Config;
+    public publicConfig: PublicConfig;
+    public defaults: {
+        USER_CONFIGURATION: UserConfig;
+        USER_STATISTICS: UserStats;
+        COOLDOWNS: Cooldowns;
+        EMOTE_TRACKER_COUNTERS: EmoteCounterData;
+        GUILD_DATA: GuildData;
+    };
+
+    public cooldowns: Enmap<string, Cooldowns>;
+    public emoteCounterTrackers: Enmap<string, EmoteCounterData>;
+    public userStatistics: Enmap<string, UserStats>;
+    public userConfiguration: Enmap<string, UserConfig>;
+    public fursonas: Enmap<string, Fursona>;
+    public restartData: Enmap<string, unknown>;
+    public guildData: Enmap<string, GuildData>;
+
+    public hooks: Enmap<string, LexiHook>;
+    public commands: LexiCommandHandler;
 
     public constructor(log: Logger, options: ClientOptions) {
         super(options);

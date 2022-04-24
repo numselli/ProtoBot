@@ -22,6 +22,16 @@ Lexi is a powerful Discord bot for furries and alike! It contains a variety of c
 
 <div align="center">
 
+## How Lexi Started
+
+</div>
+
+Lexi started as a furry bot named "ProtoBot" in it's earliest development phases. I eventually decided to make it more accessible for people outside the fandom (as a lot of people were saying ProtoBot was too specific for them) and then the name Lexi came out of my head.
+
+In pull request #510, ProtoBot 3 was started. Eventually, it got renamed to "Lexi."
+
+<div align="center">
+
 ## Installing and Setup
 
 </div>

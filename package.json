@@ -7,7 +7,7 @@
     "scripts": {
         "start": "chmod u+x ./start.sh; ./start.sh",
         "lint": "eslint .",
-        "build": "tsc; EX=\"$?\"; tsc-alias; echo \"$EX\"; [[ \"$EX\" == 0 ]] && false || true",
+        "build": "tsc; EX=\"$?\"; tsc-alias && ([[ \"$EX\" == 0 ]] && false || true)",
         "prettier:check": "prettier . --check",
         "prettier": "prettier . -w",
         "prepare": "husky install",

@@ -16,13 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Import source-map-support and register it to allow better visibility of
-// error locations as shown in the TS default source maps.
-import 'source-map-support/register';
-// No-op because of import sorting
-// eslint-disable-next-line no-empty-function, @typescript-eslint/no-empty-function
-(() => {})();
-
 import chalk from 'chalk';
 import type { TextChannel } from 'discord.js';
 import { Intents } from 'discord.js';

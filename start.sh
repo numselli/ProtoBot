@@ -54,7 +54,7 @@ while true; do
     echo 'bootstrap:      LEXI_STARTSH_COMMIT is set to '"${COMMIT_HASH}"'.';
     echo 'bootstrap: LEXI_STARTSH_DIRTYSOURCE is set to '"${DIRTYSOURCE}"'.';
 
-    PRODUCTION=$PRODUCTION LEXI_STARTSH_COMMIT="$COMMIT_HASH" LEXI_STARTSH_DIRTYSOURCE="$DIRTYSOURCE" node --experimental-specifier-resolution=node .;
+    PRODUCTION=$PRODUCTION LEXI_STARTSH_COMMIT="$COMMIT_HASH" LEXI_STARTSH_DIRTYSOURCE="$DIRTYSOURCE" yarn node -r source-map-support/register --experimental-specifier-resolution=node .;
     if [ "$?" -eq 9 ]; then
         echo 'bootstrap: Restarting instantly: exit code was 9 (RESTART)'
     else

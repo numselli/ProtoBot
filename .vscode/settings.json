@@ -9,6 +9,7 @@
         "Boops",
         "builtins",
         "clearlogbuffer",
+        "colorette",
         "commitlint",
         "conventionalcommits",
         "DIRTYSOURCE",

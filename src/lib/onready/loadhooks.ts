@@ -34,8 +34,9 @@ export default function loadHooks(client: LexiClient, log: LexiLogger): void {
                     // normal load, but in this case we import into the hook Map.
                     const HookClass: LexiHook = (
                         await import(
-                            '../../' +
-                                (client.config.dirs.hooks.endsWith('/') ? client.config.dirs.hooks + path : `${client.config.dirs.hooks}/${path}`)
+                            `../../${
+                                client.config.dirs.hooks.endsWith('/') ? client.config.dirs.hooks + path : `${client.config.dirs.hooks}/${path}`
+                            }`
                         )
                     ).default;
                     const hookName = path.replace('.js', '');

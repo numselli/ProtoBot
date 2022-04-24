@@ -68,8 +68,8 @@ client.on('ready', async () => {
 client.on('messageCreate', async (message) => {
     // Log the message content if we are in verbose mode.
     log.verbose(
-        `${chalk.yellow('[')}${chalk.yellow.bold('MSG')}${chalk.yellow(']')} ${chalk.blue.bold('@' + message.author.tag)} ${chalk.green.bold(
-            '#' + (message.channel as TextChannel).name ?? '<DM>'
+        `${chalk.yellow('[')}${chalk.yellow.bold('MSG')}${chalk.yellow(']')} ${chalk.blue.bold(`@${message.author.tag}`)} ${chalk.green.bold(
+            `#${(message.channel as TextChannel).name}` ?? '<DM>'
         )}: ${message.content}`
     );
 
@@ -147,7 +147,7 @@ process.on('SIGINT', handleInterrupt);
 
 // When the process exits, wrap up.
 process.on('exit', (code) => {
-    log.warn('Kill client... (exit code ' + code + ')');
+    log.warn(`Kill client... (exit code ${code})`);
     client.destroy(); // Kill the client
     // NOTE: you can't log here
 });

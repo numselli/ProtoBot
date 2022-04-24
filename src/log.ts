@@ -152,22 +152,23 @@ function postprocess(message: string, type: LogMode, epoch: number): void {
     if (buffer.length > maxBufferSize) buffer.shift();
 }
 
+function doPrintLog(prefix: string, mode: LogMode, msg: unknown) {
+    const [message, epoch, timePrefix] = preprocess(msg);
+    postprocess(`${timePrefix} ${prefix} ${message}`, mode, epoch);
+}
+
 function verbose(m: unknown): void {
     if (runningInProd) return;
-    const [message, epoch, timePrefix] = preprocess(m);
-    postprocess(`${timePrefix} ${chalk.cyan('[')}${chalk.cyan.bold('VERB')}${chalk.cyan(']')} ${message}`, 'v', epoch);
+    doPrintLog(`${chalk.cyan('[')}${chalk.cyan.bold('VERB')}${chalk.cyan(']')}`, 'v', m);
 }
 function info(m: unknown): void {
-    const [message, epoch, timePrefix] = preprocess(m);
-    postprocess(`${timePrefix} ${chalk.blue('[')}${chalk.blue.bold('INFO')}${chalk.blue(']')} ${message}`, 'i', epoch);
+    doPrintLog(`${chalk.blue('[')}${chalk.blue.bold('INFO')}${chalk.blue(']')}`, 'i', m);
 }
 function warn(m: unknown): void {
-    const [message, epoch, timePrefix] = preprocess(m);
-    postprocess(`${timePrefix} ${chalk.yellow('[')}${chalk.yellow.bold('WARN')}${chalk.yellow(']')} ${message}`, 'w', epoch);
+    doPrintLog(`${chalk.yellow('[')}${chalk.yellow.bold('WARN')}${chalk.yellow(']')}`, 'w', m);
 }
 function error(m: unknown): void {
-    const [message, epoch, timePrefix] = preprocess(m);
-    postprocess(`${timePrefix} ${chalk.red('[')}${chalk.red.bold('ERR')}${chalk.red(']')} ${message}`, 'e', epoch);
+    doPrintLog(`${chalk.red('[')}${chalk.red.bold('ERR')}${chalk.red(']')}`, 'e', m);
 }
 function errorWithStack(m: unknown): void {
     error(m);
@@ -177,7 +178,7 @@ function errorWithStack(m: unknown): void {
     // Remove the error itself.
     a.shift();
 
-    for (const entry of a) error('STACK: ' + entry);
+    for (const entry of a) error(`STACK: ${entry}`);
 }
 
 /**

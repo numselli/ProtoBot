@@ -95,7 +95,7 @@ export default class LexiCommandHandler {
 
             // The command data is loaded from the path.
             this.log.verbose(`Loading command "${path.replace('.js', '')}"...`);
-            const CommandClass = (await import('../' + this.commandsFolder + path)).default as LexiCommand;
+            const CommandClass = (await import(`../${this.commandsFolder}${path}`)).default as LexiCommand;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const command = new CommandClass(this.client, this.log);

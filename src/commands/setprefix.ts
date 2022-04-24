@@ -44,11 +44,11 @@ export default class SetPrefixCommand extends LexiCommand {
         const { client, log } = this;
         if (!args[0]) {
             log.info('User requested to see the prefix');
-            message.reply("Your guild's prefix is: " + client.guildData.get(message.guild!.id, 'prefix'));
+            message.reply(`Your guild's prefix is: ${client.guildData.get(message.guild!.id, 'prefix')}`);
             return;
         }
 
         client.guildData.set(message.guild!.id, args[0], 'prefix');
-        message.reply('I have set your guild prefix to ' + args[0]);
+        message.reply(`I have set your guild prefix to ${args[0]}`);
     }
 }

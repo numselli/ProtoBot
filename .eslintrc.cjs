@@ -93,6 +93,7 @@ module.exports = {
         'no-setter-return': ['error'],
         'no-sparse-arrays': ['error'],
         'no-template-curly-in-string': ['error'],
+        'template-curly-spacing': ['error', 'never'],
         'no-undef': ['error'],
         'no-unexpected-multiline': ['error'],
         'no-unreachable-loop': ['error'],
@@ -108,7 +109,8 @@ module.exports = {
         '@typescript-eslint/explicit-member-accessibility': ['error'],
         '@typescript-eslint/consistent-type-imports': ['error'],
         'simple-import-sort/imports': ['error'],
-        'simple-import-sort/exports': ['error']
+        'simple-import-sort/exports': ['error'],
+        'prefer-template': ['error']
     },
     globals: {
         NodeJS: 'readonly'

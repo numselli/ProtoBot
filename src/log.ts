@@ -18,10 +18,10 @@
 
 const runningInProd = process.env.PRODUCTION;
 
-import * as colorette from 'colorette';
-import * as fs from 'fs'; // To create the write streams.
-import strip from 'strip-ansi'; // To clean off the ANSI escape codes for the log files.
-import * as util from 'util'; // Utilities.
+import { blue, bold, cyan, green, red, yellow } from 'colorette';
+import * as fs from 'fs';
+import strip from 'strip-ansi';
+import * as util from 'util';
 
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 
@@ -125,15 +125,11 @@ function generateTimePrefix(epoch: number): string {
     preparsedTime[0] = preparsedTime[0].split(':');
 
     // Parse date/time
-    const parsedDate = `${colorette.yellow(preparsedDate[1][0])} ${colorette.yellow(colorette.bold(preparsedDate[1][1]))} ${colorette.green(
-        colorette.bold(preparsedDate[2])
-    )}`;
-    const sep: string = colorette.yellow(':');
-    const parsedTime = `${colorette.yellow(colorette.bold(preparsedTime[0][0]))}${sep}${colorette.yellow(
-        colorette.bold(preparsedTime[0][1])
-    )}${sep}${colorette.yellow(colorette.bold(preparsedTime[0][2]))}`;
+    const parsedDate = `${yellow(preparsedDate[1][0])} ${yellow(bold(preparsedDate[1][1]))} ${green(bold(preparsedDate[2]))}`;
+    const sep: string = yellow(':');
+    const parsedTime = `${yellow(bold(preparsedTime[0][0]))}${sep}${yellow(bold(preparsedTime[0][1]))}${sep}${yellow(bold(preparsedTime[0][2]))}`;
 
-    const brackets: string[] = [colorette.yellow('['), colorette.yellow(']')];
+    const brackets: string[] = [yellow('['), yellow(']')];
 
     return `${brackets[0]}${parsedDate} ${parsedTime}${brackets[1]}`;
 }
@@ -161,16 +157,16 @@ function doPrintLog(prefix: string, mode: LogMode, msg: unknown) {
 
 function verbose(m: unknown): void {
     if (runningInProd) return;
-    doPrintLog(colorette.cyan(`[${colorette.bold('VERB')}]`), 'v', m);
+    doPrintLog(cyan(`[${bold('VERB')}]`), 'v', m);
 }
 function info(m: unknown): void {
-    doPrintLog(colorette.blue(`[${colorette.bold('INFO')}]`), 'i', m);
+    doPrintLog(blue(`[${bold('INFO')}]`), 'i', m);
 }
 function warn(m: unknown): void {
-    doPrintLog(colorette.yellow(`[${colorette.bold('WARN')}]`), 'w', m);
+    doPrintLog(yellow(`[${bold('WARN')}]`), 'w', m);
 }
 function error(m: unknown): void {
-    doPrintLog(colorette.red(`[${colorette.bold('ERR!')}]`), 'e', m);
+    doPrintLog(red(`[${bold('ERR!')}]`), 'e', m);
 }
 function errorWithStack(m: unknown): void {
     error(m);

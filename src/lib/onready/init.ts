@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as colorette from 'colorette';
+import { red } from 'colorette';
 
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
@@ -49,10 +49,10 @@ export default function init(client: LexiClient, log: LexiLogger): void {
 
     // A lot of chalk prefixes to show the counts. A better way to handle this?
     // Whoever wrote this (myself) needs some mental help.
-    log.info(`Username: ${colorette.red(client.user!.tag)}`);
-    log.info(`In ${colorette.red(client.guilds.cache.size)} guilds!`);
-    log.info(`With ${colorette.red(client.channels.cache.size)} channels!`);
-    log.info(`Total ${colorette.red(userTotal)} members, excluding myself!`);
-    log.info(`Average user count over all guilds: ${colorette.red(Math.round(userAvg))}`);
+    log.info(`Username: ${red(client.user!.tag)}`);
+    log.info(`In ${red(client.guilds.cache.size)} guilds!`);
+    log.info(`With ${red(client.channels.cache.size)} channels!`);
+    log.info(`Total ${red(userTotal)} members, excluding myself!`);
+    log.info(`Average user count over all guilds: ${red(Math.round(userAvg))}`);
     log.info(`Prefix is set to '${client.config.prefix}'.`);
 }

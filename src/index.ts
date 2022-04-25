@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as colorette from 'colorette';
+import { blue, bold, green, yellow } from 'colorette';
 import type { TextChannel } from 'discord.js';
 import { Intents } from 'discord.js';
 
@@ -68,7 +68,7 @@ client.on('ready', async () => {
 client.on('messageCreate', async (message) => {
     // Log the message content if we are in verbose mode.
     log.verbose(
-        `${colorette.yellow(`[${colorette.bold('MSG')}]`)} ${`${colorette.bold(colorette.blue(`@${message.author.tag}`))} ${colorette.green(
+        `${yellow(`[${bold('MSG')}]`)} ${`${bold(blue(`@${message.author.tag}`))} ${green(
             `#${(message.channel as TextChannel).name ?? '<DM>'}`
         )}`}: ${message.content}`
     );

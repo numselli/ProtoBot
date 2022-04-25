@@ -17,7 +17,7 @@
  */
 
 import { highlight } from 'cli-highlight';
-import * as colorette from 'colorette';
+import { blue, bold, red, underline } from 'colorette';
 
 import log from '#root/log';
 
@@ -27,7 +27,7 @@ import log from '#root/log';
  */
 export default function EnmapVerbose(dbName: string, query: string): void {
     log.verbose(
-        `${colorette.blue(`[${colorette.bold('DatabaseQuery')}]`)} ${colorette.underline('Query')} ${colorette.red(dbName)}: ${highlight(query, {
+        `${blue(`[${bold('DatabaseQuery')}]`)} ${underline('Query')} ${red(dbName)}: ${highlight(query, {
             language: 'sql'
         })}`
     );

@@ -20,9 +20,9 @@ import { blue, bold, green, yellow } from 'colorette';
 import type { TextChannel } from 'discord.js';
 import { Intents } from 'discord.js';
 
-import * as ready from '#lib/onready/index';
 import LexiClient from '#lib/structures/LexiClient';
 import log from '#root/log';
+import * as ready from '#root/utils/onready/';
 
 // Verify the currently running commit...
 log.info('Verifying we were started via the start script...');

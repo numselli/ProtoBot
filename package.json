@@ -7,11 +7,11 @@
     "scripts": {
         "start": "chmod u+x ./start.sh; ./start.sh",
         "lint": "eslint .",
-        "build": "tsc; tsc-alias",
+        "build": "tsc; EX=\"$?\"; tsc-alias; echo \"$EX\"; [[ \"$EX\" == 0 ]] && false || true",
         "prettier:check": "prettier . --check",
         "prettier": "prettier . -w",
         "prepare": "husky install",
-        "test": "npm run lint && npm run prettier:check && npm run build",
+        "test": "npm run lint; npm run prettier:check; npm run build",
         "test:staged": "npx lint-staged"
     },
     "author": "BadBoyHaloCat",
@@ -44,6 +44,8 @@
         "eslint": "^8.13.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-deprecation": "^1.3.2",
+        "eslint-plugin-license-header": "^0.4.0",
+        "eslint-plugin-simple-import-sort": "^7.0.0",
         "eslint-plugin-unused-imports": "^2.0.0",
         "husky": "^7.0.0",
         "lint-staged": "^12.4.0",

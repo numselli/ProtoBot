@@ -16,57 +16,60 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Modules
-import type { Client, Message } from 'discord.js';
-import Uwuifier from 'uwuifier';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
+import Command from '@lib/structures/Command';
+import type { Message } from 'discord.js';
+import Uwuifier from 'uwuifier';
 
-// Main
-export async function run(client: Client, message: Message, args: string[]): Promise<void> {
-    let intense = false;
-    if (args.length === 0) {
-        message.reply('**Error:** No text provided!');
-        return;
+const uwuify: Uwuifier = new Uwuifier();
+uwuify.actions = [
+    '*blushes*',
+    '*whispers to self*',
+    '*cries*',
+    '*screams*',
+    '*sweats*',
+    '*twerks*',
+    '*runs away*',
+    '*screeches*',
+    '*walks away*',
+    '*looks at you*',
+    '*starts twerking*',
+    '*huggles tightly*',
+    '*boops your nose*'
+];
+
+export default class UwuifyCommand extends Command {
+    public getConfig(): CommandConfig {
+        return {
+            name: 'uwuify',
+            category: 'fun',
+            usage: '[-i] [text]',
+            description:
+                'Converts all of your text to UwU-talk!\nIntense mode available with `-i` flag: `~uwuify -i text`\nPowered by [Uwuifier](https://github.com/Schotsl/Uwuifier)',
+            enabled: true,
+            aliases: ['uwu'],
+
+            // To restrict the command, change the "false" to the following
+            // format:
+            //
+            // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
+            restrict: false
+        };
     }
 
-    if (args[0] === '-i') {
-        intense = true;
-        args.shift();
-    }
+    public async run(message: Message<boolean>, args: string[]): Promise<void> {
+        let intense = false;
+        if (args.length === 0) {
+            message.reply('**Error:** No text provided!');
+            return;
+        }
 
-    const uwuify: Uwuifier = new Uwuifier();
-    uwuify.actions = [
-        '*blushes*',
-        '*whispers to self*',
-        '*cries*',
-        '*screams*',
-        '*sweats*',
-        '*twerks*',
-        '*runs away*',
-        '*screeches*',
-        '*walks away*',
-        '*looks at you*',
-        '*starts twerking*',
-        '*huggles tightly*',
-        '*boops your nose*'
-    ];
-    const msg: string = uwuify.uwuifySentence(args.join(' '));
-    message.channel.send(intense ? msg.replace(/u/gi, 'UwU').replace(/o/gi, 'OwO') : msg.substring(0, 2000));
+        if (args[0] === '-i') {
+            intense = true;
+            args.shift();
+        }
+
+        const msg: string = uwuify.uwuifySentence(args.join(' '));
+        message.channel.send(intense ? msg.replace(/u/gi, 'UwU').replace(/o/gi, 'OwO') : msg.substring(0, 2000));
+    }
 }
-
-// Config
-export const config: CommandConfig = {
-    name: 'uwuify',
-    category: 'fun',
-    usage: '[-i] [text]',
-    description:
-        'Converts all of your text to UwU-talk!\nIntense mode available with `-i` flag: `~uwuify -i text`\nPowered by [Uwuifier](https://github.com/Schotsl/Uwuifier)',
-    enabled: true,
-    aliases: ['uwu'],
-
-    // To restrict the command, change the "false" to the following
-    // format:
-    //
-    // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false
-};

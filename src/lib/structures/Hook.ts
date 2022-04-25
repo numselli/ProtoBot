@@ -16,16 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Modules
-import type { Client, Message } from 'discord.js';
 import type Logger from '@lib/interfaces/Logger';
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
+import { Client, Message } from 'discord.js';
 
-// Main
-export function run(client: Client, message: Message, log: Logger): void {}
+export interface HookConfig {
+    name: string;
+    description: string;
+}
 
-// Config
-export const config: CommandConfig = {
-    name: 'My Cool Module',
-    description: 'Does stuff'
-};
+export default abstract class Hook {
+    protected client: Client;
+    protected log: Logger;
+
+    public constructor(client: Client, log: Logger) {
+        this.client = client;
+        this.log = log;
+    }
+
+    public abstract run(message: Message): void;
+    public abstract getConfig(): HookConfig;
+}

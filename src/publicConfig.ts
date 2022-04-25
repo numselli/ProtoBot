@@ -21,9 +21,16 @@
 // Config types
 import type PublicConfig from '@lib/interfaces/PublicConfig';
 
-// Main
 const publicConfig: PublicConfig = {
-    githubRepository: 'https://github.com/thetayloredman/ProtoBot'
+    githubRepository: 'https://github.com/thetayloredman/ProtoBot',
+
+    colors: {
+        color1: '#db2b39',
+        color2: '#29335c',
+        color3: '#f3a712',
+        color4: '#2589bd',
+        color5: '#a3b4b2'
+    }
 };
 
 // Export

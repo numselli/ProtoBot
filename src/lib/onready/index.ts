@@ -18,7 +18,7 @@
 
 import init from './init';
 import loadHooks from './loadhooks';
-import setStatus from './status';
 import handleRestart from './restart';
+import setStatus from './status';
 
-export { init, loadHooks, setStatus, handleRestart };
+export { handleRestart, init, loadHooks, setStatus };

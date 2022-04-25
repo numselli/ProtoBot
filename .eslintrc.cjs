@@ -1,3 +1,21 @@
+/*
+ * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Copyright (C) 2020, 2021, 2022  0xLogN
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 module.exports = {
     env: {
         node: true
@@ -9,7 +27,7 @@ module.exports = {
         warnOnUnsupportedTypeScriptVersion: false,
         extraFileExtensions: ['.cjs']
     },
-    plugins: ['@typescript-eslint', 'deprecation', 'unused-imports'],
+    plugins: ['@typescript-eslint', 'deprecation', 'unused-imports', 'license-header', 'simple-import-sort'],
     extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
     rules: {
         '@typescript-eslint/no-unnecessary-type-assertion': ['error'],
@@ -83,10 +101,13 @@ module.exports = {
         'no-unsafe-negation': ['error'],
         'no-use-before-define': ['error'],
         '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
-        'unused-imports/no-unused-imports': 'error',
-        'unused-imports/no-unused-vars': ['warn', { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }],
+        'unused-imports/no-unused-imports': ['error'],
         'use-isnan': ['error'],
-        'valid-typeof': ['error']
+        'valid-typeof': ['error'],
+        'license-header/header': ['error', 'src/header.ts'],
+        '@typescript-eslint/explicit-member-accessibility': ['error'],
+        'simple-import-sort/imports': ['error'],
+        'simple-import-sort/exports': ['error']
     },
     globals: {
         NodeJS: 'readonly'

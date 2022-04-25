@@ -17,34 +17,42 @@
  */
 
 // Imports
-import { Client, Message, MessageEmbed } from 'discord.js';
-import fetch from 'node-fetch';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
+import Command from '@lib/structures/Command';
+import { Message, MessageEmbed } from 'discord.js';
+import fetch from 'node-fetch';
 
 interface KoalaData {
     link: string;
 }
 
-export async function run(client: Client, message: Message): Promise<void> {
-    const msg = await message.reply('Fetching a koala picture...');
-    const body = (await fetch('https://some-random-api.ml/img/koala').then((res) => res.json())) as KoalaData;
-    const embed = new MessageEmbed().setTitle(`Koala for ${message.author.username}`).setImage(body.link).setTimestamp(Date.now()).setColor('RANDOM');
-    msg.delete();
-    message.reply({ embeds: [embed] });
+export default class KoalaCommand extends Command {
+    public getConfig(): CommandConfig {
+        return {
+            name: 'koala',
+            category: 'fun',
+            description: 'Get a koala picture!',
+            usage: '',
+            enabled: true,
+            aliases: [], // command aliases to load
+
+            // To restrict the command, change the "false" to the following
+            // format:
+            //
+            // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
+            restrict: false
+        };
+    }
+
+    public async run(message: Message<boolean>): Promise<void> {
+        const msg = await message.reply('Fetching a koala picture...');
+        const body = (await fetch('https://some-random-api.ml/img/koala').then((res) => res.json())) as KoalaData;
+        const embed = new MessageEmbed()
+            .setTitle(`Koala for ${message.author.username}`)
+            .setImage(body.link)
+            .setTimestamp(Date.now())
+            .setColor('RANDOM');
+        msg.delete();
+        message.reply({ embeds: [embed] });
+    }
 }
-
-// Config
-export const config: CommandConfig = {
-    name: 'koala',
-    category: 'fun',
-    description: 'Get a koala picture!',
-    usage: '',
-    enabled: true,
-    aliases: [], // command aliases to load
-
-    // To restrict the command, change the "false" to the following
-    // format:
-    //
-    // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false
-};

@@ -35,6 +35,9 @@ export enum Permissions {
     /** In the config.adminIDs list. */
     BOT_ADMINISTRATOR,
 
+    /** In the config.superAdminIDs list. */
+    BOT_SUPER_ADMIN,
+
     /** The one and only config.ownerID. */
     BOT_OWNER
 }

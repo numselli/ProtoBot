@@ -16,12 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import EnmapVerbose from '@lib/EnmapVerbose';
+import type Logger from '@lib/interfaces/Logger';
 import config from '@root/config';
 import publicConfig from '@root/publicConfig';
 import { Client as BaseClient, ClientOptions } from 'discord.js';
 import Enmap from 'enmap';
-import EnmapVerbose from '@lib/EnmapVerbose';
-import type Logger from '@lib/interfaces/Logger';
+
 import CommandHandler from './CommandHandler';
 
 function makeVerboseFunction(name: string): (_q: string) => void {
@@ -57,12 +58,12 @@ export default class Client extends BaseClient {
         this.cooldowns = new Enmap();
 
         // Generate the command handling instance.
-        this.commands = new CommandHandler(this._log, this.config.dirs.commands);
+        this.commands = new CommandHandler(this._log, this.config.dirs.commands, this);
     }
 
     public destroy(): void {
         if (this._isAlreadyDestroyed) {
-            this._log('e', 'Client destroy: Client is already destroyed. Abort.', true);
+            this._log.error('Client destroy: Client is already destroyed. Abort.');
             return;
         }
         this._isAlreadyDestroyed = true;

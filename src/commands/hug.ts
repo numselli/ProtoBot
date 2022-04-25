@@ -16,44 +16,45 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Modules
-import type { Client, Message } from 'discord.js';
-import type Logger from '@lib/interfaces/Logger';
 import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
+import Command from '@lib/structures/Command';
+import type { Message } from 'discord.js';
 
-// Main
-export async function run(client: Client, message: Message, args: string[], log: Logger): Promise<void> {
-    const userID = args[0]?.replace(/[<@!>]/g, '');
-    if (!args[0]) {
-        log('i', 'No hug arg provided!');
-        message.reply('Who did you want to hug?');
-        return;
+export default class HugCommand extends Command {
+    public getConfig(): CommandConfig {
+        return {
+            name: 'hug',
+            category: 'affection',
+            description: 'Hug someone!',
+            usage: '<user>',
+            enabled: true,
+            aliases: [],
+
+            // To restrict the command, change the "false" to the following
+            // format:
+            //
+            // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
+            restrict: false
+        };
     }
+    public async run(message: Message<boolean>, args: string[]): Promise<void> {
+        const { client, log } = this;
+        const userID = args[0]?.replace(/[<@!>]/g, '');
+        if (!args[0]) {
+            log.info('No hug arg provided!');
+            message.reply('Who did you want to hug?');
+            return;
+        }
 
-    if (userID === message.author.id) {
-        log('i', 'Cannot hug self!');
-        message.reply('How are you gonna hug yourself?');
-        return;
+        if (userID === message.author.id) {
+            log.info('Cannot hug self!');
+            message.reply('How are you gonna hug yourself?');
+            return;
+        }
+
+        client.userStatistics.ensure(userID, client.defaults.USER_STATISTICS);
+        client.userStatistics.inc(userID, 'hugs');
+
+        message.reply(`**HUG!**\n<@${message.author.id}> huggles <@${userID}> tightly.`);
     }
-
-    client.userStatistics.ensure(userID, client.defaults.USER_STATISTICS);
-    client.userStatistics.inc(userID, 'hugs');
-
-    message.reply(`**HUG!**\n<@${message.author.id}> huggles <@${userID}> tightly.`);
 }
-
-// Config
-export const config: CommandConfig = {
-    name: 'hug',
-    category: 'affection',
-    description: 'Hug someone!',
-    usage: '<user>',
-    enabled: true,
-    aliases: [],
-
-    // To restrict the command, change the "false" to the following
-    // format:
-    //
-    // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
-    restrict: false
-};

@@ -23,12 +23,9 @@ import Command from '@lib/structures/Command';
 import { changeMaxBufferSize, clearBuffer, getMaxBufferSize, LogMode, readBuffer, readBufferOfType } from '@root/log';
 import { exec, ExecException } from 'child_process';
 import type { Message } from 'discord.js';
-import * as util from 'util';
-import {Linter} from 'eslint';
 import { MessageEmbed } from 'discord.js';
-// Hacky way to require()
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+import { Linter } from 'eslint';
+import * as util from 'util';
 
 export default class AdminCommand extends Command {
     public getConfig(): CommandConfig {
@@ -119,6 +116,8 @@ export default class AdminCommand extends Command {
                     extends: 'eslint:recommended',
                     parserOptions: { ecmaVersion: 12 }
                 });
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 const error = lint.find((e: { fatal: boolean }) => e.fatal);
                 if (error) {
                     const line = code.split('\n')[error.line - 1];
@@ -133,7 +132,7 @@ export default class AdminCommand extends Command {
             embed
                 .setTitle(e ? '**Error**' : '**Success**')
                 .setColor(e ? 'RED' : 'GREEN')
-                .setDescription(`\`\`\`${response.substr(0, 1018)}\`\`\``);
+                .setDescription(`\`\`\`${response.substring(0, 1018)}\`\`\``);
             if (length >= 1025 && !silent) {
                 // dont do this on silent items
                 legacyLog(e ? 'e' : 'i', `An eval command executed by ${message.author.username}'s response was too long (${length}/2048).`);

@@ -59,11 +59,12 @@ const client = new Client(log, {
 
 // When the client is ready...
 client.on('ready', async () => {
+    // FIXME: this may cause a race condition
     ready.init(client, log);
     client.commands.loadCommands();
     ready.loadHooks(client, log);
     ready.setStatus(client, log);
-    ready.handleRestart(client, log);
+    await ready.handleRestart(client, log);
 });
 
 // The most important part.
@@ -124,7 +125,7 @@ client.on('messageCreate', async (message) => {
         try {
             await client.commands.run(command, args, message, client);
         } catch (e) {
-            log.error(`Executing ${command} for ${message.author.tag} with args ${args} failed:`);
+            log.error(`Executing ${command} for ${message.author.tag} with args ${args.join(' ')} failed:`);
             log.error(e);
             message.reply('Something went wrong! Notify a developer.');
         }

@@ -23,6 +23,8 @@ import Command from '@lib/structures/Command';
 import { changeMaxBufferSize, clearBuffer, getMaxBufferSize, LogMode, readBuffer, readBufferOfType } from '@root/log';
 import { exec, ExecException } from 'child_process';
 import type { Message } from 'discord.js';
+import * as util from 'util';
+import {Linter} from 'eslint';
 import { MessageEmbed } from 'discord.js';
 // Hacky way to require()
 import { createRequire } from 'module';
@@ -107,11 +109,10 @@ export default class AdminCommand extends Command {
 
                 // eslint-disable-next-line no-eval
                 response = await eval(code);
-                if (typeof response !== 'string') response = require('util').inspect(response, { depth: 3 });
+                if (typeof response !== 'string') response = util.inspect(response, { depth: 3 });
             } catch (err) {
                 e = true;
                 response = (err as Error).toString();
-                const Linter = require('eslint').Linter;
                 const linter = new Linter();
                 const lint = linter.verify(code, {
                     env: { commonjs: true, es2021: true, node: true },
@@ -121,7 +122,7 @@ export default class AdminCommand extends Command {
                 const error = lint.find((e: { fatal: boolean }) => e.fatal);
                 if (error) {
                     const line = code.split('\n')[error.line - 1];
-                    const match = line.slice(error.column - 1).match(/\w+/i);
+                    const match = /\w+/i.exec(line.slice(error.column - 1));
                     const length = match ? match[0].length : 1;
                     response = `${line}
     ${' '.repeat(error.column - 1)}${'^'.repeat(length)}

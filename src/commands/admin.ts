@@ -20,8 +20,8 @@ import type { ExecException } from 'child_process';
 import { exec } from 'child_process';
 import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
-// Hacky way to require()
-import { createRequire } from 'module';
+import { Linter } from 'eslint';
+import * as util from 'util';
 
 import { getPermissionsForUser } from '#lib/getPermissionsForUser';
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
@@ -29,7 +29,6 @@ import { Permissions } from '#lib/Permissions';
 import LexiCommand from '#lib/structures/LexiCommand';
 import type { LogMode } from '#root/log';
 import { changeMaxBufferSize, clearBuffer, getMaxBufferSize, readBuffer, readBufferOfType } from '#root/log';
-const require = createRequire(import.meta.url);
 
 export default class AdminCommand extends LexiCommand {
     public getConfig(): CommandConfig {
@@ -110,21 +109,22 @@ export default class AdminCommand extends LexiCommand {
 
                 // eslint-disable-next-line no-eval
                 response = await eval(code);
-                if (typeof response !== 'string') response = require('util').inspect(response, { depth: 3 });
+                if (typeof response !== 'string') response = util.inspect(response, { depth: 3 });
             } catch (err) {
                 e = true;
                 response = (err as Error).toString();
-                const Linter = require('eslint').Linter;
                 const linter = new Linter();
                 const lint = linter.verify(code, {
                     env: { commonjs: true, es2021: true, node: true },
                     extends: 'eslint:recommended',
                     parserOptions: { ecmaVersion: 12 }
                 });
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 const error = lint.find((e: { fatal: boolean }) => e.fatal);
                 if (error) {
                     const line = code.split('\n')[error.line - 1];
-                    const match = line.slice(error.column - 1).match(/\w+/i);
+                    const match = /\w+/i.exec(line.slice(error.column - 1));
                     const length = match ? match[0].length : 1;
                     response = `${line}
     ${' '.repeat(error.column - 1)}${'^'.repeat(length)}
@@ -135,7 +135,7 @@ export default class AdminCommand extends LexiCommand {
             embed
                 .setTitle(e ? '**Error**' : '**Success**')
                 .setColor(e ? 'RED' : 'GREEN')
-                .setDescription(`\`\`\`${response.substr(0, 1018)}\`\`\``);
+                .setDescription(`\`\`\`${response.substring(0, 1018)}\`\`\``);
             if (length >= 1025 && !silent) {
                 // dont do this on silent items
                 legacyLog(e ? 'e' : 'i', `An eval command executed by ${message.author.username}'s response was too long (${length}/2048).`);

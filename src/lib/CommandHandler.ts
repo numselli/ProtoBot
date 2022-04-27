@@ -161,7 +161,7 @@ export default class CommandHandler {
                     client,
                     this.log,
                     message
-                )}, wanted >= ${commandConfig.restrict}, exiting handler.`
+                )}, wanted >= ${String(commandConfig.restrict)}, exiting handler.`
             );
             message.reply("You aren't authorized to do that!");
             return Promise.resolve();

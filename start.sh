@@ -47,19 +47,20 @@ while true; do
     echo 'bootstrap: Compiling source tree...'
     npm run build
     echo 'bootstrap: Setting CWD to dist/';
-    cd dist;
-    echo 'bootstrap: Running ProtoBot...'
-    echo 'bootstrap: Final env:'
-    echo 'bootstrap:                   PRODUCTION is set to '"${PRODUCTION}"'.';
-    echo 'bootstrap:      PROTOBOT_STARTSH_COMMIT is set to '"${COMMIT_HASH}"'.';
-    echo 'bootstrap: PROTOBOT_STARTSH_DIRTYSOURCE is set to '"${DIRTYSOURCE}"'.';
+    (
+        cd dist;
+        echo 'bootstrap: Running ProtoBot...'
+        echo 'bootstrap: Final env:'
+        echo 'bootstrap:                   PRODUCTION is set to '"${PRODUCTION}"'.';
+        echo 'bootstrap:      PROTOBOT_STARTSH_COMMIT is set to '"${COMMIT_HASH}"'.';
+        echo 'bootstrap: PROTOBOT_STARTSH_DIRTYSOURCE is set to '"${DIRTYSOURCE}"'.';
 
-    PRODUCTION=$PRODUCTION PROTOBOT_STARTSH_COMMIT="$COMMIT_HASH" PROTOBOT_STARTSH_DIRTYSOURCE="$DIRTYSOURCE" node --experimental-specifier-resolution=node .;
-    if [ "$?" -eq 9 ]; then
-        echo 'bootstrap: Restarting instantly: exit code was 9 (RESTART)'
-    else
-        echo 'bootstrap: Restarting in '"$RESTART_DELAY_SECONDS"' seconds. Press Ctrl+C to cancel.';
-        sleep $RESTART_DELAY_SECONDS
-    fi
-    cd ..
+        PRODUCTION=$PRODUCTION PROTOBOT_STARTSH_COMMIT="$COMMIT_HASH" PROTOBOT_STARTSH_DIRTYSOURCE="$DIRTYSOURCE" node --experimental-specifier-resolution=node .;
+        if [ "$?" -eq 9 ]; then
+            echo 'bootstrap: Restarting instantly: exit code was 9 (RESTART)'
+        else
+            echo 'bootstrap: Restarting in '"$RESTART_DELAY_SECONDS"' seconds. Press Ctrl+C to cancel.';
+            sleep $RESTART_DELAY_SECONDS
+        fi
+    )
 done;

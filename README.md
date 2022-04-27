@@ -12,6 +12,18 @@
 
 <div align="center">
 
+## NOTICE! READ ME FIRST!
+
+</div>
+
+**THIS IS AN EARLY PROTOTYPE FOR LEXI VERSION 3!**
+
+THIS BRANCH IS **NOT SUITIBLE FOR PRODUCTION USE IN ANY WAY**
+
+Please consult [pulls/#510: Lexi Version 3](https://github.com/thetayloredman/ProtoBot/pull/510) for current development progress.
+
+<div align="center">
+
 ## What is Lexi?
 
 </div>

@@ -17,38 +17,19 @@
  */
 
 import type { Message } from 'discord.js';
-import Uwuifier from 'uwuifier';
 
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
-import LexiCommand from '#lib/structures/LexiCommand';
+import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 
-const uwuify: Uwuifier = new Uwuifier();
-uwuify.actions = [
-    '*blushes*',
-    '*whispers to self*',
-    '*cries*',
-    '*screams*',
-    '*sweats*',
-    '*twerks*',
-    '*runs away*',
-    '*screeches*',
-    '*walks away*',
-    '*looks at you*',
-    '*starts twerking*',
-    '*huggles tightly*',
-    '*boops your nose*'
-];
-
-export default class UwuifyCommand extends LexiCommand {
+export default class HugCommand extends LegacyLexiCommand {
     public getConfig(): CommandConfig {
         return {
-            name: 'uwuify',
-            category: 'fun',
-            usage: '[-i] [text]',
-            description:
-                'Converts all of your text to UwU-talk!\nIntense mode available with `-i` flag: `~uwuify -i text`\nPowered by [Uwuifier](https://github.com/Schotsl/Uwuifier)',
+            name: 'hug',
+            category: 'affection',
+            description: 'Hug someone!',
+            usage: '<user>',
             enabled: true,
-            aliases: ['uwu'],
+            aliases: [],
 
             // To restrict the command, change the "false" to the following
             // format:
@@ -57,20 +38,24 @@ export default class UwuifyCommand extends LexiCommand {
             restrict: false
         };
     }
-
     public async run(message: Message<boolean>, args: string[]): Promise<void> {
-        let intense = false;
-        if (args.length === 0) {
-            message.reply('**Error:** No text provided!');
+        const { client, log } = this;
+        const userID = args[0]?.replace(/[<@!>]/g, '');
+        if (!args[0]) {
+            log.info('No hug arg provided!');
+            message.reply('Who did you want to hug?');
             return;
         }
 
-        if (args[0] === '-i') {
-            intense = true;
-            args.shift();
+        if (userID === message.author.id) {
+            log.info('Cannot hug self!');
+            message.reply('How are you gonna hug yourself?');
+            return;
         }
 
-        const msg: string = uwuify.uwuifySentence(args.join(' '));
-        message.channel.send(intense ? msg.replace(/u/gi, 'UwU').replace(/o/gi, 'OwO') : msg.substring(0, 2000));
+        client.userStatistics.ensure(userID, client.defaults.USER_STATISTICS);
+        client.userStatistics.inc(userID, 'hugs');
+
+        message.reply(`**HUG!**\n<@${message.author.id}> huggles <@${userID}> tightly.`);
     }
 }

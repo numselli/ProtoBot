@@ -26,11 +26,11 @@ import * as util from 'util';
 import { getPermissionsForUser } from '#lib/getPermissionsForUser';
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
 import { Permissions } from '#lib/Permissions';
-import LexiCommand from '#lib/structures/LexiCommand';
+import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 import type { LogMode } from '#root/log';
 import { changeMaxBufferSize, clearBuffer, getMaxBufferSize, readBuffer, readBufferOfType } from '#root/log';
 
-export default class AdminCommand extends LexiCommand {
+export default class AdminCommand extends LegacyLexiCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'admin',

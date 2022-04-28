@@ -19,15 +19,15 @@
 import type { Message } from 'discord.js';
 
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
-import LexiCommand from '#lib/structures/LexiCommand';
+import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 
-export default class BoopCommand extends LexiCommand {
+export default class PatCommand extends LegacyLexiCommand {
     public getConfig(): CommandConfig {
         return {
-            name: 'boop',
+            name: 'pat',
             category: 'affection',
-            usage: '<user>',
-            description: 'Boop someone!',
+            description: 'Pat someone!',
+            usage: '',
             enabled: true,
             aliases: [],
 
@@ -41,23 +41,21 @@ export default class BoopCommand extends LexiCommand {
 
     public async run(message: Message, args: string[]): Promise<void> {
         const { client, log } = this;
-
         const userID = args[0]?.replace(/[<@!>]/g, '');
-
         if (!args[0]) {
-            log.info(`Not specified who to boop in boop.ts`);
-            message.reply('Who did you want to boop?');
+            log.info('No boop arg provided!');
+            message.reply('Who did you want to pat?');
             return;
         }
 
         if (userID === message.author.id) {
-            message.reply(`**Self boop?**\n<@${message.author.id}> boops themselves..?`);
+            message.reply(`**Self pat?**\n<@${message.author.id}> pats themselves on the head..?`);
             return;
         }
 
         client.userStatistics.ensure(userID, client.defaults.USER_STATISTICS);
-        client.userStatistics.inc(userID, 'boops');
+        client.userStatistics.inc(userID, 'pats');
 
-        message.reply(`**Boop!**\n<@${message.author.id}> boops <@${userID}>~!\n\nhttps://cdn.discordapp.com/emojis/777752005820416000.gif`);
+        message.reply(`**Pat!**\n<@${message.author.id}> pats <@${userID}> on the head~!`);
     }
 }

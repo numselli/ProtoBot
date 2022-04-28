@@ -22,21 +22,24 @@ import { MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
-import LexiCommand from '#lib/structures/LexiCommand';
+import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 
-interface DogData {
-    link: string;
+interface EpicMemeData {
+    postLink: string;
+    title: string;
+    url: string;
+    subreddit: string;
 }
 
-export default class DogCommand extends LexiCommand {
+export default class MemeCommand extends LegacyLexiCommand {
     public getConfig(): CommandConfig {
         return {
-            name: 'dog',
+            name: 'meme',
             category: 'fun',
+            description: 'Get a fresh meme!',
             usage: '',
-            description: 'Get a dog picture!',
             enabled: true,
-            aliases: ['woof', 'puppy', 'doggo'], // command aliases to load
+            aliases: [], // command aliases to load
 
             // To restrict the command, change the "false" to the following
             // format:
@@ -47,13 +50,14 @@ export default class DogCommand extends LexiCommand {
     }
 
     public async run(message: Message): Promise<void> {
-        const msg = await message.reply('Fetching a dog picture...');
-        const body = (await fetch('https://some-random-api.ml/img/dog').then((res) => res.json())) as DogData;
+        const body = (await fetch('https://meme-api.herokuapp.com/gimme').then((res) => res.json())) as EpicMemeData;
         const embed = new MessageEmbed()
-            .setTitle(`Dog for ${message.author.username}`)
-            .setImage(body.link)
-            .setTimestamp(Date.now())
+            .setColor('RANDOM')
+            .setTitle(body.title)
+            .setURL(body.postLink)
+            .setImage(body.url)
+            .setFooter({ text: `From r/${body.subreddit}` })
             .setColor('RANDOM');
-        msg.edit({ embeds: [embed] });
+        message.reply({ embeds: [embed] });
     }
 }

@@ -21,9 +21,9 @@ import { MessageEmbed } from 'discord.js';
 
 import type LexiCommandCategory from '#lib/interfaces/commands/LexiCommandCategory';
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
-import LexiCommand from '#lib/structures/LexiCommand';
+import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 
-export default class HelpCommand extends LexiCommand {
+export default class HelpCommand extends LegacyLexiCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'help',

@@ -22,8 +22,8 @@ import fs from 'fs';
 import { getPermissionsForUser } from '#lib/getPermissionsForUser';
 import type LexiCommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
 import type LexiLogger from '#lib/interfaces/LexiLogger';
+import type LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 import type LexiClient from '#lib/structures/LexiClient';
-import type LexiCommand from '#lib/structures/LexiCommand';
 
 /**
  * CommandHandler handles the storage and effective management of commands
@@ -34,7 +34,7 @@ export default class LexiCommandHandler {
     private log: LexiLogger;
 
     /** The internal storage facility for the commands. */
-    private _commandClassInstances: Map<string, LexiCommand>;
+    private _commandClassInstances: Map<string, LegacyLexiCommand>;
     private _commandConfigs: Map<string, LexiCommandConfig>;
     private _commandRefs: Map<string, string>;
     private client: LexiClient;
@@ -95,7 +95,7 @@ export default class LexiCommandHandler {
 
             // The command data is loaded from the path.
             this.log.verbose(`Loading command "${path.replace('.js', '')}"...`);
-            const CommandClass = (await import(`../${this.commandsFolder}${path}`)).default as LexiCommand;
+            const CommandClass = (await import(`../${this.commandsFolder}${path}`)).default as LegacyLexiCommand;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const command = new CommandClass(this.client, this.log);
@@ -135,7 +135,7 @@ export default class LexiCommandHandler {
         commandName = this._commandRefs.get(commandName) ?? '';
         this.log.verbose(`Alias resolved to "${commandName}"!`);
 
-        const commandData: LexiCommand | undefined = this._commandClassInstances.get(commandName);
+        const commandData: LegacyLexiCommand | undefined = this._commandClassInstances.get(commandName);
         if (!commandData) {
             // exit
             this.log.info(`Failed to find command "${commandName}", exiting handler.`);

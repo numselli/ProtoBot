@@ -20,8 +20,8 @@ import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
+import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 import type LexiClient from '#lib/structures/LexiClient';
-import LexiCommand from '#lib/structures/LexiCommand';
 
 function fireStats(userID: string, message: Message, client: LexiClient): void {
     const uData = client.userStatistics.get(userID)!;
@@ -38,7 +38,7 @@ function fireStats(userID: string, message: Message, client: LexiClient): void {
     message.reply({ embeds: [embed] });
 }
 
-export default class InfoCommand extends LexiCommand {
+export default class InfoCommand extends LegacyLexiCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'info',

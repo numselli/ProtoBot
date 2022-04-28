@@ -16,26 +16,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// Imports
 import type { Message } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
+import fetch from 'node-fetch';
 
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
-import LexiCommand from '#lib/structures/LexiCommand';
+import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 
-function escapeMarkdown(text: string) {
-    const unescaped = text.replace(/\\(\*|_|`|~|\\)/g, '$1'); // unescape any "backslashed" character
-    const escaped = unescaped.replace(/(\*|_|`|~|\\)/g, '\\$1'); // escape *, _, `, ~, \
-    return escaped;
+interface KoalaData {
+    link: string;
 }
 
-export default class SourceCommand extends LexiCommand {
+export default class KoalaCommand extends LegacyLexiCommand {
     public getConfig(): CommandConfig {
         return {
-            name: 'source',
-            category: 'utility',
-            description: 'Gets the source of the last message',
+            name: 'koala',
+            category: 'fun',
+            description: 'Get a koala picture!',
             usage: '',
             enabled: true,
-            aliases: ['src'],
+            aliases: [], // command aliases to load
 
             // To restrict the command, change the "false" to the following
             // format:
@@ -46,9 +47,14 @@ export default class SourceCommand extends LexiCommand {
     }
 
     public async run(message: Message<boolean>): Promise<void> {
-        const messages = await message.channel.messages.fetch({ limit: 2 });
-
-        const m: Message = messages.last() as Message;
-        message.reply(`Content of message ID \`${m.id}\` in channel <#${m.channel.id}>:\n\n${escapeMarkdown(m.content)}`);
+        const msg = await message.reply('Fetching a koala picture...');
+        const body = (await fetch('https://some-random-api.ml/img/koala').then((res) => res.json())) as KoalaData;
+        const embed = new MessageEmbed()
+            .setTitle(`Koala for ${message.author.username}`)
+            .setImage(body.link)
+            .setTimestamp(Date.now())
+            .setColor('RANDOM');
+        msg.delete();
+        message.reply({ embeds: [embed] });
     }
 }

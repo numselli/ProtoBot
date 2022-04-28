@@ -20,9 +20,9 @@ import type { Message } from 'discord.js';
 
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
 import { Permissions } from '#lib/Permissions';
-import LexiCommand from '#lib/structures/LexiCommand';
+import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 
-export default class SetPrefixCommand extends LexiCommand {
+export default class SetPrefixCommand extends LegacyLexiCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'setprefix',

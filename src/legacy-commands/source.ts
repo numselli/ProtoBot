@@ -16,30 +16,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Imports
 import type { Message } from 'discord.js';
-import { MessageEmbed } from 'discord.js';
-import fetch from 'node-fetch';
 
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
-import LexiCommand from '#lib/structures/LexiCommand';
+import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 
-interface EpicMemeData {
-    postLink: string;
-    title: string;
-    url: string;
-    subreddit: string;
+function escapeMarkdown(text: string) {
+    const unescaped = text.replace(/\\(\*|_|`|~|\\)/g, '$1'); // unescape any "backslashed" character
+    const escaped = unescaped.replace(/(\*|_|`|~|\\)/g, '\\$1'); // escape *, _, `, ~, \
+    return escaped;
 }
 
-export default class MemeCommand extends LexiCommand {
+export default class SourceCommand extends LegacyLexiCommand {
     public getConfig(): CommandConfig {
         return {
-            name: 'meme',
-            category: 'fun',
-            description: 'Get a fresh meme!',
+            name: 'source',
+            category: 'utility',
+            description: 'Gets the source of the last message',
             usage: '',
             enabled: true,
-            aliases: [], // command aliases to load
+            aliases: ['src'],
 
             // To restrict the command, change the "false" to the following
             // format:
@@ -49,15 +45,10 @@ export default class MemeCommand extends LexiCommand {
         };
     }
 
-    public async run(message: Message): Promise<void> {
-        const body = (await fetch('https://meme-api.herokuapp.com/gimme').then((res) => res.json())) as EpicMemeData;
-        const embed = new MessageEmbed()
-            .setColor('RANDOM')
-            .setTitle(body.title)
-            .setURL(body.postLink)
-            .setImage(body.url)
-            .setFooter({ text: `From r/${body.subreddit}` })
-            .setColor('RANDOM');
-        message.reply({ embeds: [embed] });
+    public async run(message: Message<boolean>): Promise<void> {
+        const messages = await message.channel.messages.fetch({ limit: 2 });
+
+        const m: Message = messages.last() as Message;
+        message.reply(`Content of message ID \`${m.id}\` in channel <#${m.channel.id}>:\n\n${escapeMarkdown(m.content)}`);
     }
 }

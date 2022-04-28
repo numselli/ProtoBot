@@ -20,9 +20,9 @@ import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
-import LexiCommand from '#lib/structures/LexiCommand';
+import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 
-export default class FursonaCommand extends LexiCommand {
+export default class FursonaCommand extends LegacyLexiCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'fursona',

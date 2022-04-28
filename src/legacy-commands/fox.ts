@@ -16,20 +16,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// Imports
 import type { Message } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
+import fetch from 'node-fetch';
 
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
-import LexiCommand from '#lib/structures/LexiCommand';
+import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 
-export default class PatCommand extends LexiCommand {
+interface FoxData {
+    image: string;
+    link: string;
+}
+
+export default class FoxCommand extends LegacyLexiCommand {
     public getConfig(): CommandConfig {
         return {
-            name: 'pat',
-            category: 'affection',
-            description: 'Pat someone!',
+            name: 'fox',
+            category: 'fun',
             usage: '',
+            description: 'Get a cute fox picture!',
             enabled: true,
-            aliases: [],
+            aliases: ['foxxo'], // command aliases to load
 
             // To restrict the command, change the "false" to the following
             // format:
@@ -39,23 +47,15 @@ export default class PatCommand extends LexiCommand {
         };
     }
 
-    public async run(message: Message, args: string[]): Promise<void> {
-        const { client, log } = this;
-        const userID = args[0]?.replace(/[<@!>]/g, '');
-        if (!args[0]) {
-            log.info('No boop arg provided!');
-            message.reply('Who did you want to pat?');
-            return;
-        }
-
-        if (userID === message.author.id) {
-            message.reply(`**Self pat?**\n<@${message.author.id}> pats themselves on the head..?`);
-            return;
-        }
-
-        client.userStatistics.ensure(userID, client.defaults.USER_STATISTICS);
-        client.userStatistics.inc(userID, 'pats');
-
-        message.reply(`**Pat!**\n<@${message.author.id}> pats <@${userID}> on the head~!`);
+    public async run(message: Message): Promise<void> {
+        const msg = await message.reply('Fetching a fox picture...');
+        const body = (await fetch('https://randomfox.ca/floof/').then((res) => res.json())) as FoxData;
+        const embed = new MessageEmbed()
+            .setTitle(`Fox for ${message.author.username}`)
+            .setImage(body.image)
+            .setTimestamp(Date.now())
+            .setDescription(`[Link](${body.link})`)
+            .setColor('RANDOM');
+        msg.edit({ embeds: [embed] });
     }
 }

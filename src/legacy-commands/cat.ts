@@ -22,21 +22,21 @@ import { MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
-import LexiCommand from '#lib/structures/LexiCommand';
+import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 
-interface KoalaData {
+interface CatData {
     link: string;
 }
 
-export default class KoalaCommand extends LexiCommand {
+export default class CatCommand extends LegacyLexiCommand {
     public getConfig(): CommandConfig {
         return {
-            name: 'koala',
+            name: 'cat',
             category: 'fun',
-            description: 'Get a koala picture!',
             usage: '',
+            description: 'Get a cat picture~',
             enabled: true,
-            aliases: [], // command aliases to load
+            aliases: ['meow', 'kitty'], // command aliases to load
 
             // To restrict the command, change the "false" to the following
             // format:
@@ -46,15 +46,14 @@ export default class KoalaCommand extends LexiCommand {
         };
     }
 
-    public async run(message: Message<boolean>): Promise<void> {
-        const msg = await message.reply('Fetching a koala picture...');
-        const body = (await fetch('https://some-random-api.ml/img/koala').then((res) => res.json())) as KoalaData;
+    public async run(message: Message): Promise<void> {
+        const msg = await message.reply('Fetching a cat picture...');
+        const body = (await fetch('https://some-random-api.ml/img/cat').then((res) => res.json())) as CatData;
         const embed = new MessageEmbed()
-            .setTitle(`Koala for ${message.author.username}`)
+            .setTitle(`Cat for ${message.author.username}`)
             .setImage(body.link)
             .setTimestamp(Date.now())
             .setColor('RANDOM');
-        msg.delete();
-        message.reply({ embeds: [embed] });
+        msg.edit({ embeds: [embed] });
     }
 }

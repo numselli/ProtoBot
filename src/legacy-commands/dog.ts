@@ -22,22 +22,21 @@ import { MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
-import LexiCommand from '#lib/structures/LexiCommand';
+import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 
-interface FoxData {
-    image: string;
+interface DogData {
     link: string;
 }
 
-export default class FoxCommand extends LexiCommand {
+export default class DogCommand extends LegacyLexiCommand {
     public getConfig(): CommandConfig {
         return {
-            name: 'fox',
+            name: 'dog',
             category: 'fun',
             usage: '',
-            description: 'Get a cute fox picture!',
+            description: 'Get a dog picture!',
             enabled: true,
-            aliases: ['foxxo'], // command aliases to load
+            aliases: ['woof', 'puppy', 'doggo'], // command aliases to load
 
             // To restrict the command, change the "false" to the following
             // format:
@@ -48,13 +47,12 @@ export default class FoxCommand extends LexiCommand {
     }
 
     public async run(message: Message): Promise<void> {
-        const msg = await message.reply('Fetching a fox picture...');
-        const body = (await fetch('https://randomfox.ca/floof/').then((res) => res.json())) as FoxData;
+        const msg = await message.reply('Fetching a dog picture...');
+        const body = (await fetch('https://some-random-api.ml/img/dog').then((res) => res.json())) as DogData;
         const embed = new MessageEmbed()
-            .setTitle(`Fox for ${message.author.username}`)
-            .setImage(body.image)
+            .setTitle(`Dog for ${message.author.username}`)
+            .setImage(body.link)
             .setTimestamp(Date.now())
-            .setDescription(`[Link](${body.link})`)
             .setColor('RANDOM');
         msg.edit({ embeds: [embed] });
     }

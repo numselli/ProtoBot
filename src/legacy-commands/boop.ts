@@ -16,27 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Imports
 import type { Message } from 'discord.js';
-import { MessageEmbed } from 'discord.js';
-import fetch from 'node-fetch';
 
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
-import LexiCommand from '#lib/structures/LexiCommand';
+import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 
-interface CatData {
-    link: string;
-}
-
-export default class CatCommand extends LexiCommand {
+export default class BoopCommand extends LegacyLexiCommand {
     public getConfig(): CommandConfig {
         return {
-            name: 'cat',
-            category: 'fun',
-            usage: '',
-            description: 'Get a cat picture~',
+            name: 'boop',
+            category: 'affection',
+            usage: '<user>',
+            description: 'Boop someone!',
             enabled: true,
-            aliases: ['meow', 'kitty'], // command aliases to load
+            aliases: [],
 
             // To restrict the command, change the "false" to the following
             // format:
@@ -46,14 +39,25 @@ export default class CatCommand extends LexiCommand {
         };
     }
 
-    public async run(message: Message): Promise<void> {
-        const msg = await message.reply('Fetching a cat picture...');
-        const body = (await fetch('https://some-random-api.ml/img/cat').then((res) => res.json())) as CatData;
-        const embed = new MessageEmbed()
-            .setTitle(`Cat for ${message.author.username}`)
-            .setImage(body.link)
-            .setTimestamp(Date.now())
-            .setColor('RANDOM');
-        msg.edit({ embeds: [embed] });
+    public async run(message: Message, args: string[]): Promise<void> {
+        const { client, log } = this;
+
+        const userID = args[0]?.replace(/[<@!>]/g, '');
+
+        if (!args[0]) {
+            log.info(`Not specified who to boop in boop.ts`);
+            message.reply('Who did you want to boop?');
+            return;
+        }
+
+        if (userID === message.author.id) {
+            message.reply(`**Self boop?**\n<@${message.author.id}> boops themselves..?`);
+            return;
+        }
+
+        client.userStatistics.ensure(userID, client.defaults.USER_STATISTICS);
+        client.userStatistics.inc(userID, 'boops');
+
+        message.reply(`**Boop!**\n<@${message.author.id}> boops <@${userID}>~!\n\nhttps://cdn.discordapp.com/emojis/777752005820416000.gif`);
     }
 }

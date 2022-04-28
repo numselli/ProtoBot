@@ -30,7 +30,7 @@ function minutes(count: number): number {
 const config: LexiConfig = {
     token: 'PBCONF-DiscordBotToken', // Discord token
     dirs: {
-        commands: './commands/',
+        commands: './legacy-commands/',
         hooks: './hooks/'
     },
     prefix: '~',

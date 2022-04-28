@@ -16,6 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/* eslint-disable no-await-in-loop */
+
 import { SlashCommandBuilder } from '@discordjs/builders';
 import type { Message, TextChannel } from 'discord.js';
 import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v9';
@@ -124,7 +126,7 @@ export default class LexiCommandHandler {
     /**
      * Loads all commands from the commands folder specified in the constructor.
      */
-    public loadCommands(): void {
+    public async loadCommands(): Promise<void> {
         this._commands = new Map();
         const { client, log } = this;
 
@@ -140,8 +142,7 @@ export default class LexiCommandHandler {
         }
 
         // Iterate over the files and load them.
-        // skipcq JS-0336
-        files.forEach(async (path) => {
+        for (let path of files) {
             if (path.replace('.js', '').toLowerCase() !== path.replace('.js', '')) {
                 log.warn(`CommandCasedWarning: Command at ${path} has a name with a capital letter!`);
                 log.warn(`Will be loaded as "${path.replace('.js', '').toLowerCase()}"!`);
@@ -162,7 +163,7 @@ export default class LexiCommandHandler {
             this._commands.set(cmdConfig.name, command);
             this._slashJSONs.push(json);
             log.info(`Finished loading command "${cmdConfig.name}"!`);
-        });
+        }
     }
 
     /** JUST FOR HELP! */

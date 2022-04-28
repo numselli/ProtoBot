@@ -92,7 +92,7 @@ client.on('messageCreate', async (message) => {
         return;
     }
     // Execute each hook from the database.
-    for (const /*  */ hook of client.hooks.array()) {
+    for (const hook of client.hooks.array()) {
         const cfg = hook.getConfig();
         log.verbose(`Running hook ${cfg.name} for ${message.author.tag}!`);
         // eslint-disable-next-line no-await-in-loop

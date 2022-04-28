@@ -294,7 +294,7 @@ export default class AdminCommand extends LegacyLexiCommand {
             log.info('Reloading commands...');
             const pre = Date.now();
             const msg = await message.channel.send('Reloading all commands...');
-            client.commands.loadCommands();
+            client.commands.LEGACY_loadCommands();
             const post = Date.now();
             msg.edit(`Reloaded all commands in ${post - pre}ms (${(post - pre) / 1000} seconds)!`);
         } else if (args[0] === 'clearlogbuffer' || args[0] === 'clb') {

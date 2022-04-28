@@ -46,7 +46,7 @@ export default class HelpCommand extends LegacyLexiCommand {
         // Create a list of command-category mappings
         const maps: [string, LexiCommandCategory][] = [];
 
-        client.commands.__readConfiguration__().forEach((command) => {
+        client.commands._LEGACY__readConfiguration__().forEach((command) => {
             maps.push([command.name, command.category]);
         });
 
@@ -90,7 +90,7 @@ export default class HelpCommand extends LegacyLexiCommand {
             commandsInCategory.forEach((category) => {
                 if (category[0] === (args[0].toLowerCase() as LexiCommandCategory))
                     category[1].forEach((command) => {
-                        const commandData = client.commands.__readConfiguration__().get(command) as CommandConfig;
+                        const commandData = client.commands._LEGACY__readConfiguration__().get(command) as CommandConfig;
                         embed.addField(
                             commandData.name,
                             `${commandData.description}${commandData.enabled ? '' : ' (disabled)'}${commandData.restrict ? ' (restricted)' : ''}`,
@@ -110,7 +110,7 @@ export default class HelpCommand extends LegacyLexiCommand {
                 .setDescription('Here are all of my commands!')
                 .setColor(client.publicConfig.colors.color5);
 
-            client.commands.__readConfiguration__().forEach((command) => {
+            client.commands._LEGACY__readConfiguration__().forEach((command) => {
                 embed.addField(
                     command.name,
                     `*${command.category}* ${command.description}${command.enabled ? '' : ' **[Disabled]**'}${
@@ -119,8 +119,8 @@ export default class HelpCommand extends LegacyLexiCommand {
                     true
                 );
             });
-        } else if (client.commands.__readRefs__().get(args[0].toLowerCase())) {
-            const command = client.commands.__readConfiguration__().get(client.commands.__readRefs__().get(args[0].toLowerCase())!) as CommandConfig;
+        } else if (client.commands._LEGACY__readRefs__().get(args[0].toLowerCase())) {
+            const command = client.commands._LEGACY__readConfiguration__().get(client.commands._LEGACY__readRefs__().get(args[0].toLowerCase())!) as CommandConfig;
             const embed = new MessageEmbed()
                 .setTitle('Lexi Help')
                 .setAuthor({ name: 'Lexi' })

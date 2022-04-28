@@ -34,9 +34,9 @@ export default class LexiCommandHandler {
     private log: LexiLogger;
 
     /** The internal storage facility for the commands. */
-    private _commandClassInstances: Map<string, LegacyLexiCommand>;
-    private _commandConfigs: Map<string, LexiCommandConfig>;
-    private _commandRefs: Map<string, string>;
+    private _LEGACY_commandClassInstances: Map<string, LegacyLexiCommand>;
+    private _LEGACY_commandConfigs: Map<string, LexiCommandConfig>;
+    private _LEGACY_commandRefs: Map<string, string>;
     private client: LexiClient;
 
     /** The commands folder. */
@@ -49,9 +49,9 @@ export default class LexiCommandHandler {
      */
     public constructor(logger: LexiLogger, commandsFolder: string, client: LexiClient) {
         this.log = logger;
-        this._commandClassInstances = new Map();
-        this._commandConfigs = new Map();
-        this._commandRefs = new Map();
+        this._LEGACY_commandClassInstances = new Map();
+        this._LEGACY_commandConfigs = new Map();
+        this._LEGACY_commandRefs = new Map();
         this.commandsFolder = commandsFolder;
         this.client = client;
 
@@ -61,17 +61,17 @@ export default class LexiCommandHandler {
         this.log.verbose(`CommandHandler: new command handler ready, commands folder is ${commandsFolder}`);
     }
 
-    private _resetStore(): void {
-        this._commandClassInstances.clear();
-        this._commandConfigs.clear();
-        this._commandRefs.clear();
+    private _LEGACY_resetStore(): void {
+        this._LEGACY_commandClassInstances.clear();
+        this._LEGACY_commandConfigs.clear();
+        this._LEGACY_commandRefs.clear();
     }
 
     /**
      * Loads all commands from the commands folder specified in the constructor.
      */
-    public loadCommands(): void {
-        this._resetStore();
+    public LEGACY_loadCommands(): void {
+        this._LEGACY_resetStore();
 
         this.log.verbose(`CommandHandler: loading commands from ${this.commandsFolder}`);
 
@@ -101,28 +101,28 @@ export default class LexiCommandHandler {
             const command = new CommandClass(this.client, this.log);
             const cmdName = path.replace('.js', '');
             const cmdConfig = command.getConfig();
-            this._commandConfigs.set(cmdName, cmdConfig);
-            this._commandClassInstances.set(cmdName, command);
-            this._commandRefs.set(cmdName, cmdName);
+            this._LEGACY_commandConfigs.set(cmdName, cmdConfig);
+            this._LEGACY_commandClassInstances.set(cmdName, command);
+            this._LEGACY_commandRefs.set(cmdName, cmdName);
             cmdConfig.aliases.forEach((alias: string) => {
-                this._commandRefs.set(alias, cmdName);
+                this._LEGACY_commandRefs.set(alias, cmdName);
             });
             this.log.info(`Finished loading command "${cmdName}"!`);
         });
     }
 
     /** JUST FOR HELP! */
-    public __readConfiguration__(): Map<string, LexiCommandConfig> {
-        return this._commandConfigs;
+    public _LEGACY__readConfiguration__(): Map<string, LexiCommandConfig> {
+        return this._LEGACY_commandConfigs;
     }
-    public __readRefs__(): Map<string, string> {
-        return this._commandRefs;
+    public _LEGACY__readRefs__(): Map<string, string> {
+        return this._LEGACY_commandRefs;
     }
 
     /**
      * Execute a command after performing checks.
      */
-    public async run(commandName: string, args: string[], message: Message, client: LexiClient): Promise<unknown> {
+    public async LEGACY_run(commandName: string, args: string[], message: Message, client: LexiClient): Promise<unknown> {
         // verbose info
         this.log.verbose(`Running command "${commandName}" for "${message.author.tag}" with args "${args.join(' ')}"!`);
         this.log.verbose(
@@ -132,10 +132,10 @@ export default class LexiCommandHandler {
         );
 
         this.log.verbose('Resolving alias...');
-        commandName = this._commandRefs.get(commandName) ?? '';
+        commandName = this._LEGACY_commandRefs.get(commandName) ?? '';
         this.log.verbose(`Alias resolved to "${commandName}"!`);
 
-        const commandData: LegacyLexiCommand | undefined = this._commandClassInstances.get(commandName);
+        const commandData: LegacyLexiCommand | undefined = this._LEGACY_commandClassInstances.get(commandName);
         if (!commandData) {
             // exit
             this.log.info(`Failed to find command "${commandName}", exiting handler.`);

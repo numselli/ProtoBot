@@ -56,7 +56,7 @@ const client = new LexiClient(log, {
 client.on('ready', async () => {
     // FIXME: this may cause a race condition
     ready.init(client, log);
-    client.commands.loadCommands();
+    client.commands.LEGACY_loadCommands();
     ready.loadHooks(client, log);
     ready.setStatus(client, log);
     await ready.handleRestart(client, log);
@@ -119,7 +119,7 @@ client.on('messageCreate', async (message) => {
         const command = args.shift()!.toLowerCase();
 
         try {
-            await client.commands.run(command, args, message, client);
+            await client.commands.LEGACY_run(command, args, message, client);
         } catch (e) {
             log.error(`Executing ${command} for ${message.author.tag} with args ${args.join(' ')} failed:`);
             log.error(e);

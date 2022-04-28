@@ -17,7 +17,7 @@
  */
 
 import type { SlashCommandBuilder } from '@discordjs/builders';
-import type { Message } from 'discord.js';
+import type { Interaction } from 'discord.js';
 
 import type CommandConfig from '#lib/interfaces/commands/LegacyLexiCommandConfig';
 import type LexiLogger from '#lib/interfaces/LexiLogger';
@@ -47,7 +47,7 @@ export default abstract class LexiSlashCommand {
         // noop
     }
     /** Execute this command. */
-    public abstract run(message: Message, args: string[]): Promise<void>;
+    public abstract run(interaction: Interaction): Promise<void>;
     /** Prepare this command config. */
     public abstract getConfig(): CommandConfig;
 }

@@ -154,10 +154,10 @@ export default class LexiCommandHandler {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const command: LexiSlashCommand = new CommandClass(this.client, log);
-            command.preLoadHook(client);
+            await command.preLoadHook(client);
             const cmdConfig = command.getConfig();
             const json = command.buildSlashCommand(new SlashCommandBuilder()).toJSON();
-            command.postLoadHook(client);
+            await command.postLoadHook(client);
             this._commands.set(cmdConfig.name, command);
             this._slashJSONs.push(json);
             log.info(`Finished loading command "${cmdConfig.name}"!`);

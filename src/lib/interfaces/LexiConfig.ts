@@ -18,9 +18,11 @@
 
 import type Cooldowns from '#lib/interfaces/db/Cooldowns';
 
+type RelativeDirname = `./${string}/`;
+
 export default interface LexiConfig {
     token: string;
-    dirs: { commands: string; hooks: string };
+    dirs: { commands: RelativeDirname; hooks: RelativeDirname; slashCommands: RelativeDirname };
     prefix: string;
     cooldowns: { [key in keyof Cooldowns]: number /* (ms) */ };
     adminIDs: string[];

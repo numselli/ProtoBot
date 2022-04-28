@@ -31,6 +31,7 @@ const config: LexiConfig = {
     token: 'PBCONF-DiscordBotToken', // Discord token
     dirs: {
         commands: './legacy-commands/',
+        slashCommands: './commands/',
         hooks: './hooks/'
     },
     prefix: '~',

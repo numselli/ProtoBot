@@ -140,6 +140,7 @@ export default class LexiCommandHandler {
         }
 
         // Iterate over the files and load them.
+        // skipcq JS-0336
         files.forEach(async (path) => {
             if (path.replace('.js', '').toLowerCase() !== path.replace('.js', '')) {
                 log.warn(`CommandCasedWarning: Command at ${path} has a name with a capital letter!`);

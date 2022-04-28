@@ -73,7 +73,7 @@ export default class LexiClient extends BaseClient {
         this.defaults = {
             USER_CONFIGURATION: {},
             USER_STATISTICS: { hugs: 0, boops: 0, pats: 0 },
-            COOLDOWNS: { owos: false, uwus: false, tildes: false,  },
+            COOLDOWNS: { owos: false, uwus: false, tildes: false },
             EMOTE_TRACKER_COUNTERS: { owos: 0, uwus: 0, tildes: 0 },
             GUILD_DATA: { prefix: config.prefix }
         };

@@ -120,7 +120,9 @@ export default class HelpCommand extends LegacyLexiCommand {
                 );
             });
         } else if (client.commands._LEGACY__readRefs__().get(args[0].toLowerCase())) {
-            const command = client.commands._LEGACY__readConfiguration__().get(client.commands._LEGACY__readRefs__().get(args[0].toLowerCase())!) as CommandConfig;
+            const command = client.commands
+                ._LEGACY__readConfiguration__()
+                .get(client.commands._LEGACY__readRefs__().get(args[0].toLowerCase())!) as CommandConfig;
             const embed = new MessageEmbed()
                 .setTitle('Lexi Help')
                 .setAuthor({ name: 'Lexi' })

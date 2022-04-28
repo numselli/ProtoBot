@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {SlashCommandBuilder} from '@discordjs/builders'
+import type { SlashCommandBuilder } from '@discordjs/builders';
 import type { Message } from 'discord.js';
 
 import type CommandConfig from '#lib/interfaces/commands/LegacyLexiCommandConfig';

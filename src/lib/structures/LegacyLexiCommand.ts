@@ -22,6 +22,7 @@ import type CommandConfig from '#lib/interfaces/commands/LegacyLexiCommandConfig
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
 
+/** @deprecated This is a Legacy Lexi class. */
 export default abstract class LegacyLexiCommand {
     protected client: LexiClient;
     protected log: LexiLogger;

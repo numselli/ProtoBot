@@ -128,6 +128,7 @@ export default class LexiCommandHandler {
      */
     public async loadCommands(): Promise<void> {
         this._commands = new Map();
+        this._slashJSONs = [];
         const { client, log } = this;
 
         log.verbose(`CommandHandler: loading application (/) commands from ${this.slashFolder}`);
@@ -164,6 +165,8 @@ export default class LexiCommandHandler {
             this._slashJSONs.push(json);
             log.info(`Finished loading command "${cmdConfig.name}"!`);
         }
+
+        // Push the new commands list to the API.
     }
 
     /** JUST FOR HELP! */

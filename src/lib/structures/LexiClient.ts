@@ -61,7 +61,7 @@ export default class LexiClient extends BaseClient {
     public restartData: Enmap<string, unknown>;
     public guildData: Enmap<string, GuildData>;
 
-    public hooks: Enmap<string, LexiHook>;
+    public hooks: Map<string, LexiHook>;
     public commands: LexiCommandHandler;
 
     public constructor(log: LexiLogger, options: ClientOptions) {
@@ -85,7 +85,7 @@ export default class LexiClient extends BaseClient {
         this.guildData = new Enmap({ name: 'guildData', verbose: makeVerboseFunction('guildData'), autoEnsure: this.defaults.GUILD_DATA });
 
         // In memory items
-        this.hooks = new Enmap({ cloneLevel: 'none' });
+        this.hooks = new Map();
         this.cooldowns = new Enmap();
 
         // Generate the command handling instance.

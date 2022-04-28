@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { Message, TextChannel } from 'discord.js';
+import type { CommandInteraction, GuildMember, Permissions as DJSPermissions, TextChannel } from 'discord.js';
 
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 import { Permissions } from '#lib/Permissions';
@@ -24,31 +24,30 @@ import type LexiClient from '#lib/structures/LexiClient';
 
 /**
  * Get the user's permissions value in a guild. See the Permissions enum.
- * @param message The message of whomst author to check permissions for. Why a message? Channel details are needed.
- * @deprecated Use getInteractionPermissions instead.
+ * @param interaction The interaction to check.
  */
-export function getPermissionsForUser(client: LexiClient, log: LexiLogger, message: Message): Permissions {
+export function getInteractionPermissions(client: LexiClient, log: LexiLogger, interaction: CommandInteraction): Permissions {
     // FIXME: buggy in DMs.
-    log.verbose(`permission checking ${message.author.tag} @ ${message.guild!.name}/#${(message.channel as TextChannel).name ?? '<DM>'}`);
-    if (client.config.ownerID === message.author.id) {
+    log.verbose(`permission checking ${interaction.user.tag} @ ${interaction.guild!.name}/#${(interaction.channel as TextChannel).name ?? '<DM>'}`);
+    if (client.config.ownerID === interaction.user.id) {
         log.verbose(`user is OWNER, return value BOT_OWNER: ${Permissions.BOT_OWNER}`);
         return Permissions.BOT_OWNER;
-    } else if (client.config.superAdminIDs.includes(message.author.id)) {
+    } else if (client.config.superAdminIDs.includes(interaction.user.id)) {
         log.verbose(`user is Super Admin, return value BOT_SUPER_ADMIN: ${Permissions.BOT_SUPER_ADMIN}`);
         return Permissions.BOT_SUPER_ADMIN;
-    } else if (client.config.adminIDs.includes(message.author.id)) {
+    } else if (client.config.adminIDs.includes(interaction.user.id)) {
         log.verbose(`user is ADMIN, return value BOT_ADMINISTRATOR: ${Permissions.BOT_ADMINISTRATOR}`);
         return Permissions.BOT_ADMINISTRATOR;
-    } else if (message.guild!.ownerId === message.author.id) {
+    } else if (interaction.guild!.ownerId === interaction.user.id) {
         log.verbose(`user is guild owner, return value SERVER_OWNER: ${Permissions.SERVER_OWNER}`);
         return Permissions.SERVER_OWNER;
-    } else if (message.member!.permissions.has('ADMINISTRATOR')) {
+    } else if ((interaction.member!.permissions as DJSPermissions).has('ADMINISTRATOR')) {
         log.verbose(`user is server admin, return value SERVER_ADMINISTRATOR: ${Permissions.SERVER_ADMINISTRATOR}`);
         return Permissions.SERVER_ADMINISTRATOR;
-    } else if (message.member!.permissions.has('BAN_MEMBERS')) {
+    } else if ((interaction.member!.permissions as DJSPermissions).has('BAN_MEMBERS')) {
         log.verbose(`user is server moderator, return value SERVER_MODERATOR: ${Permissions.SERVER_MODERATOR}`);
         return Permissions.SERVER_MODERATOR;
-    } else if (message.member!.permissionsIn(message.channel as TextChannel).has('MANAGE_MESSAGES')) {
+    } else if ((interaction.member as GuildMember).permissionsIn(interaction.channel as TextChannel).has('MANAGE_MESSAGES')) {
         log.verbose(`user is channel moderator, return value CHANNEL_MODERATOR: ${Permissions.CHANNEL_MODERATOR}`);
         return Permissions.CHANNEL_MODERATOR;
     } else {

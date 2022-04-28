@@ -32,6 +32,8 @@ import type LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 import type LexiClient from '#lib/structures/LexiClient';
 import type LexiSlashCommand from '#lib/structures/LexiSlashCommand';
 
+import { getInteractionPermissions } from './getInteractionPermissions';
+
 /**
  * CommandHandler handles the storage and effective management of commands
  * in Lexi.
@@ -193,7 +195,22 @@ export default class LexiCommandHandler {
             });
             return Promise.resolve('command disabled.');
         }
-        // TODO: perms
+        if (
+            commandConfig.restrict &&
+            ((typeof commandConfig.restrict === 'number' && getInteractionPermissions(this.client, this.log, interaction) < commandConfig.restrict) ||
+                (commandConfig.restrict instanceof Array && !commandConfig.restrict.includes(interaction.user.id)))
+        ) {
+            // User isn't authorized; the user is either not whitelisted to use the command and/or they're not an owner.
+            this.log.info(
+                `Command slash:"/${interaction.commandName}" is UNAUTHORIZED (for ${interaction.user.tag}), got ${getInteractionPermissions(
+                    this.client,
+                    this.log,
+                    interaction
+                )}, wanted >= ${String(commandConfig.restrict)}, exiting handler.`
+            );
+            await interaction.reply("You aren't authorized to do that!");
+            return Promise.resolve();
+        }
         return commandData.run(interaction);
     }
 

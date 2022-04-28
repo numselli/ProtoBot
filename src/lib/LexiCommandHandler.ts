@@ -43,8 +43,11 @@ export default class LexiCommandHandler {
     private log: LexiLogger;
 
     /** The internal storage facility for the commands. */
+    /** @deprecated This is a Legacy Lexi feature. */
     private _LEGACY_commandClassInstances: Map<string, LegacyLexiCommand>;
+    /** @deprecated This is a Legacy Lexi feature. */
     private _LEGACY_commandConfigs: Map<string, LegacyLexiCommandConfig>;
+    /** @deprecated This is a Legacy Lexi feature. */
     private _LEGACY_commandRefs: Map<string, string>;
     private _commands: Map<string, LexiSlashCommand>;
     private client: LexiClient;
@@ -79,6 +82,7 @@ export default class LexiCommandHandler {
         this.log.verbose(`CommandHandler: new command handler ready, commands folder is ${commandsFolder}`);
     }
 
+    /** @deprecated This is a Legacy Lexi feature. */
     private _LEGACY_resetStore(): void {
         this._LEGACY_commandClassInstances.clear();
         this._LEGACY_commandConfigs.clear();
@@ -87,6 +91,7 @@ export default class LexiCommandHandler {
 
     /**
      * Loads all commands from the commands folder specified in the constructor.
+     * @deprecated This is a Legacy Lexi feature.
      */
     public LEGACY_loadCommands(): void {
         this._LEGACY_resetStore();
@@ -215,15 +220,18 @@ export default class LexiCommandHandler {
     }
 
     /** JUST FOR HELP! */
+    /** @deprecated This is a Legacy Lexi feature. */
     public _LEGACY__readConfiguration__(): Map<string, LegacyLexiCommandConfig> {
         return this._LEGACY_commandConfigs;
     }
+    /** @deprecated This is a Legacy Lexi feature. */
     public _LEGACY__readRefs__(): Map<string, string> {
         return this._LEGACY_commandRefs;
     }
 
     /**
      * Execute a command after performing checks.
+     * @deprecated This is a Legacy Lexi feature.
      */
     public async LEGACY_run(commandName: string, args: string[], message: Message, client: LexiClient): Promise<unknown> {
         // verbose info

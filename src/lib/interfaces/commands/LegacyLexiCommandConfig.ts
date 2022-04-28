@@ -19,6 +19,7 @@
 import type LegacyLexiCommandCategory from '#lib/interfaces/commands/LegacyLexiCommandCategory';
 import type { Permissions } from '#lib/Permissions';
 
+/** @deprecated This is a Legacy Lexi feature. */
 export default interface LegacyLexiCommandConfig {
     name: string;
     description: string;

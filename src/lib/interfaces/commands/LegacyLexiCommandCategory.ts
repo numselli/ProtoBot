@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/** @deprecated This is a Legacy Lexi feature. */
 type LegacyLexiCommandCategory = 'other' | 'utility' | 'fun' | 'affection' | 'furry' | 'owner';
 
 export default LegacyLexiCommandCategory;

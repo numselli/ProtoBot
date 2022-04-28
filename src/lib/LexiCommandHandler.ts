@@ -16,7 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { SlashCommandBuilder } from '@discordjs/builders';
 import type { Message, TextChannel } from 'discord.js';
+import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v9';
 import fs from 'fs';
 
 import { getPermissionsForUser } from '#lib/getPermissionsForUser';
@@ -24,6 +26,7 @@ import type LegacyLexiCommandConfig from '#lib/interfaces/commands/LegacyLexiCom
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 import type LexiClient from '#lib/structures/LexiClient';
+import type LexiSlashCommand from '#lib/structures/LexiSlashCommand';
 
 /**
  * CommandHandler handles the storage and effective management of commands
@@ -37,10 +40,13 @@ export default class LexiCommandHandler {
     private _LEGACY_commandClassInstances: Map<string, LegacyLexiCommand>;
     private _LEGACY_commandConfigs: Map<string, LegacyLexiCommandConfig>;
     private _LEGACY_commandRefs: Map<string, string>;
+    private _commands: Map<string, LexiSlashCommand>;
     private client: LexiClient;
 
     /** The commands folder. */
-    private readonly commandsFolder: string;
+    private readonly LEGACY_commandsFolder: string;
+    private readonly slashFolder: string;
+    private _slashJSONs: RESTPostAPIApplicationCommandsJSONBody[];
 
     /**
      * Create a new command handler.
@@ -52,11 +58,15 @@ export default class LexiCommandHandler {
         this._LEGACY_commandClassInstances = new Map();
         this._LEGACY_commandConfigs = new Map();
         this._LEGACY_commandRefs = new Map();
-        this.commandsFolder = commandsFolder;
+        this._commands = new Map();
+        this.LEGACY_commandsFolder = commandsFolder;
+        this.slashFolder = client.config.dirs.slashCommands;
         this.client = client;
+        this._slashJSONs = [];
 
         // Common issue in the folder name.
-        if (!this.commandsFolder.endsWith('/')) this.commandsFolder += '/';
+        if (!this.LEGACY_commandsFolder.endsWith('/')) this.LEGACY_commandsFolder += '/';
+        if (!this.slashFolder.endsWith('/')) this.slashFolder += '/';
 
         this.log.verbose(`CommandHandler: new command handler ready, commands folder is ${commandsFolder}`);
     }
@@ -73,14 +83,14 @@ export default class LexiCommandHandler {
     public LEGACY_loadCommands(): void {
         this._LEGACY_resetStore();
 
-        this.log.verbose(`CommandHandler: loading commands from ${this.commandsFolder}`);
+        this.log.verbose(`CommandHandler: loading commands from ${this.LEGACY_commandsFolder}`);
 
         // Read the root directory of the commands.
         let files: string[] = [];
         try {
-            files = fs.readdirSync(this.commandsFolder).filter((path) => path.endsWith('.js'));
+            files = fs.readdirSync(this.LEGACY_commandsFolder).filter((path) => path.endsWith('.js'));
         } catch (e) {
-            this.log.error(`Failed to read directory ${this.commandsFolder}:`);
+            this.log.error(`Failed to read directory ${this.LEGACY_commandsFolder}:`);
             this.log.errorWithStack(e);
         }
 
@@ -95,7 +105,7 @@ export default class LexiCommandHandler {
 
             // The command data is loaded from the path.
             this.log.verbose(`Loading command "${path.replace('.js', '')}"...`);
-            const CommandClass = (await import(`../${this.commandsFolder}${path}`)).default as LegacyLexiCommand;
+            const CommandClass = (await import(`../${this.LEGACY_commandsFolder}${path}`)).default as LegacyLexiCommand;
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const command = new CommandClass(this.client, this.log);
@@ -108,6 +118,49 @@ export default class LexiCommandHandler {
                 this._LEGACY_commandRefs.set(alias, cmdName);
             });
             this.log.info(`Finished loading command "${cmdName}"!`);
+        });
+    }
+
+    /**
+     * Loads all commands from the commands folder specified in the constructor.
+     */
+    public loadCommands(): void {
+        this._commands = new Map();
+        const { client, log } = this;
+
+        log.verbose(`CommandHandler: loading application (/) commands from ${this.slashFolder}`);
+
+        // Read the root directory of the commands.
+        let files: string[] = [];
+        try {
+            files = fs.readdirSync(this.slashFolder).filter((path) => path.endsWith('.js'));
+        } catch (e) {
+            log.error(`Failed to read directory ${this.slashFolder}:`);
+            log.errorWithStack(e);
+        }
+
+        // Iterate over the files and load them.
+        files.forEach(async (path) => {
+            if (path.replace('.js', '').toLowerCase() !== path.replace('.js', '')) {
+                log.warn(`CommandCasedWarning: Command at ${path} has a name with a capital letter!`);
+                log.warn(`Will be loaded as "${path.replace('.js', '').toLowerCase()}"!`);
+                // Normalize the path. This should never be needed.
+                path = path.toLowerCase();
+            }
+
+            // The command data is loaded from the path.
+            log.verbose(`Loading slash command "${path.replace('.js', '')}"...`);
+            const CommandClass = (await import(`../${this.slashFolder}${path}`)).default as LexiSlashCommand;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            const command: LexiSlashCommand = new CommandClass(this.client, log);
+            command.preLoadHook(client);
+            const cmdConfig = command.getConfig();
+            const json = command.buildSlashCommand(new SlashCommandBuilder()).toJSON();
+            command.postLoadHook(client);
+            this._commands.set(cmdConfig.name, command);
+            this._slashJSONs.push(json);
+            log.info(`Finished loading command "${cmdConfig.name}"!`);
         });
     }
 

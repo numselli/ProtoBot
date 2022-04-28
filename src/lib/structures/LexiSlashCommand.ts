@@ -38,12 +38,12 @@ export default abstract class LexiSlashCommand {
     }
 
     /** Run before the builder is run. */
-    public async preLoadHook(): Promise<void> {
+    public async preLoadHook(_client: LexiClient): Promise<void> {
         // noop
     }
     public abstract buildSlashCommand(builder: SlashCommandBuilder): SlashCommandBuilder;
     /** Run after building the command, but before it is written to the DB. */
-    public async postLoadHook(): Promise<void> {
+    public async postLoadHook(_client: LexiClient): Promise<void> {
         // noop
     }
     /** Execute this command. */

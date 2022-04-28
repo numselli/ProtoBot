@@ -57,9 +57,24 @@ client.on('ready', async () => {
     // FIXME: this may cause a race condition
     ready.init(client, log);
     client.commands.LEGACY_loadCommands();
+    await client.commands.loadCommands();
     ready.loadHooks(client, log);
     ready.setStatus(client, log);
     await ready.handleRestart(client, log);
+});
+
+// Interactions.
+client.on('interactionCreate', async (interaction) => {
+    // other interaction types exist, TODO: add them
+    if (!interaction.isCommand()) return;
+
+    log.info(`slash: ${interaction.user.tag} used /${interaction.commandName}!`);
+
+    try {
+        await client.commands.run(interaction);
+    } catch (e) {
+        log.errorWithStack(e);
+    }
 });
 
 // The most important part.

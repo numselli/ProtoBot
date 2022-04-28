@@ -25,8 +25,8 @@ import LexiSlashCommand from '#lib/structures/LexiSlashCommand';
 export default class BoopCommand extends LexiSlashCommand {
     public getConfig(): LexiCommandConfig {
         return {
-            name: 'boop',
-            description: 'Boop someone!',
+            name: 'test',
+            description: 'A testy command.',
             enabled: true,
 
             // To restrict the command, change the "false" to the following
@@ -40,11 +40,12 @@ export default class BoopCommand extends LexiSlashCommand {
     public async run(interaction: CommandInteraction): Promise<void> {
         const { log } = this;
 
-        log.info('run ran!');
-        await interaction.reply('run ran!');
+        log.info('The testy was tested.');
+        await interaction.reply('Pong! Test worked.');
     }
 
     public buildSlashCommand(builder: SlashCommandBuilder): SlashCommandBuilder {
-        return builder.setName('test').setDescription('Test command');
+        const cfg = this.getConfig();
+        return builder.setName(cfg.name).setDescription(cfg.description);
     }
 }

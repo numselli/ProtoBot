@@ -19,8 +19,10 @@
 /* eslint-disable no-await-in-loop */
 
 import { SlashCommandBuilder } from '@discordjs/builders';
-import type { Message, TextChannel } from 'discord.js';
+import { REST } from '@discordjs/rest';
+import type { CommandInteraction, Message, TextChannel } from 'discord.js';
 import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v9';
+import { Routes } from 'discord-api-types/v9';
 import fs from 'fs';
 
 import { getPermissionsForUser } from '#lib/getPermissionsForUser';
@@ -44,6 +46,7 @@ export default class LexiCommandHandler {
     private _LEGACY_commandRefs: Map<string, string>;
     private _commands: Map<string, LexiSlashCommand>;
     private client: LexiClient;
+    private rest: REST;
 
     /** The commands folder. */
     private readonly LEGACY_commandsFolder: string;
@@ -65,6 +68,7 @@ export default class LexiCommandHandler {
         this.slashFolder = client.config.dirs.slashCommands;
         this.client = client;
         this._slashJSONs = [];
+        this.rest = new REST({ version: '9' }).setToken(this.client.config.token);
 
         // Common issue in the folder name.
         if (!this.LEGACY_commandsFolder.endsWith('/')) this.LEGACY_commandsFolder += '/';
@@ -129,7 +133,7 @@ export default class LexiCommandHandler {
     public async loadCommands(): Promise<void> {
         this._commands = new Map();
         this._slashJSONs = [];
-        const { client, log } = this;
+        const { client, log, rest } = this;
 
         log.verbose(`CommandHandler: loading application (/) commands from ${this.slashFolder}`);
 
@@ -163,10 +167,34 @@ export default class LexiCommandHandler {
             await command.postLoadHook(client);
             this._commands.set(cmdConfig.name, command);
             this._slashJSONs.push(json);
-            log.info(`Finished loading command "${cmdConfig.name}"!`);
+            log.info(`Finished loading slash command "${cmdConfig.name}"!`);
         }
 
         // Push the new commands list to the API.
+        log.info('Pushing new application commands to API...');
+        await rest.put(Routes.applicationCommands(client.application!.id), { body: this._slashJSONs });
+        log.info('Finished reloading application (/) commands.');
+    }
+
+    public async run(interaction: CommandInteraction): Promise<unknown> {
+        const commandData: LexiSlashCommand | undefined = this._commands.get(interaction.commandName);
+        if (!commandData) {
+            interaction.reply({
+                content: 'Uhhh... this should never happen. You ran a command and it was not ready to use. Please report this to the developers.',
+                ephemeral: true
+            });
+            return Promise.reject('uh oh. unknown cmd.');
+        }
+        const commandConfig = commandData.getConfig();
+        if (!commandConfig.enabled) {
+            interaction.reply({
+                content: 'This command is currently disabled.',
+                ephemeral: true
+            });
+            return Promise.resolve('command disabled.');
+        }
+        // TODO: perms
+        return commandData.run(interaction);
     }
 
     /** JUST FOR HELP! */

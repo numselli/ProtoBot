@@ -26,8 +26,8 @@ import LexiSlashCommand from '#lib/structures/LexiSlashCommand';
 export default class BoopCommand extends LexiSlashCommand {
     public getConfig(): LexiCommandConfig {
         return {
-            name: 'test',
-            description: 'A testy command.',
+            name: 'boop',
+            description: 'Boop someone!',
             enabled: true,
 
             // To restrict the command, change the "false" to the following
@@ -39,14 +39,18 @@ export default class BoopCommand extends LexiSlashCommand {
     }
 
     public async run(interaction: CommandInteraction): Promise<void> {
-        const { log } = this;
-
-        log.info('The testy was tested.');
-        await interaction.reply('Pong! Test worked.');
+        await interaction.reply(
+            `**Boop!**\n<@${interaction.user.id}> boops <@${
+                interaction.options.getUser('target')!.id
+            }>~!\n\nhttps://cdn.discordapp.com/emojis/777752005820416000.gif`
+        );
     }
 
     public buildSlashCommand(builder: SlashCommandBuilder): JSONAbleSlashCommandBody {
         const cfg = this.getConfig();
-        return builder.setName(cfg.name).setDescription(cfg.description);
+        return builder
+            .setName(cfg.name)
+            .setDescription(cfg.description)
+            .addUserOption((t) => t.setName('target').setDescription('The user to boop.').setRequired(true));
     }
 }

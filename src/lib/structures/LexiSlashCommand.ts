@@ -19,6 +19,7 @@
 import type { SlashCommandBuilder } from '@discordjs/builders';
 import type { CommandInteraction } from 'discord.js';
 
+import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
 import type LexiCommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
@@ -41,7 +42,7 @@ export default abstract class LexiSlashCommand {
     public async preLoadHook(_client: LexiClient): Promise<void> {
         // noop
     }
-    public abstract buildSlashCommand(builder: SlashCommandBuilder): SlashCommandBuilder;
+    public abstract buildSlashCommand(builder: SlashCommandBuilder): JSONAbleSlashCommandBody;
     /** Run after building the command, but before it is written to the DB. */
     public async postLoadHook(_client: LexiClient): Promise<void> {
         // noop

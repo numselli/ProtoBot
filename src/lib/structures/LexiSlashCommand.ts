@@ -16,21 +16,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type {SlashCommandBuilder} from '@discordjs/builders'
 import type { Message } from 'discord.js';
 
 import type CommandConfig from '#lib/interfaces/commands/LegacyLexiCommandConfig';
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
 
-export default abstract class LegacyLexiCommand {
+export default abstract class LexiSlashCommand {
     protected client: LexiClient;
     protected log: LexiLogger;
 
+    /**
+     * Prepare a new instance of this command.
+     * @param client The Discord client.
+     * @param log The logger to use.
+     */
     public constructor(client: LexiClient, log: LexiLogger) {
         this.client = client;
         this.log = log;
     }
 
+    /** Run before the builder is run. */
+    public async preLoadHook(): Promise<void> {
+        // noop
+    }
+    public abstract buildSlashCommand(builder: SlashCommandBuilder): SlashCommandBuilder;
+    /** Run after building the command, but before it is written to the DB. */
+    public async postLoadHook(): Promise<void> {
+        // noop
+    }
+    /** Execute this command. */
     public abstract run(message: Message, args: string[]): Promise<void>;
+    /** Prepare this command config. */
     public abstract getConfig(): CommandConfig;
 }

@@ -16,27 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { Message } from 'discord.js';
+import type LegacyLexiCommandCategory from '#lib/interfaces/commands/LegacyLexiCommandCategory';
+import type { Permissions } from '#lib/Permissions';
 
-import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
-import type LexiLogger from '#lib/interfaces/LexiLogger';
-import type LexiClient from '#lib/structures/LexiClient';
+export default interface LegacyLexiCommandConfig {
+    name: string;
+    description: string;
+    category: LegacyLexiCommandCategory;
+    enabled: boolean;
+    aliases: string[];
+    usage: string;
 
-export default abstract class LexiCommand {
-    protected client: LexiClient;
-    protected log: LexiLogger;
-
-    public constructor(client: LexiClient, log: LexiLogger) {
-        this.client = client;
-        this.log = log;
-    }
-
-    public async preLoadHook(): Promise<void> {
-        // noop
-    }
-    public async postLoadHook(): Promise<void> {
-        // noop
-    }
-    public abstract run(message: Message, args: string[]): Promise<void>;
-    public abstract getConfig(): CommandConfig;
+    /**
+     * Restrict takes a few possibilities. It may be a Permissions entry, or an array of
+     * user IDs.
+     *
+     * Permissions is the minimum level to execute.
+     */
+    restrict: Permissions | string[] | false;
 }

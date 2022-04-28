@@ -16,22 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type LexiCommandCategory from '#lib/interfaces/commands/LexiCommandCategory';
-import type { Permissions } from '#lib/Permissions';
+type LegacyLexiCommandCategory = 'other' | 'utility' | 'fun' | 'affection' | 'furry' | 'owner';
 
-export default interface LexiCommandConfig {
-    name: string;
-    description: string;
-    category: LexiCommandCategory;
-    enabled: boolean;
-    aliases: string[];
-    usage: string;
-
-    /**
-     * Restrict takes a few possibilities. It may be a Permissions entry, or an array of
-     * user IDs.
-     *
-     * Permissions is the minimum level to execute.
-     */
-    restrict: Permissions | string[] | false;
-}
+export default LegacyLexiCommandCategory;

@@ -24,7 +24,7 @@ import { Linter } from 'eslint';
 import * as util from 'util';
 
 import { getPermissionsForUser } from '#lib/getPermissionsForUser';
-import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
+import type CommandConfig from '#lib/interfaces/commands/LegacyLexiCommandConfig';
 import { Permissions } from '#lib/Permissions';
 import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 import type { LogMode } from '#root/log';

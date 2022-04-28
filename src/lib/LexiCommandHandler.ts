@@ -20,7 +20,7 @@ import type { Message, TextChannel } from 'discord.js';
 import fs from 'fs';
 
 import { getPermissionsForUser } from '#lib/getPermissionsForUser';
-import type LexiCommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
+import type LegacyLexiCommandConfig from '#lib/interfaces/commands/LegacyLexiCommandConfig';
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 import type LexiClient from '#lib/structures/LexiClient';
@@ -35,7 +35,7 @@ export default class LexiCommandHandler {
 
     /** The internal storage facility for the commands. */
     private _LEGACY_commandClassInstances: Map<string, LegacyLexiCommand>;
-    private _LEGACY_commandConfigs: Map<string, LexiCommandConfig>;
+    private _LEGACY_commandConfigs: Map<string, LegacyLexiCommandConfig>;
     private _LEGACY_commandRefs: Map<string, string>;
     private client: LexiClient;
 
@@ -112,7 +112,7 @@ export default class LexiCommandHandler {
     }
 
     /** JUST FOR HELP! */
-    public _LEGACY__readConfiguration__(): Map<string, LexiCommandConfig> {
+    public _LEGACY__readConfiguration__(): Map<string, LegacyLexiCommandConfig> {
         return this._LEGACY_commandConfigs;
     }
     public _LEGACY__readRefs__(): Map<string, string> {

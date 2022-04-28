@@ -19,8 +19,8 @@
 import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 
-import type LexiCommandCategory from '#lib/interfaces/commands/LexiCommandCategory';
-import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
+import type LegacyLexiCommandCategory from '#lib/interfaces/commands/LegacyLexiCommandCategory';
+import type CommandConfig from '#lib/interfaces/commands/LegacyLexiCommandConfig';
 import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 
 export default class HelpCommand extends LegacyLexiCommand {
@@ -44,17 +44,17 @@ export default class HelpCommand extends LegacyLexiCommand {
     public async run(message: Message, args: string[]): Promise<void> {
         const { client } = this;
         // Create a list of command-category mappings
-        const maps: [string, LexiCommandCategory][] = [];
+        const maps: [string, LegacyLexiCommandCategory][] = [];
 
         client.commands._LEGACY__readConfiguration__().forEach((command) => {
             maps.push([command.name, command.category]);
         });
 
         // Filter the list to unique categories
-        const categories: LexiCommandCategory[] = maps.map((x) => x[1]).filter((value, index, self) => self.indexOf(value) === index);
+        const categories: LegacyLexiCommandCategory[] = maps.map((x) => x[1]).filter((value, index, self) => self.indexOf(value) === index);
 
         // Determine each command under a specific category
-        const commandsInCategory: [LexiCommandCategory, string[]][] = [];
+        const commandsInCategory: [LegacyLexiCommandCategory, string[]][] = [];
         categories.forEach((category) => {
             commandsInCategory.push([category, maps.filter((command) => command[1] === category).map((command) => command[0])]);
         });
@@ -77,7 +77,7 @@ export default class HelpCommand extends LegacyLexiCommand {
 
             message.reply({ embeds: [embed] });
             return;
-        } else if (categories.includes(args[0].toLowerCase() as LexiCommandCategory)) {
+        } else if (categories.includes(args[0].toLowerCase() as LegacyLexiCommandCategory)) {
             const embed = new MessageEmbed()
                 .setTitle('Lexi Help')
                 .setAuthor({ name: 'Lexi' })
@@ -88,7 +88,7 @@ export default class HelpCommand extends LegacyLexiCommand {
 
             // Add each command to the embed
             commandsInCategory.forEach((category) => {
-                if (category[0] === (args[0].toLowerCase() as LexiCommandCategory))
+                if (category[0] === (args[0].toLowerCase() as LegacyLexiCommandCategory))
                     category[1].forEach((command) => {
                         const commandData = client.commands._LEGACY__readConfiguration__().get(command) as CommandConfig;
                         embed.addField(

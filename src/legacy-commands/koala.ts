@@ -21,7 +21,7 @@ import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 
-import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
+import type CommandConfig from '#lib/interfaces/commands/LegacyLexiCommandConfig';
 import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
 
 interface KoalaData {

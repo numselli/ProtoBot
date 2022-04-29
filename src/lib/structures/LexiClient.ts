@@ -23,7 +23,6 @@ import Enmap from 'enmap';
 import EnmapVerbose from '#lib/EnmapVerbose';
 import type Cooldowns from '#lib/interfaces/db/Cooldowns';
 import type EmoteCounterData from '#lib/interfaces/db/EmoteCounterData';
-import type Fursona from '#lib/interfaces/db/Fursona';
 import type GuildData from '#lib/interfaces/db/GuildData';
 import type UserConfig from '#lib/interfaces/db/UserConfig';
 import type UserStats from '#lib/interfaces/db/UserStats';
@@ -57,7 +56,6 @@ export default class LexiClient extends BaseClient {
     public emoteCounterTrackers: Enmap<string, EmoteCounterData>;
     public userStatistics: Enmap<string, UserStats>;
     public userConfiguration: Enmap<string, UserConfig>;
-    public fursonas: Enmap<string, Fursona>;
     public restartData: Enmap<string, unknown>;
     public guildData: Enmap<string, GuildData>;
 
@@ -80,7 +78,6 @@ export default class LexiClient extends BaseClient {
         this.emoteCounterTrackers = new Enmap({ name: 'emoteCounterTrackers', verbose: makeVerboseFunction('emoteCounterTrackers') });
         this.userStatistics = new Enmap({ name: 'userStatistics', verbose: makeVerboseFunction('userStatistics') });
         this.userConfiguration = new Enmap({ name: 'userConfiguration', verbose: makeVerboseFunction('userConfiguration') });
-        this.fursonas = new Enmap({ name: 'fursonas', verbose: makeVerboseFunction('fursonas') });
         this.restartData = new Enmap({ name: 'restartData', verbose: makeVerboseFunction('restartData') });
         this.guildData = new Enmap({ name: 'guildData', verbose: makeVerboseFunction('guildData'), autoEnsure: this.defaults.GUILD_DATA });
 

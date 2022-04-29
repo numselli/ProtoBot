@@ -156,7 +156,7 @@ async function handleInterrupt(): Promise<void> {
     log.warn('Got SIGTERM or SIGINT, shutting down...');
     log.warn('Sync logs...');
     await log.cleanup();
-    process.exit();
+    process.exit(5);
 }
 process.on('SIGTERM', handleInterrupt);
 process.on('SIGINT', handleInterrupt);

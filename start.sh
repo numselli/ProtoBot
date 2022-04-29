@@ -56,8 +56,11 @@ while true; do
         echo 'bootstrap: LEXI_STARTSH_DIRTYSOURCE is set to '"${DIRTYSOURCE}"'.';
 
         PRODUCTION=$PRODUCTION LEXI_STARTSH_COMMIT="$COMMIT_HASH" LEXI_STARTSH_DIRTYSOURCE="$DIRTYSOURCE" yarn node -r source-map-support/register  --experimental-specifier-resolution=node .;
-        if [ "$?" -eq 9 ]; then
+        EXIT="$?"
+        if [ "$EXIT" -eq 9 ]; then
             echo 'bootstrap: Restarting instantly: exit code was 9 (RESTART)'
+        elif [ "$EXIT" -eq 5 ]; then
+            echo 'bootstrap: not restarting, exit code was 5 (EXIT_RECIEVED_TERM)'
         else
             echo 'bootstrap: Restarting in '"$RESTART_DELAY_SECONDS"' seconds. Press Ctrl+C to cancel.';
             sleep "$RESTART_DELAY_SECONDS"

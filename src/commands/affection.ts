@@ -45,6 +45,10 @@ export default class BoopCommand extends LexiSlashCommand {
                     interaction.options.getUser('target')!.id
                 }>~!\n\nhttps://cdn.discordapp.com/emojis/777752005820416000.gif`
             );
+        else if (interaction.options.getSubcommand() === 'pat')
+            await interaction.reply(`**Pat!**\n<@${interaction.user.id}> pats <@${interaction.options.getUser('target')!.id}> on the head~!`);
+        else if (interaction.options.getSubcommand() === 'hug')
+            await interaction.reply(`**HUG!**\n<@${interaction.user.id}> huggles <@${interaction.options.getUser('target')!.id}> tightly.`);
         else {
             await interaction.reply('Something went wrong; notify a developer!');
             throw new Error('Bad affection subcommand.');
@@ -61,6 +65,18 @@ export default class BoopCommand extends LexiSlashCommand {
                     .setName('boop')
                     .setDescription('Boop someone!')
                     .addUserOption((t) => t.setName('target').setDescription('The user to boop.').setRequired(true))
+            )
+            .addSubcommand((sub) =>
+                sub
+                    .setName('pat')
+                    .setDescription('Pat someone on the head!')
+                    .addUserOption((t) => t.setName('target').setDescription('The user to pat.').setRequired(true))
+            )
+            .addSubcommand((sub) =>
+                sub
+                    .setName('hug')
+                    .setDescription('Hug someone!')
+                    .addUserOption((t) => t.setName('target').setDescription('The user to hug.').setRequired(true))
             );
     }
 }

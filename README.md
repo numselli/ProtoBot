@@ -10,7 +10,6 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- prettier-ignore-end -->
 
-
 <div align="center">
 
 ## What is Lexi?
@@ -21,14 +20,14 @@ Lexi is a powerful Discord bot for furries and alike! It contains a variety of c
 
 **Add me to your server!**
 
-- **Production Lexi** -- **Recommended.** This bot is the stable version.
-  - [**Production Lexi, administrator**][prod_admin] -- **Recommended for development.** Do not use in real servers. **TODO**
-  - [**Production Lexi, lax permissions**][prod_lax] -- **Recommended.** Provides leeway for new and planned features.
-  - [**Production Lexi, strict permissions**][prod_strict] -- **Not recommended.** Use this if your server needs to be very strict on permissions. Lexi may need to be re-invited regularly. **TODO**
-- **Development Lexi** -- **Recommended for contributors.** This bot is more likely to break.
-  - [**Development Lexi, administrator**][dev_admin] -- **Recommended for development.** Do not use in real servers. **TODO**
-  - [**Development Lexi, lax permissions**][dev_lax] -- **Recommended.** Provides leeway for new and planned features. **TODO**
-  - **We do not support a strict version of Dev Lexi.** You may set permissions yourself.
+-   **Production Lexi** -- **Recommended.** This bot is the stable version.
+    -   [**Production Lexi, administrator**][prod_admin] -- **Recommended for development.** Do not use in real servers. **TODO**
+    -   [**Production Lexi, lax permissions**][prod_lax] -- **Recommended.** Provides leeway for new and planned features.
+    -   [**Production Lexi, strict permissions**][prod_strict] -- **Not recommended.** Use this if your server needs to be very strict on permissions. Lexi may need to be re-invited regularly. **TODO**
+-   **Development Lexi** -- **Recommended for contributors.** This bot is more likely to break.
+    -   [**Development Lexi, administrator**][dev_admin] -- **Recommended for development.** Do not use in real servers. **TODO**
+    -   [**Development Lexi, lax permissions**][dev_lax] -- **Recommended.** Provides leeway for new and planned features. **TODO**
+    -   **We do not support a strict version of Dev Lexi.** You may set permissions yourself.
 
 [prod_admin]: https://example.com/
 [prod_lax]: https://discord.com/oauth2/authorize?client_id=769227328387416084&permissions=518151064640&scope=bot+applications.commands
@@ -47,10 +46,11 @@ Lexi started as a furry bot named "ProtoBot" in it's earliest development phases
 In pull request #510, ProtoBot 3 was started. Eventually, it got renamed to "Lexi."
 
 The name Lexi is actually the name of one of my protogen sonas, here's what you should know about her:
-- Lexi is a softie
-- Says uwu way too much (leads into the emote counter features of Lexi)
-- Kinda depressed but hides it
-- Bullied a lot as a kid
+
+-   Lexi is a softie
+-   Says uwu way too much (leads into the emote counter features of Lexi)
+-   Kinda depressed but hides it
+-   Bullied a lot as a kid
 
 A lot of Lexi's traits carried into Lexi as a Discord bot.
 

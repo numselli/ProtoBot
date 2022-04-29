@@ -20,7 +20,7 @@ import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v
 
 /**
  * Any slash command builder that has a valid toJSON method.
- * 
+ *
  * Why does this exist? There is a reason. When adding subcommands, the type changes, and I have no idea how to
  * actually represent this type, so it's an interface.
  */

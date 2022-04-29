@@ -16,6 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * ECT data tracking how often people say 'uwu', 'owo', or end their message
+ * in a tilde (~). This is the actual storage type.
+ */
 export default interface EmoteCounterData {
     uwus: number;
     owos: number;

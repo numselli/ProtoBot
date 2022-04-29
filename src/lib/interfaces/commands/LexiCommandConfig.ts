@@ -18,9 +18,15 @@
 
 import type { Permissions } from '#lib/Permissions';
 
+/**
+ * Slash command configuration for Lexi.
+ */
 export default interface LexiCommandConfig {
+    /** The name of this command. LexiCommandHandler automatically sets this in the builder. */
     name: string;
+    /** The description of this command. Similar to {@link LexiCommandConfig.name}, it is also autoset. */
     description: string;
+    /** If set to false, this command cannot be used by anyone. */
     enabled: boolean;
 
     /**

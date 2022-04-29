@@ -18,14 +18,21 @@
 
 import type Cooldowns from '#lib/interfaces/db/Cooldowns';
 
+/** A relative path ending in /. */
 type RelativeDirname = `./${string}/`;
 
+/** Lexi bot configuration. */
 export default interface LexiConfig {
+    /** The Discord API token to log in as. */
     token: string;
+    /** Directories where stuff is stored. */
     dirs: { commands: RelativeDirname; hooks: RelativeDirname };
-    prefix: string;
+    /** See {@link Cooldowns}. */
     cooldowns: { [key in keyof Cooldowns]: number /* (ms) */ };
+    /** Administators. See {@link Permissions}. */
     adminIDs: string[];
+    /** These people can use /admin eval. This is dangerous to grant. See {@link Permissions} */
     superAdminIDs: string[];
+    /** The one and only owner. */
     ownerID: string;
 }

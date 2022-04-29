@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/** An interface that represents the cooldowns in the Enmaps. */
 export default interface Cooldowns {
     owos: number;
     uwus: number;

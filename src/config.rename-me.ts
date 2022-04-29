@@ -33,7 +33,6 @@ const config: LexiConfig = {
         commands: './commands/',
         hooks: './hooks/'
     },
-    prefix: '~',
     cooldowns: {
         tildes: minutes(1),
         owos: seconds(30),

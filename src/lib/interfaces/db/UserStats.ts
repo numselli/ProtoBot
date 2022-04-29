@@ -16,8 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * User statistics.
+ */
 export default interface UserStats {
+    /** How often someone *recieved* hugs. */
     hugs: number;
+    /** How often someone *recieved* boops. */
     boops: number;
+    /** How often someone *recieved* pats. */
     pats: number;
 }

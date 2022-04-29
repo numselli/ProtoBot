@@ -16,14 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { Message } from 'discord.js';
+import type { SlashCommandBuilder } from '@discordjs/builders';
+import type { CommandInteraction } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 
-import type CommandConfig from '#lib/interfaces/commands/LegacyLexiCommandConfig';
-import LegacyLexiCommand from '#lib/structures/LegacyLexiCommand';
+import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
+import type LexiCommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
 import type LexiClient from '#lib/structures/LexiClient';
+import LexiSlashCommand from '#lib/structures/LexiSlashCommand';
 
-function fireStats(userID: string, message: Message, client: LexiClient): void {
+function fireStats(userID: string, interaction: CommandInteraction, client: LexiClient): void {
     const uData = client.userStatistics.get(userID)!;
     const ETD = client.emoteCounterTrackers.get(userID)!;
     const embed = new MessageEmbed()
@@ -35,18 +37,15 @@ function fireStats(userID: string, message: Message, client: LexiClient): void {
         .addField('owos', ETD.owos.toString())
         .addField('Tildes', ETD.tildes.toString())
         .setColor(client.publicConfig.colors.color1);
-    message.reply({ embeds: [embed] });
+    interaction.reply({ embeds: [embed] });
 }
 
-export default class InfoCommand extends LegacyLexiCommand {
-    public getConfig(): CommandConfig {
+export default class InfoCommand extends LexiSlashCommand {
+    public getConfig(): LexiCommandConfig {
         return {
             name: 'info',
-            category: 'utility',
             description: "Get a user's stats!",
-            usage: '[user]',
             enabled: true,
-            aliases: ['user'],
 
             // To restrict the command, change the "false" to the following
             // format:
@@ -55,23 +54,31 @@ export default class InfoCommand extends LegacyLexiCommand {
             restrict: false
         };
     }
-    public async run(message: Message<boolean>, args: string[]): Promise<void> {
+    public async run(interaction: CommandInteraction): Promise<void> {
         const { client, log } = this;
-        const userID = args[0]?.replace(/[<@!>]/g, '') ?? message.author.id;
+        const userID = interaction.options.getUser('target')!.id;
 
         if (!client.userStatistics.get(userID)) {
             client.users
                 .fetch(userID)
                 .then((user) => {
                     client.userStatistics.ensure(user.id, client.defaults.USER_STATISTICS);
-                    fireStats(userID, message, client);
+                    fireStats(userID, interaction, client);
                 })
                 .catch(() => {
                     log.info(`Unknown user ${userID}!`);
-                    message.reply('Unknown user!');
+                    interaction.reply('Unknown user!');
                     return;
                 });
             return;
-        } else fireStats(userID, message, client);
+        } else fireStats(userID, interaction, client);
+    }
+
+    public buildSlashCommand(builder: SlashCommandBuilder): JSONAbleSlashCommandBody {
+        const cfg = this.getConfig();
+        return builder
+            .setName(cfg.name)
+            .setDescription(cfg.description)
+            .addUserOption(i => i.setName('target').setDescription('The user to get info for.').setRequired(true));
     }
 }

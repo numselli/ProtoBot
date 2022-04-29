@@ -40,22 +40,23 @@ export default class BoopCommand extends LexiSlashCommand {
 
     public async run(interaction: CommandInteraction): Promise<void> {
         const { client } = this;
+        const target = await interaction.options.getUser('target')!.fetch();
         if (interaction.options.getSubcommand() === 'boop') {
-            client.userStatistics.ensure(interaction.options.getUser('target')!.id, client.defaults.USER_STATISTICS);
-            client.userStatistics.inc(interaction.options.getUser('target')!.id, 'boops');
+            client.userStatistics.ensure(target.id, client.defaults.USER_STATISTICS);
+            client.userStatistics.inc(target.id, 'boops');
             await interaction.reply(
                 `**Boop!**\n<@${interaction.user.id}> boops <@${
-                    interaction.options.getUser('target')!.id
+                    target.id
                 }>~!\n\nhttps://cdn.discordapp.com/emojis/777752005820416000.gif`
             );
         } else if (interaction.options.getSubcommand() === 'pat') {
-            client.userStatistics.ensure(interaction.options.getUser('target')!.id, client.defaults.USER_STATISTICS);
-            client.userStatistics.inc(interaction.options.getUser('target')!.id, 'pats');
-            await interaction.reply(`**Pat!**\n<@${interaction.user.id}> pats <@${interaction.options.getUser('target')!.id}> on the head~!`);
+            client.userStatistics.ensure(target.id, client.defaults.USER_STATISTICS);
+            client.userStatistics.inc(target.id, 'pats');
+            await interaction.reply(`**Pat!**\n<@${interaction.user.id}> pats <@${target.id}> on the head~!`);
         } else if (interaction.options.getSubcommand() === 'hug') {
-            client.userStatistics.ensure(interaction.options.getUser('target')!.id, client.defaults.USER_STATISTICS);
-            client.userStatistics.inc(interaction.options.getUser('target')!.id, 'hugs');
-            await interaction.reply(`**HUG!**\n<@${interaction.user.id}> huggles <@${interaction.options.getUser('target')!.id}> tightly.`);
+            client.userStatistics.ensure(target.id, client.defaults.USER_STATISTICS);
+            client.userStatistics.inc(target.id, 'hugs');
+            await interaction.reply(`**HUG!**\n<@${interaction.user.id}> huggles <@${target.id}> tightly.`);
         } else {
             await interaction.reply('Something went wrong; notify a developer!');
             throw new Error('Bad affection subcommand.');
@@ -67,20 +68,20 @@ export default class BoopCommand extends LexiSlashCommand {
         return builder
             .setName(cfg.name)
             .setDescription(cfg.description)
-            .addSubcommand((sub) =>
-                sub
+            .addSubcommand(s =>
+                s
                     .setName('boop')
                     .setDescription('Boop someone!')
                     .addUserOption((t) => t.setName('target').setDescription('The user to boop.').setRequired(true))
             )
-            .addSubcommand((sub) =>
-                sub
+            .addSubcommand((s) =>
+                s
                     .setName('pat')
                     .setDescription('Pat someone on the head!')
                     .addUserOption((t) => t.setName('target').setDescription('The user to pat.').setRequired(true))
             )
-            .addSubcommand((sub) =>
-                sub
+            .addSubcommand((s) =>
+                s
                     .setName('hug')
                     .setDescription('Hug someone!')
                     .addUserOption((t) => t.setName('target').setDescription('The user to hug.').setRequired(true))

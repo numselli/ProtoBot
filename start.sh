@@ -61,6 +61,7 @@ while true; do
             echo 'bootstrap: Restarting instantly: exit code was 9 (RESTART)'
         elif [ "$EXIT" -eq 5 ]; then
             echo 'bootstrap: not restarting, exit code was 5 (EXIT_RECIEVED_TERM)'
+            exit 0
         else
             echo 'bootstrap: Restarting in '"$RESTART_DELAY_SECONDS"' seconds. Press Ctrl+C to cancel.';
             sleep "$RESTART_DELAY_SECONDS"

@@ -79,6 +79,6 @@ export default class InfoCommand extends LexiSlashCommand {
         return builder
             .setName(cfg.name)
             .setDescription(cfg.description)
-            .addUserOption(i => i.setName('target').setDescription('The user to get info for.').setRequired(true));
+            .addUserOption((i) => i.setName('target').setDescription('The user to get info for.').setRequired(true));
     }
 }

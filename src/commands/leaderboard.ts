@@ -47,7 +47,11 @@ export default class CatCommand extends LexiSlashCommand {
 
     public async run(interaction: CommandInteraction): Promise<void> {
         const { client } = this;
-        if (interaction.options.getSubcommand() !== 'uwus' && interaction.options.getSubcommand() !== 'owos' && interaction.options.getSubcommand() !== 'tildes') {
+        if (
+            interaction.options.getSubcommand() !== 'uwus' &&
+            interaction.options.getSubcommand() !== 'owos' &&
+            interaction.options.getSubcommand() !== 'tildes'
+        ) {
             await interaction.reply('The bot is probably broken. Notify a developer. The issue was: Invalid subcommand in leaderboard.');
             throw new Error('This should never happen.');
         }
@@ -67,10 +71,11 @@ export default class CatCommand extends LexiSlashCommand {
                 buf.push('```adoc\n===== TILDE LEADERBOARD =====');
                 sorted = client.emoteCounterTrackers.map((values, id) => [id, values.tildes] as const).sort((a, b) => b[1] - a[1]);
                 break;
-            default: throw new Error('This should never happen.');
+            default:
+                throw new Error('This should never happen.');
         }
 
-        let placed = false
+        let placed = false;
         for (let i = 0; i < sorted.length && i < CUTOFF; i++) {
             const [id] = sorted[i];
             if (id === interaction.user.id) placed = true;

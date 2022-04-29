@@ -22,7 +22,7 @@ type RelativeDirname = `./${string}/`;
 
 export default interface LexiConfig {
     token: string;
-    dirs: { commands: RelativeDirname; hooks: RelativeDirname; slashCommands: RelativeDirname };
+    dirs: { commands: RelativeDirname; hooks: RelativeDirname };
     prefix: string;
     cooldowns: { [key in keyof Cooldowns]: number /* (ms) */ };
     adminIDs: string[];

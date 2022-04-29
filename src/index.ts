@@ -56,7 +56,6 @@ const client = new LexiClient(log, {
 client.on('ready', async () => {
     // FIXME: this may cause a race condition
     ready.init(client, log);
-    client.commands.LEGACY_loadCommands();
     await client.commands.loadCommands();
     ready.loadHooks(client, log);
     ready.setStatus(client, log);
@@ -112,34 +111,6 @@ client.on('messageCreate', async (message) => {
         log.verbose(`Running hook ${cfg.name} for ${message.author.tag}!`);
         // eslint-disable-next-line no-await-in-loop
         await hook.run(message);
-    }
-    let msgIsCommand = false;
-    let prefixLen = 0;
-    const prefix = client.config.prefix;
-    const lowercasedMessageContent = message.content.toLowerCase();
-
-    if (lowercasedMessageContent.startsWith(prefix)) {
-        prefixLen = prefix.length;
-        msgIsCommand = true;
-    } else if (lowercasedMessageContent.startsWith(`<@${client.user!.id}>`) || lowercasedMessageContent.startsWith(`<@!${client.user!.id}>`)) {
-        prefixLen = client.user!.id.length + (lowercasedMessageContent.startsWith('<@!') ? 4 : 3);
-        if (lowercasedMessageContent.charAt(prefixLen) === ' ') prefixLen++;
-        msgIsCommand = true;
-        log.verbose(`${message.author.tag} used mention-based prefix for command ${message.content}.`);
-    }
-
-    // if it's a command, we handle it.
-    if (msgIsCommand) {
-        const args: string[] = message.content.slice(prefixLen).split(/ +/g);
-        const command = args.shift()!.toLowerCase();
-
-        try {
-            await client.commands.LEGACY_run(command, args, message, client);
-        } catch (e) {
-            log.error(`Executing ${command} for ${message.author.tag} with args ${args.join(' ')} failed:`);
-            log.error(e);
-            message.reply('Something went wrong! Notify a developer.');
-        }
     }
 });
 

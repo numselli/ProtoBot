@@ -23,7 +23,6 @@ import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
 import type { LexiHookConfig } from '#lib/structures/LexiHook';
 import LexiHook from '#lib/structures/LexiHook';
-import { doesHavePrefix } from '#lib/utils/doesHavePrefix';
 
 type Checkers = 'uwu' | 'owo' | '~';
 type DBName = 'uwus' | 'owos' | 'tildes';
@@ -32,7 +31,6 @@ function checkAndSet(client: LexiClient, cooldowns: Cooldowns, l: LexiLogger, m:
     if (
         ((checkString !== '~' && m.content.toLowerCase().includes(checkString)) ||
             (m.content.endsWith('~') && !/~~+/.test(m.content) && m.content !== '~')) &&
-        !doesHavePrefix(m, client) &&
         (!cooldowns || cooldowns[dbName] + client.config.cooldowns[dbName] - Date.now() < 1)
     ) {
         client.emoteCounterTrackers.ensure(m.author.id, client.defaults.EMOTE_TRACKER_COUNTERS);

@@ -75,10 +75,6 @@ export default class InfoCommand extends LexiSlashCommand {
     }
 
     public buildSlashCommand(builder: SlashCommandBuilder): JSONAbleSlashCommandBody {
-        const cfg = this.getConfig();
-        return builder
-            .setName(cfg.name)
-            .setDescription(cfg.description)
-            .addUserOption((i) => i.setName('target').setDescription('The user to get info for.').setRequired(true));
+        return builder.addUserOption((i) => i.setName('target').setDescription('The user to get info for.').setRequired(true));
     }
 }

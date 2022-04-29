@@ -95,10 +95,7 @@ export default class CatCommand extends LexiSlashCommand {
     }
 
     public buildSlashCommand(builder: SlashCommandBuilder): JSONAbleSlashCommandBody {
-        const cfg = this.getConfig();
         return builder
-            .setName(cfg.name)
-            .setDescription(cfg.description)
             .addSubcommand((sub) => sub.setName('uwus').setDescription('Check who said uwu the most!'))
             .addSubcommand((sub) => sub.setName('owos').setDescription('Check who said owo the most!'))
             .addSubcommand((sub) => sub.setName('tildes').setDescription('Check who ended their message in a tilde the most!'));

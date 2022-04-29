@@ -42,6 +42,7 @@ export default abstract class LexiSlashCommand {
     public async preLoadHook(_client: LexiClient): Promise<void> {
         // noop
     }
+    /** Build this slash command. The LexiCommandHandler already sets name & description for you. */
     public abstract buildSlashCommand(builder: SlashCommandBuilder): JSONAbleSlashCommandBody;
     /** Run after building the command, but before it is written to the DB. */
     public async postLoadHook(_client: LexiClient): Promise<void> {

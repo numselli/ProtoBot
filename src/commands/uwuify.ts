@@ -59,10 +59,7 @@ export default class UwuifyCommand extends LexiSlashCommand {
     }
 
     public buildSlashCommand(builder: SlashCommandBuilder): JSONAbleSlashCommandBody {
-        const cfg = this.getConfig();
         return builder
-            .setName(cfg.name)
-            .setDescription(cfg.description)
             .addStringOption((i) => i.setName('text').setDescription('The text to uwuify.').setRequired(true))
             .addBooleanOption((i) => i.setName('intense').setDescription('If true, u is replaced with UwU and o is replaced with OwO.'));
     }

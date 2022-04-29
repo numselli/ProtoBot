@@ -307,10 +307,7 @@ export default class AdminCommand extends LexiSlashCommand {
     }
 
     public buildSlashCommand(builder: SlashCommandBuilder): JSONAbleSlashCommandBody {
-        const cfg = this.getConfig();
         return builder
-            .setName(cfg.name)
-            .setDescription(cfg.description)
             .addSubcommand((sub) => sub.setName('restart').setDescription('Restarts the bot.'))
             .addSubcommand((sub) =>
                 sub

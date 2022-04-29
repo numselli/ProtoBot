@@ -45,9 +45,7 @@ export default class BoopCommand extends LexiSlashCommand {
             client.userStatistics.ensure(target.id, client.defaults.USER_STATISTICS);
             client.userStatistics.inc(target.id, 'boops');
             await interaction.reply(
-                `**Boop!**\n<@${interaction.user.id}> boops <@${
-                    target.id
-                }>~!\n\nhttps://cdn.discordapp.com/emojis/777752005820416000.gif`
+                `**Boop!**\n<@${interaction.user.id}> boops <@${target.id}>~!\n\nhttps://cdn.discordapp.com/emojis/777752005820416000.gif`
             );
         } else if (interaction.options.getSubcommand() === 'pat') {
             client.userStatistics.ensure(target.id, client.defaults.USER_STATISTICS);
@@ -64,11 +62,8 @@ export default class BoopCommand extends LexiSlashCommand {
     }
 
     public buildSlashCommand(builder: SlashCommandBuilder): JSONAbleSlashCommandBody {
-        const cfg = this.getConfig();
         return builder
-            .setName(cfg.name)
-            .setDescription(cfg.description)
-            .addSubcommand(s =>
+            .addSubcommand((s) =>
                 s
                     .setName('boop')
                     .setDescription('Boop someone!')

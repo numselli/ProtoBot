@@ -106,7 +106,8 @@ export default class LexiCommandHandler {
             const command: LexiSlashCommand = new CommandClass(this.client, log);
             await command.preLoadHook(client);
             const cmdConfig = command.getConfig();
-            const json = command.buildSlashCommand(new SlashCommandBuilder()).toJSON();
+            const builder = new SlashCommandBuilder().setName(cmdConfig.name).setDescription(cmdConfig.description);
+            const json = command.buildSlashCommand(builder).toJSON();
             await command.postLoadHook(client);
             this._commands.set(cmdConfig.name, command);
             this._slashJSONs.push(json);

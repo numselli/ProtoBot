@@ -86,10 +86,7 @@ export default class CatCommand extends LexiSlashCommand {
     }
 
     public buildSlashCommand(builder: SlashCommandBuilder): JSONAbleSlashCommandBody {
-        const cfg = this.getConfig();
         return builder
-            .setName(cfg.name)
-            .setDescription(cfg.description)
             .addSubcommand((sub) => sub.setName('cat').setDescription('Get a cute cat picture~!'))
             .addSubcommand((sub) => sub.setName('dog').setDescription('Get a cute dog picture~!'))
             .addSubcommand((sub) => sub.setName('fox').setDescription('Get a cute fox picture~!'));

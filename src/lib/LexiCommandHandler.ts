@@ -213,7 +213,7 @@ export default class LexiCommandHandler {
                     interaction
                 )}, wanted >= ${String(commandConfig.restrict)}, exiting handler.`
             );
-            await interaction.reply("You aren't authorized to do that!");
+            await interaction.reply({ content: "You aren't authorized to do that!", ephemeral: true });
             return Promise.resolve();
         }
         return commandData.run(interaction);

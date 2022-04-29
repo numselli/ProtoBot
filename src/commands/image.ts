@@ -16,18 +16,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// Imports
 import type { SlashCommandBuilder } from '@discordjs/builders';
 import type { CommandInteraction } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
+import fetch from 'node-fetch';
 
 import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
-import type LexiCommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
+import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
 import LexiSlashCommand from '#lib/structures/LexiSlashCommand';
 
-export default class BoopCommand extends LexiSlashCommand {
-    public getConfig(): LexiCommandConfig {
+interface SomeRandomAPILinkData {
+    link: string;
+}
+
+export default class CatCommand extends LexiSlashCommand {
+    public getConfig(): CommandConfig {
         return {
-            name: 'test',
-            description: 'A testy command.',
+            name: 'image',
+            description: 'Get a picture of an animal!',
             enabled: true,
 
             // To restrict the command, change the "false" to the following
@@ -39,14 +46,26 @@ export default class BoopCommand extends LexiSlashCommand {
     }
 
     public async run(interaction: CommandInteraction): Promise<void> {
-        const { log } = this;
-
-        log.info('The testy was tested.');
-        await interaction.reply('Pong! Test worked.');
+        if (interaction.options.getSubcommand() === 'cat') {
+            await interaction.reply('Fetching a cat picture...');
+            const body = (await fetch('https://some-random-api.ml/img/cat').then((res) => res.json())) as SomeRandomAPILinkData;
+            const embed = new MessageEmbed()
+                .setTitle(`Cat for ${interaction.user.username}`)
+                .setImage(body.link)
+                .setTimestamp(Date.now())
+                .setColor('RANDOM');
+            await interaction.editReply({ embeds: [embed] });
+        } else {
+            await interaction.reply('The bot is probably broken. Notify a developer. The issue was: Invalid subcommand in image.');
+            throw new Error('This should never happen.');
+        }
     }
 
     public buildSlashCommand(builder: SlashCommandBuilder): JSONAbleSlashCommandBody {
         const cfg = this.getConfig();
-        return builder.setName(cfg.name).setDescription(cfg.description);
+        return builder
+            .setName(cfg.name)
+            .setDescription(cfg.description)
+            .addSubcommand((sub) => sub.setName('cat').setDescription('Get a cute cat picture~!'));
     }
 }

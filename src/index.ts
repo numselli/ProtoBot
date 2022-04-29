@@ -115,7 +115,7 @@ client.on('messageCreate', async (message) => {
     }
     let msgIsCommand = false;
     let prefixLen = 0;
-    const prefix = client.guildData.get(message.guild!.id, 'prefix')!;
+    const prefix = client.config.prefix;
     const lowercasedMessageContent = message.content.toLowerCase();
 
     if (lowercasedMessageContent.startsWith(prefix)) {

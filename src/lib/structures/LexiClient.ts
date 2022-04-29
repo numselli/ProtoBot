@@ -23,7 +23,6 @@ import Enmap from 'enmap';
 import EnmapVerbose from '#lib/EnmapVerbose';
 import type Cooldowns from '#lib/interfaces/db/Cooldowns';
 import type EmoteCounterData from '#lib/interfaces/db/EmoteCounterData';
-import type GuildData from '#lib/interfaces/db/GuildData';
 import type UserConfig from '#lib/interfaces/db/UserConfig';
 import type UserStats from '#lib/interfaces/db/UserStats';
 import type LexiConfig from '#lib/interfaces/LexiConfig';
@@ -49,7 +48,6 @@ export default class LexiClient extends BaseClient {
         USER_STATISTICS: UserStats;
         COOLDOWNS: Cooldowns;
         EMOTE_TRACKER_COUNTERS: EmoteCounterData;
-        GUILD_DATA: GuildData;
     };
 
     public cooldowns: Enmap<string, Cooldowns>;
@@ -57,7 +55,6 @@ export default class LexiClient extends BaseClient {
     public userStatistics: Enmap<string, UserStats>;
     public userConfiguration: Enmap<string, UserConfig>;
     public restartData: Enmap<string, unknown>;
-    public guildData: Enmap<string, GuildData>;
 
     public hooks: Map<string, LexiHook>;
     public commands: LexiCommandHandler;
@@ -72,14 +69,12 @@ export default class LexiClient extends BaseClient {
             USER_CONFIGURATION: {},
             USER_STATISTICS: { hugs: 0, boops: 0, pats: 0 },
             COOLDOWNS: { owos: 0, uwus: 0, tildes: 0 },
-            EMOTE_TRACKER_COUNTERS: { owos: 0, uwus: 0, tildes: 0 },
-            GUILD_DATA: { prefix: config.prefix }
+            EMOTE_TRACKER_COUNTERS: { owos: 0, uwus: 0, tildes: 0 }
         };
         this.emoteCounterTrackers = new Enmap({ name: 'emoteCounterTrackers', verbose: makeVerboseFunction('emoteCounterTrackers') });
         this.userStatistics = new Enmap({ name: 'userStatistics', verbose: makeVerboseFunction('userStatistics') });
         this.userConfiguration = new Enmap({ name: 'userConfiguration', verbose: makeVerboseFunction('userConfiguration') });
         this.restartData = new Enmap({ name: 'restartData', verbose: makeVerboseFunction('restartData') });
-        this.guildData = new Enmap({ name: 'guildData', verbose: makeVerboseFunction('guildData'), autoEnsure: this.defaults.GUILD_DATA });
 
         // In memory items
         this.hooks = new Map();

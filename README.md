@@ -10,17 +10,6 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- prettier-ignore-end -->
 
-<div align="center">
-
-## NOTICE! READ ME FIRST!
-
-</div>
-
-**THIS IS AN EARLY PROTOTYPE FOR LEXI VERSION 3!**
-
-THIS BRANCH IS **NOT SUITIBLE FOR PRODUCTION USE IN ANY WAY**
-
-Please consult [pulls/#510: Lexi Version 3](https://github.com/thetayloredman/ProtoBot/pull/510) for current development progress.
 
 <div align="center">
 
@@ -30,7 +19,7 @@ Please consult [pulls/#510: Lexi Version 3](https://github.com/thetayloredman/Pr
 
 Lexi is a powerful Discord bot for furries and alike! It contains a variety of commands that can be used to make your server more fun and interactive.
 
-[Add me to your server!](https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=518151064640&scope=bot)
+[Add the Production bot to your server!](https://discord.com/oauth2/authorize?client_id=769227328387416084&permissions=518151064640&scope=bot+applications.commands)
 
 <div align="center">
 

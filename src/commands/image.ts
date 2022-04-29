@@ -30,6 +30,11 @@ interface SomeRandomAPILinkData {
     link: string;
 }
 
+interface FoxData {
+    image: string;
+    link: string;
+}
+
 export default class CatCommand extends LexiSlashCommand {
     public getConfig(): CommandConfig {
         return {
@@ -55,6 +60,25 @@ export default class CatCommand extends LexiSlashCommand {
                 .setTimestamp(Date.now())
                 .setColor('RANDOM');
             await interaction.editReply({ embeds: [embed] });
+        } else if (interaction.options.getSubcommand() === 'dog') {
+            await interaction.reply('Fetching a dog picture...');
+            const body = (await fetch('https://some-random-api.ml/img/dog').then((res) => res.json())) as SomeRandomAPILinkData;
+            const embed = new MessageEmbed()
+                .setTitle(`Dog for ${interaction.user.username}`)
+                .setImage(body.link)
+                .setTimestamp(Date.now())
+                .setColor('RANDOM');
+            await interaction.editReply({ embeds: [embed] });
+        } else if (interaction.options.getSubcommand() === 'fox') {
+            await interaction.reply('Fetching a fox picture...');
+            const body = (await fetch('https://randomfox.ca/floof/').then((res) => res.json())) as FoxData;
+            const embed = new MessageEmbed()
+                .setTitle(`Fox for ${interaction.user.username}`)
+                .setImage(body.image)
+                .setTimestamp(Date.now())
+                .setDescription(`[Link](${body.link})`)
+                .setColor('RANDOM');
+            await interaction.editReply({ embeds: [embed] });
         } else {
             await interaction.reply('The bot is probably broken. Notify a developer. The issue was: Invalid subcommand in image.');
             throw new Error('This should never happen.');
@@ -66,6 +90,8 @@ export default class CatCommand extends LexiSlashCommand {
         return builder
             .setName(cfg.name)
             .setDescription(cfg.description)
-            .addSubcommand((sub) => sub.setName('cat').setDescription('Get a cute cat picture~!'));
+            .addSubcommand((sub) => sub.setName('cat').setDescription('Get a cute cat picture~!'))
+            .addSubcommand((sub) => sub.setName('dog').setDescription('Get a cute dog picture~!'))
+            .addSubcommand((sub) => sub.setName('fox').setDescription('Get a cute fox picture~!'));
     }
 }

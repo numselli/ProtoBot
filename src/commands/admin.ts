@@ -313,14 +313,14 @@ export default class AdminCommand extends LexiSlashCommand {
                 sub
                     .setName('eval')
                     .setDescription('Run a JS code snippet.')
-                    .addStringOption((o) => o.setName('code').setDescription('The code to run.'))
+                    .addStringOption((o) => o.setName('code').setDescription('The code to run.').setRequired(true))
                     .addBooleanOption((o) => o.setName('silent').setDescription('Silent mode.'))
             )
             .addSubcommand((sub) =>
                 sub
                     .setName('exec')
                     .setDescription('Run a shell command.')
-                    .addStringOption((o) => o.setName('code').setDescription('The code to run.'))
+                    .addStringOption((o) => o.setName('code').setDescription('The code to run.').setRequired(true))
                     .addBooleanOption((o) => o.setName('silent').setDescription('Silent mode.'))
             )
             .addSubcommand((sub) => sub.setName('clear_log_buffer').setDescription('Reset the log buffer.'))
@@ -328,7 +328,7 @@ export default class AdminCommand extends LexiSlashCommand {
                 sub
                     .setName('set_log_buffer_max')
                     .setDescription('Set the maximum log buffer length.')
-                    .addNumberOption((o) => o.setName('new').setDescription('The new maximum length.'))
+                    .addNumberOption((o) => o.setName('new').setDescription('The new maximum length.').setRequired(true))
             )
             .addSubcommand((sub) =>
                 sub

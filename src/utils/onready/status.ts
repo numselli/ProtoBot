@@ -24,10 +24,10 @@ export default function setStatus(client: LexiClient, log: LexiLogger): void {
     // We assume the main prefix is always the first in the array.
     const allStatuses: ['PLAYING' | 'STREAMING' | 'LISTENING' | 'WATCHING' | 'COMPETING', string][] = [
         // First index is the initial one.
-        ['PLAYING', `${client.config.prefix}about | Written for furries, by furries!`],
-        ['PLAYING', `${client.config.prefix}about | uwu`],
-        ['PLAYING', `${client.config.prefix}about | ah yes, much furry`],
-        ['PLAYING', `${client.config.prefix}about | I am not an uwu cat! - one of the developers, probably.`]
+        ['WATCHING', `for /about | Written for furries, by furries!`],
+        ['WATCHING', `for /about | uwu`],
+        ['WATCHING', `for /about | ah yes, much furry`],
+        ['WATCHING', `for /about | I am not an uwu cat! - one of the developers, probably.`]
     ];
     setInterval(() => {
         const status = allStatuses[Math.floor(Math.random() * allStatuses.length)];

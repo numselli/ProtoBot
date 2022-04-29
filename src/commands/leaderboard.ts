@@ -22,9 +22,9 @@ import type { CommandInteraction } from 'discord.js';
 
 import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
+import type EmoteCounterData from '#lib/interfaces/db/EmoteCounterData';
 import LexiSlashCommand from '#lib/structures/LexiSlashCommand';
 import { formatRow } from '#lib/utils/formatTrackerRow';
-import EmoteCounterData from '#lib/interfaces/db/EmoteCounterData';
 
 // The number of users that should be displayed on the leaderboard at a
 // given time.

@@ -26,8 +26,8 @@ import LexiSlashCommand from '#lib/structures/LexiSlashCommand';
 export default class BoopCommand extends LexiSlashCommand {
     public getConfig(): LexiCommandConfig {
         return {
-            name: 'boop',
-            description: 'Boop someone!',
+            name: 'affection',
+            description: 'Be affectionate!',
             enabled: true,
 
             // To restrict the command, change the "false" to the following
@@ -39,11 +39,16 @@ export default class BoopCommand extends LexiSlashCommand {
     }
 
     public async run(interaction: CommandInteraction): Promise<void> {
-        await interaction.reply(
-            `**Boop!**\n<@${interaction.user.id}> boops <@${
-                interaction.options.getUser('target')!.id
-            }>~!\n\nhttps://cdn.discordapp.com/emojis/777752005820416000.gif`
-        );
+        if (interaction.options.getSubcommand() === 'boop')
+            await interaction.reply(
+                `**Boop!**\n<@${interaction.user.id}> boops <@${
+                    interaction.options.getUser('target')!.id
+                }>~!\n\nhttps://cdn.discordapp.com/emojis/777752005820416000.gif`
+            );
+        else {
+            await interaction.reply('Something went wrong; notify a developer!');
+            throw new Error('Bad affection subcommand.');
+        }
     }
 
     public buildSlashCommand(builder: SlashCommandBuilder): JSONAbleSlashCommandBody {
@@ -51,6 +56,11 @@ export default class BoopCommand extends LexiSlashCommand {
         return builder
             .setName(cfg.name)
             .setDescription(cfg.description)
-            .addUserOption((t) => t.setName('target').setDescription('The user to boop.').setRequired(true));
+            .addSubcommand((sub) =>
+                sub
+                    .setName('boop')
+                    .setDescription('Boop someone!')
+                    .addUserOption((t) => t.setName('target').setDescription('The user to boop.').setRequired(true))
+            );
     }
 }

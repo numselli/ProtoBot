@@ -18,16 +18,18 @@
 
 Lexi is a powerful Discord bot for furries and alike! It contains a variety of commands that can be used to make your server more fun and interactive.
 
-**Add me to your server!**
+**Add me to your server!** [**Main Bot, Recommended**][prod_lax] | [Development Bot][dev_lax]
 
+**You may choose more detailed permissions here:**
 -   **Production Lexi** -- **Recommended.** This bot is the stable version.
-    -   [**Production Lexi, administrator**][prod_admin] -- **Recommended for development.** Do not use in real servers. **TODO**
+    -   [**Production Lexi, administrator**][prod_admin] -- **Recommended for development.** Do not use in real servers.
     -   [**Production Lexi, lax permissions**][prod_lax] -- **Recommended.** Provides leeway for new and planned features.
-    -   [**Production Lexi, strict permissions**][prod_strict] -- **Not recommended.** Use this if your server needs to be very strict on permissions. Lexi may need to be re-invited regularly. **TODO**
+    -   [**Production Lexi, strict permissions**][prod_strict] -- **Not recommended.** Use this if your server needs to be very strict on permissions. Lexi may need to be re-invited regularly.
 -   **Development Lexi** -- **Recommended for contributors.** This bot is more likely to break.
-    -   [**Development Lexi, administrator**][dev_admin] -- **Recommended for development.** Do not use in real servers. **TODO**
-    -   [**Development Lexi, lax permissions**][dev_lax] -- **Recommended.** Provides leeway for new and planned features. **TODO**
+    -   [**Development Lexi, administrator**][dev_admin] -- **Recommended.** Provides leeway for new and planned features.
     -   **We do not support a strict version of Dev Lexi.** You may set permissions yourself.
+    -   [**Development Lexi, lax permissions**][dev_lax] -- **Recommended for testing.** Provides leeway for new and planned features.
+    -   **We do not support a strict version of Dev Lexi.** You may set permissions yourself. More test-worthy.
 
 [prod_admin]: https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=8&scope=applications.commands%20bot
 [prod_lax]: https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=1633965964615&scope=applications.commands%20bot

@@ -83,6 +83,8 @@ export default class AdminCommand extends LexiSlashCommand {
             const ephemeral = interaction.options.getBoolean('ephemeral') ?? false;
             let code = interaction.options.getString('code')!;
 
+            await interaction.deferReply({ ephemeral });
+
             const embed = new MessageEmbed()
                 .setFooter({ text: `Eval command executed by ${interaction.user.username}` })
                 .setTimestamp()
@@ -133,7 +135,7 @@ export default class AdminCommand extends LexiSlashCommand {
             }
 
             try {
-                await interaction.reply({ embeds: [embed], ephemeral });
+                await interaction.editReply({ embeds: [embed] });
             } catch (e) {
                 legacyLog('e', e as string);
             }
@@ -146,6 +148,8 @@ export default class AdminCommand extends LexiSlashCommand {
 
             const ephemeral = interaction.options.getBoolean('ephemeral') ?? false;
             const code = interaction.options.getString('code')!;
+
+            await interaction.deferReply({ ephemeral });
 
             let e = false;
             const embed = new MessageEmbed()
@@ -204,7 +208,7 @@ export default class AdminCommand extends LexiSlashCommand {
                 }
 
                 try {
-                    interaction.reply({ embeds: [embed], ephemeral });
+                    interaction.editReply({ embeds: [embed] });
                 } catch (e) {
                     legacyLog('e', e as string);
                 }
@@ -223,6 +227,7 @@ export default class AdminCommand extends LexiSlashCommand {
             await interaction.reply(`Changed maximum buffer size from ${old} to ${interaction.options.getNumber('new')} entries.`);
         } else if (subcommand === 'read') {
             // /admin log read
+            await interaction.deferReply({ ephemeral: interaction.options.getBoolean('ephemeral') ?? false });
             let mode = interaction.options.getString('mode')! as LogMode;
             switch (mode.toLowerCase()) {
                 case 'v':
@@ -243,7 +248,7 @@ export default class AdminCommand extends LexiSlashCommand {
                     break;
                 default:
                     if (mode === 'i') break;
-                    await interaction.reply({ content: 'Unknown modespec.', ephemeral: true });
+                    await interaction.editReply({ content: 'Unknown modespec.' });
                     return;
             }
             let buffer = readBufferOfType(mode);
@@ -251,7 +256,7 @@ export default class AdminCommand extends LexiSlashCommand {
             buffer = buffer.slice(count * -1);
 
             if (buffer.length === 0) {
-                await interaction.reply('No entries found.');
+                await interaction.editReply('No entries found.');
                 return;
             }
 
@@ -260,14 +265,13 @@ export default class AdminCommand extends LexiSlashCommand {
                 mtext += `\n${b[2]}`;
             });
             mtext += '```';
-            try {
-                await interaction.reply(mtext);
-            } catch (e) {
-                await interaction.reply(
-                    'Failed to send message! Probably too long. Report this to yourself, LogN~! (located at commands/admin.ts rdl try-catch ONSEND)'
-                );
-                legacyLog('e', e);
+            if (mtext.length > 2000) {
+                await interaction.editReply(`Too many logs were generated. Total length was ${mtext.length} characters, 2000 is the maximum.`);
+                return;
             }
+
+            await interaction.editReply(mtext);
+
             return;
         }
     }
@@ -317,6 +321,7 @@ export default class AdminCommand extends LexiSlashCommand {
                                     .setRequired(true)
                             )
                             .addNumberOption((opt) => opt.setName('count').setDescription('The maximum amount of logs to read.'))
+                            .addBooleanOption((opt) => opt.setName('ephemeral').setDescription('Respond with an ephemeral message?'))
                     )
             );
     }

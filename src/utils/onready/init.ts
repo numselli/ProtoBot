@@ -54,5 +54,4 @@ export default function init(client: LexiClient, log: LexiLogger): void {
     log.info(`With ${red(client.channels.cache.size)} channels!`);
     log.info(`Total ${red(userTotal)} members, excluding myself!`);
     log.info(`Average user count over all guilds: ${red(Math.round(userAvg))}`);
-    log.info(`Prefix is set to '${client.config.prefix}'.`);
 }

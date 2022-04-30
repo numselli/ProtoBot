@@ -59,6 +59,7 @@ export default class AdminCommand extends LexiSlashCommand {
         log.info(`Admin command executed by ${interaction.user.tag}`);
 
         const subcommand = interaction.options.getSubcommand();
+        // TODO: Actually check the group. /admin read would be the same as /admin log read.
         if (subcommand === 'restart') {
             log.warn(`${interaction.user.tag} has triggered a restart!`);
             // restart bot
@@ -79,7 +80,7 @@ export default class AdminCommand extends LexiSlashCommand {
                 return;
             }
 
-            const silent = interaction.options.getBoolean('silent') ?? false;
+            const ephemeral = interaction.options.getBoolean('ephemeral') ?? false;
             let code = interaction.options.getString('code')!;
 
             const embed = new MessageEmbed()
@@ -121,8 +122,7 @@ export default class AdminCommand extends LexiSlashCommand {
                 .setTitle(e ? '**Error**' : '**Success**')
                 .setColor(e ? 'RED' : 'GREEN')
                 .setDescription(`\`\`\`${response.substring(0, 1018)}\`\`\``);
-            if (length >= 1025 && !silent) {
-                // dont do this on silent items
+            if (length >= 1025) {
                 legacyLog(e ? 'e' : 'i', `An eval command executed by ${interaction.user.username}'s response was too long (${length}/2048).`);
                 legacyLog(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
                 legacyLog(e ? 'e' : 'i', 'Output:');
@@ -130,22 +130,13 @@ export default class AdminCommand extends LexiSlashCommand {
                     legacyLog(e ? 'e' : 'i', b);
                 });
                 embed.addField('Note:', `The response was too long with a length of \`${length}/1024\` characters. it was logged to the console. `);
-            } else if (!silent) {
-                // use different log for silent items
-                legacyLog(e ? 'e' : 'i', `An eval command has been executed by ${interaction.user.username}!`);
-                legacyLog(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
-                legacyLog(e ? 'e' : 'i', 'Output:');
-                response.split('\n').forEach((b: string) => {
-                    legacyLog(e ? 'e' : 'i', b);
-                });
             }
 
-            if (!silent)
-                try {
-                    await interaction.reply({ embeds: [embed] });
-                } catch (e) {
-                    legacyLog('e', e as string);
-                }
+            try {
+                await interaction.reply({ embeds: [embed], ephemeral });
+            } catch (e) {
+                legacyLog('e', e as string);
+            }
         } else if (subcommand === 'exec') {
             if (getInteractionPermissions(client, log, interaction) < Permissions.BOT_SUPER_ADMIN) {
                 log.warn(`User ${interaction.user.tag} tried to use "admin exec", but they don't have permission!`);
@@ -153,7 +144,7 @@ export default class AdminCommand extends LexiSlashCommand {
                 return;
             }
 
-            const silent = interaction.options.getBoolean('silent') ?? false;
+            const ephemeral = interaction.options.getBoolean('ephemeral') ?? false;
             const code = interaction.options.getString('code')!;
 
             let e = false;
@@ -178,8 +169,7 @@ export default class AdminCommand extends LexiSlashCommand {
                     .setColor(e ? 'RED' : 'GREEN')
                     .setDescription('Here is your output!');
 
-                if (parsed.length >= 1025 && !silent) {
-                    // dont do this on silent items
+                if (parsed.length >= 1025) {
                     legacyLog(
                         e ? 'e' : 'i',
                         `An exec command executed by ${interaction.user.username}'s response was too long (${parsed.length}/1024).`
@@ -211,52 +201,28 @@ export default class AdminCommand extends LexiSlashCommand {
                         'Note:',
                         `The response was too long with a length of \`${parsed.length}/1024\` characters. It was logged to the console.`
                     );
-                } else if (!silent) {
-                    // use different log for silent items
-                    legacyLog(e ? 'e' : 'i', `An exec command has been executed by ${interaction.user.username}!`);
-                    legacyLog(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
-                    legacyLog(e ? 'e' : 'i', 'Output:');
-                    if (error) {
-                        legacyLog(e ? 'e' : 'i', 'ExecError:');
-                        error
-                            .toString()
-                            .split('\n')
-                            .forEach((b: string) => {
-                                legacyLog(e ? 'e' : 'i', b);
-                            });
-                    }
-                    if (stderr) {
-                        legacyLog(e ? 'e' : 'i', 'STDERR:');
-                        stderr.split('\n').forEach((b: string) => {
-                            legacyLog(e ? 'e' : 'i', b);
-                        });
-                    }
-                    if (stdout) {
-                        legacyLog(e ? 'e' : 'i', 'STDOUT:');
-                        stdout.split('\n').forEach((b: string) => {
-                            legacyLog(e ? 'e' : 'i', b);
-                        });
-                    }
                 }
 
-                if (!silent)
-                    try {
-                        interaction.reply({ embeds: [embed] });
-                    } catch (e) {
-                        legacyLog('e', e as string);
-                    }
+                try {
+                    interaction.reply({ embeds: [embed], ephemeral });
+                } catch (e) {
+                    legacyLog('e', e as string);
+                }
             });
-        } else if (subcommand === 'clear_log_buffer') {
+        } else if (subcommand === 'clear') {
+            // /admin log clear
             log.info('Clearing log buffer...');
             const len = readBuffer().length;
             clearBuffer();
             await interaction.reply(`Cleared log buffer of ${len} entries.`);
-        } else if (subcommand === 'set_log_buffer_max') {
+        } else if (subcommand === 'set_max_size') {
+            // /admin log set_max_size <n>
             log.info(`Setting log buffer max to ${interaction.options.getNumber('new')} entries...`);
             const old = getMaxBufferSize();
             changeMaxBufferSize(interaction.options.getNumber('new')!);
             await interaction.reply(`Changed maximum buffer size from ${old} to ${interaction.options.getNumber('new')} entries.`);
-        } else if (subcommand === 'read_log_buffer') {
+        } else if (subcommand === 'read') {
+            // /admin log read
             let mode = interaction.options.getString('mode')! as LogMode;
             switch (mode.toLowerCase()) {
                 case 'v':
@@ -314,28 +280,44 @@ export default class AdminCommand extends LexiSlashCommand {
                     .setName('eval')
                     .setDescription('Run a JS code snippet.')
                     .addStringOption((o) => o.setName('code').setDescription('The code to run.').setRequired(true))
-                    .addBooleanOption((o) => o.setName('silent').setDescription('Silent mode.'))
+                    .addBooleanOption((o) => o.setName('ephemeral').setDescription('Respond with an ephemeral message?'))
             )
             .addSubcommand((sub) =>
                 sub
                     .setName('exec')
                     .setDescription('Run a shell command.')
                     .addStringOption((o) => o.setName('code').setDescription('The code to run.').setRequired(true))
-                    .addBooleanOption((o) => o.setName('silent').setDescription('Silent mode.'))
+                    .addBooleanOption((o) => o.setName('ephemeral').setDescription('Respond with an ephemeral message?'))
             )
-            .addSubcommand((sub) => sub.setName('clear_log_buffer').setDescription('Reset the log buffer.'))
-            .addSubcommand((sub) =>
-                sub
-                    .setName('set_log_buffer_max')
-                    .setDescription('Set the maximum log buffer length.')
-                    .addNumberOption((o) => o.setName('new').setDescription('The new maximum length.').setRequired(true))
-            )
-            .addSubcommand((sub) =>
-                sub
-                    .setName('read_log_buffer')
-                    .setDescription('Read some logs!')
-                    .addStringOption((opt) => opt.setName('mode').setDescription('The type of logs to filter.').setRequired(true))
-                    .addNumberOption((opt) => opt.setName('count').setDescription('The maximum amount of logs to read.'))
+            .addSubcommandGroup((g) =>
+                g
+                    .setName('log')
+                    .setDescription('Logging management commands.')
+                    .addSubcommand((s) => s.setName('clear').setDescription('Clear the log buffer.'))
+                    .addSubcommand((s) =>
+                        s
+                            .setName('set_max_size')
+                            .setDescription('Set the maximum log buffer size.')
+                            .addNumberOption((o) => o.setName('new').setDescription('The new maximum size.').setRequired(true))
+                    )
+                    .addSubcommand((s) =>
+                        s
+                            .setName('read')
+                            .setDescription('Read some logs!')
+                            .addStringOption((opt) =>
+                                opt
+                                    .setName('mode')
+                                    .setDescription('The type of logs to filter.')
+                                    .addChoices(
+                                        { name: 'Verbose', value: 'v' },
+                                        { name: 'Info', value: 'i' },
+                                        { name: 'Warning', value: 'w' },
+                                        { name: 'Error', value: 'e' }
+                                    )
+                                    .setRequired(true)
+                            )
+                            .addNumberOption((opt) => opt.setName('count').setDescription('The maximum amount of logs to read.'))
+                    )
             );
     }
 }

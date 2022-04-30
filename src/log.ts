@@ -144,7 +144,7 @@ function postprocess(message: string, type: LogMode, epoch: number): void {
     // eslint-disable-next-line no-console
     console.log(message);
     writeItem(type, message);
-    buffer.push([epoch, type, message]);
+    buffer.push([epoch, type, strip(message)]);
     // FIXME: In an edge case where buffer size is *dropped*, it does not decrease
     // all of the way.
     if (buffer.length > maxBufferSize) buffer.shift();

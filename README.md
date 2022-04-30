@@ -29,11 +29,11 @@ Lexi is a powerful Discord bot for furries and alike! It contains a variety of c
     -   [**Development Lexi, lax permissions**][dev_lax] -- **Recommended.** Provides leeway for new and planned features. **TODO**
     -   **We do not support a strict version of Dev Lexi.** You may set permissions yourself.
 
-[prod_admin]: https://example.com/
-[prod_lax]: https://discord.com/oauth2/authorize?client_id=769227328387416084&permissions=518151064640&scope=bot+applications.commands
-[prod_strict]: https://example.com/
-[dev_admin]: https://example.com/
-[dev_strict]: https://example.com/
+[prod_admin]: https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=8&scope=applications.commands%20bot
+[prod_lax]: https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=1633965964615&scope=applications.commands%20bot
+[prod_strict]: https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=516053912903&scope=applications.commands%20bot
+[dev_admin]: https://discord.com/api/oauth2/authorize?client_id=957443529314013244&permissions=8&scope=bot%20applications.commands
+[dev_lax]: https://discord.com/api/oauth2/authorize?client_id=957443529314013244&permissions=1633965964615&scope=applications.commands%20bot
 
 <div align="center">
 

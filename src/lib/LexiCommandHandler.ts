@@ -117,6 +117,15 @@ export default class LexiCommandHandler {
         // Push the new commands list to the API.
         log.info('Pushing new application commands to API...');
         await rest.put(Routes.applicationCommands(client.application!.id), { body: this._slashJSONs });
+        if (client.config.doDevGuildCommandsIn) {
+            log.info('Pushing dev guild commands with prefix dev-');
+            await rest.put(Routes.applicationGuildCommands(client.application!.id, client.config.doDevGuildCommandsIn), {
+                body: this._slashJSONs.map((x) => {
+                    x.name = `dev-${x.name}`;
+                    return x;
+                })
+            });
+        }
         log.info('Finished reloading application (/) commands.');
     }
 

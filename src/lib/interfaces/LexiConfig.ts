@@ -35,4 +35,7 @@ export default interface LexiConfig {
     superAdminIDs: string[];
     /** The one and only owner. */
     ownerID: string;
+
+    /** If set to false, use normal commands. Set to a guild ID and it will recieve un-cached commands prefixed with /dev-. */
+    doDevGuildCommandsIn: false | string;
 }

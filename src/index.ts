@@ -69,6 +69,9 @@ client.on('interactionCreate', async (interaction) => {
 
     log.info(`slash: ${interaction.user.tag} used /${interaction.commandName}!`);
 
+    // Super mini pre-processing.
+    if (interaction.commandName.startsWith('dev-')) interaction.commandName = interaction.commandName.slice(4);
+
     try {
         await client.commands.run(interaction);
     } catch (e) {

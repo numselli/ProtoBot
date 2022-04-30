@@ -42,7 +42,9 @@ const config: LexiConfig = {
     // WARNING: These users can do whatever they want with your system.
     // They have the same power to run code as 'owners'. Be careful!
     superAdminIDs: [],
-    ownerID: 'PBCONF-DiscordUserID' // Your user ID
+    ownerID: 'PBCONF-DiscordUserID', // Your user ID
+
+    doDevGuildCommandsIn: false
 };
 
 // Export

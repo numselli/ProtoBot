@@ -3,7 +3,10 @@ module.exports = {
         {
             name: 'Lexi-Dev',
             script: './start.sh',
-            env: {}
+            env: {},
+            env_production: {
+                PRODUCTION: '1'
+            }
         }
     ]
 };

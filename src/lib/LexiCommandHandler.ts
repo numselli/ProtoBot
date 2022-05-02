@@ -146,18 +146,15 @@ export default class LexiCommandHandler {
             });
             return Promise.resolve('command disabled.');
         }
+        const permissionLevel = await getInteractionPermissions(this.client, this.log, interaction);
         if (
             commandConfig.restrict &&
-            ((typeof commandConfig.restrict === 'number' && getInteractionPermissions(this.client, this.log, interaction) < commandConfig.restrict) ||
+            ((typeof commandConfig.restrict === 'number' && permissionLevel < commandConfig.restrict) ||
                 (commandConfig.restrict instanceof Array && !commandConfig.restrict.includes(interaction.user.id)))
         ) {
             // User isn't authorized; the user is either not whitelisted to use the command and/or they're not an owner.
             this.log.info(
-                `Command slash:"/${interaction.commandName}" is UNAUTHORIZED (for ${interaction.user.tag}), got ${getInteractionPermissions(
-                    this.client,
-                    this.log,
-                    interaction
-                )}, wanted >= ${String(commandConfig.restrict)}, exiting handler.`
+                `Command slash:"/${interaction.commandName}" is UNAUTHORIZED (for ${interaction.user.tag}), got ${permissionLevel}, wanted >= ${String(commandConfig.restrict)}, exiting handler.`
             );
             await interaction.reply({ content: "You aren't authorized to do that!", ephemeral: true });
             return Promise.resolve();

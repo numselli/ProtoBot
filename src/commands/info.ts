@@ -30,12 +30,12 @@ function fireStats(userID: string, interaction: CommandInteraction, client: Lexi
     const ETD = client.emoteCounterTrackers.get(userID)!;
     const embed = new MessageEmbed()
         .setTitle(`User info for ${userID}`)
-        .addField('Hugs', uData.hugs.toString())
-        .addField('Boops', uData.boops.toString())
-        .addField('Pats', uData.pats.toString())
-        .addField('uwus', ETD.uwus.toString())
-        .addField('owos', ETD.owos.toString())
-        .addField('Tildes', ETD.tildes.toString())
+        .addField('Hugs received', uData.hugs.toString(), true)
+        .addField('Boops received', uData.boops.toString(), true)
+        .addField('Pats received', uData.pats.toString(), true)
+        .addField('uwus', ETD.uwus.toString(), true)
+        .addField('owos', ETD.owos.toString(), true)
+        .addField('Tildes', ETD.tildes.toString(), true)
         .setColor(client.publicConfig.colors.color1);
     interaction.reply({ embeds: [embed] });
 }

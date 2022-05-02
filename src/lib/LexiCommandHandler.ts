@@ -154,7 +154,9 @@ export default class LexiCommandHandler {
         ) {
             // User isn't authorized; the user is either not whitelisted to use the command and/or they're not an owner.
             this.log.info(
-                `Command slash:"/${interaction.commandName}" is UNAUTHORIZED (for ${interaction.user.tag}), got ${permissionLevel}, wanted >= ${String(commandConfig.restrict)}, exiting handler.`
+                `Command slash:"/${interaction.commandName}" is UNAUTHORIZED (for ${
+                    interaction.user.tag
+                }), got ${permissionLevel}, wanted >= ${String(commandConfig.restrict)}, exiting handler.`
             );
             await interaction.reply({ content: "You aren't authorized to do that!", ephemeral: true });
             return Promise.resolve();

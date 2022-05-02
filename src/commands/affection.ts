@@ -42,7 +42,7 @@ export default class BoopCommand extends LexiSlashCommand {
         const { client } = this;
         const target = await interaction.options.getUser('target')!.fetch();
         if (['boop', 'pat', 'hug'].includes(interaction.options.getSubcommand()) && target.id === interaction.user.id) {
-            await interaction.reply('You can\'t do that to yourself!');
+            await interaction.reply("You can't do that to yourself!");
             return;
         }
         if (interaction.options.getSubcommand() === 'boop') {

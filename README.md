@@ -21,6 +21,7 @@ Lexi is a powerful Discord bot for furries and alike! It contains a variety of c
 **Add me to your server!** [**Main Bot, Recommended**][prod_lax] | [Development Bot][dev_lax]
 
 **You may choose more detailed permissions here:**
+
 -   **Production Lexi** -- **Recommended.** This bot is the stable version.
     -   [**Production Lexi, administrator**][prod_admin] -- **Recommended for development.** Do not use in real servers.
     -   [**Production Lexi, lax permissions**][prod_lax] -- **Recommended.** Provides leeway for new and planned features.

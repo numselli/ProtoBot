@@ -76,6 +76,7 @@ export default class AdminCommand extends LexiSlashCommand {
         } else if (subcommand === 'eval') {
             if (getInteractionPermissions(client, log, interaction) < Permissions.BOT_SUPER_ADMIN) {
                 log.warn(`User ${interaction.user.tag} tried to use "admin eval", but they don't have permission!`);
+                log.info(`Attempted code was ${interaction.options.getString('code')}`);
                 await interaction.reply({ content: 'Nah, that command is for the bot owner only!', ephemeral: true });
                 return;
             }
@@ -133,6 +134,10 @@ export default class AdminCommand extends LexiSlashCommand {
                 });
                 embed.addField('Note:', `The response was too long with a length of \`${length}/1024\` characters. it was logged to the console. `);
             }
+
+            log.info(`${ephemeral ? 'Ephemeral eval' : 'Eval'} command executed by ${interaction.user.tag}`);
+            log.info(`Code: ${code}`);
+            log.info(`Response: ${response}`);
 
             try {
                 await interaction.editReply({ embeds: [embed] });
@@ -206,6 +211,12 @@ export default class AdminCommand extends LexiSlashCommand {
                         `The response was too long with a length of \`${parsed.length}/1024\` characters. It was logged to the console.`
                     );
                 }
+
+                log.info(`${ephemeral ? 'Ephemeral exec' : 'exec'} command executed by ${interaction.user.tag}`);
+                log.info(`Code: ${code}`);
+                if (error) log.error(`ExecError: ${error.toString()}`);
+                if (stderr) log.error(`STDERR: ${stderr}`);
+                if (stdout) log.info(`STDOUT: ${stdout}`);
 
                 try {
                     interaction.editReply({ embeds: [embed] });

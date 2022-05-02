@@ -146,7 +146,7 @@ export default class LexiCommandHandler {
             });
             return Promise.resolve('command disabled.');
         }
-        const permissionLevel = await getInteractionPermissions(this.client, this.log, interaction);
+        const permissionLevel = getInteractionPermissions(this.client, this.log, interaction);
         if (
             commandConfig.restrict &&
             ((typeof commandConfig.restrict === 'number' && permissionLevel < commandConfig.restrict) ||

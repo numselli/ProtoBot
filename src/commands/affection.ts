@@ -41,6 +41,10 @@ export default class BoopCommand extends LexiSlashCommand {
     public async run(interaction: CommandInteraction): Promise<void> {
         const { client } = this;
         const target = await interaction.options.getUser('target')!.fetch();
+        if (['boop', 'pat', 'hug'].includes(interaction.options.getSubcommand()) && target.id === interaction.user.id) {
+            await interaction.reply('You can\'t do that to yourself!');
+            return;
+        }
         if (interaction.options.getSubcommand() === 'boop') {
             client.userStatistics.ensure(target.id, client.defaults.USER_STATISTICS);
             client.userStatistics.inc(target.id, 'boops');

@@ -12,6 +12,7 @@
         "colorette",
         "commitlint",
         "conventionalcommits",
+        "cooldown",
         "DIRTYSOURCE",
         "discordjs",
         "enmap",

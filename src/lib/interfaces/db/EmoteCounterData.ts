@@ -21,8 +21,12 @@
  * in a tilde (~). This is the actual storage type.
  */
 export default interface EmoteCounterData {
+    /** The data value for the uwus ECT. */
     uwus: number;
+    /** The data value for the owos ECT. */
     owos: number;
+    /** The data value for the tildes ECT. */
     tildes: number;
 }
+/** All valid ECT keys. */
 export type EmoteCounterType = keyof EmoteCounterData;

@@ -17,13 +17,13 @@
  */
 
 /**
- * User statistics.
+ * User statistics data for Lexi.
  */
 export default interface UserStats {
-    /** How often someone *recieved* hugs. */
+    /** How often someone *received* hugs. */
     hugs: number;
-    /** How often someone *recieved* boops. */
+    /** How often someone *received* boops. */
     boops: number;
-    /** How often someone *recieved* pats. */
+    /** How often someone *received* pats. */
     pats: number;
 }

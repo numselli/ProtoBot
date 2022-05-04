@@ -16,16 +16,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/** A hexadecimal color. */
 type HexColor = `#${string}`;
 
+/** Types for the PublicConfig.ts file. */
 export default interface LexiPublicConfig {
+    /** Link to where the source code is hosted. */
     githubRepository: string;
 
+    /** Color pallet data for Lexi. */
     colors: {
+        /** Primary color. */
         color1: HexColor;
+        /** Secondary color. */
         color2: HexColor;
+        /** Supplementary color. */
         color3: HexColor;
+        /** Supplementary color. */
         color4: HexColor;
+        /** Supplementary color. */
         color5: HexColor;
     };
 }

@@ -18,7 +18,10 @@
 
 /** An interface that represents the cooldowns in the Enmaps. */
 export default interface Cooldowns {
+    /** The cooldown for the owos ECT. */
     owos: number;
+    /** The cooldown for the uwus ECT. */
     uwus: number;
+    /** The cooldown for the tildes ECT. */
     tildes: number;
 }

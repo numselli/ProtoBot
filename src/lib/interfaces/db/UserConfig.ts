@@ -16,5 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * Represents a user's configuration settings.
+ */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export default interface UserConfig {}

@@ -20,7 +20,7 @@
 export default interface LexiLogger {
     /**
      * Print a debug message to the console. This is hidden when Lexi is in production mode.
-     * 
+     *
      * Use this for super-detailed debugging. Stuff that is not really important, but you want to know.
      * An example message is: "LCH: Command arguments for /ping by ${USER}: ${ARGS}"
      */

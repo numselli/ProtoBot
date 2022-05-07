@@ -38,4 +38,7 @@ export default interface LexiConfig {
 
     /** If set to false, use normal commands. Set to a guild ID and it will recieve un-cached commands prefixed with /dev-. */
     doDevGuildCommandsIn: false | string;
+
+    /** The API WS port. */
+    apiPort: number;
 }

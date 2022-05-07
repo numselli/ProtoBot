@@ -6,7 +6,7 @@
 
 <!-- prettier-ignore-start -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=for-the-badge)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=for-the-badge)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- prettier-ignore-end -->
 
@@ -160,7 +160,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/ilikestohack"><img src="https://avatars.githubusercontent.com/u/47259933?v=4?s=100" width="100px;" alt=""/><br /><sub><b>charmines</b></sub></a><br /><a href="https://github.com/thetayloredman/ProtoBot/commits?author=ilikestohack" title="Code">💻</a></td>
-    <td align="center"><a href="http://skepfusky.github.io"><img src="https://avatars.githubusercontent.com/u/94678583?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kerby Keith Aquino</b></sub></a><br /><a href="#projectManagement-skepfusky" title="Project Management">📆</a> <a href="#ideas-skepfusky" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 

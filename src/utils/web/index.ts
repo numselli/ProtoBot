@@ -26,6 +26,7 @@ export function start(client: Client, log: LexiLogger): void  {
     // Initialize an Express instance.
     const app = express();
     app.use(morgan('combined'));
+    app.disable('x-powered-by');
     log.info('Web server started.');
 
     app.get('/api/v0/uwus', (req, res) => {

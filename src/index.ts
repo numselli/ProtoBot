@@ -23,6 +23,7 @@ import { Intents } from 'discord.js';
 import LexiClient from '#lib/structures/LexiClient';
 import log from '#root/log';
 import * as ready from '#root/utils/onready/';
+import * as web from '#root/utils/web/';
 
 // Verify the currently running commit...
 log.info('Verifying we were started via the start script...');
@@ -60,6 +61,7 @@ client.on('ready', async () => {
     ready.loadHooks(client, log);
     ready.setStatus(client, log);
     await ready.handleRestart(client, log);
+    web.start(client, log);
 });
 
 // Interactions.

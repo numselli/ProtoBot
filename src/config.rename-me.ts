@@ -44,7 +44,8 @@ const config: LexiConfig = {
     superAdminIDs: [],
     ownerID: 'PBCONF-DiscordUserID', // Your user ID
 
-    doDevGuildCommandsIn: false
+    doDevGuildCommandsIn: false,
+    apiPort: 8082
 };
 
 // Export

@@ -28,9 +28,8 @@ Lexi is a powerful Discord bot for furries and alike! It contains a variety of c
     -   [**Production Lexi, strict permissions**][prod_strict] -- **Not recommended.** Use this if your server needs to be very strict on permissions. Lexi may need to be re-invited regularly.
 -   **Development Lexi** -- **Recommended for contributors.** This bot is more likely to break.
     -   [**Development Lexi, administrator**][dev_admin] -- **Recommended.** Provides leeway for new and planned features.
-    -   **We do not support a strict version of Dev Lexi.** You may set permissions yourself.
     -   [**Development Lexi, lax permissions**][dev_lax] -- **Recommended for testing.** Provides leeway for new and planned features.
-    -   **We do not support a strict version of Dev Lexi.** You may set permissions yourself. More test-worthy.
+    -   **We do not support a strict version of Dev Lexi.** You may set permissions yourself.
 
 [prod_admin]: https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=8&scope=applications.commands%20bot
 [prod_lax]: https://discord.com/api/oauth2/authorize?client_id=769227328387416084&permissions=1633965964615&scope=applications.commands%20bot

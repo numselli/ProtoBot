@@ -22,7 +22,7 @@ import morgan from 'morgan';
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type Client from '#lib/structures/LexiClient';
 
-export function start(client: Client, log: LexiLogger): void  {
+export function start(client: Client, log: LexiLogger): void {
     // Initialize an Express instance.
     const app = express();
     app.use(morgan('combined'));

@@ -8,6 +8,7 @@
         "start": "chmod u+x ./start.sh; ./start.sh",
         "lint": "eslint .",
         "build": "tsc; tsc-alias",
+        "build:noalias": "tsc",
         "prettier:check": "prettier . --check",
         "prettier": "prettier . -w",
         "prepare": "husky install",

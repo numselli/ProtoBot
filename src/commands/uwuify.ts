@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,10 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
-import Command from '@lib/structures/Command';
-import type { Message } from 'discord.js';
+import type { SlashCommandBuilder } from '@discordjs/builders';
+import type { CommandInteraction } from 'discord.js';
 import Uwuifier from 'uwuifier';
+
+import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
+import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
+import LexiSlashCommand from '#lib/structures/LexiSlashCommand';
 
 const uwuify: Uwuifier = new Uwuifier();
 uwuify.actions = [
@@ -38,38 +41,26 @@ uwuify.actions = [
     '*boops your nose*'
 ];
 
-export default class UwuifyCommand extends Command {
+export default class UwuifyCommand extends LexiSlashCommand {
     public getConfig(): CommandConfig {
         return {
             name: 'uwuify',
-            category: 'fun',
-            usage: '[-i] [text]',
-            description:
-                'Converts all of your text to UwU-talk!\nIntense mode available with `-i` flag: `~uwuify -i text`\nPowered by [Uwuifier](https://github.com/Schotsl/Uwuifier)',
+            description: 'Converts all of your text to UwU-talk!',
             enabled: true,
-            aliases: ['uwu'],
-
-            // To restrict the command, change the "false" to the following
-            // format:
-            //
-            // restrict: { users: [ "array", "of", "authorized", "user", "IDs" ] }
             restrict: false
         };
     }
 
-    public async run(message: Message<boolean>, args: string[]): Promise<void> {
-        let intense = false;
-        if (args.length === 0) {
-            message.reply('**Error:** No text provided!');
-            return;
-        }
+    public async run(interaction: CommandInteraction): Promise<void> {
+        const intense = interaction.options.getBoolean('intense') ?? false;
 
-        if (args[0] === '-i') {
-            intense = true;
-            args.shift();
-        }
+        const msg: string = uwuify.uwuifySentence(interaction.options.getString('text')!);
+        await interaction.reply(intense ? msg.replace(/u/gi, 'UwU').replace(/o/gi, 'OwO') : msg.substring(0, 2000));
+    }
 
-        const msg: string = uwuify.uwuifySentence(args.join(' '));
-        message.channel.send(intense ? msg.replace(/u/gi, 'UwU').replace(/o/gi, 'OwO') : msg.substring(0, 2000));
+    public buildSlashCommand(builder: SlashCommandBuilder): JSONAbleSlashCommandBody {
+        return builder
+            .addStringOption((i) => i.setName('text').setDescription('The text to uwuify.').setRequired(true))
+            .addBooleanOption((i) => i.setName('intense').setDescription('If true, u is replaced with UwU and o is replaced with OwO.'));
     }
 }

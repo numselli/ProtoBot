@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,10 +19,10 @@
 // A non-secret version of this configuration file.
 
 // Config types
-import type PublicConfig from '@lib/interfaces/PublicConfig';
+import type LexiPublicConfig from '#lib/interfaces/LexiPublicConfig';
 
-const publicConfig: PublicConfig = {
-    githubRepository: 'https://github.com/thetayloredman/ProtoBot',
+const publicConfig: LexiPublicConfig = {
+    githubRepository: 'https://github.com/thetayloredman/Lexi',
 
     colors: {
         color1: '#db2b39',

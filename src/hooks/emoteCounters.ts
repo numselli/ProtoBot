@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,20 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import Cooldowns from '@lib/interfaces/db/Cooldowns';
-import type Logger from '@lib/interfaces/Logger';
-import Hook, { HookConfig } from '@lib/structures/Hook';
-import { doesHavePrefix } from '@lib/utils/doesHavePrefix';
-import type { Client, Message } from 'discord.js';
+import type { Message } from 'discord.js';
+
+import type Cooldowns from '#lib/interfaces/db/Cooldowns';
+import type LexiLogger from '#lib/interfaces/LexiLogger';
+import type LexiClient from '#lib/structures/LexiClient';
+import type { LexiHookConfig } from '#lib/structures/LexiHook';
+import LexiHook from '#lib/structures/LexiHook';
 
 type Checkers = 'uwu' | 'owo' | '~';
 type DBName = 'uwus' | 'owos' | 'tildes';
 
-function checkAndSet(client: Client, cooldowns: Cooldowns, l: Logger, m: Message, checkString: Checkers, dbName: DBName): void {
+function checkAndSet(client: LexiClient, cooldowns: Cooldowns, l: LexiLogger, m: Message, checkString: Checkers, dbName: DBName): void {
     if (
         ((checkString !== '~' && m.content.toLowerCase().includes(checkString)) ||
             (m.content.endsWith('~') && !/~~+/.test(m.content) && m.content !== '~')) &&
-        !doesHavePrefix(m, client) &&
         (!cooldowns || cooldowns[dbName] + client.config.cooldowns[dbName] - Date.now() < 1)
     ) {
         client.emoteCounterTrackers.ensure(m.author.id, client.defaults.EMOTE_TRACKER_COUNTERS);
@@ -39,15 +40,15 @@ function checkAndSet(client: Client, cooldowns: Cooldowns, l: Logger, m: Message
     }
 }
 
-export default class EmoteCountersHook extends Hook {
-    public getConfig(): HookConfig {
+export default class EmoteCountersHook extends LexiHook {
+    public getConfig(): LexiHookConfig {
         return {
             name: 'emoteCounters',
             description: 'Detects a message containing "owo", "uwu", or ends in "~" and logs it.'
         };
     }
 
-    public run(message: Message): void {
+    public async run(message: Message): Promise<void> {
         const { log, client } = this;
         const cooldowns = client.cooldowns.ensure(message.author.id, client.defaults.COOLDOWNS);
         checkAndSet(client, cooldowns, log, message, 'uwu', 'uwus');

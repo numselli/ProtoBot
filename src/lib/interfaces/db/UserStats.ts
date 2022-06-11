@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,8 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * User statistics data for Lexi.
+ */
 export default interface UserStats {
+    /** How often someone *received* hugs. */
     hugs: number;
+    /** How often someone *received* boops. */
     boops: number;
+    /** How often someone *received* pats. */
     pats: number;
 }

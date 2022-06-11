@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -30,9 +30,12 @@ module.exports = {
     plugins: ['@typescript-eslint', 'deprecation', 'unused-imports', 'license-header', 'simple-import-sort'],
     extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
     rules: {
-        '@typescript-eslint/no-unnecessary-type-assertion': ['error'],
-        '@typescript-eslint/no-non-null-assertion': ['off'],
         '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'as' }],
+        '@typescript-eslint/consistent-type-imports': ['error'],
+        '@typescript-eslint/explicit-member-accessibility': ['error'],
+        '@typescript-eslint/no-non-null-assertion': ['off'],
+        '@typescript-eslint/no-unnecessary-type-assertion': ['error'],
+        '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
         'accessor-pairs': ['error'],
         'array-callback-return': ['error'],
         'block-scoped-var': ['error'],
@@ -48,6 +51,7 @@ module.exports = {
         'for-direction': ['error'],
         'getter-return': ['error'],
         'grouped-accessor-pairs': ['error', 'getBeforeSet'],
+        'license-header/header': ['error', 'src/header.ts'],
         'no-async-promise-executor': ['error'],
         'no-await-in-loop': ['error'],
         'no-case-declarations': ['off'],
@@ -100,14 +104,13 @@ module.exports = {
         'no-unsafe-finally': ['error'],
         'no-unsafe-negation': ['error'],
         'no-use-before-define': ['error'],
-        '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
+        'prefer-template': ['error'],
+        'simple-import-sort/exports': ['error'],
+        'simple-import-sort/imports': ['error'],
+        'template-curly-spacing': ['error', 'never'],
         'unused-imports/no-unused-imports': ['error'],
         'use-isnan': ['error'],
-        'valid-typeof': ['error'],
-        'license-header/header': ['error', 'src/header.ts'],
-        '@typescript-eslint/explicit-member-accessibility': ['error'],
-        'simple-import-sort/imports': ['error'],
-        'simple-import-sort/exports': ['error']
+        'valid-typeof': ['error']
     },
     globals: {
         NodeJS: 'readonly'

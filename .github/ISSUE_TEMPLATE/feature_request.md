@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea to be added to ProtoBot
+about: Suggest an idea to be added to Lexi
 title: 'feat: Describe the feature request...'
 labels: 'enhancement, Triage: Untriaged'
 assignees: ''

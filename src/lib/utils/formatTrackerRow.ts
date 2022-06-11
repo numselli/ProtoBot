@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,10 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { EmoteCounterType } from '@lib/interfaces/db/EmoteCounterData';
-import type { Client, User } from 'discord.js';
+import type { User } from 'discord.js';
 
-export function formatRow(type: EmoteCounterType, index: number, user: User | null, client: Client): string {
+import type { EmoteCounterType } from '#lib/interfaces/db/EmoteCounterData';
+import type LexiClient from '#lib/structures/LexiClient';
+
+export function formatRow(type: EmoteCounterType, index: number, user: User | null, client: LexiClient): string {
     const ranking = (index + 1).toString().padStart(2, ' ');
     const count = user ? client.emoteCounterTrackers.get(user?.id, type) : 0;
     return `${ranking} :: ${user ? `${user.tag} with ${count} ${type}` : '(none)'}`;

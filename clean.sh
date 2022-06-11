@@ -1,8 +1,8 @@
 #!/bin/bash
-# Clean the ProtoBot workspace of unnecessary compilation
+# Clean the Lexi workspace of unnecessary compilation
 # archives that are messy and hard to code with.
 
-TMPDIR="$(mktemp -d /tmp/ProtoBot.clean.XXXXXXXX)"
+TMPDIR="$(mktemp -d /tmp/Lexi.clean.XXXXXXXX)"
 echo "distclean: Copying out important data to $TMPDIR..."
 cp -r ./dist/data/* $TMPDIR/
 echo "distclean: Clearing dist..."

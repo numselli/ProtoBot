@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,35 +16,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Import source-map-support and register it to allow better visibility of
-// error locations as shown in the TS default source maps.
-import 'source-map-support/register';
+import { blue, bold, green, yellow } from 'colorette';
+import type { TextChannel } from 'discord.js';
+import { Intents } from 'discord.js';
 
-import Client from '@lib/Client'; // The custom client files
-import * as ready from '@lib/onready/index';
-import Hook from '@lib/structures/Hook';
-import chalk from 'chalk'; // Coloring for CLI
-import { Intents, TextChannel } from 'discord.js'; // <<< Discord!
-
-// Import the primary log function from the CWD.
-import log from './log';
+import LexiClient from '#lib/structures/LexiClient';
+import log from '#root/log';
+import * as ready from '#root/utils/onready/';
+import * as web from '#root/utils/web/';
 
 // Verify the currently running commit...
-log.verbose('Verifying we were started via the start script...');
-if (!process.env.PROTOBOT_STARTSH_COMMIT) {
-    log.error('Environment variable PROTOBOT_STARTSH_COMMIT is not set!');
-    log.warn("If you are seeing this message, it means you are running the bot's script directly.");
-    log.warn('This is not recommended, and may cause unexpected behavior.');
-    log.warn('After multiple bug reports of people using an invalid environment (like this one),');
-    log.warn('the developer team has decided that direct execution should be disabled.');
-    log.warn('Please use the start script instead.');
-    log.warn('Reference issue #463 for more information.');
+log.info('Verifying we were started via the start script...');
+if (!process.env.LEXI_STARTSH_COMMIT) {
+    log.error('Environment variable LEXI_STARTSH_COMMIT is not set!');
+    log.error("If you are seeing this message, it means you are running the bot's script directly.");
+    log.error('This is not recommended, and may cause unexpected behavior.');
+    log.error('After multiple bug reports of people using an invalid environment (like this one),');
+    log.error('the developer team has decided that direct execution should be disabled.');
+    log.error('Please use the start script instead.');
+    log.error('Reference issue #463 for more information.');
     log.error('We were not started via the start script! Exiting (code 1)...');
     process.exit(1);
 }
 
 // Initialize a Client instance, and provide the Discord intent flags.
-const client = new Client(log, {
+const client = new LexiClient(log, {
     intents: [
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MEMBERS,
@@ -61,10 +57,28 @@ const client = new Client(log, {
 client.on('ready', async () => {
     // FIXME: this may cause a race condition
     ready.init(client, log);
-    client.commands.loadCommands();
+    await client.commands.loadCommands();
     ready.loadHooks(client, log);
     ready.setStatus(client, log);
     await ready.handleRestart(client, log);
+    web.start(client, log);
+});
+
+// Interactions.
+client.on('interactionCreate', async (interaction) => {
+    // other interaction types exist, TODO: add them
+    if (!interaction.isCommand()) return;
+
+    log.info(`slash: ${interaction.user.tag} used /${interaction.commandName}!`);
+
+    // Super mini pre-processing.
+    if (interaction.commandName.startsWith('dev-')) interaction.commandName = interaction.commandName.slice(4);
+
+    try {
+        await client.commands.run(interaction);
+    } catch (e) {
+        log.errorWithStack(e);
+    }
 });
 
 // The most important part.
@@ -74,9 +88,9 @@ client.on('ready', async () => {
 client.on('messageCreate', async (message) => {
     // Log the message content if we are in verbose mode.
     log.verbose(
-        `${chalk.yellow('[')}${chalk.yellow.bold('MSG')}${chalk.yellow(']')} ${chalk.blue.bold('@' + message.author.tag)} ${chalk.green.bold(
-            '#' + (message.channel as TextChannel).name ?? '<DM>'
-        )}: ${message.content}`
+        `${yellow(`[${bold('MSG')}]`)} ${`${bold(blue(`@${message.author.tag}`))} ${green(
+            `#${(message.channel as TextChannel).name ?? '<DM>'}`
+        )}`}: ${message.content}`
     );
 
     // Let's (theoretically) say this person is brand new to us. We need
@@ -97,38 +111,11 @@ client.on('messageCreate', async (message) => {
         return;
     }
     // Execute each hook from the database.
-    client.hooks.forEach((hookData: Hook) => {
-        const cfg = hookData.getConfig();
+    for (const [_, hook] of client.hooks) {
+        const cfg = hook.getConfig();
         log.verbose(`Running hook ${cfg.name} for ${message.author.tag}!`);
-        hookData.run(message);
-    });
-    let msgIsCommand = false;
-    let prefixLen = 0;
-    const prefix = client.guildData.get(message.guild!.id, 'prefix')!;
-    const lowercasedMessageContent = message.content.toLowerCase();
-
-    if (lowercasedMessageContent.startsWith(prefix)) {
-        prefixLen = prefix.length;
-        msgIsCommand = true;
-    } else if (lowercasedMessageContent.startsWith(`<@${client.user!.id}>`) || lowercasedMessageContent.startsWith(`<@!${client.user!.id}>`)) {
-        prefixLen = client.user!.id.length + (lowercasedMessageContent.startsWith('<@!') ? 4 : 3);
-        if (lowercasedMessageContent.charAt(prefixLen) === ' ') prefixLen++;
-        msgIsCommand = true;
-        log.info(`${message.author.tag} used mention-based prefix for command ${message.content}.`);
-    }
-
-    // if it's a command, we handle it.
-    if (msgIsCommand) {
-        const args: string[] = message.content.slice(prefixLen).split(/ +/g);
-        const command = args.shift()!.toLowerCase();
-
-        try {
-            await client.commands.run(command, args, message, client);
-        } catch (e) {
-            log.error(`Executing ${command} for ${message.author.tag} with args ${args.join(' ')} failed:`);
-            log.error(e);
-            message.reply('Something went wrong! Notify a developer.');
-        }
+        // eslint-disable-next-line no-await-in-loop
+        await hook.run(message);
     }
 });
 
@@ -145,14 +132,14 @@ async function handleInterrupt(): Promise<void> {
     log.warn('Got SIGTERM or SIGINT, shutting down...');
     log.warn('Sync logs...');
     await log.cleanup();
-    process.exit();
+    process.exit(5);
 }
 process.on('SIGTERM', handleInterrupt);
 process.on('SIGINT', handleInterrupt);
 
 // When the process exits, wrap up.
 process.on('exit', (code) => {
-    log.warn('Kill client... (exit code ' + code + ')');
+    log.warn(`Kill client... (exit code ${code})`);
     client.destroy(); // Kill the client
     // NOTE: you can't log here
 });
@@ -177,7 +164,7 @@ process.on('uncaughtException', async (error) => {
     });
     log.error('Process exiting.');
     log.error('Exit code 5.');
-    log.error('Goodbye!');
+    log.errorWithStack('Goodbye!');
     await log.cleanup();
     process.exit(5);
 });

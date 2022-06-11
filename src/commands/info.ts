@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,35 +16,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type CommandConfig from '@lib/interfaces/commands/CommandConfig';
-import Command from '@lib/structures/Command';
-import type { Client, Message } from 'discord.js';
+import type { SlashCommandBuilder } from '@discordjs/builders';
+import type { CommandInteraction } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 
-function fireStats(userID: string, message: Message, client: Client): void {
+import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
+import type LexiCommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
+import type LexiClient from '#lib/structures/LexiClient';
+import LexiSlashCommand from '#lib/structures/LexiSlashCommand';
+
+function fireStats(userID: string, interaction: CommandInteraction, client: LexiClient): void {
     const uData = client.userStatistics.get(userID)!;
     const ETD = client.emoteCounterTrackers.get(userID)!;
     const embed = new MessageEmbed()
         .setTitle(`User info for ${userID}`)
-        .addField('Hugs', uData.hugs.toString())
-        .addField('Boops', uData.boops.toString())
-        .addField('Pats', uData.pats.toString())
-        .addField('uwus', ETD.uwus.toString())
-        .addField('owos', ETD.owos.toString())
-        .addField('Tildes', ETD.tildes.toString())
+        .addField('Hugs received', uData.hugs.toString(), true)
+        .addField('Boops received', uData.boops.toString(), true)
+        .addField('Pats received', uData.pats.toString(), true)
+        .addField('uwus', ETD.uwus.toString(), true)
+        .addField('owos', ETD.owos.toString(), true)
+        .addField('Tildes', ETD.tildes.toString(), true)
         .setColor(client.publicConfig.colors.color1);
-    message.reply({ embeds: [embed] });
+    interaction.reply({ embeds: [embed] });
 }
 
-export default class InfoCommand extends Command {
-    public getConfig(): CommandConfig {
+export default class InfoCommand extends LexiSlashCommand {
+    public getConfig(): LexiCommandConfig {
         return {
             name: 'info',
-            category: 'utility',
             description: "Get a user's stats!",
-            usage: '[user]',
             enabled: true,
-            aliases: ['user'],
 
             // To restrict the command, change the "false" to the following
             // format:
@@ -53,23 +54,27 @@ export default class InfoCommand extends Command {
             restrict: false
         };
     }
-    public async run(message: Message<boolean>, args: string[]): Promise<void> {
+    public async run(interaction: CommandInteraction): Promise<void> {
         const { client, log } = this;
-        const userID = args[0]?.replace(/[<@!>]/g, '') ?? message.author.id;
+        const userID = interaction.options.getUser('target')!.id;
 
         if (!client.userStatistics.get(userID)) {
             client.users
                 .fetch(userID)
                 .then((user) => {
                     client.userStatistics.ensure(user.id, client.defaults.USER_STATISTICS);
-                    fireStats(userID, message, client);
+                    fireStats(userID, interaction, client);
                 })
                 .catch(() => {
                     log.info(`Unknown user ${userID}!`);
-                    message.reply('Unknown user!');
+                    interaction.reply('Unknown user!');
                     return;
                 });
             return;
-        } else fireStats(userID, message, client);
+        } else fireStats(userID, interaction, client);
+    }
+
+    public buildSlashCommand(builder: SlashCommandBuilder): JSONAbleSlashCommandBody {
+        return builder.addUserOption((i) => i.setName('target').setDescription('The user to get info for.').setRequired(true));
     }
 }

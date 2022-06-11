@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,11 +18,12 @@
 
 const runningInProd = process.env.PRODUCTION;
 
-import Logger from '@lib/interfaces/Logger';
-import chalk from 'chalk'; // Chalk handles fancy coloring.
-import * as fs from 'fs'; // To create the write streams.
-import strip from 'strip-ansi'; // To clean off the ANSI escape codes for the log files.
-import * as util from 'util'; // Utilities.
+import { blue, bold, cyan, green, red, yellow } from 'colorette';
+import * as fs from 'fs';
+import strip from 'strip-ansi';
+import * as util from 'util';
+
+import type LexiLogger from '#lib/interfaces/LexiLogger';
 
 // Create the logging streams for all of the log levels.
 // A certain log level is always logged to all below it, so for example, if you were
@@ -67,7 +68,7 @@ try {
 function spawnLogStream(logLevel: 'verbose' | 'all' | 'warn' | 'err'): fs.WriteStream {
     return catchFSErrors(() => {
         const logStream: fs.WriteStream = fs.createWriteStream(`../logs/${logInitTime}${logFolderSuffix}/${logLevel}.log`);
-        logStream.write(`### ProtoBot - Log File @ ${logLevel}/${logInitTime}\n`);
+        logStream.write(`### Lexi - Log File @ ${logLevel}/${logInitTime}\n`);
         if (runningInProd) logStream.write('### This is a production mode log file.\n');
 
         if (logLevel === 'verbose' && runningInProd)
@@ -124,13 +125,11 @@ function generateTimePrefix(epoch: number): string {
     preparsedTime[0] = preparsedTime[0].split(':');
 
     // Parse date/time
-    const parsedDate = `${chalk.yellow(preparsedDate[1][0])} ${chalk.yellow.bold(preparsedDate[1][1])} ${chalk.green.bold(preparsedDate[2])}`;
-    const sep: string = chalk.yellow(':');
-    const parsedTime = `${chalk.yellow.bold(preparsedTime[0][0])}${sep}${chalk.yellow.bold(preparsedTime[0][1])}${sep}${chalk.yellow.bold(
-        preparsedTime[0][2]
-    )}`;
+    const parsedDate = `${yellow(preparsedDate[1][0])} ${yellow(bold(preparsedDate[1][1]))} ${green(bold(preparsedDate[2]))}`;
+    const sep: string = yellow(':');
+    const parsedTime = `${yellow(bold(preparsedTime[0][0]))}${sep}${yellow(bold(preparsedTime[0][1]))}${sep}${yellow(bold(preparsedTime[0][2]))}`;
 
-    const brackets: string[] = [chalk.yellow('['), chalk.yellow(']')];
+    const brackets: string[] = [yellow('['), yellow(']')];
 
     return `${brackets[0]}${parsedDate} ${parsedTime}${brackets[1]}`;
 }
@@ -145,28 +144,29 @@ function postprocess(message: string, type: LogMode, epoch: number): void {
     // eslint-disable-next-line no-console
     console.log(message);
     writeItem(type, message);
-    buffer.push([epoch, type, message]);
+    buffer.push([epoch, type, strip(message)]);
     // FIXME: In an edge case where buffer size is *dropped*, it does not decrease
     // all of the way.
     if (buffer.length > maxBufferSize) buffer.shift();
 }
 
+function doPrintLog(prefix: string, mode: LogMode, msg: unknown) {
+    const [message, epoch, timePrefix] = preprocess(msg);
+    postprocess(`${timePrefix} ${prefix} ${message}`, mode, epoch);
+}
+
 function verbose(m: unknown): void {
     if (runningInProd) return;
-    const [message, epoch, timePrefix] = preprocess(m);
-    postprocess(`${timePrefix} ${chalk.cyan('[')}${chalk.cyan.bold('VERB')}${chalk.cyan(']')} ${message}`, 'v', epoch);
+    doPrintLog(cyan(`[${bold('VERB')}]`), 'v', m);
 }
 function info(m: unknown): void {
-    const [message, epoch, timePrefix] = preprocess(m);
-    postprocess(`${timePrefix} ${chalk.blue('[')}${chalk.blue.bold('INFO')}${chalk.blue(']')} ${message}`, 'i', epoch);
+    doPrintLog(blue(`[${bold('INFO')}]`), 'i', m);
 }
 function warn(m: unknown): void {
-    const [message, epoch, timePrefix] = preprocess(m);
-    postprocess(`${timePrefix} ${chalk.yellow('[')}${chalk.yellow.bold('WARN')}${chalk.yellow(']')} ${message}`, 'w', epoch);
+    doPrintLog(yellow(`[${bold('WARN')}]`), 'w', m);
 }
 function error(m: unknown): void {
-    const [message, epoch, timePrefix] = preprocess(m);
-    postprocess(`${timePrefix} ${chalk.red('[')}${chalk.red.bold('ERR')}${chalk.red(']')} ${message}`, 'e', epoch);
+    doPrintLog(red(`[${bold('ERR!')}]`), 'e', m);
 }
 function errorWithStack(m: unknown): void {
     error(m);
@@ -176,7 +176,7 @@ function errorWithStack(m: unknown): void {
     // Remove the error itself.
     a.shift();
 
-    for (const entry of a) error('STACK: ' + entry);
+    for (const entry of a) error(`STACK: ${entry}`);
 }
 
 /**
@@ -194,7 +194,7 @@ async function cleanup(): Promise<void> {
     });
 }
 
-const toBeExported: Logger = { verbose, info, warn, error, cleanup, errorWithStack };
+const toBeExported: LexiLogger = { verbose, info, warn, error, cleanup, errorWithStack };
 export default toBeExported;
 
 export function clearBuffer(): void {

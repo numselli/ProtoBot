@@ -1,5 +1,5 @@
 /*
- * ProtoBot -- A Discord bot for furries and non-furs alike!
+ * Lexi -- A Discord bot for furries and non-furs alike!
  * Copyright (C) 2020, 2021, 2022  0xLogN
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,9 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * ECT data tracking how often people say 'uwu', 'owo', or end their message
+ * in a tilde (~). This is the actual storage type.
+ */
 export default interface EmoteCounterData {
+    /** The data value for the uwus ECT. */
     uwus: number;
+    /** The data value for the owos ECT. */
     owos: number;
+    /** The data value for the tildes ECT. */
     tildes: number;
 }
+/** All valid ECT keys. */
 export type EmoteCounterType = keyof EmoteCounterData;

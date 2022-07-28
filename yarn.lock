@@ -2319,12 +2319,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-license-header@npm:0.4.0":
-  version: 0.4.0
-  resolution: "eslint-plugin-license-header@npm:0.4.0"
+"eslint-plugin-license-header@npm:0.6.0":
+  version: 0.6.0
+  resolution: "eslint-plugin-license-header@npm:0.6.0"
   dependencies:
     requireindex: ^1.2.0
-  checksum: f0923e23c900c044651c54500fc5e7cfb650afbcb46959e5fbb55494911ef2fde62376d553797ada82883b670cdc1dd82c34956ecefb1bfbec53df0f41a618cb
+  checksum: 7508fcedc4059189922e4d8c1e9c416305a8901c6b5f5f1121f107c3b87e216a877d9e268d35268e0cff129d09837619380866984213b7891c824d13555e3406
   languageName: node
   linkType: hard
 
@@ -3519,7 +3519,7 @@ __metadata:
     eslint: ^8.13.0
     eslint-config-prettier: 8.5.0
     eslint-plugin-deprecation: 1.3.2
-    eslint-plugin-license-header: 0.4.0
+    eslint-plugin-license-header: 0.6.0
     eslint-plugin-simple-import-sort: 7.0.0
     eslint-plugin-unused-imports: 2.0.0
     express: ^4.18.1

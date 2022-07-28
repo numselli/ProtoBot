@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { SlashCommandBuilder } from '@discordjs/builders';
 import type { ExecException } from 'child_process';
 import { exec } from 'child_process';
-import type { CommandInteraction } from 'discord.js';
-import { MessageEmbed } from 'discord.js';
+import type { SlashCommandBuilder } from 'discord.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import { Linter } from 'eslint';
 import * as util from 'util';
 
@@ -34,15 +34,10 @@ import { changeMaxBufferSize, clearBuffer, getMaxBufferSize, readBuffer, readBuf
 
 export default class AdminCommand extends LexiSlashCommand {
     public getConfig(): CommandConfig {
-        return {
-            name: 'admin',
-            description: 'Manage the bot internals.',
-            enabled: true,
-            restrict: Permissions.BOT_ADMINISTRATOR
-        };
+        return { name: 'admin', description: 'Manage the bot internals.', enabled: true, restrict: Permissions.BOT_ADMINISTRATOR };
     }
 
-    public async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const { client, log } = this;
 
         /**
@@ -86,7 +81,7 @@ export default class AdminCommand extends LexiSlashCommand {
 
             await interaction.deferReply({ ephemeral });
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setFooter({ text: `Eval command executed by ${interaction.user.username}` })
                 .setTimestamp()
                 .setColor(client.publicConfig.colors.color3);
@@ -123,7 +118,7 @@ export default class AdminCommand extends LexiSlashCommand {
             const length = `\`\`\`${response}\`\`\``.length;
             embed
                 .setTitle(e ? '**Error**' : '**Success**')
-                .setColor(e ? 'RED' : 'GREEN')
+                .setColor(e ? 'Red' : 'Green')
                 .setDescription(`\`\`\`${response.substring(0, 1018)}\`\`\``);
             if (length >= 1025) {
                 legacyLog(e ? 'e' : 'i', `An eval command executed by ${interaction.user.username}'s response was too long (${length}/2048).`);
@@ -132,7 +127,12 @@ export default class AdminCommand extends LexiSlashCommand {
                 response.split('\n').forEach((b: string) => {
                     legacyLog(e ? 'e' : 'i', b);
                 });
-                embed.addField('Note:', `The response was too long with a length of \`${length}/1024\` characters. it was logged to the console. `);
+                embed.addFields([
+                    {
+                        name: 'Note:',
+                        value: `The response was too long with a length of \`${length}/1024\` characters. it was logged to the console.`
+                    }
+                ]);
             }
 
             log.info(`${ephemeral ? 'Ephemeral eval' : 'Eval'} command executed by ${interaction.user.tag}`);
@@ -157,7 +157,7 @@ export default class AdminCommand extends LexiSlashCommand {
             await interaction.deferReply({ ephemeral });
 
             let e = false;
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setFooter({ text: `Exec command executed by ${interaction.user.username}` })
                 .setTimestamp()
                 .setColor(client.publicConfig.colors.color3);
@@ -165,17 +165,17 @@ export default class AdminCommand extends LexiSlashCommand {
             exec(code, (error: ExecException | null, stdout: string, stderr: string) => {
                 if (error || stderr) e = true;
 
-                if (stderr) embed.addField('STDERR', `\`\`\`${stderr.substring(0, 1018)}\`\`\``);
+                if (stderr) embed.addFields([{ name: 'STDERR', value: `\`\`\`${stderr.substring(0, 1018)}\`\`\`` }]);
 
-                if (stdout) embed.addField('STDOUT', `\`\`\`${stdout.substring(0, 1018)}\`\`\``);
+                if (stdout) embed.addFields([{ name: 'STDOUT', value: `\`\`\`${stdout.substring(0, 1018)}\`\`\`` }]);
 
-                if (error) embed.addField('ExecError', `\`\`\`${error.toString().substring(0, 1018)}\`\`\``);
+                if (error) embed.addFields([{ name: 'ExecError', value: `\`\`\`${error.toString().substring(0, 1018)}\`\`\`` }]);
 
                 const parsed = [(error ?? { toString: () => '' }).toString(), stderr, stdout].reduce((a, b) => (a.length > b.length ? a : b));
 
                 embed
                     .setTitle(e ? '**Error**' : '**Success**')
-                    .setColor(e ? 'RED' : 'GREEN')
+                    .setColor(e ? 'Red' : 'Green')
                     .setDescription('Here is your output!');
 
                 if (parsed.length >= 1025) {
@@ -206,10 +206,12 @@ export default class AdminCommand extends LexiSlashCommand {
                             legacyLog(e ? 'e' : 'i', b);
                         });
                     }
-                    embed.addField(
-                        'Note:',
-                        `The response was too long with a length of \`${parsed.length}/1024\` characters. It was logged to the console.`
-                    );
+                    embed.addFields([
+                        {
+                            name: 'Note:',
+                            value: `The response was too long with a length of \`${parsed.length}/1024\` characters. It was logged to the console.`
+                        }
+                    ]);
                 }
 
                 log.info(`${ephemeral ? 'Ephemeral exec' : 'exec'} command executed by ${interaction.user.tag}`);

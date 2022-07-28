@@ -17,7 +17,7 @@
  */
 
 import type { SlashCommandBuilder } from '@discordjs/builders';
-import type { CommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
 
 import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
 import type LexiCommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
@@ -49,7 +49,7 @@ export default abstract class LexiSlashCommand {
         // noop
     }
     /** Execute this command. */
-    public abstract run(interaction: CommandInteraction): Promise<void>;
+    public abstract run(interaction: ChatInputCommandInteraction): Promise<void>;
     /** Prepare this command config. */
     public abstract getConfig(): LexiCommandConfig;
 }

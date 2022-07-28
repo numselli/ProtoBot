@@ -17,25 +17,27 @@
  */
 
 import type { SlashCommandBuilder } from '@discordjs/builders';
-import type { CommandInteraction } from 'discord.js';
-import { MessageEmbed } from 'discord.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
 import type LexiCommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
 import type LexiClient from '#lib/structures/LexiClient';
 import LexiSlashCommand from '#lib/structures/LexiSlashCommand';
 
-function fireStats(userID: string, interaction: CommandInteraction, client: LexiClient): void {
+function fireStats(userID: string, interaction: ChatInputCommandInteraction, client: LexiClient): void {
     const uData = client.userStatistics.get(userID)!;
     const ETD = client.emoteCounterTrackers.get(userID)!;
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
         .setTitle(`User info for ${userID}`)
-        .addField('Hugs received', uData.hugs.toString(), true)
-        .addField('Boops received', uData.boops.toString(), true)
-        .addField('Pats received', uData.pats.toString(), true)
-        .addField('uwus', ETD.uwus.toString(), true)
-        .addField('owos', ETD.owos.toString(), true)
-        .addField('Tildes', ETD.tildes.toString(), true)
+        .addFields([
+            { name: 'Hugs received', value: uData.hugs.toString(), inline: true },
+            { name: 'Boops received', value: uData.boops.toString(), inline: true },
+            { name: 'Pats received', value: uData.pats.toString(), inline: true },
+            { name: 'uwus', value: ETD.uwus.toString(), inline: true },
+            { name: 'owos', value: ETD.owos.toString(), inline: true },
+            { name: 'Tildes', value: ETD.tildes.toString(), inline: true }
+        ])
         .setColor(client.publicConfig.colors.color1);
     interaction.reply({ embeds: [embed] });
 }
@@ -54,7 +56,7 @@ export default class InfoCommand extends LexiSlashCommand {
             restrict: false
         };
     }
-    public async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const { client, log } = this;
         const userID = interaction.options.getUser('target')!.id;
 

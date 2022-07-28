@@ -29,15 +29,8 @@ function minutes(count: number): number {
 
 const config: LexiConfig = {
     token: 'PBCONF-DiscordBotToken', // Discord token
-    dirs: {
-        commands: './commands/',
-        hooks: './hooks/'
-    },
-    cooldowns: {
-        tildes: minutes(1),
-        owos: seconds(30),
-        uwus: seconds(30)
-    },
+    dirs: { commands: './commands/', hooks: './hooks/' },
+    cooldowns: { tildes: minutes(1), owos: seconds(30), uwus: seconds(30) },
     adminIDs: [],
     // WARNING: These users can do whatever they want with your system.
     // They have the same power to run code as 'owners'. Be careful!

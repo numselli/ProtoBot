@@ -17,7 +17,7 @@
  */
 
 import type { SlashCommandBuilder } from '@discordjs/builders';
-import type { CommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
 import Uwuifier from 'uwuifier';
 
 import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
@@ -51,7 +51,7 @@ export default class UwuifyCommand extends LexiSlashCommand {
         };
     }
 
-    public async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const intense = interaction.options.getBoolean('intense') ?? false;
 
         const msg: string = uwuify.uwuifySentence(interaction.options.getString('text')!);

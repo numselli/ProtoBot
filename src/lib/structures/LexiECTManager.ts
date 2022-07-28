@@ -23,6 +23,8 @@ import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from './LexiClient';
 import { makeVerboseFunction } from './LexiClient';
 
+type ReversedData = (string[] | undefined)[];
+
 /**
  * Stores ECT (emote counter/tracker) data for Lexi.
  */
@@ -40,7 +42,7 @@ export default class LexiECTManager {
     public tildes: Enmap<string, number>;
 
     /** reversed version of the above data */
-    public reversed: Enmap<'uwus' | 'owos' | 'tildes', (string[] | undefined)[]>;
+    public reversed: Enmap<'uwus' | 'owos' | 'tildes', ReversedData>;
 
     public constructor(client: LexiClient, log: LexiLogger) {
         this.client = client;
@@ -66,7 +68,7 @@ export default class LexiECTManager {
         this._log.info('ECTManager: Reversed list rebuilt.');
     }
 
-    private _checkReverse(db: 'uwus' | 'owos' | 'tildes', std: [string, number][], rev: (string[] | undefined)[]) {
+    private _checkReverse(db: 'uwus' | 'owos' | 'tildes', std: [string, number][], rev: ReversedData) {
         let isOk = true;
         for (const [id, count] of std) {
             if (!rev[count]) {
@@ -112,52 +114,32 @@ export default class LexiECTManager {
         this.tildes.ensure(id, 0);
     }
 
-    public addUwu(id: string) {
+    private _add(db: 'uwus' | 'owos' | 'tildes', id: string) {
         // We would use .inc() but we need to move the ID around.
-        const old = this.uwus.ensure(id, 0);
-        const newArr = this.reversedUwus();
+        const old = this[db].ensure(id, 0);
+        const newArr = this.reversed.get(db)!;
         const revEnt = newArr[old]!;
         if (!revEnt) {
-            this._log.error(`ECTManager: uwus list is missing entry for count ${old}... rebuild! this should never happen!`);
+            this._log.error(`ECTManager: ${db} list is missing entry for count ${old}. rebuilding.`);
             this.rebuildReversed();
         }
-        let newRevEnt: string[] | undefined = revEnt.filter(i => i !== id);
+        let newRevEnt: string[] | undefined = revEnt.filter((i) => i !== id);
         if (newRevEnt.length === 0) newRevEnt = undefined;
         newArr[old] = newRevEnt;
-        this.reversed.set('uwus', newArr);
-        this.uwus.set(id, old + 1);
+        this.reversed.set(db, newArr);
+        this[db].set(id, old + 1);
+    }
+
+    public addUwu(id: string) {
+        this._add('uwus', id);
     }
 
     public addOwo(id: string) {
-        // We would use .inc() but we need to move the ID around.
-        const old = this.owos.ensure(id, 0);
-        const newArr = this.reversedOwos();
-        const revEnt = newArr[old]!;
-        if (!revEnt) {
-            this._log.error(`ECTManager: owos list is missing entry for count ${old}... rebuild! this should never happen!`);
-            this.rebuildReversed();
-        }
-        let newRevEnt: string[] | undefined = revEnt.filter(i => i !== id);
-        if (newRevEnt.length === 0) newRevEnt = undefined;
-        newArr[old] = newRevEnt;
-        this.reversed.set('owos', newArr);
-        this.owos.set(id, old + 1);
+        this._add('owos', id);
     }
 
     public addTilde(id: string) {
-        // We would use .inc() but we need to move the ID around.
-        const old = this.tildes.ensure(id, 0);
-        const newArr = this.reversedTildes();
-        const revEnt = newArr[old]!;
-        if (!revEnt) {
-            this._log.error(`ECTManager: tildes list is missing entry for count ${old}... rebuild! this should never happen!`);
-            this.rebuildReversed();
-        }
-        let newRevEnt: string[] | undefined = revEnt.filter(i => i !== id);
-        if (newRevEnt.length === 0) newRevEnt = undefined;
-        newArr[old] = newRevEnt;
-        this.reversed.set('tildes', newArr);
-        this.tildes.set(id, old + 1);
+        this._add('tildes', id);
     }
 
     public uwusArray() {
@@ -172,15 +154,15 @@ export default class LexiECTManager {
         return Array.from(this.tildes.entries());
     }
 
-    public reversedUwus(): (string[] | undefined)[] {
+    public reversedUwus(): ReversedData {
         return this.reversed.get('uwus')!;
     }
 
-    public reversedOwos(): (string[] | undefined)[] {
+    public reversedOwos(): ReversedData {
         return this.reversed.get('owos')!;
     }
 
-    public reversedTildes(): (string[] | undefined)[] {
+    public reversedTildes(): ReversedData {
         return this.reversed.get('tildes')!;
     }
 }

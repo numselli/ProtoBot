@@ -17,8 +17,9 @@
  */
 
 import { blue, bold, green, yellow } from 'colorette';
-import type { TextChannel } from 'discord.js';
-import { Intents } from 'discord.js';
+import type { ChatInputCommandInteraction, TextChannel } from 'discord.js';
+import { ChannelType, InteractionType } from 'discord.js';
+import { GatewayIntentBits, Partials } from 'discord.js';
 
 import LexiClient from '#lib/structures/LexiClient';
 import log from '#root/log';
@@ -42,15 +43,15 @@ if (!process.env.LEXI_STARTSH_COMMIT) {
 // Initialize a Client instance, and provide the Discord intent flags.
 const client = new LexiClient(log, {
     intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MEMBERS,
-        Intents.FLAGS.GUILD_INVITES,
-        Intents.FLAGS.GUILD_MESSAGES, // We may need to apply for this intent at verification
-        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Intents.FLAGS.DIRECT_MESSAGES,
-        Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildInvites,
+        GatewayIntentBits.GuildMessages, // We may need to apply for this intent at verification
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.DirectMessageReactions
     ],
-    partials: ['CHANNEL']
+    partials: [Partials.Channel]
 });
 
 // When the client is ready...
@@ -67,7 +68,7 @@ client.on('ready', async () => {
 // Interactions.
 client.on('interactionCreate', async (interaction) => {
     // other interaction types exist, TODO: add them
-    if (!interaction.isCommand()) return;
+    if (interaction.type !== InteractionType.ApplicationCommand) return;
 
     log.info(`slash: ${interaction.user.tag} used /${interaction.commandName}!`);
 
@@ -75,7 +76,7 @@ client.on('interactionCreate', async (interaction) => {
     if (interaction.commandName.startsWith('dev-')) interaction.commandName = interaction.commandName.slice(4);
 
     try {
-        await client.commands.run(interaction);
+        await client.commands.run(interaction as ChatInputCommandInteraction);
     } catch (e) {
         log.errorWithStack(e);
     }
@@ -105,7 +106,7 @@ client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
 
     // ...but if it's a DM, clarify it to the user.
-    if (message.channel.type === 'DM') {
+    if (message.channel.type === ChannelType.DM) {
         log.info(`Discouraged DM from ${message.author.tag}`);
         message.reply('Hey there! I do not accept DMs. Use me in a server.');
         return;
@@ -120,7 +121,7 @@ client.on('messageCreate', async (message) => {
 });
 
 // Handle rate limits
-client.on('rateLimit', (data) => {
+client.rest.on('rateLimit', (data) => {
     log.warn('Got hit with a ratelimit!');
     log.warn(`Ratelimited when performing ${data.method} ${data.path}`);
     log.warn(`API route was ${data.route} and limit hit was ${data.limit}/${data.timeout}ms (${data.timeout / 1000} seconds).`);

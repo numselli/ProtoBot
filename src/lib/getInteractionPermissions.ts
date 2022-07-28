@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { CommandInteraction, GuildMember, Permissions as DJSPermissions, TextChannel } from 'discord.js';
+import type { CommandInteraction, GuildMember, PermissionsBitField as DJSPermissionsBitField, TextChannel } from 'discord.js';
 
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 import { Permissions } from '#lib/Permissions';
@@ -41,13 +41,13 @@ export function getInteractionPermissions(client: LexiClient, log: LexiLogger, i
     } else if (interaction.guild!.ownerId === interaction.user.id) {
         log.verbose(`user is guild owner, return value SERVER_OWNER: ${Permissions.SERVER_OWNER}`);
         return Permissions.SERVER_OWNER;
-    } else if ((interaction.member!.permissions as DJSPermissions).has('ADMINISTRATOR')) {
+    } else if ((interaction.member!.permissions as DJSPermissionsBitField).has('Administrator')) {
         log.verbose(`user is server admin, return value SERVER_ADMINISTRATOR: ${Permissions.SERVER_ADMINISTRATOR}`);
         return Permissions.SERVER_ADMINISTRATOR;
-    } else if ((interaction.member!.permissions as DJSPermissions).has('BAN_MEMBERS')) {
+    } else if ((interaction.member!.permissions as DJSPermissionsBitField).has('BanMembers')) {
         log.verbose(`user is server moderator, return value SERVER_MODERATOR: ${Permissions.SERVER_MODERATOR}`);
         return Permissions.SERVER_MODERATOR;
-    } else if ((interaction.member as GuildMember).permissionsIn(interaction.channel as TextChannel).has('MANAGE_MESSAGES')) {
+    } else if ((interaction.member as GuildMember).permissionsIn(interaction.channel as TextChannel).has('ManageMessages')) {
         log.verbose(`user is channel moderator, return value CHANNEL_MODERATOR: ${Permissions.CHANNEL_MODERATOR}`);
         return Permissions.CHANNEL_MODERATOR;
     } else {

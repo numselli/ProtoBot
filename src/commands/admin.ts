@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { SlashCommandBuilder } from '@discordjs/builders';
 import type { ExecException } from 'child_process';
 import { exec } from 'child_process';
-import type { CommandInteraction } from 'discord.js';
-import { MessageEmbed } from 'discord.js';
+import type { SlashCommandBuilder } from 'discord.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import { Linter } from 'eslint';
-import * as util from 'util';
+import { inspect } from 'util';
 
 import { getInteractionPermissions } from '#lib/getInteractionPermissions';
 import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
@@ -34,15 +34,10 @@ import { changeMaxBufferSize, clearBuffer, getMaxBufferSize, readBuffer, readBuf
 
 export default class AdminCommand extends LexiSlashCommand {
     public getConfig(): CommandConfig {
-        return {
-            name: 'admin',
-            description: 'Manage the bot internals.',
-            enabled: true,
-            restrict: Permissions.BOT_ADMINISTRATOR
-        };
+        return { name: 'admin', description: 'Manage the bot internals.', enabled: true, restrict: Permissions.BOT_ADMINISTRATOR };
     }
 
-    public async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const { client, log } = this;
 
         /**
@@ -64,10 +59,10 @@ export default class AdminCommand extends LexiSlashCommand {
             log.warn(`${interaction.user.tag} has triggered a restart!`);
             // restart bot
             await interaction.reply('Alright, restarting...');
-            const m = await interaction.fetchReply();
+            const repliedMessage = await interaction.fetchReply();
             client.restartData.set('serverId', interaction.guild!.id);
             client.restartData.set('channelId', interaction.channel!.id);
-            client.restartData.set('messageId', m.id);
+            client.restartData.set('messageId', repliedMessage.id);
             client.restartData.set('time', Date.now());
             client.restartData.set('wasRestarted', true);
             log.warn('Goodbye!');
@@ -86,21 +81,21 @@ export default class AdminCommand extends LexiSlashCommand {
 
             await interaction.deferReply({ ephemeral });
 
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setFooter({ text: `Eval command executed by ${interaction.user.username}` })
                 .setTimestamp()
                 .setColor(client.publicConfig.colors.color3);
             let response;
-            let e = false;
+            let didError = false;
             try {
                 if (code.includes('await') && !code.includes('\n')) code = `( async () => {return ${code}})()`;
                 else if (code.includes('await') && code.includes('\n')) code = `( async () => {${code}})()`;
 
                 // eslint-disable-next-line no-eval
                 response = await eval(code);
-                if (typeof response !== 'string') response = util.inspect(response, { depth: 3 });
+                if (typeof response !== 'string') response = inspect(response, { depth: 3 });
             } catch (err) {
-                e = true;
+                didError = true;
                 response = (err as Error).toString();
                 const linter = new Linter();
                 const lint = linter.verify(code, {
@@ -122,17 +117,22 @@ export default class AdminCommand extends LexiSlashCommand {
             }
             const length = `\`\`\`${response}\`\`\``.length;
             embed
-                .setTitle(e ? '**Error**' : '**Success**')
-                .setColor(e ? 'RED' : 'GREEN')
+                .setTitle(didError ? '**Error**' : '**Success**')
+                .setColor(didError ? 'Red' : 'Green')
                 .setDescription(`\`\`\`${response.substring(0, 1018)}\`\`\``);
             if (length >= 1025) {
-                legacyLog(e ? 'e' : 'i', `An eval command executed by ${interaction.user.username}'s response was too long (${length}/2048).`);
-                legacyLog(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
-                legacyLog(e ? 'e' : 'i', 'Output:');
+                legacyLog(didError ? 'e' : 'i', `An eval command executed by ${interaction.user.username}'s response was too long (${length}/2048).`);
+                legacyLog(didError ? 'e' : 'i', `Error: ${didError ? 'Yes' : 'No'}`);
+                legacyLog(didError ? 'e' : 'i', 'Output:');
                 response.split('\n').forEach((b: string) => {
-                    legacyLog(e ? 'e' : 'i', b);
+                    legacyLog(didError ? 'e' : 'i', b);
                 });
-                embed.addField('Note:', `The response was too long with a length of \`${length}/1024\` characters. it was logged to the console. `);
+                embed.addFields([
+                    {
+                        name: 'Note:',
+                        value: `The response was too long with a length of \`${length}/1024\` characters. it was logged to the console.`
+                    }
+                ]);
             }
 
             log.info(`${ephemeral ? 'Ephemeral eval' : 'Eval'} command executed by ${interaction.user.tag}`);
@@ -156,60 +156,62 @@ export default class AdminCommand extends LexiSlashCommand {
 
             await interaction.deferReply({ ephemeral });
 
-            let e = false;
-            const embed = new MessageEmbed()
+            let didError = false;
+            const embed = new EmbedBuilder()
                 .setFooter({ text: `Exec command executed by ${interaction.user.username}` })
                 .setTimestamp()
                 .setColor(client.publicConfig.colors.color3);
 
             exec(code, (error: ExecException | null, stdout: string, stderr: string) => {
-                if (error || stderr) e = true;
+                if (error || stderr) didError = true;
 
-                if (stderr) embed.addField('STDERR', `\`\`\`${stderr.substring(0, 1018)}\`\`\``);
+                if (stderr) embed.addFields([{ name: 'STDERR', value: `\`\`\`${stderr.substring(0, 1018)}\`\`\`` }]);
 
-                if (stdout) embed.addField('STDOUT', `\`\`\`${stdout.substring(0, 1018)}\`\`\``);
+                if (stdout) embed.addFields([{ name: 'STDOUT', value: `\`\`\`${stdout.substring(0, 1018)}\`\`\`` }]);
 
-                if (error) embed.addField('ExecError', `\`\`\`${error.toString().substring(0, 1018)}\`\`\``);
+                if (error) embed.addFields([{ name: 'ExecError', value: `\`\`\`${error.toString().substring(0, 1018)}\`\`\`` }]);
 
                 const parsed = [(error ?? { toString: () => '' }).toString(), stderr, stdout].reduce((a, b) => (a.length > b.length ? a : b));
 
                 embed
-                    .setTitle(e ? '**Error**' : '**Success**')
-                    .setColor(e ? 'RED' : 'GREEN')
+                    .setTitle(didError ? '**Error**' : '**Success**')
+                    .setColor(didError ? 'Red' : 'Green')
                     .setDescription('Here is your output!');
 
                 if (parsed.length >= 1025) {
                     legacyLog(
-                        e ? 'e' : 'i',
+                        didError ? 'e' : 'i',
                         `An exec command executed by ${interaction.user.username}'s response was too long (${parsed.length}/1024).`
                     );
-                    legacyLog(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
-                    legacyLog(e ? 'e' : 'i', 'Output:');
+                    legacyLog(didError ? 'e' : 'i', `Error: ${didError ? 'Yes' : 'No'}`);
+                    legacyLog(didError ? 'e' : 'i', 'Output:');
                     if (error) {
-                        legacyLog(e ? 'e' : 'i', 'ExecError:');
+                        legacyLog(didError ? 'e' : 'i', 'ExecError:');
                         error
                             .toString()
                             .split('\n')
                             .forEach((b: string) => {
-                                legacyLog(e ? 'e' : 'i', b);
+                                legacyLog(didError ? 'e' : 'i', b);
                             });
                     }
                     if (stderr) {
-                        legacyLog(e ? 'e' : 'i', 'STDERR:');
+                        legacyLog(didError ? 'e' : 'i', 'STDERR:');
                         stderr.split('\n').forEach((b: string) => {
-                            legacyLog(e ? 'e' : 'i', b);
+                            legacyLog(didError ? 'e' : 'i', b);
                         });
                     }
                     if (stdout) {
-                        legacyLog(e ? 'e' : 'i', 'STDOUT:');
+                        legacyLog(didError ? 'e' : 'i', 'STDOUT:');
                         stdout.split('\n').forEach((b: string) => {
-                            legacyLog(e ? 'e' : 'i', b);
+                            legacyLog(didError ? 'e' : 'i', b);
                         });
                     }
-                    embed.addField(
-                        'Note:',
-                        `The response was too long with a length of \`${parsed.length}/1024\` characters. It was logged to the console.`
-                    );
+                    embed.addFields([
+                        {
+                            name: 'Note:',
+                            value: `The response was too long with a length of \`${parsed.length}/1024\` characters. It was logged to the console.`
+                        }
+                    ]);
                 }
 
                 log.info(`${ephemeral ? 'Ephemeral exec' : 'exec'} command executed by ${interaction.user.tag}`);

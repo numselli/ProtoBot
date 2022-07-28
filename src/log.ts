@@ -19,9 +19,10 @@
 const runningInProd = process.env.PRODUCTION;
 
 import { blue, bold, cyan, green, red, yellow } from 'colorette';
-import * as fs from 'fs';
+import type { WriteStream } from 'fs';
+import { createWriteStream, mkdirSync, readdirSync } from 'fs';
 import strip from 'strip-ansi';
-import * as util from 'util';
+import { inspect } from 'util';
 
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 
@@ -55,9 +56,9 @@ const logInitTime: number = Date.now();
 const logFolderSuffix = runningInProd ? '.prod' : '.dev';
 
 try {
-    fs.readdirSync('../logs/');
+    readdirSync('../logs/');
 } catch (e) {
-    if ((e as { code: string }).code === 'ENOENT') catchFSErrors(() => fs.mkdirSync('../logs/'));
+    if ((e as { code: string }).code === 'ENOENT') catchFSErrors(() => mkdirSync('../logs/'));
     else die(1, e);
 }
 
@@ -65,9 +66,9 @@ try {
 // Disable consistent-return. This is a bug in eslint, where a process.exit() does not count
 // as a return.
 // eslint-disable-next-line consistent-return
-function spawnLogStream(logLevel: 'verbose' | 'all' | 'warn' | 'err'): fs.WriteStream {
+function spawnLogStream(logLevel: 'verbose' | 'all' | 'warn' | 'err'): WriteStream {
     return catchFSErrors(() => {
-        const logStream: fs.WriteStream = fs.createWriteStream(`../logs/${logInitTime}${logFolderSuffix}/${logLevel}.log`);
+        const logStream: WriteStream = createWriteStream(`../logs/${logInitTime}${logFolderSuffix}/${logLevel}.log`);
         logStream.write(`### Lexi - Log File @ ${logLevel}/${logInitTime}\n`);
         if (runningInProd) logStream.write('### This is a production mode log file.\n');
 
@@ -84,7 +85,7 @@ let buffer: [number, LogMode, string][] = [];
 let maxBufferSize = 500; // in lines
 
 // Create the log directory.
-catchFSErrors(() => fs.mkdirSync(`../logs/${logInitTime}${logFolderSuffix}`));
+catchFSErrors(() => mkdirSync(`../logs/${logInitTime}${logFolderSuffix}`));
 
 const verboseStr = spawnLogStream('verbose');
 const allStr = spawnLogStream('all');
@@ -93,7 +94,7 @@ const errStr = spawnLogStream('err');
 
 // Function to log to the appropriate stream(s).
 function writeItem(mode: LogMode, message: string): void {
-    const logArray: [fs.WriteStream, string][] = [
+    const logArray: [WriteStream, string][] = [
         [errStr, 'e'],
         [warnStr, 'w'],
         [allStr, 'a'],
@@ -136,7 +137,7 @@ function generateTimePrefix(epoch: number): string {
 
 function preprocess(message: unknown): [string, number, string] {
     const epoch = Date.now();
-    if (typeof message !== 'string') message = util.inspect(message);
+    if (typeof message !== 'string') message = inspect(message);
     return [message as string, epoch, generateTimePrefix(epoch)];
 }
 
@@ -171,12 +172,12 @@ function error(m: unknown): void {
 function errorWithStack(m: unknown): void {
     error(m);
 
-    const s = new Error('Temporary stack creation error').stack || '';
-    const a = s.split('\n');
-    // Remove the error itself.
-    a.shift();
+    const stack = (new Error('Temporary stack creation error').stack || '').split('\n');
 
-    for (const entry of a) error(`STACK: ${entry}`);
+    // Remove the error itself.
+    stack.shift();
+
+    for (const entry of stack) error(`STACK: ${entry}`);
 }
 
 /**

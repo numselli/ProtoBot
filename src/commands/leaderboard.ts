@@ -18,7 +18,7 @@
 
 // Imports
 import type { SlashCommandBuilder } from '@discordjs/builders';
-import type { CommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
 
 import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
@@ -45,7 +45,7 @@ export default class CatCommand extends LexiSlashCommand {
         };
     }
 
-    public async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const { client } = this;
         if (
             interaction.options.getSubcommand() !== 'uwus' &&

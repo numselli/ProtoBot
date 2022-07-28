@@ -20,7 +20,7 @@
 
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { REST } from '@discordjs/rest';
-import type { CommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
 import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v9';
 import { Routes } from 'discord-api-types/v9';
 import fs from 'fs';
@@ -129,7 +129,7 @@ export default class LexiCommandHandler {
         log.info('Finished reloading application (/) commands.');
     }
 
-    public async run(interaction: CommandInteraction): Promise<unknown> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<unknown> {
         const commandData: LexiSlashCommand | undefined = this._commands.get(interaction.commandName);
         if (!commandData) {
             interaction.reply({

@@ -16,23 +16,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { ActivityType } from 'discord.js';
+
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
 
 export default function setStatus(client: LexiClient, log: LexiLogger): void {
     // Status handling code
     // We assume the main prefix is always the first in the array.
-    const allStatuses: ['PLAYING' | 'STREAMING' | 'LISTENING' | 'WATCHING' | 'COMPETING', string][] = [
+    const allStatuses: [number, string][] = [
         // First index is the initial one.
-        ['WATCHING', 'for / - Written for furries, by furries!'],
-        ['WATCHING', 'for / - uwu'],
-        ['WATCHING', 'for / - ah yes, much furry'],
-        ['WATCHING', 'for / - I am not an uwu cat! - one of the developers, probably.'],
-        ['WATCHING', 'you type /'],
-        ['PLAYING', 'with fire - type /'],
-        ['LISTENING', 'for /'],
-        ['COMPETING', 'with other furry bots - type /'],
-        ['WATCHING', 'you. - type /']
+        [ActivityType.Watching, 'for / - Written for furries, by furries!'],
+        [ActivityType.Watching, 'for / - uwu'],
+        [ActivityType.Watching, 'for / - ah yes, much furry'],
+        [ActivityType.Watching, 'for / - I am not an uwu cat! - one of the developers, probably.'],
+        [ActivityType.Watching, 'you type /'],
+        [ActivityType.Playing, 'with fire - type /'],
+        [ActivityType.Listening, 'for /'],
+        [ActivityType.Competing, 'with other furry bots - type /'],
+        [ActivityType.Watching, 'you. - type /']
     ];
     setInterval(() => {
         const status = allStatuses[Math.floor(Math.random() * allStatuses.length)];

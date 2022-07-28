@@ -18,8 +18,8 @@
 
 // Imports
 import type { SlashCommandBuilder } from '@discordjs/builders';
-import type { CommandInteraction } from 'discord.js';
-import { MessageEmbed } from 'discord.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import fetch from 'node-fetch';
 
 import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
@@ -50,34 +50,34 @@ export default class CatCommand extends LexiSlashCommand {
         };
     }
 
-    public async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         if (interaction.options.getSubcommand() === 'cat') {
             await interaction.reply('Fetching a cat picture...');
             const body = (await fetch('https://some-random-api.ml/img/cat').then((res) => res.json())) as SomeRandomAPILinkData;
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle(`Cat for ${interaction.user.username}`)
                 .setImage(body.link)
                 .setTimestamp(Date.now())
-                .setColor('RANDOM');
+                .setColor('Random');
             await interaction.editReply({ embeds: [embed] });
         } else if (interaction.options.getSubcommand() === 'dog') {
             await interaction.reply('Fetching a dog picture...');
             const body = (await fetch('https://some-random-api.ml/img/dog').then((res) => res.json())) as SomeRandomAPILinkData;
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle(`Dog for ${interaction.user.username}`)
                 .setImage(body.link)
                 .setTimestamp(Date.now())
-                .setColor('RANDOM');
+                .setColor('Random');
             await interaction.editReply({ embeds: [embed] });
         } else if (interaction.options.getSubcommand() === 'fox') {
             await interaction.reply('Fetching a fox picture...');
             const body = (await fetch('https://randomfox.ca/floof/').then((res) => res.json())) as FoxData;
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
                 .setTitle(`Fox for ${interaction.user.username}`)
                 .setImage(body.image)
                 .setTimestamp(Date.now())
                 .setDescription(`[Link](${body.link})`)
-                .setColor('RANDOM');
+                .setColor('Random');
             await interaction.editReply({ embeds: [embed] });
         } else {
             await interaction.reply('The bot is probably broken. Notify a developer. The issue was: Invalid subcommand in image.');

@@ -17,7 +17,7 @@
  */
 
 import type { SlashCommandBuilder } from '@discordjs/builders';
-import type { CommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
 
 import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
 import type LexiCommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
@@ -38,7 +38,7 @@ export default class BoopCommand extends LexiSlashCommand {
         };
     }
 
-    public async run(interaction: CommandInteraction): Promise<void> {
+    public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const { client } = this;
         const target = await interaction.options.getUser('target')!.fetch();
         if (['boop', 'pat', 'hug'].includes(interaction.options.getSubcommand()) && target.id === interaction.user.id) {

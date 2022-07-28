@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type * as discord from 'discord.js';
+import type { TextChannel } from 'discord.js';
 
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
@@ -28,7 +28,7 @@ export default async function handleRestart(client: LexiClient, log: LexiLogger)
     if (client.restartData.get('wasRestarted')) {
         log.info('We have restarted. Sending message...');
         const guild = client.guilds.cache.get(client.restartData.get('serverId') as string); // Fetch the server we restarted in...
-        const channel = (await guild?.channels.cache.get(client.restartData.get('channelId') as string)) as discord.TextChannel; // ...and get the channel...
+        const channel = (await guild?.channels.cache.get(client.restartData.get('channelId') as string)) as TextChannel; // ...and get the channel...
         const message = await channel?.messages.fetch(client.restartData.get('messageId') as string); // ...and finally the message.
         await message.reply(
             `Done! Restart complete in ${Date.now() - (client.restartData.get('time') as number)}ms (${

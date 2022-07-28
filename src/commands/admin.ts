@@ -22,7 +22,7 @@ import type { SlashCommandBuilder } from 'discord.js';
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { EmbedBuilder } from 'discord.js';
 import { Linter } from 'eslint';
-import * as util from 'util';
+import { inspect } from 'util';
 
 import { getInteractionPermissions } from '#lib/getInteractionPermissions';
 import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
@@ -59,10 +59,10 @@ export default class AdminCommand extends LexiSlashCommand {
             log.warn(`${interaction.user.tag} has triggered a restart!`);
             // restart bot
             await interaction.reply('Alright, restarting...');
-            const m = await interaction.fetchReply();
+            const repliedMessage = await interaction.fetchReply();
             client.restartData.set('serverId', interaction.guild!.id);
             client.restartData.set('channelId', interaction.channel!.id);
-            client.restartData.set('messageId', m.id);
+            client.restartData.set('messageId', repliedMessage.id);
             client.restartData.set('time', Date.now());
             client.restartData.set('wasRestarted', true);
             log.warn('Goodbye!');
@@ -86,16 +86,16 @@ export default class AdminCommand extends LexiSlashCommand {
                 .setTimestamp()
                 .setColor(client.publicConfig.colors.color3);
             let response;
-            let e = false;
+            let didError = false;
             try {
                 if (code.includes('await') && !code.includes('\n')) code = `( async () => {return ${code}})()`;
                 else if (code.includes('await') && code.includes('\n')) code = `( async () => {${code}})()`;
 
                 // eslint-disable-next-line no-eval
                 response = await eval(code);
-                if (typeof response !== 'string') response = util.inspect(response, { depth: 3 });
+                if (typeof response !== 'string') response = inspect(response, { depth: 3 });
             } catch (err) {
-                e = true;
+                didError = true;
                 response = (err as Error).toString();
                 const linter = new Linter();
                 const lint = linter.verify(code, {
@@ -117,15 +117,15 @@ export default class AdminCommand extends LexiSlashCommand {
             }
             const length = `\`\`\`${response}\`\`\``.length;
             embed
-                .setTitle(e ? '**Error**' : '**Success**')
-                .setColor(e ? 'Red' : 'Green')
+                .setTitle(didError ? '**Error**' : '**Success**')
+                .setColor(didError ? 'Red' : 'Green')
                 .setDescription(`\`\`\`${response.substring(0, 1018)}\`\`\``);
             if (length >= 1025) {
-                legacyLog(e ? 'e' : 'i', `An eval command executed by ${interaction.user.username}'s response was too long (${length}/2048).`);
-                legacyLog(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
-                legacyLog(e ? 'e' : 'i', 'Output:');
+                legacyLog(didError ? 'e' : 'i', `An eval command executed by ${interaction.user.username}'s response was too long (${length}/2048).`);
+                legacyLog(didError ? 'e' : 'i', `Error: ${didError ? 'Yes' : 'No'}`);
+                legacyLog(didError ? 'e' : 'i', 'Output:');
                 response.split('\n').forEach((b: string) => {
-                    legacyLog(e ? 'e' : 'i', b);
+                    legacyLog(didError ? 'e' : 'i', b);
                 });
                 embed.addFields([
                     {
@@ -156,14 +156,14 @@ export default class AdminCommand extends LexiSlashCommand {
 
             await interaction.deferReply({ ephemeral });
 
-            let e = false;
+            let didError = false;
             const embed = new EmbedBuilder()
                 .setFooter({ text: `Exec command executed by ${interaction.user.username}` })
                 .setTimestamp()
                 .setColor(client.publicConfig.colors.color3);
 
             exec(code, (error: ExecException | null, stdout: string, stderr: string) => {
-                if (error || stderr) e = true;
+                if (error || stderr) didError = true;
 
                 if (stderr) embed.addFields([{ name: 'STDERR', value: `\`\`\`${stderr.substring(0, 1018)}\`\`\`` }]);
 
@@ -174,36 +174,36 @@ export default class AdminCommand extends LexiSlashCommand {
                 const parsed = [(error ?? { toString: () => '' }).toString(), stderr, stdout].reduce((a, b) => (a.length > b.length ? a : b));
 
                 embed
-                    .setTitle(e ? '**Error**' : '**Success**')
-                    .setColor(e ? 'Red' : 'Green')
+                    .setTitle(didError ? '**Error**' : '**Success**')
+                    .setColor(didError ? 'Red' : 'Green')
                     .setDescription('Here is your output!');
 
                 if (parsed.length >= 1025) {
                     legacyLog(
-                        e ? 'e' : 'i',
+                        didError ? 'e' : 'i',
                         `An exec command executed by ${interaction.user.username}'s response was too long (${parsed.length}/1024).`
                     );
-                    legacyLog(e ? 'e' : 'i', `Error: ${e ? 'Yes' : 'No'}`);
-                    legacyLog(e ? 'e' : 'i', 'Output:');
+                    legacyLog(didError ? 'e' : 'i', `Error: ${didError ? 'Yes' : 'No'}`);
+                    legacyLog(didError ? 'e' : 'i', 'Output:');
                     if (error) {
-                        legacyLog(e ? 'e' : 'i', 'ExecError:');
+                        legacyLog(didError ? 'e' : 'i', 'ExecError:');
                         error
                             .toString()
                             .split('\n')
                             .forEach((b: string) => {
-                                legacyLog(e ? 'e' : 'i', b);
+                                legacyLog(didError ? 'e' : 'i', b);
                             });
                     }
                     if (stderr) {
-                        legacyLog(e ? 'e' : 'i', 'STDERR:');
+                        legacyLog(didError ? 'e' : 'i', 'STDERR:');
                         stderr.split('\n').forEach((b: string) => {
-                            legacyLog(e ? 'e' : 'i', b);
+                            legacyLog(didError ? 'e' : 'i', b);
                         });
                     }
                     if (stdout) {
-                        legacyLog(e ? 'e' : 'i', 'STDOUT:');
+                        legacyLog(didError ? 'e' : 'i', 'STDOUT:');
                         stdout.split('\n').forEach((b: string) => {
-                            legacyLog(e ? 'e' : 'i', b);
+                            legacyLog(didError ? 'e' : 'i', b);
                         });
                     }
                     embed.addFields([

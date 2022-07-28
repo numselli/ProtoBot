@@ -27,7 +27,7 @@ import LexiSlashCommand from '#lib/structures/LexiSlashCommand';
 
 function fireStats(userID: string, interaction: ChatInputCommandInteraction, client: LexiClient): void {
     const uData = client.userStatistics.get(userID)!;
-    const ETD = client.emoteCounterTrackers.get(userID)!;
+    const ETD = client.emoteCounterTrackers.forUser(userID)!;
     const embed = new EmbedBuilder()
         .setTitle(`User info for ${userID}`)
         .addFields([

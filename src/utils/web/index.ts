@@ -35,15 +35,15 @@ export function start(client: Client, log: LexiLogger): void {
                 res.status(400).send('Invalid user ID');
                 return;
             }
-            if (!client.emoteCounterTrackers.has(req.query.uid as string)) {
+            if (!client.emoteCounterTrackers.uwus.has(req.query.uid as string)) {
                 res.status(404).send('User not found');
                 return;
             }
             res.json({
                 uid: req.query.uid,
-                uwus: client.emoteCounterTrackers.get(req.query.uid as string, 'uwus')
+                uwus: client.emoteCounterTrackers.uwusForUser(req.query.uid as string)
             });
-        } else res.json(client.emoteCounterTrackers.map((values, id) => [id, values.uwus] as const).sort((a, b) => b[1] - a[1]));
+        } else res.json(client.emoteCounterTrackers.uwusArray().sort((a, b) => b[1] - a[1]));
     });
     app.get('/api/v0/owos', (req, res) => {
         if (req.query.uid) {
@@ -51,15 +51,15 @@ export function start(client: Client, log: LexiLogger): void {
                 res.status(400).send('Invalid user ID');
                 return;
             }
-            if (!client.emoteCounterTrackers.has(req.query.uid as string)) {
+            if (!client.emoteCounterTrackers.owos.has(req.query.uid as string)) {
                 res.status(404).send('User not found');
                 return;
             }
             res.json({
                 uid: req.query.uid,
-                uwus: client.emoteCounterTrackers.get(req.query.uid as string, 'owos')
+                uwus: client.emoteCounterTrackers.owosForUser(req.query.uid as string)
             });
-        } else res.json(client.emoteCounterTrackers.map((values, id) => [id, values.owos] as const).sort((a, b) => b[1] - a[1]));
+        } else res.json(client.emoteCounterTrackers.owosArray().sort((a, b) => b[1] - a[1]));
     });
     app.get('/api/v0/tildes', (req, res) => {
         if (req.query.uid) {
@@ -67,15 +67,15 @@ export function start(client: Client, log: LexiLogger): void {
                 res.status(400).send('Invalid user ID');
                 return;
             }
-            if (!client.emoteCounterTrackers.has(req.query.uid as string)) {
+            if (!client.emoteCounterTrackers.tildes.has(req.query.uid as string)) {
                 res.status(404).send('User not found');
                 return;
             }
             res.json({
                 uid: req.query.uid,
-                uwus: client.emoteCounterTrackers.get(req.query.uid as string, 'tildes')
+                uwus: client.emoteCounterTrackers.tildesForUser(req.query.uid as string)
             });
-        } else res.json(client.emoteCounterTrackers.map((values, id) => [id, values.tildes] as const).sort((a, b) => b[1] - a[1]));
+        } else res.json(client.emoteCounterTrackers.tildesArray().sort((a, b) => b[1] - a[1]));
     });
 
     app.listen(client.config.apiPort);

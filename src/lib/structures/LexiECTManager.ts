@@ -60,6 +60,18 @@ export default class LexiECTManager {
         this.rebuildReversed();
     }
 
+    public ensure(id: string) {
+        this.uwus.ensure(id, 0);
+        this.owos.ensure(id, 0);
+        this.tildes.ensure(id, 0);
+        const uwuRevOld = this.reversedUwus();
+        if (this.uwus.get(id) === 0 && !uwuRevOld[0]?.includes?.(id)) uwuRevOld[0]?.push(id);
+        const owoRevOld = this.reversedOwos();
+        if (this.owos.get(id) === 0 && !owoRevOld[0]?.includes?.(id)) owoRevOld[0]?.push(id);
+        const tildeRevOld = this.reversedTildes();
+        if (this.tildes.get(id) === 0 && !tildeRevOld[0]?.includes?.(id)) tildeRevOld[0]?.push(id);
+    }
+
     public rebuildReversed() {
         this._log.info('Verifying reversed list...');
         this._checkReverse('uwus', this.uwusArray(), this.reversedUwus());
@@ -111,7 +123,7 @@ export default class LexiECTManager {
     }
 
     public tildesForUser(id: string) {
-        this.tildes.ensure(id, 0);
+        return this.tildes.ensure(id, 0);
     }
 
     private _add(db: 'uwus' | 'owos' | 'tildes', id: string) {
@@ -124,7 +136,7 @@ export default class LexiECTManager {
             this.rebuildReversed();
         }
         // Generate a new entry excluding this one
-        let newRevEnt: string[] | undefined = revEnt.filter(i => i !== id);
+        let newRevEnt: string[] | undefined = revEnt.filter((i) => i !== id);
         // Set it as sparse if needed
         if (newRevEnt.length === 0) newRevEnt = undefined;
         // Enter in the new rev entry
@@ -146,6 +158,22 @@ export default class LexiECTManager {
 
     public addTilde(id: string) {
         this._add('tildes', id);
+    }
+
+    public add(id: string, name: 'uwus' | 'owos' | 'tildes') {
+        switch (name) {
+            case 'uwus':
+                this.addUwu(id);
+                break;
+            case 'owos':
+                this.addOwo(id);
+                break;
+            case 'tildes':
+                this.addTilde(id);
+                break;
+            default:
+                throw new Error('This should never happen');
+        }
     }
 
     public uwusArray() {

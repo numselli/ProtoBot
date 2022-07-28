@@ -60,62 +60,27 @@ export default class LexiECTManager {
 
     public rebuildReversed() {
         this._log.info('Verifying reversed list...');
-        const uwus = this.uwusArray();
-        const ruwus = this.reversedUwus();
-        const owos = this.owosArray();
-        const rowos = this.reversedOwos();
-        const tildes = this.tildesArray();
-        const rtildes = this.reversedTildes();
-
-        // Check uwus set
-        let uwusOk = true;
-        for (const [id, count] of uwus) {
-            if (!ruwus[count]) {
-                this._log.error(`ECTManager: uwus list is missing entry for count ${count}`);
-                uwusOk = false;
-                continue;
-            }
-            if (!ruwus[count].includes(id)) this._log.error(`ECTManager: uwus list for entry ${count} is missing id ${id}`);
-        }
-        if (uwusOk) this._log.info('ECTManager: uwus list is ok');
-        else {
-            this._log.error('ECTManager: uwus list is not ok... rebuilding.');
-            this._rebuildReverse('uwus');
-        }
-
-        // Check owos set
-        let owosOk = true;
-        for (const [id, count] of owos) {
-            if (!rowos[count]) {
-                this._log.error(`ECTManager: owos list is missing entry for count ${count}`);
-                owosOk = false;
-                continue;
-            }
-            if (!rowos[count].includes(id)) this._log.error(`ECTManager: owos list for entry ${count} is missing id ${id}`);
-        }
-        if (owosOk) this._log.info('ECTManager: owos list is ok');
-        else {
-            this._log.error('ECTManager: owos list is not ok... rebuilding.');
-            this._rebuildReverse('owos');
-        }
-
-        // Check tildes set
-        let tildesOk = true;
-        for (const [id, count] of tildes) {
-            if (!rtildes[count]) {
-                this._log.error(`ECTManager: tildes list is missing entry for count ${count}`);
-                tildesOk = false;
-                continue;
-            }
-            if (!rtildes[count].includes(id)) this._log.error(`ECTManager: tildes list for entry ${count} is missing id ${id}`);
-        }
-        if (tildesOk) this._log.info('ECTManager: tildes list is ok');
-        else {
-            this._log.error('ECTManager: tildes list is not ok... rebuilding.');
-            this._rebuildReverse('tildes');
-        }
-
+        this._checkReverse('uwus', this.uwusArray(), this.reversedUwus());
+        this._checkReverse('owos', this.owosArray(), this.reversedOwos());
+        this._checkReverse('tildes', this.tildesArray(), this.reversedTildes());
         this._log.info('ECTManager: Reversed list rebuilt.');
+    }
+
+    private _checkReverse(db: 'uwus' | 'owos' | 'tildes', std: [string, number][], rev: string[][]) {
+        let isOk = true;
+        for (const [id, count] of std) {
+            if (!rev[count]) {
+                this._log.error(`ECTManager: ${db} list is missing entry for count ${count}`);
+                isOk = false;
+                continue;
+            }
+            if (!rev[count].includes(id)) this._log.error(`ECTManager: ${db} list for entry ${count} is missing id ${id}`);
+        }
+        if (isOk) this._log.info(`ECTManager: ${db} list is ok`);
+        else {
+            this._log.error(`ECTManager: ${db} list is not ok... rebuilding.`);
+            this._rebuildReverse(db);
+        }
     }
 
     private _rebuildReverse(db: 'uwus' | 'owos' | 'tildes') {

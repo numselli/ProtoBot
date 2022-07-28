@@ -34,7 +34,7 @@ import config from '#root/config';
 import publicConfig from '#root/publicConfig';
 
 /** Make a verbose function for an Enmap. */
-function makeVerboseFunction(name: string): (_q: string) => void {
+export function makeVerboseFunction(name: string): (_q: string) => void {
     return (q: string) => EnmapVerbose(name, q);
 }
 

@@ -51,7 +51,7 @@ module.exports = {
         'for-direction': ['error'],
         'getter-return': ['error'],
         'grouped-accessor-pairs': ['error', 'getBeforeSet'],
-        'license-header/header': ['error', 'src/header.ts'],
+        'license-header/header': ['error', './header.txt'],
         'no-async-promise-executor': ['error'],
         'no-await-in-loop': ['error'],
         'no-case-declarations': ['off'],

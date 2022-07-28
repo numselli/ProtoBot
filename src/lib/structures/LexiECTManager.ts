@@ -123,9 +123,15 @@ export default class LexiECTManager {
             this._log.error(`ECTManager: ${db} list is missing entry for count ${old}. rebuilding.`);
             this.rebuildReversed();
         }
-        let newRevEnt: string[] | undefined = revEnt.filter((i) => i !== id);
+        // Generate a new entry excluding this one
+        let newRevEnt: string[] | undefined = revEnt.filter(i => i !== id);
+        // Set it as sparse if needed
         if (newRevEnt.length === 0) newRevEnt = undefined;
+        // Enter in the new rev entry
         newArr[old] = newRevEnt;
+        // Add the next as well
+        if (!newArr[old + 1]) newArr[old + 1] = [];
+        newArr[old + 1]!.push(id);
         this.reversed.set(db, newArr);
         this[db].set(id, old + 1);
     }

@@ -40,7 +40,7 @@ export default class LexiECTManager {
     public tildes: Enmap<string, number>;
 
     /** reversed version of the above data */
-    public reversed: Enmap<'uwus' | 'owos' | 'tildes', string[][]>;
+    public reversed: Enmap<'uwus' | 'owos' | 'tildes', (string[] | undefined)[]>;
 
     public constructor(client: LexiClient, log: LexiLogger) {
         this.client = client;
@@ -66,7 +66,7 @@ export default class LexiECTManager {
         this._log.info('ECTManager: Reversed list rebuilt.');
     }
 
-    private _checkReverse(db: 'uwus' | 'owos' | 'tildes', std: [string, number][], rev: string[][]) {
+    private _checkReverse(db: 'uwus' | 'owos' | 'tildes', std: [string, number][], rev: (string[] | undefined)[]) {
         let isOk = true;
         for (const [id, count] of std) {
             if (!rev[count]) {
@@ -74,7 +74,7 @@ export default class LexiECTManager {
                 isOk = false;
                 continue;
             }
-            if (!rev[count].includes(id)) this._log.error(`ECTManager: ${db} list for entry ${count} is missing id ${id}`);
+            if (!rev[count]!.includes(id)) this._log.error(`ECTManager: ${db} list for entry ${count} is missing id ${id}`);
         }
         if (isOk) this._log.info(`ECTManager: ${db} list is ok`);
         else {
@@ -113,15 +113,51 @@ export default class LexiECTManager {
     }
 
     public addUwu(id: string) {
-        this.uwus.inc(id);
+        // We would use .inc() but we need to move the ID around.
+        const old = this.uwus.ensure(id, 0);
+        const newArr = this.reversedUwus();
+        const revEnt = newArr[old]!;
+        if (!revEnt) {
+            this._log.error(`ECTManager: uwus list is missing entry for count ${old}... rebuild! this should never happen!`);
+            this.rebuildReversed();
+        }
+        let newRevEnt: string[] | undefined = revEnt.filter(i => i !== id);
+        if (newRevEnt.length === 0) newRevEnt = undefined;
+        newArr[old] = newRevEnt;
+        this.reversed.set('uwus', newArr);
+        this.uwus.set(id, old + 1);
     }
 
     public addOwo(id: string) {
-        this.owos.inc(id);
+        // We would use .inc() but we need to move the ID around.
+        const old = this.owos.ensure(id, 0);
+        const newArr = this.reversedOwos();
+        const revEnt = newArr[old]!;
+        if (!revEnt) {
+            this._log.error(`ECTManager: owos list is missing entry for count ${old}... rebuild! this should never happen!`);
+            this.rebuildReversed();
+        }
+        let newRevEnt: string[] | undefined = revEnt.filter(i => i !== id);
+        if (newRevEnt.length === 0) newRevEnt = undefined;
+        newArr[old] = newRevEnt;
+        this.reversed.set('owos', newArr);
+        this.owos.set(id, old + 1);
     }
 
     public addTilde(id: string) {
-        this.tildes.inc(id);
+        // We would use .inc() but we need to move the ID around.
+        const old = this.tildes.ensure(id, 0);
+        const newArr = this.reversedTildes();
+        const revEnt = newArr[old]!;
+        if (!revEnt) {
+            this._log.error(`ECTManager: tildes list is missing entry for count ${old}... rebuild! this should never happen!`);
+            this.rebuildReversed();
+        }
+        let newRevEnt: string[] | undefined = revEnt.filter(i => i !== id);
+        if (newRevEnt.length === 0) newRevEnt = undefined;
+        newArr[old] = newRevEnt;
+        this.reversed.set('tildes', newArr);
+        this.tildes.set(id, old + 1);
     }
 
     public uwusArray() {
@@ -136,15 +172,15 @@ export default class LexiECTManager {
         return Array.from(this.tildes.entries());
     }
 
-    public reversedUwus() {
+    public reversedUwus(): (string[] | undefined)[] {
         return this.reversed.get('uwus')!;
     }
 
-    public reversedOwos() {
+    public reversedOwos(): (string[] | undefined)[] {
         return this.reversed.get('owos')!;
     }
 
-    public reversedTildes() {
+    public reversedTildes(): (string[] | undefined)[] {
         return this.reversed.get('tildes')!;
     }
 }

@@ -60,15 +60,15 @@ export default class CatCommand extends LexiSlashCommand {
         switch (interaction.options.getSubcommand()) {
             case 'uwus':
                 buf.push('```adoc\n===== UWU LEADERBOARD =====');
-                sorted = client.emoteCounterTrackers.uwusArray().sort((a, b) => b[1] - a[1]);
+                sorted = client.emoteCounterTrackers.uwusLeaderboard(10);
                 break;
             case 'owos':
                 buf.push('```adoc\n===== OWO LEADERBOARD =====');
-                sorted = client.emoteCounterTrackers.owosArray().sort((a, b) => b[1] - a[1]);
+                sorted = client.emoteCounterTrackers.owosLeaderboard(10);
                 break;
             case 'tildes':
                 buf.push('```adoc\n===== TILDE LEADERBOARD =====');
-                sorted = client.emoteCounterTrackers.tildesArray().sort((a, b) => b[1] - a[1]);
+                sorted = client.emoteCounterTrackers.tildesLeaderboard(10);
                 break;
             default:
                 throw new Error('This should never happen.');

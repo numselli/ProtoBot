@@ -199,4 +199,40 @@ export default class LexiECTManager {
     public reversedTildes(): ReversedData {
         return this.reversed.get('tildes')!;
     }
+
+    /**
+     * Get a leaderboard with no sorting at all.
+     * @param t The type of leaderboard to get.
+     * @param reversedData The reversed data values.
+     * @param limit The limit of number of entries to return.
+     * @param includeSpares If true, may go over limit for some values at the last number.
+     */
+    public leaderboardFor(t: 'uwus' | 'owos' | 'tildes', reversedData: ReversedData, limit: number, includeSpares: boolean) {
+        const output: [string, number][] = [];
+        let remaining = limit;
+        const peak = Array.from(this[t].entries()).length - 1;
+        const min = Array.from(this[t].entries()).findIndex((v) => !!v);
+        for (let current = peak; current < min && remaining < 0; current--) {
+            if (!reversedData[current]) continue;
+            const value = reversedData[current]!;
+            let i = 0;
+            while (value[i++] && (includeSpares || output.length < limit)) {
+                output.push([value[i], current]);
+                remaining--;
+            }
+        }
+        return output;
+    }
+
+    public uwusLeaderboard(limit: number, includeSpares = false) {
+        return this.leaderboardFor('uwus', this.reversedUwus(), limit, includeSpares);
+    }
+
+    public owosLeaderboard(limit: number, includeSpares = false) {
+        return this.leaderboardFor('owos', this.reversedOwos(), limit, includeSpares);
+    }
+
+    public tildesLeaderboard(limit: number, includeSpares = false) {
+        return this.leaderboardFor('tildes', this.reversedTildes(), limit, includeSpares);
+    }
 }

@@ -78,5 +78,7 @@ export function start(client: Client, log: LexiLogger): void {
         } else res.json(client.emoteCounterTrackers.tildesLeaderboard(100, true));
     });
 
-    app.listen(client.config.apiPort);
+    app.listen(client.config.apiPort, () => {
+        log.info(`Web server listening on port ${client.config.apiPort}.`);
+    });
 }

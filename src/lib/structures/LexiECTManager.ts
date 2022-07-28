@@ -17,6 +17,7 @@
  */
 
 import Enmap from 'enmap';
+import { inspect } from 'util';
 
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 
@@ -65,11 +66,23 @@ export default class LexiECTManager {
         this.owos.ensure(id, 0);
         this.tildes.ensure(id, 0);
         const uwuRevOld = this.reversedUwus();
-        if (this.uwus.get(id) === 0 && !uwuRevOld[0]?.includes?.(id)) uwuRevOld[0]?.push(id);
+        if (this.uwus.get(id) === 0) {
+            if (!uwuRevOld[0]) uwuRevOld[0] = [];
+            uwuRevOld[0].push(id);
+        }
+        this.reversed.set('uwus', uwuRevOld);
         const owoRevOld = this.reversedOwos();
-        if (this.owos.get(id) === 0 && !owoRevOld[0]?.includes?.(id)) owoRevOld[0]?.push(id);
+        if (this.owos.get(id) === 0) {
+            if (!owoRevOld[0]) owoRevOld[0] = [];
+            owoRevOld[0].push(id);
+        }
+        this.reversed.set('owos', owoRevOld);
         const tildeRevOld = this.reversedTildes();
-        if (this.tildes.get(id) === 0 && !tildeRevOld[0]?.includes?.(id)) tildeRevOld[0]?.push(id);
+        if (this.tildes.get(id) === 0) {
+            if (!tildeRevOld[0]) tildeRevOld[0] = [];
+            tildeRevOld[0].push(id);
+        }
+        this.reversed.set('tildes', tildeRevOld);
     }
 
     public rebuildReversed() {
@@ -208,17 +221,22 @@ export default class LexiECTManager {
      * @param includeSpares If true, may go over limit for some values at the last number.
      */
     public leaderboardFor(t: 'uwus' | 'owos' | 'tildes', reversedData: ReversedData, limit: number, includeSpares: boolean) {
+        this._log.verbose(`Getting leaderboard for ${t} with spares: ${includeSpares} and limit ${limit}`);
         const output: [string, number][] = [];
         let remaining = limit;
-        const peak = Array.from(this[t].entries()).length - 1;
+        const peak = reversedData.length - 1;
         const min = Array.from(this[t].entries()).findIndex((v) => !!v);
-        for (let current = peak; current < min && remaining < 0; current--) {
+        this._log.verbose(`peak: ${peak} - min: ${min} - limit: ${limit}`);
+        for (let current = peak; current > min && remaining > 0; current--) {
             if (!reversedData[current]) continue;
+            this._log.verbose(`current: ${current} - remaining: ${remaining} - entry: ${inspect(reversedData[current])}`);
             const value = reversedData[current]!;
             let i = 0;
-            while (value[i++] && (includeSpares || output.length < limit)) {
+            while (value[i] && (includeSpares || output.length < limit)) {
+                this._log.verbose(`  sub ${i} on ${current} - ${value[i]}`);
                 output.push([value[i], current]);
                 remaining--;
+                i++;
             }
         }
         return output;

@@ -1158,12 +1158,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:8.7.1":
-  version: 8.7.1
-  resolution: "acorn@npm:8.7.1"
+"acorn@npm:8.8.0":
+  version: 8.8.0
+  resolution: "acorn@npm:8.8.0"
   bin:
     acorn: bin/acorn
-  checksum: aca0aabf98826717920ac2583fdcad0a6fbe4e583fdb6e843af2594e907455aeafe30b1e14f1757cd83ce1776773cf8296ffc3a4acf13f0bd3dfebcf1db6ae80
+  checksum: 7270ca82b242eafe5687a11fea6e088c960af712683756abf0791b68855ea9cace3057bd5e998ffcef50c944810c1e0ca1da526d02b32110e13c722aa959afdc
   languageName: node
   linkType: hard
 
@@ -3493,7 +3493,7 @@ __metadata:
     "@types/node-fetch": 2.6.2
     "@typescript-eslint/eslint-plugin": 5.31.0
     "@typescript-eslint/parser": 5.31.0
-    acorn: 8.7.1
+    acorn: 8.8.0
     better-sqlite3: ^7.5.1
     bytes: ^3.1.2
     cli-highlight: ^2.1.11

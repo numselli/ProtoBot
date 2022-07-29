@@ -17,7 +17,7 @@
  */
 
 // Imports
-import type { SlashCommandBuilder } from '@discordjs/builders';
+import type { SlashCommandBuilder } from 'discord.js';
 import type { ChatInputCommandInteraction } from 'discord.js';
 
 import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';

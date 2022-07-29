@@ -18,9 +18,9 @@
 
 /* eslint-disable no-await-in-loop */
 
-import { SlashCommandBuilder } from '@discordjs/builders';
 import { REST } from '@discordjs/rest';
 import type { ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v9';
 import { Routes } from 'discord-api-types/v9';
 import fs from 'fs';

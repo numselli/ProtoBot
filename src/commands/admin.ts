@@ -350,9 +350,9 @@ export default class AdminCommand extends LexiSlashCommand {
                                     .setName('type')
                                     .setDescription('The type of presence to use.')
                                     .addChoices(
-                                        { name: 'Playing', value: 'PLAYING' },
-                                        { name: 'Listening', value: 'LISTENING' },
-                                        { name: 'Watching', value: 'WATCHING' }
+                                        { name: 'Playing', value: 'Playing' },
+                                        { name: 'Listening', value: 'Listening' },
+                                        { name: 'Watching', value: 'Watching' }
                                     )
                                     .setRequired(true)
                             )

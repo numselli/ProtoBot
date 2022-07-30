@@ -303,23 +303,10 @@ export default class AdminCommand extends LexiSlashCommand {
             }
         else if (group === 'status')
             if (subcommand === 'set') {
-                const type = interaction.options.getString('type')!;
+                const type = interaction.options.getString('type') as keyof typeof ActivityType;
                 const string = interaction.options.getString('string')!;
-                switch (type) {
-                    case 'PLAYING':
-                        setForcedStatus(client, log, [ActivityType.Playing, string]);
-                        break;
-                    case 'WATCHING':
-                        setForcedStatus(client, log, [ActivityType.Watching, string]);
-                        break;
-                    case 'LISTENING':
-                        setForcedStatus(client, log, [ActivityType.Listening, string]);
-                        break;
-                    default:
-                        await interaction.reply('This should never happen. Report this as a bug.');
-                        throw new Error('invalid type of status set');
-                }
-                await interaction.reply(`Successfully set status to "${type[0]}${type.substring(1).toLowerCase()} **${string}**".`);
+                setForcedStatus(client, log, [ActivityType[type], string]);
+                await interaction.reply(`Successfully set status to "${ActivityType[type]} **${string}**".`);
             } else if (subcommand === 'reset') {
                 resetForcedStatus(client, log);
                 await interaction.reply('Status has been reset.');

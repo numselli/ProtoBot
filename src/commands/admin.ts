@@ -18,8 +18,8 @@
 
 import type { ExecException } from 'child_process';
 import { exec } from 'child_process';
-import type { SlashCommandBuilder } from 'discord.js';
-import type { ChatInputCommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { ActivityType } from 'discord.js';
 import { EmbedBuilder } from 'discord.js';
 import { Linter } from 'eslint';
 import { inspect } from 'util';
@@ -31,6 +31,7 @@ import { Permissions } from '#lib/Permissions';
 import LexiSlashCommand from '#lib/structures/LexiSlashCommand';
 import type { LogMode } from '#root/log';
 import { changeMaxBufferSize, clearBuffer, getMaxBufferSize, readBuffer, readBufferOfType } from '#root/log';
+import { resetForcedStatus, setForcedStatus } from '#root/utils/onready/status';
 
 export default class AdminCommand extends LexiSlashCommand {
     public getConfig(): CommandConfig {
@@ -300,6 +301,19 @@ export default class AdminCommand extends LexiSlashCommand {
                 await interaction.reply('This should never happen. Report this as a bug.');
                 throw new Error('invalid subcommand of admin log');
             }
+        else if (group === 'status')
+            if (subcommand === 'set') {
+                const type = interaction.options.getString('type') as keyof typeof ActivityType;
+                const string = interaction.options.getString('string')!;
+                setForcedStatus(client, log, [ActivityType[type], string]);
+                await interaction.reply(`Successfully set status to "${ActivityType[type]} **${string}**".`);
+            } else if (subcommand === 'reset') {
+                resetForcedStatus(client, log);
+                await interaction.reply('Status has been reset.');
+            } else {
+                await interaction.reply('This should never happen. Report this as a bug.');
+                throw new Error('invalid subcommand of admin status');
+            }
         else {
             await interaction.reply('This should never happen. Report this as a bug.');
             throw new Error('invalid group of admin');
@@ -322,6 +336,29 @@ export default class AdminCommand extends LexiSlashCommand {
                     .setDescription('Run a shell command.')
                     .addStringOption((o) => o.setName('code').setDescription('The code to run.').setRequired(true))
                     .addBooleanOption((o) => o.setName('ephemeral').setDescription('Respond with an ephemeral message?'))
+            )
+            .addSubcommandGroup((g) =>
+                g
+                    .setName('status')
+                    .setDescription('Manage the status & presence of the bot.')
+                    .addSubcommand((s) =>
+                        s
+                            .setName('set')
+                            .setDescription('Set the presence of the bot.')
+                            .addStringOption((o) =>
+                                o
+                                    .setName('type')
+                                    .setDescription('The type of presence to use.')
+                                    .addChoices(
+                                        { name: 'Playing', value: 'Playing' },
+                                        { name: 'Listening', value: 'Listening' },
+                                        { name: 'Watching', value: 'Watching' }
+                                    )
+                                    .setRequired(true)
+                            )
+                            .addStringOption((o) => o.setName('string').setDescription('The message to set the presence to.').setRequired(true))
+                    )
+                    .addSubcommand((s) => s.setName('reset').setDescription('Removes a custom presence and selects a new random one.'))
             )
             .addSubcommandGroup((g) =>
                 g

@@ -43,7 +43,7 @@ export function start(client: Client, log: LexiLogger): void {
                 return;
             }
             res.json({ ok: true, data: client.emoteCounterTrackers.get(req.query.uid as string, 'uwus') });
-        } else res.json({ok: true, data:client.emoteCounterTrackers.map((values, id) => [id, values.uwus] as const).sort((a, b) => b[1] - a[1]))});
+        } else res.json({ ok: true, data: client.emoteCounterTrackers.map((values, id) => [id, values.uwus] as const).sort((a, b) => b[1] - a[1]) });
     });
     app.get('/api/v1/owos', (req, res) => {
         if (req.query.uid) {
@@ -56,7 +56,7 @@ export function start(client: Client, log: LexiLogger): void {
                 return;
             }
             res.json({ ok: true, data: client.emoteCounterTrackers.get(req.query.uid as string, 'owos') });
-        } else res.json({ok: true, data:client.emoteCounterTrackers.map((values, id) => [id, values.owos] as const).sort((a, b) => b[1] - a[1]))});
+        } else res.json({ ok: true, data: client.emoteCounterTrackers.map((values, id) => [id, values.owos] as const).sort((a, b) => b[1] - a[1]) });
     });
     app.get('/api/v1/tildes', (req, res) => {
         if (req.query.uid) {
@@ -69,7 +69,8 @@ export function start(client: Client, log: LexiLogger): void {
                 return;
             }
             res.json({ ok: true, data: client.emoteCounterTrackers.get(req.query.uid as string, 'tildes') });
-        } else res.json({ok: true, data:client.emoteCounterTrackers.map((values, id) => [id, values.tildes] as const).sort((a, b) => b[1] - a[1]))});
+        } else
+            res.json({ ok: true, data: client.emoteCounterTrackers.map((values, id) => [id, values.tildes] as const).sort((a, b) => b[1] - a[1]) });
     });
 
     app.get('/api/v0/uwus', (req, res) => {

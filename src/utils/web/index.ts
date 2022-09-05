@@ -42,8 +42,8 @@ export function start(client: Client, log: LexiLogger): void {
                 res.status(404).json({ ok: false, error: 'User not found.' });
                 return;
             }
-            res.json({ ok: true, data: client.emoteCounterTrackers.get(req.query.uid as string, 'uwus') });
-        } else res.json(client.emoteCounterTrackers.map((values, id) => [id, values.uwus] as const).sort((a, b) => b[1] - a[1]));
+            res.json({ ok: true, data: client.emoteCounterTrackers.uwusForUser(req.query.uid as string) });
+        } else res.json(client.emoteCounterTrackers.uwusLeaderboard(100, true));
     });
     app.get('/api/v1/owos', (req, res) => {
         if (req.query.uid) {
@@ -55,8 +55,8 @@ export function start(client: Client, log: LexiLogger): void {
                 res.status(404).json({ ok: false, error: 'User not found.' });
                 return;
             }
-            res.json({ ok: true, data: client.emoteCounterTrackers.get(req.query.uid as string, 'owos') });
-        } else res.json(client.emoteCounterTrackers.map((values, id) => [id, values.owos] as const).sort((a, b) => b[1] - a[1]));
+            res.json({ ok: true, data: client.emoteCounterTrackers.owosForUser(req.query.uid as string) });
+        } else res.json(client.emoteCounterTrackers.owosLeaderboard(100, true));
     });
     app.get('/api/v1/tildes', (req, res) => {
         if (req.query.uid) {
@@ -68,8 +68,8 @@ export function start(client: Client, log: LexiLogger): void {
                 res.status(404).json({ ok: false, error: 'User not found.' });
                 return;
             }
-            res.json({ ok: true, data: client.emoteCounterTrackers.get(req.query.uid as string, 'tildes') });
-        } else res.json(client.emoteCounterTrackers.map((values, id) => [id, values.tildes] as const).sort((a, b) => b[1] - a[1]));
+            res.json({ ok: true, data: client.emoteCounterTrackers.tildesForUser(req.query.uid as string) });
+        } else res.json(client.emoteCounterTrackers.tildesLeaderboard(100, true));
     });
 
     app.get('/api/v0/uwus', (req, res) => {

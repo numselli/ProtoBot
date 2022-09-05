@@ -127,6 +127,10 @@ export default class LexiECTManager {
         };
     }
 
+    public has(id: string) {
+        return this.uwus.has(id) || this.owos.has(id) || this.tildes.has(id);
+    }
+
     public uwusForUser(id: string) {
         return this.uwus.ensure(id, 0);
     }

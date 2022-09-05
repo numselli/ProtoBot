@@ -16,6 +16,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// This file often appears to be one of those "what?" files. It's bad code, but for a reason.
+// This file's purpose is to handle ECTs with no sorting, by storing the ects in a "reverse"
+// format, where the index is the position, and the value is an array of IDs. For example:
+// A: 1
+// B: 5
+// C: 3
+// D: 2
+// E: 3
+// Would be stored as both:
+// {
+//     A: 1,
+//     B: 5,
+//     C: 3,
+//     D: 2,
+//     E: 3
+// }
+// And:
+// [
+//     empty, // 0
+//     [A], // 1
+//     [D], // 2
+//     [C, E], // 3
+//     empty, // 4
+//     [B] // 5
+// ]
+
 import Enmap from 'enmap';
 import { inspect } from 'util';
 
@@ -61,30 +87,32 @@ export default class LexiECTManager {
         this.rebuildReversed();
     }
 
+    /** similar to {@link Enmap#ensure} */
     public ensure(id: string) {
+        // Ensure we have the id in all of the databases.
         this.uwus.ensure(id, 0);
         this.owos.ensure(id, 0);
         this.tildes.ensure(id, 0);
+        // Get the old count for each reversed database.
         const uwuRevOld = this.reversedUwus();
-        if (this.uwus.get(id) === 0) {
-            if (!uwuRevOld[0]) uwuRevOld[0] = [];
-            uwuRevOld[0].push(id);
-        }
+        // Make a new array if needed
+        if (!uwuRevOld[0]) uwuRevOld[0] = [];
+        // If we aren't already here, add a new entry.
+        if (!uwuRevOld[0].includes(id)) uwuRevOld[0].push(id);
         this.reversed.set('uwus', uwuRevOld);
+
         const owoRevOld = this.reversedOwos();
-        if (this.owos.get(id) === 0) {
-            if (!owoRevOld[0]) owoRevOld[0] = [];
-            owoRevOld[0].push(id);
-        }
+        if (!owoRevOld[0]) owoRevOld[0] = [];
+        if (!owoRevOld[0].includes(id)) owoRevOld[0].push(id);
         this.reversed.set('owos', owoRevOld);
+
         const tildeRevOld = this.reversedTildes();
-        if (this.tildes.get(id) === 0) {
-            if (!tildeRevOld[0]) tildeRevOld[0] = [];
-            tildeRevOld[0].push(id);
-        }
+        if (!tildeRevOld[0]) tildeRevOld[0] = [];
+        if (!tildeRevOld[0].includes(id)) tildeRevOld[0].push(id);
         this.reversed.set('tildes', tildeRevOld);
     }
 
+    /** rebuild all reversed databases */
     public rebuildReversed() {
         this._log.info('Verifying reversed list...');
         this._checkReverse('uwus', this.uwusArray(), this.reversedUwus());
@@ -93,6 +121,12 @@ export default class LexiECTManager {
         this._log.info('ECTManager: Reversed list rebuilt.');
     }
 
+    /**
+     * examine a specific database to ensure it is correct
+     * @param db the name of the database
+     * @param std the real (standard) value
+     * @param rev the reversed value
+     */
     private _checkReverse(db: 'uwus' | 'owos' | 'tildes', std: [string, number][], rev: ReversedData) {
         let isOk = true;
         for (const [id, count] of std) {
@@ -110,6 +144,10 @@ export default class LexiECTManager {
         }
     }
 
+    /**
+     * rebuild a specific reversed database
+     * @param db the name of the database
+     */
     private _rebuildReverse(db: 'uwus' | 'owos' | 'tildes') {
         const newArr: (string | never)[][] = [];
         for (const [id, count] of this[db]) {
@@ -119,6 +157,10 @@ export default class LexiECTManager {
         this.reversed.set(db, newArr);
     }
 
+    /**
+     * get all data for a user
+     * @param id the user id
+     */
     public forUser(id: string) {
         return {
             uwus: this.uwusForUser(id),
@@ -127,6 +169,11 @@ export default class LexiECTManager {
         };
     }
 
+    /**
+     * return true if the user exists, false if not in the database
+     * @param id the user id
+     * @returns true if the user exists
+     */
     public has(id: string) {
         return this.uwus.has(id) || this.owos.has(id) || this.tildes.has(id);
     }

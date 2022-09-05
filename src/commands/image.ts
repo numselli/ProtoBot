@@ -17,7 +17,7 @@
  */
 
 // Imports
-import type { SlashCommandBuilder } from '@discordjs/builders';
+import type { SlashCommandBuilder } from 'discord.js';
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { EmbedBuilder } from 'discord.js';
 import fetch from 'node-fetch';

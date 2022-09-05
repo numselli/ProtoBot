@@ -306,7 +306,7 @@ export default class AdminCommand extends LexiSlashCommand {
                 const type = interaction.options.getString('type') as keyof typeof ActivityType;
                 const string = interaction.options.getString('string')!;
                 setForcedStatus(client, log, [ActivityType[type], string]);
-                await interaction.reply(`Successfully set status to "${ActivityType[type]} **${string}**".`);
+                await interaction.reply(`Successfully set status to "${type} **${string}**".`);
             } else if (subcommand === 'reset') {
                 resetForcedStatus(client, log);
                 await interaction.reply('Status has been reset.');

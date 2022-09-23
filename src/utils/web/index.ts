@@ -43,7 +43,7 @@ export function start(client: Client, log: LexiLogger): void {
                 return;
             }
             res.json({ ok: true, data: client.emoteCounterTrackers.uwusForUser(req.query.uid as string) });
-        } else res.json(client.emoteCounterTrackers.uwusLeaderboard(100, true));
+        } else res.json({ ok: true, data: client.emoteCounterTrackers.uwusLeaderboard(100, true) });
     });
     app.get('/api/v1/owos', (req, res) => {
         if (req.query.uid) {
@@ -56,7 +56,7 @@ export function start(client: Client, log: LexiLogger): void {
                 return;
             }
             res.json({ ok: true, data: client.emoteCounterTrackers.owosForUser(req.query.uid as string) });
-        } else res.json(client.emoteCounterTrackers.owosLeaderboard(100, true));
+        } else res.json({ ok: true, data: client.emoteCounterTrackers.owosLeaderboard(100, true) });
     });
     app.get('/api/v1/tildes', (req, res) => {
         if (req.query.uid) {
@@ -69,7 +69,7 @@ export function start(client: Client, log: LexiLogger): void {
                 return;
             }
             res.json({ ok: true, data: client.emoteCounterTrackers.tildesForUser(req.query.uid as string) });
-        } else res.json(client.emoteCounterTrackers.tildesLeaderboard(100, true));
+        } else res.json({ ok: true, data: client.emoteCounterTrackers.tildesLeaderboard(100, true) });
     });
 
     app.get('/api/v0/uwus', (req, res) => {

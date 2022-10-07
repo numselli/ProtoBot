@@ -21,7 +21,6 @@
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { SlashCommandBuilder } from 'discord.js';
 import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v9';
-import { Routes } from 'discord-api-types/v9';
 import fs from 'fs';
 
 import type LexiLogger from '#lib/interfaces/LexiLogger';
@@ -112,12 +111,14 @@ export default class LexiCommandHandler {
             log.info(`Finished loading slash command "${cmdConfig.name}"!`);
         }
 
+        await client.application.fetch();
+
         // Push the new commands list to the API.
         log.info('Pushing new application commands to API...');
-        await client.application.commands.set(this._slashJSONs);
+        await client.application!.commands.set(this._slashJSONs);
         if (client.config.doDevGuildCommandsIn) {
             log.info('Pushing dev guild commands with prefix dev-');
-            await client.application.commands.set(
+            await client.application!.commands.set(
                 this._slashJSONs.map((x) => {
                     x.name = `dev-${x.name}`;
                     return x;

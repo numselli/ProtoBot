@@ -111,7 +111,7 @@ export default class LexiCommandHandler {
             log.info(`Finished loading slash command "${cmdConfig.name}"!`);
         }
 
-        await client.application.fetch();
+        await client.application!.fetch();
 
         // Push the new commands list to the API.
         log.info('Pushing new application commands to API...');

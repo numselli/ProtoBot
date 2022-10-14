@@ -136,7 +136,7 @@ export default class LexiCommandHandler {
                 content: 'Uhhh... this should never happen. You ran a command and it was not ready to use. Please report this to the developers.',
                 ephemeral: true
             });
-            return Promise.reject('uh oh. unknown cmd.');
+            return Promise.reject(new Error('commandData not found in the commands database'));
         }
         const commandConfig = commandData.getConfig();
         if (!commandConfig.enabled) {

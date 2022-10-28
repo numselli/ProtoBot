@@ -276,7 +276,7 @@ export default class LexiECTManager {
         const output: [string, number][] = [];
         let remaining = limit;
         const peak = reversedData.length - 1;
-        const min = Array.from(this[t].entries()).findIndex((v) => !!v);
+        const min = Array.from(this[t].entries()).findIndex((v) => Boolean(v));
         this._log.verbose(`peak: ${peak} - min: ${min} - limit: ${limit}`);
         for (let current = peak; current > min && remaining > 0; current--) {
             if (!reversedData[current]) continue;

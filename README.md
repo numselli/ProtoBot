@@ -47,14 +47,7 @@ Lexi started as a furry bot named "ProtoBot" in it's earliest development phases
 
 In pull request #510, ProtoBot 3 was started. Eventually, it got renamed to "Lexi."
 
-The name Lexi is actually the name of one of my protogen sonas, here's what you should know about her:
-
--   Lexi is a softie
--   Says uwu way too much (leads into the emote counter features of Lexi)
--   Kinda depressed but hides it
--   Bullied a lot as a kid
-
-A lot of Lexi's traits carried into Lexi as a Discord bot.
+The name Lexi is actually the name of one of my protogen fursonas, and a lot of her traits carried into Lexi as a Discord bot.
 
 <div align="center">
 
@@ -64,17 +57,23 @@ A lot of Lexi's traits carried into Lexi as a Discord bot.
 
 The following steps will help you get Lexi up and running on your computer.
 
-We support **Linux** and **macOS 11 or greater**. Any Windows/OSX bugs will be treated with LOW PRIORITY, and we will not consider
-adding install/start scripts in Batch any time in the future. WSL is supported and recommended if you are to host using Windows, and we suggest using PM2 for process management.
+Lexi supports **Linux** and **macOS 11 or later**. Any Windows/OSX bugs will be treated with low priority, and we will not consider
+adding install/start scripts in Batch any time in the near future. WSL is supported and recommended if you are to host using Windows, and we suggest using PM2 for process management.
 
-### CONSIDER THE FOLLOWING BEFORE CONTINUING WITH THE INSTALLATION!
+### Before you continue (Notice on Open Source status of Lexi)
 
-Lexi is a public Discord bot because we wanted to enforce open-source ruling and allow for the growth of the community.
+Please consider the following before you continue the installation of Lexi.
 
-One of the things we have considered is people forking off on their own, and not contributing to the project. If you have something you'd like to see
-added to the project, please consider contributing to the project, instead of self-hosting.
+Lexi's source code is OSS (Open Source Software). As part of the terms in GPL3, I (Logan) have no right to stop you from self-hosting this bot with the applicable credit. I decided to open-source Lexi to allow for contributions from other fandom members, and to further my maintaining experience.
 
-Plus, Lexi relies on plenty of external services to function. Self-Hosting of Lexi is not endorsed!
+One thing I considered when open-sourcing Lexi was the possibility of people forking off on their own and contributing to their own Lexi fork, instead of Lexi itself. If you have something you'd like to see added to Lexi, please contribute instead of self-hosting. It's better for all of us.
+
+In addition, Lexi relies on a lot of external services to function, and this number is getting greater as more functionality is being added.
+
+Self-hosts of Lexi is not recommended for non-development purposes.
+
+\- 0xLogN
+Lexi Maintainer
 
 ### 1. Install Prerequisites
 
@@ -104,11 +103,12 @@ git clone https://github.com/thetayloredman/Lexi.git
 
 Execute `./install.sh`.
 
-> One of the questions the installer asks is very important:
-> **_WARNING: DO NOT GIVE ANYBODY YOU DO NOT KNOW VERY WELL OWNER ACCESS!_**  
-> **ANYONE WITH OWNER ACCESS CAN GET DIRECT ACCESS TO A SHELL ON YOUR SYSTEM.**  
-> **I REPEAT, _NOBODY_ GETS OWNER ACCESS. I AM NOT RESPONSIBLE FOR ANY DAMAGE CAUSED IF YOU DO NOT OBEY THIS.**
-> Anyone with this user ID can access _any_ file on your system. **Keep. The. Owner. Account. Secure.** I suggest using 2FA on it.
+Before you continue, take close note:
+
+> One of the questions the installer will ask you is VERY important:
+> It will read as something like "What is your Discord User ID?"
+>
+> This is one of the most important steps here. Do NOT give ANYONE you do not know very well access to this. They can open a shell on your system and make changes to any file.
 
 **Hey, did you read that thing above me? If not, read it. Did you read it? Read it again. This is serious.**
 
@@ -136,7 +136,7 @@ If you want daemon startup, run `pm2 save`.
 
 Logs will automatically be created and manual maintenance is needed for cleaning these up.
 
-## Notable Mentions
+## Notable Mentions & Maintainers
 
 <table>
   <tr>
@@ -149,7 +149,7 @@ Logs will automatically be created and manual maintenance is needed for cleaning
         </sub>
       </a>
       <br/>
-      Maintainer
+      Core Maintainer
     </td>
     <td align="center">
       <a href="https://github.com/ilikestohack">
@@ -160,7 +160,7 @@ Logs will automatically be created and manual maintenance is needed for cleaning
         </sub>
       </a>
       <br/>
-      existing
+      Maintainer
     </td>
   </tr>
 </table>

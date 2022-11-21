@@ -934,10 +934,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:17.0.30":
-  version: 17.0.30
-  resolution: "@types/node@npm:17.0.30"
-  checksum: b3cd2db6474aae3ddac5a312f340f6e4ca200429371e62cb74698fe7f23d7414d0200f643204ddfaa797846328539359e3797d7f2baaf3cdd643b159cf53baa6
+"@types/node@npm:18.11.9":
+  version: 18.11.9
+  resolution: "@types/node@npm:18.11.9"
+  checksum: cc0aae109e9b7adefc32eecb838d6fad931663bb06484b5e9cbbbf74865c721b03d16fd8d74ad90e31dbe093d956a7c2c306ba5429ba0c00f3f7505103d7a496
   languageName: node
   linkType: hard
 
@@ -3567,7 +3567,7 @@ __metadata:
     "@types/express": 4.17.14
     "@types/module-alias": 2.0.1
     "@types/morgan": 1.9.3
-    "@types/node": 17.0.30
+    "@types/node": 18.11.9
     "@types/node-fetch": 2.6.2
     "@typescript-eslint/eslint-plugin": 5.43.0
     "@typescript-eslint/parser": 5.43.0

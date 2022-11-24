@@ -18,11 +18,9 @@
 
 /* eslint-disable no-await-in-loop */
 
-import { REST } from '@discordjs/rest';
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { SlashCommandBuilder } from 'discord.js';
 import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v9';
-import { Routes } from 'discord-api-types/v9';
 import fs from 'fs';
 
 import type LexiLogger from '#lib/interfaces/LexiLogger';
@@ -42,9 +40,9 @@ export default class LexiCommandHandler {
     /** The internal storage facility for the commands. */
     private _commands: Map<string, LexiSlashCommand>;
     private client: LexiClient;
-    private rest: REST;
 
     /** The commands folder. */
+    // FIXME: can this be removed?
     private readonly LEGACY_commandsFolder: string;
     private readonly slashFolder: string;
     private _slashJSONs: RESTPostAPIApplicationCommandsJSONBody[];
@@ -61,7 +59,6 @@ export default class LexiCommandHandler {
         this.slashFolder = client.config.dirs.commands;
         this.client = client;
         this._slashJSONs = [];
-        this.rest = new REST({ version: '9' }).setToken(this.client.config.token);
 
         // Common issue in the folder name.
         if (!this.LEGACY_commandsFolder.endsWith('/')) this.LEGACY_commandsFolder += '/';
@@ -76,7 +73,7 @@ export default class LexiCommandHandler {
     public async loadCommands(): Promise<void> {
         this._commands = new Map();
         this._slashJSONs = [];
-        const { client, log, rest } = this;
+        const { client, log } = this;
 
         log.verbose(`CommandHandler: loading application (/) commands from ${this.slashFolder}`);
 
@@ -114,17 +111,20 @@ export default class LexiCommandHandler {
             log.info(`Finished loading slash command "${cmdConfig.name}"!`);
         }
 
+        await client.application!.fetch();
+
         // Push the new commands list to the API.
         log.info('Pushing new application commands to API...');
-        await rest.put(Routes.applicationCommands(client.application!.id), { body: this._slashJSONs });
+        await client.application!.commands.set(this._slashJSONs);
         if (client.config.doDevGuildCommandsIn) {
             log.info('Pushing dev guild commands with prefix dev-');
-            await rest.put(Routes.applicationGuildCommands(client.application!.id, client.config.doDevGuildCommandsIn), {
-                body: this._slashJSONs.map((x) => {
+            await client.application!.commands.set(
+                this._slashJSONs.map((x) => {
                     x.name = `dev-${x.name}`;
                     return x;
-                })
-            });
+                }),
+                client.config.doDevGuildCommandsIn
+            );
         }
         log.info('Finished reloading application (/) commands.');
     }

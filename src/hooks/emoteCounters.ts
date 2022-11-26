@@ -33,8 +33,8 @@ function checkAndSet(client: LexiClient, cooldowns: Cooldowns, l: LexiLogger, m:
             (m.content.endsWith('~') && !/~~+/.test(m.content) && m.content !== '~')) &&
         (!cooldowns || cooldowns[dbName] + client.config.cooldowns[dbName] - Date.now() < 1)
     ) {
-        client.emoteCounterTrackers.ensure(m.author.id, client.defaults.EMOTE_TRACKER_COUNTERS);
-        client.emoteCounterTrackers.inc(m.author.id, dbName);
+        client.emoteCounterTrackers.ensure(m.author.id);
+        client.emoteCounterTrackers.add(m.author.id, dbName);
         client.cooldowns.set(m.author.id, Date.now(), dbName);
         l.info(`${dbName}: added ${checkString} for ${m.author.tag}.`);
     }

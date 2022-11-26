@@ -18,11 +18,10 @@
 
 import type { User } from 'discord.js';
 
-import type { EmoteCounterType } from '#lib/interfaces/db/EmoteCounterData';
 import type LexiClient from '#lib/structures/LexiClient';
 
-export function formatRow(type: EmoteCounterType, index: number, user: User | null, client: LexiClient): string {
+export function formatRow(type: 'uwus' | 'owos' | 'tildes', index: number, user: User | null, client: LexiClient): string {
     const ranking = (index + 1).toString().padStart(2, ' ');
-    const count = user ? client.emoteCounterTrackers.get(user?.id, type) : 0;
+    const count = user ? client.emoteCounterTrackers.forUser(user?.id)[type] : 0;
     return `${ranking} :: ${user ? `${user.tag} with ${count} ${type}` : '(none)'}`;
 }

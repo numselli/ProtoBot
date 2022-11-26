@@ -46,7 +46,8 @@ const client = new LexiClient(log, {
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.GuildInvites,
-        GatewayIntentBits.GuildMessages, // We may need to apply for this intent at verification
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent, // We may need to apply for this intent at verification
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.DirectMessages,
         GatewayIntentBits.DirectMessageReactions

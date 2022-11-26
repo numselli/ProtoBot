@@ -22,7 +22,6 @@ import Enmap from 'enmap';
 
 import EnmapVerbose from '#lib/EnmapVerbose';
 import type Cooldowns from '#lib/interfaces/db/Cooldowns';
-import type EmoteCounterData from '#lib/interfaces/db/EmoteCounterData';
 import type UserConfig from '#lib/interfaces/db/UserConfig';
 import type UserStats from '#lib/interfaces/db/UserStats';
 import type LexiConfig from '#lib/interfaces/LexiConfig';
@@ -33,8 +32,10 @@ import type LexiHook from '#lib/structures/LexiHook';
 import config from '#root/config';
 import publicConfig from '#root/publicConfig';
 
+import LexiECTManager from './LexiECTManager';
+
 /** Make a verbose function for an Enmap. */
-function makeVerboseFunction(name: string): (_q: string) => void {
+export function makeVerboseFunction(name: string): (_q: string) => void {
     return (q: string) => EnmapVerbose(name, q);
 }
 
@@ -56,14 +57,12 @@ export default class LexiClient extends BaseClient {
         USER_STATISTICS: UserStats;
         /** See {@link Cooldowns}. */
         COOLDOWNS: Cooldowns;
-        /** See {@link EmoteCounterData} */
-        EMOTE_TRACKER_COUNTERS: EmoteCounterData;
     };
 
     /** Cooldowns information for ECTs. */
     public cooldowns: Enmap<string, Cooldowns>;
-    /** The {@link EmoteCounterData} for ECTs. */
-    public emoteCounterTrackers: Enmap<string, EmoteCounterData>;
+    /** The {@link LexiECTManager} for ECTs. */
+    public emoteCounterTrackers: LexiECTManager;
     /** Stores hugs, and similar information. */
     public userStatistics: Enmap<string, UserStats>;
     /** Settings for the users. */
@@ -85,10 +84,9 @@ export default class LexiClient extends BaseClient {
         this.defaults = {
             USER_CONFIGURATION: {},
             USER_STATISTICS: { hugs: 0, boops: 0, pats: 0 },
-            COOLDOWNS: { owos: 0, uwus: 0, tildes: 0 },
-            EMOTE_TRACKER_COUNTERS: { owos: 0, uwus: 0, tildes: 0 }
+            COOLDOWNS: { owos: 0, uwus: 0, tildes: 0 }
         };
-        this.emoteCounterTrackers = new Enmap({ name: 'emoteCounterTrackers', verbose: makeVerboseFunction('emoteCounterTrackers') });
+        this.emoteCounterTrackers = new LexiECTManager(this, this._log);
         this.userStatistics = new Enmap({ name: 'userStatistics', verbose: makeVerboseFunction('userStatistics') });
         this.userConfiguration = new Enmap({ name: 'userConfiguration', verbose: makeVerboseFunction('userConfiguration') });
         this.restartData = new Enmap({ name: 'restartData', verbose: makeVerboseFunction('restartData') });

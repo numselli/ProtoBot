@@ -22,7 +22,6 @@ import type { ChatInputCommandInteraction } from 'discord.js';
 
 import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
-import type EmoteCounterData from '#lib/interfaces/db/EmoteCounterData';
 import LexiSlashCommand from '#lib/structures/LexiSlashCommand';
 import { formatRow } from '#lib/utils/formatTrackerRow';
 
@@ -61,15 +60,15 @@ export default class CatCommand extends LexiSlashCommand {
         switch (interaction.options.getSubcommand()) {
             case 'uwus':
                 buf.push('```adoc\n===== UWU LEADERBOARD =====');
-                sorted = client.emoteCounterTrackers.map((values, id) => [id, values.uwus] as const).sort((a, b) => b[1] - a[1]);
+                sorted = client.emoteCounterTrackers.uwusLeaderboard(10);
                 break;
             case 'owos':
                 buf.push('```adoc\n===== OWO LEADERBOARD =====');
-                sorted = client.emoteCounterTrackers.map((values, id) => [id, values.owos] as const).sort((a, b) => b[1] - a[1]);
+                sorted = client.emoteCounterTrackers.owosLeaderboard(10);
                 break;
             case 'tildes':
                 buf.push('```adoc\n===== TILDE LEADERBOARD =====');
-                sorted = client.emoteCounterTrackers.map((values, id) => [id, values.tildes] as const).sort((a, b) => b[1] - a[1]);
+                sorted = client.emoteCounterTrackers.tildesLeaderboard(10);
                 break;
             default:
                 throw new Error('This should never happen.');
@@ -82,7 +81,7 @@ export default class CatCommand extends LexiSlashCommand {
 
             // eslint-disable-next-line no-await-in-loop
             const user = await client.users.fetch(id).catch(() => null);
-            buf.push(formatRow(interaction.options.getSubcommand() as keyof EmoteCounterData, i, user, client));
+            buf.push(formatRow(interaction.options.getSubcommand() as 'uwus' | 'owos' | 'tildes', i, user, client));
         }
 
         if (!placed) {

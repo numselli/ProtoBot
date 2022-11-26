@@ -27,6 +27,7 @@ import { inspect } from 'util';
 import { getInteractionPermissions } from '#lib/getInteractionPermissions';
 import type JSONAbleSlashCommandBody from '#lib/interfaces/commands/JSONAbleSlashCommandBody';
 import type CommandConfig from '#lib/interfaces/commands/LexiCommandConfig';
+import LNHaste from '#lib/LNHaste';
 import { Permissions } from '#lib/Permissions';
 import LexiSlashCommand from '#lib/structures/LexiSlashCommand';
 import type { LogMode } from '#root/log';
@@ -80,6 +81,7 @@ export default class AdminCommand extends LexiSlashCommand {
                 }
 
                 const ephemeral = interaction.options.getBoolean('ephemeral') ?? false;
+                const haste = interaction.options.getBoolean('haste') ?? false;
                 let code = interaction.options.getString('code')!;
 
                 await interaction.deferReply({ ephemeral });
@@ -118,27 +120,36 @@ export default class AdminCommand extends LexiSlashCommand {
     [${error.line}:${error.column}] ${error.message} `;
                     }
                 }
-                const length = `\`\`\`${response}\`\`\``.length;
-                embed
-                    .setTitle(didError ? '**Error**' : '**Success**')
-                    .setColor(didError ? 'Red' : 'Green')
-                    .setDescription(`\`\`\`${response.substring(0, 1018)}\`\`\``);
-                if (length >= 1025) {
-                    legacyLog(
-                        didError ? 'e' : 'i',
-                        `An eval command executed by ${interaction.user.username}'s response was too long (${length}/2048).`
-                    );
-                    legacyLog(didError ? 'e' : 'i', `Error: ${didError ? 'Yes' : 'No'}`);
-                    legacyLog(didError ? 'e' : 'i', 'Output:');
-                    response.split('\n').forEach((b: string) => {
-                        legacyLog(didError ? 'e' : 'i', b);
-                    });
-                    embed.addFields([
-                        {
-                            name: 'Note:',
-                            value: `The response was too long with a length of \`${length}/1024\` characters. it was logged to the console.`
-                        }
-                    ]);
+                if (!haste) {
+                    const length = `\`\`\`${response}\`\`\``.length;
+                    embed
+                        .setTitle(didError ? '**Error**' : '**Success**')
+                        .setColor(didError ? 'Red' : 'Green')
+                        .setDescription(`\`\`\`${response.substring(0, 1018)}\`\`\``);
+                    if (length >= 1025) {
+                        legacyLog(
+                            didError ? 'e' : 'i',
+                            `An eval command executed by ${interaction.user.username}'s response was too long (${length}/2048).`
+                        );
+                        legacyLog(didError ? 'e' : 'i', `Error: ${didError ? 'Yes' : 'No'}`);
+                        legacyLog(didError ? 'e' : 'i', 'Output:');
+                        response.split('\n').forEach((b: string) => {
+                            legacyLog(didError ? 'e' : 'i', b);
+                        });
+                        embed.addFields([
+                            {
+                                name: 'Note:',
+                                value: `The response was too long with a length of \`${length}/1024\` characters. it was logged to the console.`
+                            }
+                        ]);
+                    }
+                } else {
+                    const hasteURL = await LNHaste(response);
+                    embed
+                        .setTitle(didError ? '**Error**' : '**Success**')
+                        .setColor(didError ? 'Red' : 'Green')
+                        .setDescription(`[Click to open Haste](${hasteURL})`);
+                    log.info(`Haste URL: ${hasteURL}`);
                 }
 
                 log.info(`${ephemeral ? 'Ephemeral eval' : 'Eval'} command executed by ${interaction.user.tag}`);
@@ -157,7 +168,9 @@ export default class AdminCommand extends LexiSlashCommand {
                     return;
                 }
 
+                const haste = interaction.options.getBoolean('haste') ?? false;
                 const ephemeral = interaction.options.getBoolean('ephemeral') ?? false;
+                const separate = interaction.options.getBoolean('separate') ?? false;
                 const code = interaction.options.getString('code')!;
 
                 await interaction.deferReply({ ephemeral });
@@ -168,23 +181,49 @@ export default class AdminCommand extends LexiSlashCommand {
                     .setTimestamp()
                     .setColor(client.publicConfig.colors.color3);
 
-                exec(code, (error: ExecException | null, stdout: string, stderr: string) => {
+                exec(code, async (error: ExecException | null, stdout: string, stderr: string) => {
                     if (error || stderr) didError = true;
 
-                    if (stderr) embed.addFields([{ name: 'STDERR', value: `\`\`\`${stderr.substring(0, 1018)}\`\`\`` }]);
+                    // used for no haste no separate to check length
+                    let response = '';
 
-                    if (stdout) embed.addFields([{ name: 'STDOUT', value: `\`\`\`${stdout.substring(0, 1018)}\`\`\`` }]);
+                    if (separate)
+                        if (!haste) {
+                            if (stderr) embed.addFields([{ name: 'STDERR', value: `\`\`\`${stderr.substring(0, 1018)}\`\`\`` }]);
+                            if (stdout) embed.addFields([{ name: 'STDOUT', value: `\`\`\`${stdout.substring(0, 1018)}\`\`\`` }]);
+                            if (error) embed.addFields([{ name: 'ExecError', value: `\`\`\`${error.toString().substring(0, 1018)}\`\`\`` }]);
+                        } else {
+                            const [hasteStderr, hasteStdout, hasteError] = await Promise.all([
+                                stderr ? LNHaste(stderr) : undefined,
+                                stdout ? LNHaste(stdout) : undefined,
+                                error ? LNHaste(error.toString()) : undefined
+                            ]);
+                            if (stderr) embed.addFields([{ name: 'STDERR', value: `[Click to open Haste](${hasteStderr})` }]);
+                            if (stdout) embed.addFields([{ name: 'STDOUT', value: `[Click to open Haste](${hasteStdout})` }]);
+                            if (error) embed.addFields([{ name: 'ExecError', value: `[Click to open Haste](${hasteError})` }]);
+                        }
+                    else {
+                        if (stderr) response += `\nSTDERR:\n ${stderr}`;
+                        if (stdout) response += `\nSTDOUT:\n${stdout}`;
+                        if (error) response += `\nExecError:\n${error.toString()}`;
+                        response = response.trim();
+                        if (!haste) embed.addFields([{ name: 'Output', value: `\`\`\`${response.substring(0, 1018)}\`\`\`` }]);
+                        else {
+                            const hasteURL = await LNHaste(response);
+                            embed.addFields([{ name: 'Output', value: `[Click to open Haste](${hasteURL})` }]);
+                        }
+                    }
 
-                    if (error) embed.addFields([{ name: 'ExecError', value: `\`\`\`${error.toString().substring(0, 1018)}\`\`\`` }]);
-
-                    const parsed = [(error ?? { toString: () => '' }).toString(), stderr, stdout].reduce((a, b) => (a.length > b.length ? a : b));
+                    const parsed = separate
+                        ? [(error ?? { toString: () => '' }).toString(), stderr, stdout].reduce((a, b) => (a.length > b.length ? a : b))
+                        : response;
 
                     embed
                         .setTitle(didError ? '**Error**' : '**Success**')
                         .setColor(didError ? 'Red' : 'Green')
                         .setDescription('Here is your output!');
 
-                    if (parsed.length >= 1025) {
+                    if (!haste && parsed.length >= 1025) {
                         legacyLog(
                             didError ? 'e' : 'i',
                             `An exec command executed by ${interaction.user.username}'s response was too long (${parsed.length}/1024).`
@@ -252,29 +291,8 @@ export default class AdminCommand extends LexiSlashCommand {
             } else if (subcommand === 'read') {
                 // /admin log read
                 await interaction.deferReply({ ephemeral: interaction.options.getBoolean('ephemeral') ?? false });
-                let mode = interaction.options.getString('mode')! as LogMode;
-                switch (mode.toLowerCase()) {
-                    case 'v':
-                    case 'verbose':
-                        mode = 'v';
-                        break;
-                    case 'i':
-                    case 'info':
-                        mode = 'i';
-                        break;
-                    case 'w':
-                    case 'warning':
-                        mode = 'w';
-                        break;
-                    case 'e':
-                    case 'error':
-                        mode = 'e';
-                        break;
-                    default:
-                        if (mode === 'i') break;
-                        await interaction.editReply({ content: 'Unknown modespec.' });
-                        return;
-                }
+                const mode = interaction.options.getString('mode')! as LogMode;
+                const haste = interaction.options.getBoolean('haste') ?? false;
                 let buffer = readBufferOfType(mode);
                 const count = interaction.options.getNumber('count') ?? 15;
                 buffer = buffer.slice(count * -1);
@@ -284,17 +302,19 @@ export default class AdminCommand extends LexiSlashCommand {
                     return;
                 }
 
-                let mtext = '```';
+                let mtext = '';
+                if (!haste) mtext += '```';
                 buffer.forEach((b) => {
                     mtext += `\n${b[2]}`;
                 });
-                mtext += '```';
-                if (mtext.length > 2000) {
+                if (!haste) mtext += '```';
+                mtext = mtext.trim();
+                if (!haste && mtext.length > 2000) {
                     await interaction.editReply(`Too many logs were generated. Total length was ${mtext.length} characters, 2000 is the maximum.`);
                     return;
                 }
 
-                await interaction.editReply(mtext);
+                await interaction.editReply(haste ? await LNHaste(mtext) : mtext);
 
                 return;
             } else {
@@ -329,6 +349,7 @@ export default class AdminCommand extends LexiSlashCommand {
                     .setDescription('Run a JS code snippet.')
                     .addStringOption((o) => o.setName('code').setDescription('The code to run.').setRequired(true))
                     .addBooleanOption((o) => o.setName('ephemeral').setDescription('Respond with an ephemeral message?'))
+                    .addBooleanOption((o) => o.setName('haste').setDescription('Reply with a hastebin link to the result?'))
             )
             .addSubcommand((sub) =>
                 sub
@@ -336,6 +357,8 @@ export default class AdminCommand extends LexiSlashCommand {
                     .setDescription('Run a shell command.')
                     .addStringOption((o) => o.setName('code').setDescription('The code to run.').setRequired(true))
                     .addBooleanOption((o) => o.setName('ephemeral').setDescription('Respond with an ephemeral message?'))
+                    .addBooleanOption((o) => o.setName('separate').setDescription('Separate stdout, stderr, and ExecError streams?'))
+                    .addBooleanOption((o) => o.setName('haste').setDescription('Reply with a hastebin link to the result?'))
             )
             .addSubcommandGroup((g) =>
                 g
@@ -389,6 +412,7 @@ export default class AdminCommand extends LexiSlashCommand {
                             )
                             .addNumberOption((opt) => opt.setName('count').setDescription('The maximum amount of logs to read.'))
                             .addBooleanOption((opt) => opt.setName('ephemeral').setDescription('Respond with an ephemeral message?'))
+                            .addBooleanOption((o) => o.setName('haste').setDescription('Reply with a hastebin link to the result?'))
                     )
             );
     }

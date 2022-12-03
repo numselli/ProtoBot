@@ -41,4 +41,10 @@ export default interface LexiConfig {
 
     /** The API WS port. */
     apiPort: number;
+
+    /** The URL for Hastebin. e.g. https://paste.0xlogn.dev */
+    hasteServer: `${'http' | 'https'}://${string}`;
+
+    /** The URL for the Git repository for this instance. */
+    repoURL: `${'http' | 'https'}://${string}`;
 }

@@ -38,7 +38,9 @@ const config: LexiConfig = {
     ownerID: 'PBCONF-DiscordUserID', // Your user ID
 
     doDevGuildCommandsIn: false,
-    apiPort: 8082
+    apiPort: 8082,
+    hasteServer: 'https://paste.0xlogn.dev',
+    repoURL: 'https://github.com/thetayloredman/Lexi'
 };
 
 // Export

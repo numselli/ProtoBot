@@ -20,6 +20,7 @@ import { red } from 'colorette';
 
 import type LexiLogger from '#lib/interfaces/LexiLogger';
 import type LexiClient from '#lib/structures/LexiClient';
+import config from '#root/config';
 
 export default function init(client: LexiClient, log: LexiLogger): void {
     // Count the total user counts up. We do this by getting the total user count
@@ -41,7 +42,7 @@ export default function init(client: LexiClient, log: LexiLogger): void {
         log.info(String.raw`|_______||_______||__| |__||___| `);
     })();
     log.info('Ready!');
-    log.info(`Running Lexi on commit ${process.env.LEXI_STARTSH_COMMIT}.`);
+    log.info(`Running Lexi on commit ${process.env.LEXI_STARTSH_COMMIT} from ${config.repoURL}.`);
     if (process.env.LEXI_STARTSH_DIRTYSOURCE) log.warn('Uncommitted changes present (dirty source tree)');
 
     if (process.env.PRODUCTION) log.info('Running in production mode. Verbose logging is disabled.');

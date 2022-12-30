@@ -22,6 +22,8 @@ import { createPaste } from 'hastebin';
 import config from '#root/config';
 import log from '#root/log';
 
+import publicConfig from '../publicConfig';
+
 const gotVersion = JSON.parse(readFileSync('../node_modules/got/package.json', 'utf8')).version as string;
 
 /**
@@ -39,7 +41,7 @@ export default function LNHaste(data: string): Promise<string> {
                     process.env.LEXI_STARTSH_COMMIT!.length - 7
                 )} (${process.env.LEXI_STARTSH_DIRTYSOURCE ? 'DirtySourceTree; ' : ''}got/${gotVersion}; node/${process.version}; ${
                     process.platform
-                } ${process.arch}) +${config.repoURL}`
+                } ${process.arch}) +${publicConfig.githubRepository}`
             }
         }
     );

@@ -39,8 +39,7 @@ const config: LexiConfig = {
 
     doDevGuildCommandsIn: false,
     apiPort: 8082,
-    hasteServer: 'https://paste.0xlogn.dev',
-    repoURL: 'https://github.com/thetayloredman/Lexi'
+    hasteServer: 'https://paste.0xlogn.dev'
 };
 
 // Export

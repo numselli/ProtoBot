@@ -23,7 +23,7 @@ import type LexiClient from '#lib/structures/LexiClient';
 import type LexiHook from '#lib/structures/LexiHook';
 
 export default function loadHooks(client: LexiClient, log: LexiLogger): void {
-    log.info('beginning initial hook load...');
+    log.info('Beginning initial hook load...');
     fs.readdir(client.config.dirs.hooks, (err, files) => {
         if (err) {
             log.error(`Failed to read directory ${client.config.dirs.hooks}:`);

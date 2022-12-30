@@ -51,7 +51,7 @@ while true; do
         cd dist;
         echo 'bootstrap: Running Lexi...'
         echo 'bootstrap: Final env:'
-        echo 'bootstrap:                   PRODUCTION is set to '"${PRODUCTION}"'.';
+        echo 'bootstrap:               PRODUCTION is set to '"${PRODUCTION}"'.';
         echo 'bootstrap:      LEXI_STARTSH_COMMIT is set to '"${COMMIT_HASH}"'.';
         echo 'bootstrap: LEXI_STARTSH_DIRTYSOURCE is set to '"${DIRTYSOURCE}"'.';
 

@@ -113,12 +113,20 @@ if [[ "$does_have_deps" -eq 0 ]]; then
 fi
 
 # Ensure we are on Node 16.
-echo "if (parseInt(process.version.split('.')[0].replace('v', '')) > 16) process.exit(1)" | node
+echo "if (parseInt(process.version.split('.')[0].replace('v', '')) < 18) process.exit(1)" | node
 if [ $? -eq 1 ]; then
-  echo_error "  ${RED}You need to be running Node 16 or higher.${NOCOLOR}"
+  echo_error "  ${RED}You need to be running Node 18 or higher.${NOCOLOR}"
   echo_error "  Please update your Node version and try again."
   exit 1
 fi
+# Ensure we are on an EVEN Node version
+echo "if (parseInt(process.version.split('.')[0].replace('v', '')) % 2 !== 0) process.exit(1)" | node
+if [ $? -eq 1 ]; then
+    echo_error "  ${RED}You need to be running an even-numbered (stable) Node version.${NOCOLOR}"
+    echo_error "  Please update your Node version and try again."
+    exit 1
+fi
+
 echo_ok "Node version OK!"
 
 echo ""
@@ -147,20 +155,26 @@ case "$pm2_auto_start" in
 esac
 echo ""
 
-echo_info "Now I need to ask... what is your bot token?"
-echo_question "Please enter your bot token [no echo]:"
-read -s bot_token
-echo ""
-
-echo_info "What is your Discord user ID?"
-echo_warning "THIS MUST BE YOUR USER ID, or your bot may be compromised!"
-echo_question "Please enter your Discord user ID:"
-read discord_user_id
-
-echo_info "Bot information read, generating configuration..."
 if [[ -f src/config.ts ]]; then
-    echo_error "Config already exists. Not using this configuration."
+    echo_warning "The file src/config.ts already exists!"
+    echo_warning "This means you have already configured the bot."
+    echo_warning "If you want to reconfigure the bot, please delete src/config.ts and run this script again."
+    echo_warning "Due to this, we are skipping the configuration generation steps."
+    echo_warning "Press Enter to continue..."
+    read
 else
+    echo_info "Now I need to ask... what is your bot token?"
+    echo_question "Please enter your bot token [no echo]:"
+    read -s bot_token
+    echo ""
+
+    echo_info "What is your Discord user ID?"
+    echo_warning "THIS MUST BE YOUR USER ID, or your bot may be compromised!"
+    echo_question "Please enter your Discord user ID:"
+    read discord_user_id
+
+    echo_info "Bot information read, generating configuration..."
+
     cp src/config.rename-me.ts src/config.ts
     sed -i "s/PBCONF-DiscordBotToken/$bot_token/g" src/config.ts
     sed -i "s/PBCONF-DiscordUserID/$discord_user_id/g" src/config.ts

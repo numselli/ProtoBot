@@ -27,7 +27,7 @@ import log from '#root/log';
  */
 export default function EnmapVerbose(dbName: string, query: string): void {
     log.verbose(
-        `${blue(`[${bold('DatabaseQuery')}]`)} ${underline('Query')} ${red(dbName)}: ${highlight(query, {
+        `${blue(`[${bold('DB')}]`)} ${underline('Query')} ${red(dbName)}: ${highlight(query, {
             language: 'sql'
         })}`
     );

@@ -18,6 +18,7 @@
 
 import type { ClientOptions } from 'discord.js';
 import { Client as BaseClient } from 'discord.js';
+import type { EnmapOptions } from 'enmap';
 import Enmap from 'enmap';
 
 import EnmapVerbose from '#lib/EnmapVerbose';
@@ -37,6 +38,11 @@ import LexiECTManager from './LexiECTManager';
 /** Make a verbose function for an Enmap. */
 export function makeVerboseFunction(name: string): (_q: string) => void {
     return (q: string) => EnmapVerbose(name, q);
+}
+
+/** Create the Enmap options parameter */
+export function createEnmapOptions(name: string, additional: EnmapOptions = {}): EnmapOptions {
+    return { name, verbose: makeVerboseFunction(name), ...additional };
 }
 
 export default class LexiClient extends BaseClient {
@@ -87,9 +93,9 @@ export default class LexiClient extends BaseClient {
             COOLDOWNS: { owos: 0, uwus: 0, tildes: 0 }
         };
         this.emoteCounterTrackers = new LexiECTManager(this, this._log);
-        this.userStatistics = new Enmap({ name: 'userStatistics', verbose: makeVerboseFunction('userStatistics') });
-        this.userConfiguration = new Enmap({ name: 'userConfiguration', verbose: makeVerboseFunction('userConfiguration') });
-        this.restartData = new Enmap({ name: 'restartData', verbose: makeVerboseFunction('restartData') });
+        this.userStatistics = new Enmap(createEnmapOptions('userStatistics'));
+        this.userConfiguration = new Enmap(createEnmapOptions('userConfiguration'));
+        this.restartData = new Enmap(createEnmapOptions('restartData'));
 
         // In memory items
         this.hooks = new Map();

@@ -41,21 +41,22 @@ export default class BoopCommand extends LexiSlashCommand {
     public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const { client } = this;
         const target = await interaction.options.getUser('target')!.fetch();
-        if (['boop', 'pat', 'hug'].includes(interaction.options.getSubcommand()) && target.id === interaction.user.id) {
+        const subcommand = interaction.options.getSubcommand();
+        if (['boop', 'pat', 'hug'].includes(subcommand) && target.id === interaction.user.id) {
             await interaction.reply("You can't do that to yourself!");
             return;
         }
-        if (interaction.options.getSubcommand() === 'boop') {
+        if (subcommand === 'boop') {
             client.userStatistics.ensure(target.id, client.defaults.USER_STATISTICS);
             client.userStatistics.inc(target.id, 'boops');
             await interaction.reply(
                 `**Boop!**\n<@${interaction.user.id}> boops <@${target.id}>~!\n\nhttps://cdn.discordapp.com/emojis/777752005820416000.gif`
             );
-        } else if (interaction.options.getSubcommand() === 'pat') {
+        } else if (subcommand === 'pat') {
             client.userStatistics.ensure(target.id, client.defaults.USER_STATISTICS);
             client.userStatistics.inc(target.id, 'pats');
             await interaction.reply(`**Pat!**\n<@${interaction.user.id}> pats <@${target.id}> on the head~!`);
-        } else if (interaction.options.getSubcommand() === 'hug') {
+        } else if (subcommand === 'hug') {
             client.userStatistics.ensure(target.id, client.defaults.USER_STATISTICS);
             client.userStatistics.inc(target.id, 'hugs');
             await interaction.reply(`**HUG!**\n<@${interaction.user.id}> huggles <@${target.id}> tightly.`);

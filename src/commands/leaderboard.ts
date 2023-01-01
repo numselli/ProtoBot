@@ -46,18 +46,15 @@ export default class CatCommand extends LexiSlashCommand {
 
     public async run(interaction: ChatInputCommandInteraction): Promise<void> {
         const { client } = this;
-        if (
-            interaction.options.getSubcommand() !== 'uwus' &&
-            interaction.options.getSubcommand() !== 'owos' &&
-            interaction.options.getSubcommand() !== 'tildes'
-        ) {
+        const subcommand = interaction.options.getSubcommand() as 'uwus' | 'owos' | 'tildes';
+        if (!['uwus', 'owos', 'tildes'].includes(subcommand)) {
             await interaction.reply('The bot is probably broken. Notify a developer. The issue was: Invalid subcommand in leaderboard.');
             throw new Error('This should never happen.');
         }
 
         const buf: string[] = [];
         let sorted: (readonly [string, number])[] = [];
-        switch (interaction.options.getSubcommand()) {
+        switch (subcommand) {
             case 'uwus':
                 buf.push('```adoc\n===== UWU LEADERBOARD =====');
                 sorted = client.emoteCounterTrackers.uwusLeaderboard(10);
@@ -81,7 +78,7 @@ export default class CatCommand extends LexiSlashCommand {
 
             // eslint-disable-next-line no-await-in-loop
             const user = await client.users.fetch(id).catch(() => null);
-            buf.push(formatRow(interaction.options.getSubcommand() as 'uwus' | 'owos' | 'tildes', i, user, client));
+            buf.push(formatRow(subcommand, i, user, client));
         }
 
         if (!placed) {

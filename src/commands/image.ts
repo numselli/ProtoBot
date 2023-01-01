@@ -51,7 +51,8 @@ export default class CatCommand extends LexiSlashCommand {
     }
 
     public async run(interaction: ChatInputCommandInteraction): Promise<void> {
-        if (interaction.options.getSubcommand() === 'cat') {
+        const subcommand = interaction.options.getSubcommand();
+        if (subcommand === 'cat') {
             await interaction.reply('Fetching a cat picture...');
             const body = (await fetch('https://some-random-api.ml/img/cat').then((res) => res.json())) as SomeRandomAPILinkData;
             const embed = new EmbedBuilder()
@@ -60,7 +61,7 @@ export default class CatCommand extends LexiSlashCommand {
                 .setTimestamp(Date.now())
                 .setColor('Random');
             await interaction.editReply({ embeds: [embed] });
-        } else if (interaction.options.getSubcommand() === 'dog') {
+        } else if (subcommand === 'dog') {
             await interaction.reply('Fetching a dog picture...');
             const body = (await fetch('https://some-random-api.ml/img/dog').then((res) => res.json())) as SomeRandomAPILinkData;
             const embed = new EmbedBuilder()
@@ -69,7 +70,7 @@ export default class CatCommand extends LexiSlashCommand {
                 .setTimestamp(Date.now())
                 .setColor('Random');
             await interaction.editReply({ embeds: [embed] });
-        } else if (interaction.options.getSubcommand() === 'fox') {
+        } else if (subcommand === 'fox') {
             await interaction.reply('Fetching a fox picture...');
             const body = (await fetch('https://randomfox.ca/floof/').then((res) => res.json())) as FoxData;
             const embed = new EmbedBuilder()

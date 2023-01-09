@@ -1,9 +1,7 @@
 {
     "extends": ["config:base"],
     "baseBranches": ["dev"],
-    "npm": {
-        "rangeStrategy": "bump"
-    },
+    "rangeStrategy": "bump",
     "major": {
         "dependencyDashboardApproval": true
     }

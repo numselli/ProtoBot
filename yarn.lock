@@ -2255,7 +2255,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord.js@npm:v14":
+"discord.js@npm:^14.7.1":
   version: 14.7.1
   resolution: "discord.js@npm:14.7.1"
   dependencies:
@@ -3697,7 +3697,7 @@ __metadata:
     conventional-changelog-conventionalcommits: 5.0.0
     cosmiconfig: 8.0.0
     discord-api-types: ^0.37.0
-    discord.js: v14
+    discord.js: ^14.7.1
     enmap: ^5.9.0
     eslint: ^8.13.0
     eslint-config-prettier: 8.6.0

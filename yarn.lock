@@ -2241,14 +2241,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-api-types@npm:^0.37.0":
-  version: 0.37.0
-  resolution: "discord-api-types@npm:0.37.0"
-  checksum: a411d1f5a04301507e095af4b311fdf31593f42e57ff5259eaf1b8e6f3a1828b5899c9a5123cae005cad567c765367fcf20d434154ecba3e6fcdd79e53aa9f20
-  languageName: node
-  linkType: hard
-
-"discord-api-types@npm:^0.37.20, discord-api-types@npm:^0.37.23":
+"discord-api-types@npm:0.37.27, discord-api-types@npm:^0.37.20, discord-api-types@npm:^0.37.23":
   version: 0.37.27
   resolution: "discord-api-types@npm:0.37.27"
   checksum: f3c404db151862871686008a1e7902f22e2147b391840f9184568d5bc54593babac567fed90bd4831a6b793bd84c424172b081af36badbf950ea0e6fcd5d2e8a
@@ -3696,7 +3689,7 @@ __metadata:
     commitlint: ^17.4.1
     conventional-changelog-conventionalcommits: ^5.0.0
     cosmiconfig: ^8.0.0
-    discord-api-types: ^0.37.0
+    discord-api-types: 0.37.27
     discord.js: ^14.7.1
     enmap: ^5.9.0
     eslint: ^8.13.0

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v9';
+import type { RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 
 /**
  * Any slash command builder that has a valid toJSON method.
@@ -25,5 +25,5 @@ import type { RESTPostAPIApplicationCommandsJSONBody } from 'discord-api-types/v
  * actually represent this type, so it's an interface.
  */
 export default interface JSONAbleSlashCommandBody {
-    toJSON: () => RESTPostAPIApplicationCommandsJSONBody;
+    toJSON: () => RESTPostAPIChatInputApplicationCommandsJSONBody;
 }

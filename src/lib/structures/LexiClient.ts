@@ -41,7 +41,7 @@ export function makeVerboseFunction(name: string): (_q: string) => void {
 }
 
 /** Create the Enmap options parameter */
-export function createEnmapOptions(name: string, additional: EnmapOptions = {}): EnmapOptions {
+export function createEnmapOptions<V, SV>(name: string, additional: EnmapOptions<V, SV> = {}): EnmapOptions<V, SV> {
     return { name, verbose: makeVerboseFunction(name), ...additional };
 }
 

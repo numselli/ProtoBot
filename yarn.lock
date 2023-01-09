@@ -1034,7 +1034,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^5.48.0":
+"@typescript-eslint/eslint-plugin@npm:^5.48.1":
   version: 5.48.1
   resolution: "@typescript-eslint/eslint-plugin@npm:5.48.1"
   dependencies:
@@ -1068,7 +1068,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^5.48.0":
+"@typescript-eslint/parser@npm:^5.48.1":
   version: 5.48.1
   resolution: "@typescript-eslint/parser@npm:5.48.1"
   dependencies:
@@ -3680,8 +3680,8 @@ __metadata:
     "@types/morgan": ^1.9.4
     "@types/node": ^18.11.18
     "@types/node-fetch": ^2.6.2
-    "@typescript-eslint/eslint-plugin": ^5.48.0
-    "@typescript-eslint/parser": ^5.48.0
+    "@typescript-eslint/eslint-plugin": ^5.48.1
+    "@typescript-eslint/parser": ^5.48.1
     acorn: ^8.8.1
     bytes: ^3.1.2
     cli-highlight: ^2.1.11

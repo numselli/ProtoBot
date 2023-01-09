@@ -2355,15 +2355,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enmap@npm:^5.9.0":
-  version: 5.9.0
-  resolution: "enmap@npm:5.9.0"
+"enmap@npm:^5.9.5":
+  version: 5.9.5
+  resolution: "enmap@npm:5.9.5"
   dependencies:
     better-sqlite3: ^7.5.1
     lodash: ^4.17.21
     on-change: ^2.2.3
     serialize-javascript: ^6.0.0
-  checksum: 44a997e59283349fc31fd03cf033a30eb2b8ad155a2c9379c73eaeececc475467e44fc7be15e76591201764b0ba8a2b87f67a5723f0c62e0a2ccc7f96eb3b677
+  checksum: 845f2ba05047b663971b4746d2cb0be0394e2685387970a9b86d2a1dec840526830aab1afa2ef240fd67e7b8b19cf866789bd0f05c2dd47276113dea81dc2cdf
   languageName: node
   linkType: hard
 
@@ -3691,7 +3691,7 @@ __metadata:
     cosmiconfig: ^8.0.0
     discord-api-types: 0.37.27
     discord.js: ^14.7.1
-    enmap: ^5.9.0
+    enmap: ^5.9.5
     eslint: ^8.13.0
     eslint-config-prettier: ^8.6.0
     eslint-plugin-deprecation: ^1.3.3

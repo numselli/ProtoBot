@@ -18,7 +18,7 @@
 
 import { blue, bold, green, yellow } from 'colorette';
 import type { ChatInputCommandInteraction, TextChannel } from 'discord.js';
-import { ChannelType, InteractionType } from 'discord.js';
+import { ChannelType, Events, InteractionType } from 'discord.js';
 import { GatewayIntentBits, Partials } from 'discord.js';
 
 import LexiClient from '#lib/structures/LexiClient';
@@ -56,7 +56,7 @@ const client = new LexiClient(log, {
 });
 
 // When the client is ready...
-client.on('ready', async () => {
+client.on(Events.ClientReady, async () => {
     // FIXME: this may cause a race condition
     ready.init(client, log);
     await client.commands.loadCommands();
@@ -67,7 +67,7 @@ client.on('ready', async () => {
 });
 
 // Interactions.
-client.on('interactionCreate', async (interaction) => {
+client.on(Events.InteractionCreate, async (interaction) => {
     // other interaction types exist, TODO: add them
     if (interaction.type !== InteractionType.ApplicationCommand) return;
 
@@ -87,7 +87,7 @@ client.on('interactionCreate', async (interaction) => {
 // *** HANDLING MESSAGES ***
 // message will be a discord.Message object with the standard properties.
 // -- THIS REQUIRES THE GUILDMESSAGES PRIVILEGED INTENT
-client.on('messageCreate', async (message) => {
+client.on(Events.MessageCreate, async (message) => {
     // Log the message content if we are in verbose mode.
     log.verbose(
         `${yellow(`[${bold('MSG')}]`)} ${`${bold(blue(`@${message.author.tag}`))} ${green(

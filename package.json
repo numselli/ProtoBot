@@ -21,7 +21,7 @@
         "@babel/core": "^7.20.12",
         "@babel/eslint-parser": "^7.19.1",
         "@types/eslint": "^8.4.10",
-        "acorn": "^8.8.1",
+        "acorn": "^8.8.2",
         "bytes": "^3.1.2",
         "cli-highlight": "^2.1.11",
         "colorette": "^2.0.19",

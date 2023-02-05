@@ -16,15 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { readFileSync } from 'fs';
-import { createPaste } from 'hastebin';
+import hastebin from 'hastebin-v1';
 
 import config from '#root/config';
 import log from '#root/log';
 
 import publicConfig from '../publicConfig';
 
-const gotVersion = JSON.parse(readFileSync('../node_modules/got/package.json', 'utf8')).version as string;
+const USER_AGENT = `Lexi${process.env.PRODUCTION ? 'Prod' : ''}/${process.env.LEXI_STARTSH_COMMIT!.substring(
+    process.env.LEXI_STARTSH_COMMIT!.length - 7
+)} (${process.env.LEXI_STARTSH_DIRTYSOURCE ? 'DirtySourceTree; ' : ''}; node/${process.version}; ${
+    process.platform
+} ${process.arch}) +${publicConfig.githubRepository}`
 
 /**
  * Send text to LogN's hastebin server.
@@ -32,17 +35,13 @@ const gotVersion = JSON.parse(readFileSync('../node_modules/got/package.json', '
  */
 export default function LNHaste(data: string): Promise<string> {
     log.info(`LNHaste: sending ${data.length} bytes of data to ${config.hasteServer}`);
-    return createPaste(
+    return hastebin(
         data,
         { server: config.hasteServer },
         {
-            headers: {
-                'User-Agent': `Lexi${process.env.PRODUCTION ? 'Prod' : ''}/${process.env.LEXI_STARTSH_COMMIT!.substring(
-                    process.env.LEXI_STARTSH_COMMIT!.length - 7
-                )} (${process.env.LEXI_STARTSH_DIRTYSOURCE ? 'DirtySourceTree; ' : ''}got/${gotVersion}; node/${process.version}; ${
-                    process.platform
-                } ${process.arch}) +${publicConfig.githubRepository}`
-            }
+            headers: new Headers({
+                'User-Agent': USER_AGENT
+            })
         }
     );
 }

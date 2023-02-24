@@ -12,6 +12,45 @@
 
 <div align="center">
 
+## An Update on the Status of Lexi
+
+</div>
+
+The Lexi project has been a major project of mine for a long time. I've put a lot of
+work into the framework and design behind the Lexi Discord bot, and I've enjoyed
+the time that everyone has put into this as well. However, as all great things must
+come to an end, I've decided to begin sunsetting Lexi.
+
+I've decided to do this for a few reasons:
+
+-   Lack of assistance from other developers & even the other maintainers
+-   Lack of interest in the bot at all (it's only in my servers)
+-   Lack of time & motivation (The framework is amazing, but few features are available)
+-   Lack of legal support with privacy policies etc
+
+Here's how this is going to work. From now on, I will no longer be providing any
+feature updates to Lexi. I will still be providing bug fixes and security updates
+for a limited amount of time, but once Discord stops supporting Lexi's API version,
+the hosted instance will officially be shut down.
+
+Thank you to everyone who has made this project possible, especially:
+
+-   Alcremie, for performing the TypeScript rewrite in ProtoBot 2
+-   numselli, for helping me find some security issues and for making some contributions
+-   charmines, for maintaining the project
+
+And finally, thank you, the user, for using Lexi. I hope you enjoyed your time with
+the bot while it lasted.
+
+Signing off...
+
+Logan (LogN / 0xLogN)  
+Lexi Core Maintainer
+SkyMines Network Owner
+Zirco Compiler Engineer
+
+<div align="center">
+
 ## What is Lexi?
 
 </div>

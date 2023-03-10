@@ -49,6 +49,12 @@ Lexi Core Maintainer
 SkyMines Network Owner
 Zirco Compiler Engineer
 
+### Update
+
+Lexi is now officially feature-frozen. No more feature PRs or changes will be made from this point on,
+except in some VERY specific circumstances. Lexi's `dev` branch will be shut down soon, and the Dev
+bot will soon be stopped.
+
 <div align="center">
 
 ## What is Lexi?

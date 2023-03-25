@@ -5,7 +5,7 @@
     "baseBranches": ["dev"],
     "rangeStrategy": "bump",
     "major": {
-        "dependencyDashboardApproval": true,
+        "dependencyDashboardApproval": true
     },
     "npm": {
         "packageRules": [
@@ -14,15 +14,15 @@
                 "matchDepTypes": ["dependencies"],
                 "groupName": "all non-major dependencies",
                 "groupSlug": "all-non-major",
-                "semanticCommitType": "fix",
+                "semanticCommitType": "fix"
             },
             {
                 "matchUpdateTypes": ["minor", "patch"],
                 "matchDepTypes": ["devDependencies"],
                 "groupName": "all non-major dev-dependencies",
                 "groupSlug": "all-non-major-dev",
-                "semanticCommitType": "chore",
-            },
-        ],
-    },
+                "semanticCommitType": "chore"
+            }
+        ]
+    }
 }

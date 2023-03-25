@@ -110,6 +110,7 @@ function writeItem(mode: LogMode, message: string): void {
 
 function generateTimePrefix(epoch: number): string {
     const date = new Date(epoch);
+    // TODO: clean up
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let preparsedDate: any = date.toLocaleDateString('en-US', {
         weekday: 'short',

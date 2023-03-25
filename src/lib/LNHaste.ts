@@ -25,9 +25,9 @@ import publicConfig from '../publicConfig';
 
 const USER_AGENT = `Lexi${process.env.PRODUCTION ? 'Prod' : ''}/${process.env.LEXI_STARTSH_COMMIT!.substring(
     process.env.LEXI_STARTSH_COMMIT!.length - 7
-)} (${process.env.LEXI_STARTSH_DIRTYSOURCE ? 'DirtySourceTree; ' : ''}; node/${process.version}; ${
-    process.platform
-} ${process.arch}) +${publicConfig.githubRepository}`
+)} (${process.env.LEXI_STARTSH_DIRTYSOURCE ? 'DirtySourceTree; ' : ''}; node/${process.version}; ${process.platform} ${process.arch}) +${
+    publicConfig.githubRepository
+}`;
 
 /**
  * Send text to LogN's hastebin server.

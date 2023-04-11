@@ -45,8 +45,8 @@ the bot while it lasted.
 Signing off...
 
 Logan (LogN / 0xLogN)  
-Lexi Core Maintainer
-SkyMines Network Owner
+Lexi Core Maintainer  
+SkyMines Network Owner  
 Zirco Compiler Engineer
 
 ### Update
@@ -54,6 +54,11 @@ Zirco Compiler Engineer
 Lexi is now officially feature-frozen. No more feature PRs or changes will be made from this point on,
 except in some VERY specific circumstances. Lexi's `dev` branch will be shut down soon, and the Dev
 bot will soon be stopped.
+
+### Update II
+
+All Lexi bots have officially been shut down and this repository is about to be archived. Thank you so much
+for supporting Lexi.
 
 <div align="center">
 

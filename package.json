@@ -18,7 +18,7 @@
     "author": "BadBoyHaloCat",
     "license": "GPL-3.0",
     "dependencies": {
-        "@babel/core": "^7.21.0",
+        "@babel/core": "^7.23.2",
         "@babel/eslint-parser": "^7.19.1",
         "@types/eslint": "^8.21.1",
         "acorn": "^8.8.2",

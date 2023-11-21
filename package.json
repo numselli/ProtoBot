@@ -26,7 +26,7 @@
         "cli-highlight": "^2.1.11",
         "colorette": "^2.0.19",
         "cosmiconfig": "^8.1.0",
-        "discord-api-types": "0.37.35",
+        "discord-api-types": "0.37.62",
         "discord.js": "^14.7.1",
         "enmap": "^5.9.5",
         "eslint": "^8.35.0",
